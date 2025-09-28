@@ -39,7 +39,7 @@
     "security:fix": "npm audit fix && npm audit fix --workspaces",
     "security:check": "npm run security:audit && npm run lint:security",
     "lint:security": "eslint --config .eslintrc.security.js \"frontend/src/**/*.{js,jsx,ts,tsx}\" \"backend/src/**/*.{js,jsx,ts,tsx}\"",
-    "prepare": "husky install"
+    "prepare": "is-ci || husky install"
   },
   "keywords": [
     "musician",
@@ -79,6 +79,7 @@
     "eslint": "^8.55.0",
     "eslint-plugin-security": "^1.7.1",
     "husky": "^8.0.3",
+    "is-ci": "^4.1.0",
     "lint-staged": "^15.2.0",
     "prettier": "^3.1.0",
     "rimraf": "^5.0.5",
