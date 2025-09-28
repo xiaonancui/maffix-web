@@ -1,4 +1,4 @@
-# TenTenTen Web
+# TenTenTen
 
 [![CI/CD Pipeline](https://github.com/xiaonancui/tententen-web/workflows/CI%2FCD%20Pipeline/badge.svg)](https://github.com/xiaonancui/tententen-web/actions/workflows/ci.yml)
 [![Code Quality](https://github.com/xiaonancui/tententen-web/workflows/Code%20Quality%20Checks/badge.svg)](https://github.com/xiaonancui/tententen-web/actions/workflows/code-quality.yml)
