@@ -1,5 +1,9 @@
 # TenTenTen Web
 
+[![CI/CD Pipeline](https://github.com/xiaonancui/tententen-web/workflows/CI%2FCD%20Pipeline/badge.svg)](https://github.com/xiaonancui/tententen-web/actions/workflows/ci.yml)
+[![Code Quality](https://github.com/xiaonancui/tententen-web/workflows/Code%20Quality%20Checks/badge.svg)](https://github.com/xiaonancui/tententen-web/actions/workflows/code-quality.yml)
+[![Security Checks](https://github.com/xiaonancui/tententen-web/workflows/Security%20Checks/badge.svg)](https://github.com/xiaonancui/tententen-web/actions/workflows/security.yml)
+
 An independent musician fan engagement platform that revolutionizes how artists
 connect with their audience through gamified experiences and meaningful
 interactions.
@@ -176,6 +180,31 @@ guidelines, see:
 - Write comprehensive tests
 - Use conventional commit messages
 - Update documentation for new features
+
+## 🔧 CI/CD & Code Quality
+
+This project uses comprehensive GitHub Actions workflows to ensure code quality and security:
+
+### Automated Checks
+
+- **Code Quality**: ESLint, Prettier, TypeScript type checking
+- **Security**: Dependency audits, vulnerability scanning, secret detection
+- **Testing**: Automated test execution for frontend and backend
+- **Build Verification**: Ensures all components build successfully
+
+### Pre-commit Hooks
+
+- Automatic code formatting with Prettier
+- Linting with ESLint
+- Type checking with TypeScript
+
+### Branch Protection
+
+- All changes require Pull Request reviews
+- Status checks must pass before merging
+- Automated dependency updates via Dependabot
+
+For detailed information, see [GitHub Actions Documentation](docs/GITHUB_ACTIONS.md).
 
 ## 📄 License
 
