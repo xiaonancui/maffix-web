@@ -8,7 +8,12 @@
     "start": "node src/server.js",
     "build": "echo 'build placeholder'",
     "clean": "rimraf node_modules",
-    "test": "echo 'no tests yet'"
+    "test": "echo 'no tests yet'",
+    "type-check": "echo 'no TypeScript in backend yet'",
+    "lint": "echo 'no linting configured yet'",
+    "lint:fix": "echo 'no linting configured yet'",
+    "format": "echo 'no formatting configured yet'",
+    "format:check": "echo 'no formatting configured yet'"
   },
   "dependencies": {
     "express": "^4.18.2",
