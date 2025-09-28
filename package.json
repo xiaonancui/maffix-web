@@ -35,10 +35,6 @@
     "db:studio": "npm run db:studio --workspace=backend",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,css,scss,md,yml,yaml}\"",
     "format:check": "prettier --check \"**/*.{js,jsx,ts,tsx,json,css,scss,md,yml,yaml}\"",
-    "security:audit": "npm audit && npm audit --workspaces",
-    "security:fix": "npm audit fix && npm audit fix --workspaces",
-    "security:check": "npm run security:audit && npm run lint:security",
-    "lint:security": "eslint --config .eslintrc.security.js \"frontend/src/**/*.{js,jsx,ts,tsx}\" \"backend/src/**/*.{js,jsx,ts,tsx}\"",
     "prepare": "if [ \"$CI\" != \"true\" ]; then husky install; fi"
   },
   "keywords": [
