@@ -1,14 +1,21 @@
 # TenTenTen Web
 
-An independent musician fan engagement platform that revolutionizes how artists connect with their audience through gamified experiences and meaningful interactions.
+An independent musician fan engagement platform that revolutionizes how artists
+connect with their audience through gamified experiences and meaningful
+interactions.
 
 ## 🎵 Vision
 
-TenTenTen Web empowers independent musicians to build stronger relationships with their fans through an innovative platform that combines task-based engagement, gamification elements, and reward systems. Our goal is to create a sustainable ecosystem where artists can monetize their creativity while providing fans with unique, interactive experiences.
+TenTenTen Web empowers independent musicians to build stronger relationships
+with their fans through an innovative platform that combines task-based
+engagement, gamification elements, and reward systems. Our goal is to create a
+sustainable ecosystem where artists can monetize their creativity while
+providing fans with unique, interactive experiences.
 
 ## 🚀 MVP Goals
 
 ### Core Features
+
 - **Task Submission System**: Fans complete artist-defined tasks to earn rewards
 - **Gacha System**: Exciting randomized reward mechanism with collectible items
 - **Diamond Economy**: Virtual currency system for platform transactions
@@ -16,6 +23,7 @@ TenTenTen Web empowers independent musicians to build stronger relationships wit
 - **Fan Profiles**: Personalized spaces showcasing achievements and collections
 
 ### Key Objectives
+
 - Enable artists to create and manage fan engagement tasks
 - Implement secure payment processing for premium features
 - Provide analytics and insights for artist growth
@@ -25,6 +33,7 @@ TenTenTen Web empowers independent musicians to build stronger relationships wit
 ## 🛠 Technology Stack
 
 ### Frontend
+
 - **Next.js 14**: React framework with App Router
 - **Refine**: Admin panel and CRUD operations framework
 - **TypeScript**: Type-safe development
@@ -32,6 +41,7 @@ TenTenTen Web empowers independent musicians to build stronger relationships wit
 - **NextAuth.js**: Authentication and session management
 
 ### Backend
+
 - **NestJS**: Scalable Node.js framework
 - **TypeScript**: End-to-end type safety
 - **Prisma**: Database ORM and migrations
@@ -39,6 +49,7 @@ TenTenTen Web empowers independent musicians to build stronger relationships wit
 - **Klarna**: Payment processing integration
 
 ### Database & Services
+
 - **Supabase**: PostgreSQL database with real-time features
 - **Vercel**: Frontend deployment and hosting
 - **Railway**: Backend API deployment
@@ -58,6 +69,7 @@ tententen-web/
 ## 🏃‍♂️ Quick Start
 
 ### Prerequisites
+
 - Node.js 18+ and npm/yarn
 - Git for version control
 - Supabase account for database
@@ -65,17 +77,20 @@ tententen-web/
 ### Development Setup
 
 1. **Clone the repository**
+
    ```bash
    git clone <repository-url>
    cd tententen-web
    ```
 
 2. **Install dependencies**
+
    ```bash
    npm install
    ```
 
 3. **Environment Setup**
+
    ```bash
    # Copy environment templates
    cp .env.example .env.local
@@ -90,10 +105,11 @@ tententen-web/
    - Set API endpoints
 
 5. **Start development servers**
+
    ```bash
    # Start both frontend and backend
    npm run dev
-   
+
    # Or start individually
    npm run dev:frontend
    npm run dev:backend
@@ -102,11 +118,14 @@ tententen-web/
 ### Environment Variables
 
 Environment variables are loaded from specific locations:
+
 - **Frontend**: Loads from `frontend/.env.local` (Next.js conventions)
 - **Backend**: Loads from `backend/.env.local` (NestJS dotenv config)
-- **Root**: `.env.local` is a template only and not read by either app unless explicitly configured
+- **Root**: `.env.local` is a template only and not read by either app unless
+  explicitly configured
 
-See the `.env.example` files in the root, frontend, and backend directories for required environment variables. Key variables include:
+See the `.env.example` files in the root, frontend, and backend directories for
+required environment variables. Key variables include:
 
 - Database connection (Supabase)
 - Authentication secrets (NextAuth.js)
@@ -116,25 +135,30 @@ See the `.env.example` files in the root, frontend, and backend directories for 
 ## 🚀 Deployment
 
 ### Frontend (Vercel)
+
 - Automatic deployments from main branch
 - Environment variables configured in Vercel dashboard
 - Custom domain support
 
 ### Backend (Railway)
+
 - Containerized deployment
 - Environment variables managed in Railway
 - Automatic SSL and scaling
 
 ### Database (Supabase)
+
 - Managed PostgreSQL instance
 - Real-time subscriptions
 - Built-in authentication support
 
 ## 📚 Documentation
 
-For detailed technical information, architecture decisions, and development guidelines, see:
+For detailed technical information, architecture decisions, and development
+guidelines, see:
 
-- [ARCHITECTURE.md](./ARCHITECTURE.md) - System architecture and technical details
+- [ARCHITECTURE.md](./ARCHITECTURE.md) - System architecture and technical
+  details
 - Frontend documentation (coming in subsequent phases)
 - Backend API documentation (coming in subsequent phases)
 
@@ -147,6 +171,7 @@ For detailed technical information, architecture decisions, and development guid
 5. Open a Pull Request
 
 ### Development Guidelines
+
 - Follow TypeScript best practices
 - Write comprehensive tests
 - Use conventional commit messages
@@ -154,7 +179,8 @@ For detailed technical information, architecture decisions, and development guid
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the MIT License - see the LICENSE file for
+details.
 
 ## 🎯 Roadmap
 

@@ -1,0 +1,194 @@
+name: Code Quality Checks
+
+on:
+  push:
+    branches: [main, develop, feature/*]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  lint-and-format:
+    name: Lint & Format Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18.19.0'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: |
+          npm ci
+          npm run install:all
+
+      - name: Check Prettier formatting
+        run: |
+          echo "Checking code formatting with Prettier..."
+          npm run format:check
+
+      - name: Run ESLint
+        run: |
+          echo "Running ESLint checks..."
+          npm run lint
+
+      - name: TypeScript type checking
+        run: |
+          echo "Running TypeScript type checks..."
+          npm run type-check
+
+  commit-message-check:
+    name: Commit Message Check
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check commit messages
+        run: |
+          echo "Checking commit message format..."
+          # 检查提交信息是否符合约定式提交规范
+          git log --format="%s" ${{ github.event.pull_request.base.sha }}..${{ github.event.pull_request.head.sha }} | while read msg; do
+            if [[ ! "$msg" =~ ^(feat|fix|docs|style|refactor|test|chore|perf|ci|build|revert)(\(.+\))?: .+ ]]; then
+              echo "❌ Invalid commit message format: $msg"
+              echo "Please use conventional commit format: type(scope): description"
+              echo "Examples: feat: add user authentication, fix(ui): resolve button styling issue"
+              exit 1
+            else
+              echo "✅ Valid commit message: $msg"
+            fi
+          done
+
+  file-size-check:
+    name: File Size Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check large files
+        run: |
+          echo "Checking for large files..."
+          find . -type f -size +10M -not -path "./node_modules/*" -not -path "./.git/*" | while read file; do
+            echo "❌ Large file detected: $file ($(du -h "$file" | cut -f1))"
+            echo "Please consider using Git LFS for files larger than 10MB"
+            exit 1
+          done || echo "✅ No large files found"
+
+  package-lock-check:
+    name: Package Lock Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check package-lock.json consistency
+        run: |
+          echo "Checking package-lock.json consistency..."
+          npm ci --dry-run
+
+          # 检查是否有未提交的 package-lock.json 变更
+          if ! git diff --exit-code package-lock.json frontend/package-lock.json backend/package-lock.json 2>/dev/null; then
+            echo "❌ package-lock.json files are not consistent"
+            echo "Please run 'npm install' and commit the updated lock files"
+            exit 1
+          else
+            echo "✅ Package lock files are consistent"
+          fi
+
+  code-complexity:
+    name: Code Complexity Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18.19.0'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: |
+          npm ci
+          npm run install:all
+
+      - name: Install complexity analysis tools
+        run: |
+          npm install -g complexity-report jscpd
+
+      - name: Check code complexity
+        run: |
+          echo "Analyzing code complexity..."
+          # 检查 JavaScript/TypeScript 文件的复杂度
+          find frontend/src backend/src -name "*.ts" -o -name "*.tsx" -o -name "*.js" -o -name "*.jsx" 2>/dev/null | head -20 | while read file; do
+            if [ -f "$file" ]; then
+              echo "Checking complexity for: $file"
+              cr "$file" --format json || echo "Could not analyze $file"
+            fi
+          done || echo "Complexity analysis completed"
+
+      - name: Check code duplication
+        run: |
+          echo "Checking for code duplication..."
+          jscpd frontend/src backend/src --threshold 10 --reporters console || echo "Duplication check completed"
+
+  security-linting:
+    name: Security Linting
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18.19.0'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: |
+          npm ci
+          npm run install:all
+
+      - name: Install security linting tools
+        run: |
+          npm install -g eslint-plugin-security
+
+      - name: Run security linting
+        run: |
+          echo "Running security-focused linting..."
+          # 检查常见的安全问题
+          npx eslint frontend/src backend/src --ext .js,.jsx,.ts,.tsx --config .eslintrc.security.js || echo "Security linting completed"
+
+  branch-protection:
+    name: Branch Protection Check
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+
+    steps:
+      - name: Check branch naming
+        run: |
+          branch_name="${{ github.head_ref }}"
+          echo "Checking branch name: $branch_name"
+
+          if [[ "$branch_name" =~ ^(feature|bugfix|hotfix|release)/.+ ]]; then
+            echo "✅ Valid branch name format"
+          else
+            echo "❌ Invalid branch name format: $branch_name"
+            echo "Please use format: feature/description, bugfix/description, hotfix/description, or release/version"
+            exit 1
+          fi

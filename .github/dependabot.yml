@@ -1,0 +1,109 @@
+version: 2
+updates:
+  # 根目录 package.json
+  - package-ecosystem: 'npm'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+      day: 'monday'
+      time: '09:00'
+    open-pull-requests-limit: 5
+    reviewers:
+      - 'xiaonancui'
+    assignees:
+      - 'xiaonancui'
+    commit-message:
+      prefix: 'chore'
+      prefix-development: 'chore'
+      include: 'scope'
+    labels:
+      - 'dependencies'
+      - 'security'
+    allow:
+      - dependency-type: 'direct'
+      - dependency-type: 'indirect'
+    ignore:
+      # 忽略主要版本更新，需要手动审查
+      - dependency-name: '*'
+        update-types: ['version-update:semver-major']
+
+  # 前端依赖
+  - package-ecosystem: 'npm'
+    directory: '/frontend'
+    schedule:
+      interval: 'weekly'
+      day: 'monday'
+      time: '10:00'
+    open-pull-requests-limit: 5
+    reviewers:
+      - 'xiaonancui'
+    assignees:
+      - 'xiaonancui'
+    commit-message:
+      prefix: 'chore(frontend)'
+      prefix-development: 'chore(frontend)'
+      include: 'scope'
+    labels:
+      - 'dependencies'
+      - 'frontend'
+    allow:
+      - dependency-type: 'direct'
+      - dependency-type: 'indirect'
+    ignore:
+      # React 和 Next.js 主要版本更新需要手动处理
+      - dependency-name: 'react'
+        update-types: ['version-update:semver-major']
+      - dependency-name: 'react-dom'
+        update-types: ['version-update:semver-major']
+      - dependency-name: 'next'
+        update-types: ['version-update:semver-major']
+      - dependency-name: '@refinedev/*'
+        update-types: ['version-update:semver-major']
+
+  # 后端依赖
+  - package-ecosystem: 'npm'
+    directory: '/backend'
+    schedule:
+      interval: 'weekly'
+      day: 'monday'
+      time: '11:00'
+    open-pull-requests-limit: 5
+    reviewers:
+      - 'xiaonancui'
+    assignees:
+      - 'xiaonancui'
+    commit-message:
+      prefix: 'chore(backend)'
+      prefix-development: 'chore(backend)'
+      include: 'scope'
+    labels:
+      - 'dependencies'
+      - 'backend'
+    allow:
+      - dependency-type: 'direct'
+      - dependency-type: 'indirect'
+    ignore:
+      # Express 主要版本更新需要手动处理
+      - dependency-name: 'express'
+        update-types: ['version-update:semver-major']
+
+  # GitHub Actions 依赖
+  - package-ecosystem: 'github-actions'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+      day: 'monday'
+      time: '12:00'
+    open-pull-requests-limit: 3
+    reviewers:
+      - 'xiaonancui'
+    assignees:
+      - 'xiaonancui'
+    commit-message:
+      prefix: 'chore(ci)'
+      prefix-development: 'chore(ci)'
+      include: 'scope'
+    labels:
+      - 'dependencies'
+      - 'github-actions'
+      - 'ci/cd'
