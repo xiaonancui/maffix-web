@@ -42,7 +42,7 @@ export default function SignInPage() {
         const session = await getSession();
 
         // Redirect based on user role
-        if (session?.user?.role === "admin") {
+        if ((session?.user as any)?.role === "admin") {
           router.push("/admin");
         } else {
           router.push("/dashboard");
@@ -191,7 +191,7 @@ export default function SignInPage() {
 
       {/* Sign Up Link */}
       <div className="text-center">
-        <span className="text-gray-600">Don't have an account? </span>
+        <span className="text-gray-600">Don&apos;t have an account? </span>
         <Link
           href="/auth/signup"
           className="font-medium text-blue-600 hover:text-blue-500"

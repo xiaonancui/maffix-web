@@ -1,4 +1,4 @@
-import { NextAuthOptions } from 'next-auth';
+// Types for the application
 
 // User types
 export interface User {
@@ -6,7 +6,7 @@ export interface User {
   email: string;
   name?: string;
   image?: string;
-  role: 'user' | 'admin';
+  role: "user" | "admin";
   diamondBalance: number;
   createdAt: string;
   updatedAt: string;
@@ -28,7 +28,7 @@ export interface UserProfile {
 }
 
 export interface UserPreferences {
-  theme: 'light' | 'dark' | 'system';
+  theme: "light" | "dark" | "system";
   notifications: {
     email: boolean;
     push: boolean;
@@ -64,27 +64,27 @@ export interface Task {
 }
 
 export type TaskType =
-  | 'survey'
-  | 'social'
-  | 'review'
-  | 'referral'
-  | 'daily'
-  | 'special';
+  | "survey"
+  | "social"
+  | "review"
+  | "referral"
+  | "daily"
+  | "special";
 export type TaskStatus =
-  | 'draft'
-  | 'active'
-  | 'completed'
-  | 'expired'
-  | 'cancelled';
-export type TaskDifficulty = 'easy' | 'medium' | 'hard' | 'expert';
+  | "draft"
+  | "active"
+  | "completed"
+  | "expired"
+  | "cancelled";
+export type TaskDifficulty = "easy" | "medium" | "hard" | "expert";
 
 export interface TaskRequirement {
   type:
-    | 'url_visit'
-    | 'form_submission'
-    | 'file_upload'
-    | 'social_follow'
-    | 'code_verification';
+    | "url_visit"
+    | "form_submission"
+    | "file_upload"
+    | "social_follow"
+    | "code_verification";
   description: string;
   data?: Record<string, any>;
   isRequired: boolean;
@@ -94,7 +94,7 @@ export interface TaskCompletion {
   id: string;
   taskId: string;
   userId: string;
-  status: 'pending' | 'approved' | 'rejected';
+  status: "pending" | "approved" | "rejected";
   submissionData?: Record<string, any>;
   reviewNotes?: string;
   diamondsAwarded: number;
@@ -122,12 +122,12 @@ export interface Prize {
 }
 
 export type PrizeType =
-  | 'physical'
-  | 'digital'
-  | 'voucher'
-  | 'discount'
-  | 'experience';
-export type PrizeRarity = 'common' | 'uncommon' | 'rare' | 'epic' | 'legendary';
+  | "physical"
+  | "digital"
+  | "voucher"
+  | "discount"
+  | "experience";
+export type PrizeRarity = "common" | "uncommon" | "rare" | "epic" | "legendary";
 
 export interface Banner {
   id: string;
@@ -145,7 +145,7 @@ export interface Banner {
   updatedAt: string;
 }
 
-export type BannerType = 'standard' | 'premium' | 'limited' | 'event';
+export type BannerType = "standard" | "premium" | "limited" | "event";
 
 export interface BannerPrize {
   prizeId: string;
@@ -162,7 +162,7 @@ export interface GachaSpin {
   prizeId?: string;
   prize?: Prize;
   diamondsCost: number;
-  result: 'win' | 'lose';
+  result: "win" | "lose";
   spinAt: string;
 }
 
@@ -175,7 +175,7 @@ export interface UserPrize {
   banner: Banner;
   wonAt: string;
   claimedAt?: string;
-  status: 'pending' | 'claimed' | 'shipped' | 'delivered';
+  status: "pending" | "claimed" | "shipped" | "delivered";
   trackingInfo?: string;
   notes?: string;
 }
@@ -202,7 +202,7 @@ export interface ListParams {
   pageSize?: number;
   search?: string;
   sortBy?: string;
-  sortOrder?: 'asc' | 'desc';
+  sortOrder?: "asc" | "desc";
   filters?: Record<string, any>;
 }
 
@@ -269,7 +269,7 @@ export interface NavItem {
   icon?: React.ReactNode;
   href?: string;
   children?: NavItem[];
-  roles?: ('user' | 'admin')[];
+  roles?: ("user" | "admin")[];
 }
 
 export interface Breadcrumb {
@@ -290,11 +290,11 @@ export interface Notification {
 }
 
 export type NotificationType =
-  | 'task_completed'
-  | 'prize_won'
-  | 'diamonds_earned'
-  | 'system_announcement'
-  | 'account_update';
+  | "task_completed"
+  | "prize_won"
+  | "diamonds_earned"
+  | "system_announcement"
+  | "account_update";
 
 // Statistics types
 export interface UserStats {
@@ -318,30 +318,12 @@ export interface SystemStats {
   revenue: number;
 }
 
-// Extended NextAuth types
-declare module 'next-auth' {
-  interface Session {
-    user: {
-      id: string;
-      email: string;
-      name?: string;
-      image?: string;
-      role: 'user' | 'admin';
-      diamondBalance: number;
-    };
-  }
+// NextAuth types are defined in src/types/next-auth.d.ts
 
-  interface User {
-    id: string;
-    role: 'user' | 'admin';
-    diamondBalance: number;
-  }
-}
-
-declare module 'next-auth/jwt' {
+declare module "next-auth/jwt" {
   interface JWT {
     id: string;
-    role: 'user' | 'admin';
+    role: "user" | "admin";
     diamondBalance: number;
   }
 }

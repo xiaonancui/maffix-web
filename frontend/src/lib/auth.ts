@@ -1,4 +1,3 @@
-import { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 
 // Custom TikTok OAuth Provider
@@ -18,7 +17,7 @@ const TikTokProvider = {
   token: {
     url: "https://open-api.tiktok.com/oauth/access_token/",
     async request(context: any) {
-      const { client, params } = context;
+      const { params } = context;
       const response = await fetch(
         "https://open-api.tiktok.com/oauth/access_token/",
         {
@@ -64,7 +63,7 @@ const TikTokProvider = {
   },
 };
 
-export const authOptions: NextAuthOptions = {
+export const authOptions: any = {
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
@@ -76,19 +75,19 @@ export const authOptions: NextAuthOptions = {
     signIn: "/auth/signin",
   },
   callbacks: {
-    async jwt({ token, user, account }) {
+    async jwt({ token, user, account }: any) {
       if (account && user) {
         token.accessToken = account.access_token;
         token.provider = account.provider;
       }
       return token;
     },
-    async session({ session, token }) {
+    async session({ session, token }: any) {
       session.accessToken = token.accessToken as string;
       session.provider = token.provider as string;
       return session;
     },
-    async signIn({ user, account, profile }) {
+    async signIn({ user, account }: any) {
       // Handle OAuth sign in
       if (account?.provider === "google" || account?.provider === "tiktok") {
         try {

@@ -23,7 +23,7 @@ const httpClient = async (url: string, options: RequestInit = {}) => {
 export const dataProvider: DataProvider = {
   getApiUrl: () => API_URL,
 
-  getList: async ({ resource, pagination, filters, sorters, meta }) => {
+  getList: async ({ resource, pagination, filters, sorters }) => {
     const url = new URL(`${API_URL}/${resource}`);
 
     // Pagination
@@ -64,7 +64,7 @@ export const dataProvider: DataProvider = {
     };
   },
 
-  getOne: async ({ resource, id, meta }) => {
+  getOne: async ({ resource, id }) => {
     const url = `${API_URL}/${resource}/${id}`;
     const response = await httpClient(url);
     const data = await response.json();
@@ -74,7 +74,7 @@ export const dataProvider: DataProvider = {
     };
   },
 
-  create: async ({ resource, variables, meta }) => {
+  create: async ({ resource, variables }) => {
     const url = `${API_URL}/${resource}`;
     const response = await httpClient(url, {
       method: "POST",
@@ -87,7 +87,7 @@ export const dataProvider: DataProvider = {
     };
   },
 
-  update: async ({ resource, id, variables, meta }) => {
+  update: async ({ resource, id, variables }) => {
     const url = `${API_URL}/${resource}/${id}`;
     const response = await httpClient(url, {
       method: "PUT",
@@ -100,7 +100,7 @@ export const dataProvider: DataProvider = {
     };
   },
 
-  deleteOne: async ({ resource, id, meta }) => {
+  deleteOne: async ({ resource, id }) => {
     const url = `${API_URL}/${resource}/${id}`;
     const response = await httpClient(url, {
       method: "DELETE",
@@ -112,7 +112,7 @@ export const dataProvider: DataProvider = {
     };
   },
 
-  getMany: async ({ resource, ids, meta }) => {
+  getMany: async ({ resource, ids }) => {
     const url = new URL(`${API_URL}/${resource}`);
     ids.forEach((id) => url.searchParams.append("id", String(id)));
 
@@ -124,15 +124,7 @@ export const dataProvider: DataProvider = {
     };
   },
 
-  custom: async ({
-    url,
-    method,
-    filters,
-    sorters,
-    payload,
-    query,
-    headers,
-  }) => {
+  custom: async ({ url, method, payload, query, headers }) => {
     let requestUrl = `${API_URL}${url}`;
 
     if (query) {

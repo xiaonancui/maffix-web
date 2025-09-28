@@ -120,7 +120,8 @@ export default function SignUpPage() {
           Welcome to TenTenTen!
         </h1>
         <p className="text-gray-600">
-          Your account has been created successfully. You're being signed in...
+          Your account has been created successfully. You&apos;re being signed
+          in...
         </p>
         <div className="mx-auto h-8 w-8 animate-spin rounded-full border-b-2 border-blue-600"></div>
       </div>

@@ -17,7 +17,6 @@ import {
   GiftOutlined,
   FireOutlined,
   ArrowUpOutlined,
-  ArrowDownOutlined,
 } from "@ant-design/icons";
 import { useSession } from "next-auth/react";
 import { useList } from "@refinedev/core";
@@ -37,7 +36,7 @@ export default function DashboardPage() {
       {
         field: "userId",
         operator: "eq",
-        value: session?.user?.id,
+        value: (session?.user as any)?.id,
       },
     ],
     sorters: [
@@ -58,7 +57,7 @@ export default function DashboardPage() {
       {
         field: "userId",
         operator: "eq",
-        value: session?.user?.id,
+        value: (session?.user as any)?.id,
       },
     ],
     sorters: [
@@ -72,7 +71,7 @@ export default function DashboardPage() {
   const stats = [
     {
       title: "Diamond Balance",
-      value: session?.user?.diamondBalance || 0,
+      value: (session?.user as any)?.diamondBalance || 0,
       formatter: formatDiamonds as any,
       prefix: <StarOutlined className="text-diamond-600" />,
       valueStyle: { color: "#f59532" },
@@ -107,8 +106,8 @@ export default function DashboardPage() {
           Welcome back, {session?.user?.name || "User"}! 👋
         </h1>
         <p className="mb-4 text-blue-100">
-          You have {formatDiamonds(session?.user?.diamondBalance || 0)} diamonds
-          ready to spend on the gacha!
+          You have {formatDiamonds((session?.user as any)?.diamondBalance || 0)}{" "}
+          diamonds ready to spend on the gacha!
         </p>
         <div className="flex space-x-4">
           <Link href="/dashboard/tasks">

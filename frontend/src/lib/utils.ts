@@ -1,6 +1,6 @@
-import { type ClassValue, clsx } from 'clsx';
-import { twMerge } from 'tailwind-merge';
-import { format, formatDistanceToNow, isValid, parseISO } from 'date-fns';
+import { type ClassValue, clsx } from "clsx";
+import { twMerge } from "tailwind-merge";
+import { format, formatDistanceToNow, isValid, parseISO } from "date-fns";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -8,20 +8,20 @@ export function cn(...inputs: ClassValue[]) {
 
 export function formatDate(
   date: Date | string | number,
-  formatStr: string = 'PPP'
+  formatStr: string = "PPP",
 ): string {
   let dateObj: Date;
 
-  if (typeof date === 'string') {
+  if (typeof date === "string") {
     dateObj = parseISO(date);
-  } else if (typeof date === 'number') {
+  } else if (typeof date === "number") {
     dateObj = new Date(date);
   } else {
     dateObj = date;
   }
 
   if (!isValid(dateObj)) {
-    return 'Invalid date';
+    return "Invalid date";
   }
 
   return format(dateObj, formatStr);
@@ -30,16 +30,16 @@ export function formatDate(
 export function formatRelativeTime(date: Date | string | number): string {
   let dateObj: Date;
 
-  if (typeof date === 'string') {
+  if (typeof date === "string") {
     dateObj = parseISO(date);
-  } else if (typeof date === 'number') {
+  } else if (typeof date === "number") {
     dateObj = new Date(date);
   } else {
     dateObj = date;
   }
 
   if (!isValid(dateObj)) {
-    return 'Invalid date';
+    return "Invalid date";
   }
 
   return formatDistanceToNow(dateObj, { addSuffix: true });
@@ -57,16 +57,16 @@ export function formatDiamonds(amount: number): string {
 
 export function formatCurrency(
   amount: number,
-  currency: string = 'USD'
+  currency: string = "USD",
 ): string {
-  return new Intl.NumberFormat('en-US', {
-    style: 'currency',
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
     currency,
   }).format(amount);
 }
 
 export function formatNumber(num: number): string {
-  return new Intl.NumberFormat('en-US').format(num);
+  return new Intl.NumberFormat("en-US").format(num);
 }
 
 export function isValidEmail(email: string): boolean {
@@ -87,15 +87,15 @@ export function truncateText(text: string, maxLength: number): string {
   if (text.length <= maxLength) {
     return text;
   }
-  return text.slice(0, maxLength) + '...';
+  return text.slice(0, maxLength) + "...";
 }
 
 export function slugify(text: string): string {
   return text
     .toLowerCase()
-    .replace(/[^\w\s-]/g, '')
-    .replace(/[\s_-]+/g, '-')
-    .replace(/^-+|-+$/g, '');
+    .replace(/[^\w\s-]/g, "")
+    .replace(/[\s_-]+/g, "-")
+    .replace(/^-+|-+$/g, "");
 }
 
 export function generateId(): string {
@@ -104,7 +104,7 @@ export function generateId(): string {
 
 export function debounce<T extends (...args: any[]) => any>(
   func: T,
-  wait: number
+  wait: number,
 ): (...args: Parameters<T>) => void {
   let timeout: NodeJS.Timeout;
   return (...args: Parameters<T>) => {
@@ -115,7 +115,7 @@ export function debounce<T extends (...args: any[]) => any>(
 
 export function throttle<T extends (...args: any[]) => any>(
   func: T,
-  limit: number
+  limit: number,
 ): (...args: Parameters<T>) => void {
   let inThrottle: boolean;
   return (...args: Parameters<T>) => {
@@ -129,9 +129,9 @@ export function throttle<T extends (...args: any[]) => any>(
 
 export function getInitials(name: string): string {
   return name
-    .split(' ')
-    .map(word => word.charAt(0))
-    .join('')
+    .split(" ")
+    .map((word) => word.charAt(0))
+    .join("")
     .toUpperCase()
     .slice(0, 2);
 }
@@ -141,16 +141,16 @@ export function copyToClipboard(text: string): Promise<void> {
     return navigator.clipboard.writeText(text);
   } else {
     // Fallback for older browsers
-    const textArea = document.createElement('textarea');
+    const textArea = document.createElement("textarea");
     textArea.value = text;
-    textArea.style.position = 'absolute';
-    textArea.style.left = '-999999px';
+    textArea.style.position = "absolute";
+    textArea.style.left = "-999999px";
     document.body.prepend(textArea);
     textArea.select();
     try {
-      document.execCommand('copy');
+      document.execCommand("copy");
     } catch (error) {
-      console.error('Failed to copy text: ', error);
+      console.error("Failed to copy text: ", error);
     } finally {
       textArea.remove();
     }
@@ -162,8 +162,8 @@ export function getErrorMessage(error: unknown): string {
   if (error instanceof Error) {
     return error.message;
   }
-  if (typeof error === 'string') {
+  if (typeof error === "string") {
     return error;
   }
-  return 'An unknown error occurred';
+  return "An unknown error occurred";
 }

@@ -17,7 +17,6 @@ import {
   GiftOutlined,
   DollarOutlined,
   ArrowUpOutlined,
-  ArrowDownOutlined,
   EyeOutlined,
 } from "@ant-design/icons";
 import { useList } from "@refinedev/core";
@@ -34,14 +33,7 @@ export default function AdminDashboardPage() {
     sorters: [{ field: "createdAt", order: "desc" }],
   });
 
-  // Fetch recent tasks
-  const {
-    query: { data: tasksData, isLoading: tasksLoading },
-  } = useList({
-    resource: "tasks",
-    pagination: { current: 1, pageSize: 5 } as any,
-    sorters: [{ field: "createdAt", order: "desc" }],
-  });
+  // Note: Tasks data fetching removed as it's not currently used in the UI
 
   const systemStats = [
     {
