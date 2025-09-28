@@ -35,7 +35,7 @@
     "db:studio": "npm run db:studio --workspace=backend",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,css,scss,md,yml,yaml}\"",
     "format:check": "prettier --check \"**/*.{js,jsx,ts,tsx,json,css,scss,md,yml,yaml}\"",
-    "prepare": "if [ \"$CI\" != \"true\" ]; then husky install; fi"
+    "prepare": "node -e \"try { if (!process.env.CI && !process.env.VERCEL && !process.env.NETLIFY) { require('child_process').execSync('husky install', { stdio: 'inherit' }); } } catch (e) { console.log('Husky install skipped'); }\""
   },
   "keywords": [
     "musician",
