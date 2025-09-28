@@ -1,0 +1,209 @@
+# =============================================================================
+# Git Attributes Configuration
+# =============================================================================
+# This file ensures consistent behavior across different operating systems
+# and provides hints for proper file handling in Git repositories
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Text Files - Normalize Line Endings
+# -----------------------------------------------------------------------------
+# Ensure consistent line endings across platforms
+* text=auto eol=lf
+
+# Source code files
+*.js text eol=lf
+*.jsx text eol=lf
+*.ts text eol=lf
+*.tsx text eol=lf
+*.json text eol=lf
+*.css text eol=lf
+*.scss text eol=lf
+*.sass text eol=lf
+*.less text eol=lf
+*.html text eol=lf
+*.xml text eol=lf
+*.svg text eol=lf
+
+# Configuration files
+*.yml text eol=lf
+*.yaml text eol=lf
+*.toml text eol=lf
+*.ini text eol=lf
+*.cfg text eol=lf
+*.conf text eol=lf
+*.config text eol=lf
+
+# Documentation files
+*.md text eol=lf
+*.txt text eol=lf
+*.rst text eol=lf
+*.adoc text eol=lf
+
+# Shell scripts
+*.sh text eol=lf
+*.bash text eol=lf
+*.zsh text eol=lf
+*.fish text eol=lf
+
+# Batch files (Windows)
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.ps1 text eol=crlf
+
+# Environment files
+.env* text eol=lf
+*.env text eol=lf
+
+# Lock files
+package-lock.json text eol=lf
+yarn.lock text eol=lf
+pnpm-lock.yaml text eol=lf
+
+# -----------------------------------------------------------------------------
+# Binary Files - Do Not Modify
+# -----------------------------------------------------------------------------
+# Images
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.webp binary
+*.avif binary
+*.bmp binary
+*.tiff binary
+*.svg binary
+
+# Fonts
+*.woff binary
+*.woff2 binary
+*.eot binary
+*.ttf binary
+*.otf binary
+
+# Audio/Video
+*.mp3 binary
+*.mp4 binary
+*.avi binary
+*.mov binary
+*.wmv binary
+*.flv binary
+*.wav binary
+*.ogg binary
+
+# Archives
+*.zip binary
+*.tar binary
+*.gz binary
+*.rar binary
+*.7z binary
+
+# Documents
+*.pdf binary
+*.doc binary
+*.docx binary
+*.xls binary
+*.xlsx binary
+*.ppt binary
+*.pptx binary
+
+# Executables
+*.exe binary
+*.dll binary
+*.so binary
+*.dylib binary
+
+# -----------------------------------------------------------------------------
+# Language Detection for GitHub
+# -----------------------------------------------------------------------------
+# Help GitHub properly detect languages
+*.prisma linguist-language=Prisma
+*.graphql linguist-language=GraphQL
+*.gql linguist-language=GraphQL
+
+# Exclude generated files from language statistics
+dist/ linguist-generated=true
+build/ linguist-generated=true
+coverage/ linguist-generated=true
+*.min.js linguist-generated=true
+*.min.css linguist-generated=true
+*.bundle.js linguist-generated=true
+*.bundle.css linguist-generated=true
+
+# Mark vendor/third-party code
+node_modules/ linguist-vendored=true
+vendor/ linguist-vendored=true
+third-party/ linguist-vendored=true
+
+# -----------------------------------------------------------------------------
+# Merge Strategies
+# -----------------------------------------------------------------------------
+# Use union merge for changelog files
+CHANGELOG.md merge=union
+CHANGELOG.txt merge=union
+HISTORY.md merge=union
+
+# Use ours strategy for generated files
+package-lock.json merge=ours
+yarn.lock merge=ours
+pnpm-lock.yaml merge=ours
+
+# -----------------------------------------------------------------------------
+# Diff Settings
+# -----------------------------------------------------------------------------
+# Better diff for specific file types
+*.json diff=json
+*.md diff=markdown
+*.css diff=css
+*.html diff=html
+
+# Custom diff drivers (if configured)
+*.prisma diff=prisma
+*.graphql diff=graphql
+
+# -----------------------------------------------------------------------------
+# Export Settings
+# -----------------------------------------------------------------------------
+# Exclude files from git archive exports
+.gitattributes export-ignore
+.gitignore export-ignore
+.github/ export-ignore
+.vscode/ export-ignore
+.idea/ export-ignore
+*.log export-ignore
+coverage/ export-ignore
+.nyc_output/ export-ignore
+test-results/ export-ignore
+
+# Development and testing files
+*.test.js export-ignore
+*.spec.js export-ignore
+*.test.ts export-ignore
+*.spec.ts export-ignore
+__tests__/ export-ignore
+__mocks__/ export-ignore
+cypress/ export-ignore
+e2e/ export-ignore
+
+# Documentation that shouldn't be in releases
+docs/ export-ignore
+examples/ export-ignore
+.storybook/ export-ignore
+
+# -----------------------------------------------------------------------------
+# Filter Settings
+# -----------------------------------------------------------------------------
+# Clean filters for sensitive files
+*.env filter=git-crypt diff=git-crypt
+*.key filter=git-crypt diff=git-crypt
+*secret* filter=git-crypt diff=git-crypt
+
+# =============================================================================
+# Notes:
+# - This file ensures consistent behavior across different development environments
+# - Binary files are properly marked to prevent Git from attempting text operations
+# - Language detection helps GitHub provide accurate repository statistics
+# - Merge strategies prevent conflicts in generated files
+# - Export settings control what gets included in release archives
+# =============================================================================
