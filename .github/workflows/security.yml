@@ -25,6 +25,8 @@ jobs:
           cache: "npm"
 
       - name: Install dependencies
+        env:
+          CI: true
         run: |
           npm ci --ignore-scripts
           npm run install:all
@@ -83,12 +85,13 @@ jobs:
           output: "trivy-results.sarif"
           severity: "CRITICAL,HIGH,MEDIUM"
 
-      - name: Upload Trivy scan results to GitHub Security tab
-        uses: github/codeql-action/upload-sarif@v3
-        if: always()
-        with:
-          sarif_file: "trivy-results.sarif"
-        continue-on-error: true
+      # Note: SARIF upload requires special permissions and may fail in some repositories
+      # - name: Upload Trivy scan results to GitHub Security tab
+      #   uses: github/codeql-action/upload-sarif@v3
+      #   if: always()
+      #   with:
+      #     sarif_file: "trivy-results.sarif"
+      #   continue-on-error: true
 
   secret-scan:
     name: Secret Scanning
