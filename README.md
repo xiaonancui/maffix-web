@@ -5,7 +5,7 @@
 [![Security Checks](https://github.com/xiaonancui/tententen-web/workflows/Security%20Checks/badge.svg)](https://github.com/xiaonancui/tententen-web/actions/workflows/security.yml)
 
 An independent musician fan engagement platform that revolutionizes how artists
-connect with their audience through gamified experiences and meaningful
+connect with audience through gamified experiences and meaningful
 interactions.
 
 ## 🎵 Vision
