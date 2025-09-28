@@ -73,7 +73,6 @@ pnpm-lock.yaml text eol=lf
 *.avif binary
 *.bmp binary
 *.tiff binary
-*.svg binary
 
 # Fonts
 *.woff binary

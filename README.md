@@ -101,6 +101,11 @@ tententen-web/
 
 ### Environment Variables
 
+Environment variables are loaded from specific locations:
+- **Frontend**: Loads from `frontend/.env.local` (Next.js conventions)
+- **Backend**: Loads from `backend/.env.local` (NestJS dotenv config)
+- **Root**: `.env.local` is a template only and not read by either app unless explicitly configured
+
 See the `.env.example` files in the root, frontend, and backend directories for required environment variables. Key variables include:
 
 - Database connection (Supabase)

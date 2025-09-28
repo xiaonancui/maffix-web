@@ -132,7 +132,7 @@ logs
 *.sqlite3
 
 # Prisma
-prisma/migrations/
+# Note: migrations/ should be versioned
 
 # Deployment
 .vercel
