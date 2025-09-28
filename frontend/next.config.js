@@ -18,6 +18,11 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: false,
   },
+  // Disable static generation for pages with dynamic content
+  output: "standalone",
+  experimental: {
+    missingSuspenseWithCSRBailout: false,
+  },
   // Allow build to continue even with prerender errors
   onDemandEntries: {
     maxInactiveAge: 25 * 1000,

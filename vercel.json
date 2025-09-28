@@ -1,20 +1,12 @@
 {
   "version": 2,
+  "buildCommand": "node build-vercel.js",
+  "outputDirectory": "frontend/.next",
+  "installCommand": "npm install --ignore-scripts",
+  "framework": null,
   "env": {
     "CI": "true",
     "VERCEL": "1",
     "NODE_ENV": "production"
-  },
-  "build": {
-    "env": {
-      "CI": "true",
-      "VERCEL": "1",
-      "NODE_ENV": "production"
-    }
-  },
-  "installCommand": "npm ci --ignore-scripts",
-  "buildCommand": "cd frontend && npm ci && npm run build",
-  "outputDirectory": "frontend/.next",
-  "framework": null,
-  "regions": ["iad1"]
+  }
 }
