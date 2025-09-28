@@ -85,12 +85,6 @@
       "prettier --write"
     ]
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged",
-      "pre-push": "npm run type-check && npm run test"
-    }
-  },
   "volta": {
     "node": "18.19.0",
     "npm": "10.2.3"

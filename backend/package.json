@@ -1,0 +1,12 @@
+{
+  "name": "@tententen/backend",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "echo 'backend dev placeholder'",
+    "build": "echo 'backend build placeholder'",
+    "start": "echo 'backend start placeholder'",
+    "clean": "rimraf node_modules",
+    "test": "echo 'no tests yet'"
+  }
+}
