@@ -6,6 +6,10 @@ updates:
     schedule:
       interval: "weekly"
     open-pull-requests-limit: 3
+    ignore:
+      # Ignore major version updates for Tailwind CSS v4 (breaking changes)
+      - dependency-name: "tailwindcss"
+        update-types: ["version-update:semver-major"]
 
   # Frontend dependencies
   - package-ecosystem: "npm"
@@ -13,6 +17,17 @@ updates:
     schedule:
       interval: "weekly"
     open-pull-requests-limit: 3
+    ignore:
+      # Ignore major version updates for Tailwind CSS v4 (breaking changes)
+      - dependency-name: "tailwindcss"
+        update-types: ["version-update:semver-major"]
+      # Ignore React 19 for now (breaking changes)
+      - dependency-name: "@types/react"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "react"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "react-dom"
+        update-types: ["version-update:semver-major"]
 
   # Backend dependencies
   - package-ecosystem: "npm"
@@ -20,6 +35,10 @@ updates:
     schedule:
       interval: "weekly"
     open-pull-requests-limit: 3
+    ignore:
+      # Ignore Express v5 for now (breaking changes)
+      - dependency-name: "express"
+        update-types: ["version-update:semver-major"]
 
   # GitHub Actions
   - package-ecosystem: "github-actions"
