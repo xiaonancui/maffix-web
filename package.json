@@ -87,7 +87,7 @@
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
       "prettier --write",
-      "eslint --fix || true"
+      "bash -c 'eslint --fix \"$@\" || true' --"
     ],
     "*.{json,css,scss,md,yml,yaml}": [
       "prettier --write"

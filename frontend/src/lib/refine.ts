@@ -1,13 +1,13 @@
-import { DataProvider } from '@refinedev/core';
-import { generateFilter, generateSort } from '@refinedev/simple-rest';
+import { DataProvider } from "@refinedev/core";
+import { generateFilter, generateSort } from "@refinedev/simple-rest";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api";
 
 const httpClient = async (url: string, options: RequestInit = {}) => {
   const response = await fetch(url, {
     ...options,
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
       ...options.headers,
     },
   });
@@ -28,15 +28,20 @@ export const dataProvider: DataProvider = {
 
     // Pagination
     if (pagination) {
-      url.searchParams.append('_start', String(pagination.current - 1));
-      url.searchParams.append('_end', String(pagination.pageSize));
+      const current = (pagination as any).current || 1;
+      const pageSize = (pagination as any).pageSize || 10;
+      url.searchParams.append("_start", String((current - 1) * pageSize));
+      url.searchParams.append("_end", String(pageSize));
     }
 
     // Filters
     if (filters) {
       const generatedFilters = generateFilter(filters);
-      Object.keys(generatedFilters).forEach(key => {
-        url.searchParams.append(key, generatedFilters[key]);
+      Object.keys(generatedFilters).forEach((key) => {
+        const value = generatedFilters[key];
+        if (value !== undefined) {
+          url.searchParams.append(key, value);
+        }
       });
     }
 
@@ -45,8 +50,8 @@ export const dataProvider: DataProvider = {
       const generatedSort = generateSort(sorters);
       if (generatedSort) {
         const { _sort, _order } = generatedSort;
-        url.searchParams.append('_sort', _sort.join(','));
-        url.searchParams.append('_order', _order.join(','));
+        url.searchParams.append("_sort", _sort.join(","));
+        url.searchParams.append("_order", _order.join(","));
       }
     }
 
@@ -72,7 +77,7 @@ export const dataProvider: DataProvider = {
   create: async ({ resource, variables, meta }) => {
     const url = `${API_URL}/${resource}`;
     const response = await httpClient(url, {
-      method: 'POST',
+      method: "POST",
       body: JSON.stringify(variables),
     });
     const data = await response.json();
@@ -85,7 +90,7 @@ export const dataProvider: DataProvider = {
   update: async ({ resource, id, variables, meta }) => {
     const url = `${API_URL}/${resource}/${id}`;
     const response = await httpClient(url, {
-      method: 'PUT',
+      method: "PUT",
       body: JSON.stringify(variables),
     });
     const data = await response.json();
@@ -98,7 +103,7 @@ export const dataProvider: DataProvider = {
   deleteOne: async ({ resource, id, meta }) => {
     const url = `${API_URL}/${resource}/${id}`;
     const response = await httpClient(url, {
-      method: 'DELETE',
+      method: "DELETE",
     });
     const data = await response.json();
 
@@ -109,7 +114,7 @@ export const dataProvider: DataProvider = {
 
   getMany: async ({ resource, ids, meta }) => {
     const url = new URL(`${API_URL}/${resource}`);
-    ids.forEach(id => url.searchParams.append('id', String(id)));
+    ids.forEach((id) => url.searchParams.append("id", String(id)));
 
     const response = await httpClient(url.toString());
     const data = await response.json();
@@ -135,11 +140,16 @@ export const dataProvider: DataProvider = {
       requestUrl = `${requestUrl}?${queryParams.toString()}`;
     }
 
-    const response = await httpClient(requestUrl, {
-      method: method || 'GET',
+    const requestOptions: RequestInit = {
+      method: method || "GET",
       headers: headers || {},
-      body: payload ? JSON.stringify(payload) : undefined,
-    });
+    };
+
+    if (payload) {
+      requestOptions.body = JSON.stringify(payload);
+    }
+
+    const response = await httpClient(requestUrl, requestOptions);
 
     const data = await response.json();
 
