@@ -1,0 +1,322 @@
+// =============================================================================
+// TenTenTen Database Schema
+// =============================================================================
+// This schema defines the database structure for the TenTenTen platform
+// =============================================================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// =============================================================================
+// User Management
+// =============================================================================
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  name      String
+  password  String?  // Nullable for OAuth users
+  role      Role     @default(USER)
+  avatar    String?
+  
+  // Gamification
+  diamondBalance Int      @default(0)
+  points         Int      @default(0)
+  level          Int      @default(1)
+  
+  // OAuth
+  provider       String?  // google, tiktok, discord, etc.
+  providerId     String?  // ID from OAuth provider
+  
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  lastLoginAt DateTime?
+  
+  // Relations
+  completedTasks UserTask[]
+  prizes         UserPrize[]
+  gachaPulls     GachaPull[]
+  transactions   Transaction[]
+  
+  @@index([email])
+  @@index([provider, providerId])
+  @@map("users")
+}
+
+enum Role {
+  USER
+  ADMIN
+  ARTIST
+}
+
+// =============================================================================
+// Task Management
+// =============================================================================
+
+model Task {
+  id          String   @id @default(uuid())
+  title       String
+  description String
+  type        TaskType
+  difficulty  Difficulty @default(EASY)
+  
+  // Rewards
+  points      Int      @default(0)
+  diamonds    Int      @default(0)
+  
+  // Status
+  isActive    Boolean  @default(true)
+  startDate   DateTime?
+  endDate     DateTime?
+  
+  // Limits
+  maxCompletions Int?  // Max times this task can be completed globally
+  completionCount Int @default(0)
+  
+  // Timestamps
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Relations
+  completions UserTask[]
+  
+  @@index([type])
+  @@index([isActive])
+  @@map("tasks")
+}
+
+enum TaskType {
+  SOCIAL      // Follow, share, like
+  CONTENT     // Write review, create content
+  DAILY       // Daily check-in
+  PROFILE     // Complete profile
+  REFERRAL    // Invite friends
+  PURCHASE    // Make a purchase
+  EVENT       // Attend event
+}
+
+enum Difficulty {
+  EASY
+  MEDIUM
+  HARD
+}
+
+// =============================================================================
+// User Task Completion
+// =============================================================================
+
+model UserTask {
+  id          String   @id @default(uuid())
+  userId      String
+  taskId      String
+  
+  // Completion details
+  completedAt DateTime @default(now())
+  pointsEarned Int
+  diamondsEarned Int
+  
+  // Verification
+  verified    Boolean  @default(false)
+  verifiedAt  DateTime?
+  verifiedBy  String?  // Admin user ID
+  
+  // Relations
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  task        Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  
+  @@unique([userId, taskId])
+  @@index([userId])
+  @@index([taskId])
+  @@map("user_tasks")
+}
+
+// =============================================================================
+// Prize System
+// =============================================================================
+
+model Prize {
+  id          String   @id @default(uuid())
+  name        String
+  description String
+  rarity      Rarity
+  
+  // Prize details
+  image       String?
+  value       Int      @default(0)  // Diamond value
+  type        PrizeType
+  
+  // Availability
+  isActive    Boolean  @default(true)
+  stock       Int?     // Null = unlimited
+  
+  // Timestamps
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Relations
+  userPrizes  UserPrize[]
+  gachaItems  GachaItem[]
+  
+  @@index([rarity])
+  @@index([isActive])
+  @@map("prizes")
+}
+
+enum Rarity {
+  COMMON
+  RARE
+  EPIC
+  LEGENDARY
+}
+
+enum PrizeType {
+  PHYSICAL    // Physical merchandise
+  DIGITAL     // Digital content
+  EXPERIENCE  // Meet & greet, concert tickets
+  DISCOUNT    // Discount codes
+  EXCLUSIVE   // Exclusive content access
+}
+
+// =============================================================================
+// User Prize Ownership
+// =============================================================================
+
+model UserPrize {
+  id          String   @id @default(uuid())
+  userId      String
+  prizeId     String
+  
+  // Acquisition details
+  acquiredAt  DateTime @default(now())
+  source      PrizeSource
+  
+  // Redemption
+  redeemed    Boolean  @default(false)
+  redeemedAt  DateTime?
+  
+  // Relations
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  prize       Prize    @relation(fields: [prizeId], references: [id], onDelete: Cascade)
+  
+  @@index([userId])
+  @@index([prizeId])
+  @@map("user_prizes")
+}
+
+enum PrizeSource {
+  GACHA
+  PURCHASE
+  REWARD
+  GIFT
+}
+
+// =============================================================================
+// Gacha System
+// =============================================================================
+
+model GachaItem {
+  id          String   @id @default(uuid())
+  prizeId     String
+  
+  // Probability (0-100)
+  probability Float
+  
+  // Pity system
+  pityCounter Int      @default(0)
+  
+  // Status
+  isActive    Boolean  @default(true)
+  
+  // Timestamps
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Relations
+  prize       Prize    @relation(fields: [prizeId], references: [id], onDelete: Cascade)
+  pulls       GachaPull[]
+  
+  @@index([isActive])
+  @@map("gacha_items")
+}
+
+model GachaPull {
+  id          String   @id @default(uuid())
+  userId      String
+  gachaItemId String
+  
+  // Pull details
+  pulledAt    DateTime @default(now())
+  cost        Int      // Diamonds spent
+  
+  // Result
+  won         Boolean  @default(false)
+  
+  // Relations
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  gachaItem   GachaItem @relation(fields: [gachaItemId], references: [id], onDelete: Cascade)
+  
+  @@index([userId])
+  @@index([gachaItemId])
+  @@map("gacha_pulls")
+}
+
+// =============================================================================
+// Transaction History
+// =============================================================================
+
+model Transaction {
+  id          String   @id @default(uuid())
+  userId      String
+  
+  // Transaction details
+  type        TransactionType
+  amount      Int      // Diamonds or points
+  currency    Currency
+  
+  // Description
+  description String
+  reference   String?  // Reference to related entity (taskId, prizeId, etc.)
+  
+  // Status
+  status      TransactionStatus @default(COMPLETED)
+  
+  // Timestamps
+  createdAt   DateTime @default(now())
+  
+  // Relations
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@index([userId])
+  @@index([type])
+  @@index([createdAt])
+  @@map("transactions")
+}
+
+enum TransactionType {
+  EARN        // Earned from tasks
+  SPEND       // Spent on gacha/prizes
+  PURCHASE    // Purchased with real money
+  GIFT        // Received as gift
+  REFUND      // Refunded
+  ADJUSTMENT  // Admin adjustment
+}
+
+enum Currency {
+  DIAMONDS
+  POINTS
+}
+
+enum TransactionStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  CANCELLED
+}
+

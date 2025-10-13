@@ -1,96 +1,58 @@
 {
-  "name": "tententen-web",
-  "version": "1.0.0",
-  "description": "Independent musician fan engagement platform with gamified experiences and meaningful interactions",
+  "name": "maffix-web",
+  "version": "2.0.0",
+  "description": "Independent musician fan engagement platform with gamified experiences - Maffix Edition",
   "private": true,
   "workspaces": [
-    "frontend",
-    "backend"
+    "apps/*",
+    "packages/*"
   ],
   "scripts": {
-    "dev": "concurrently \"npm run dev:frontend\" \"npm run dev:backend\"",
-    "dev:frontend": "npm run dev --workspace=frontend",
-    "dev:backend": "npm run dev --workspace=backend",
-    "build": "npm run build --workspaces",
-    "build:frontend": "npm run build --workspace=frontend",
-    "build:backend": "npm run build --workspace=backend",
-    "start": "concurrently \"npm run start:frontend\" \"npm run start:backend\"",
-    "start:frontend": "npm run start --workspace=frontend",
-    "start:backend": "npm run start --workspace=backend",
-    "test": "npm run test --workspaces",
-    "test:frontend": "npm run test --workspace=frontend",
-    "test:backend": "npm run test --workspace=backend",
-    "lint": "npm run lint --workspaces",
-    "lint:fix": "npm run lint:fix --workspaces",
-    "type-check": "npm run type-check --workspaces",
-    "clean": "npm run clean --workspaces && rimraf node_modules",
-    "clean:frontend": "npm run clean --workspace=frontend",
-    "clean:backend": "npm run clean --workspace=backend",
-    "install:all": "npm install && npm install --workspaces",
-    "postinstall": "npm run postinstall --workspaces --if-present",
-    "db:generate": "npm run db:generate --workspace=backend",
-    "db:push": "npm run db:push --workspace=backend",
-    "db:migrate": "npm run db:migrate --workspace=backend",
-    "db:seed": "npm run db:seed --workspace=backend",
-    "db:studio": "npm run db:studio --workspace=backend",
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "start": "turbo run start",
+    "lint": "turbo run lint",
+    "test": "turbo run test",
+    "clean": "turbo run clean && rm -rf node_modules",
+    "db:generate": "turbo run db:generate",
+    "db:push": "turbo run db:push",
+    "db:migrate": "turbo run db:migrate",
+    "db:studio": "turbo run db:studio",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,css,scss,md,yml,yaml}\"",
-    "format:check": "prettier --check \"**/*.{js,jsx,ts,tsx,json,css,scss,md,yml,yaml}\"",
-    "prepare": "node -e \"try { if (!process.env.CI && !process.env.VERCEL && !process.env.NETLIFY) { require('child_process').execSync('husky install', { stdio: 'inherit' }); } } catch (e) { console.log('Husky install skipped'); }\""
+    "format:check": "prettier --check \"**/*.{js,jsx,ts,tsx,json,css,scss,md,yml,yaml}\""
   },
   "keywords": [
     "musician",
     "fan-engagement",
     "gamification",
     "nextjs",
-    "nestjs",
     "typescript",
     "supabase",
-    "refine",
-    "klarna",
-    "gacha"
+    "turborepo",
+    "maffix"
   ],
   "author": {
-    "name": "TenTenTen Team",
-    "email": "team@tententen.com",
-    "url": "https://tententen.com"
+    "name": "Maffix Team",
+    "email": "team@maffix.com",
+    "url": "https://maffix.com"
   },
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/your-org/tententen-web.git"
+    "url": "https://github.com/xiaonancui/maffix-web.git"
   },
   "bugs": {
-    "url": "https://github.com/your-org/tententen-web/issues"
+    "url": "https://github.com/xiaonancui/maffix-web/issues"
   },
-  "homepage": "https://tententen.com",
+  "homepage": "https://maffix.com",
   "engines": {
-    "node": ">=18.0.0",
-    "npm": ">=8.0.0"
+    "node": ">=18.0.0"
   },
   "devDependencies": {
-    "@types/node": "^20.10.0",
-    "@typescript-eslint/eslint-plugin": "^6.13.0",
-    "@typescript-eslint/parser": "^6.13.0",
-    "concurrently": "^8.2.2",
-    "eslint": "^8.55.0",
-    "eslint-plugin-security": "^1.7.1",
-    "husky": "^8.0.3",
-    "lint-staged": "^15.2.0",
+    "turbo": "^2.0.0",
     "prettier": "^3.1.0",
-    "rimraf": "^5.0.5",
-    "typescript": "^5.3.0"
+    "typescript": "^5.3.0",
+    "@types/node": "^20.10.0"
   },
-  "lint-staged": {
-    "*.{js,jsx,ts,tsx}": [
-      "prettier --write",
-      "bash -c 'eslint --fix \"$@\" || true' --"
-    ],
-    "*.{json,css,scss,md,yml,yaml}": [
-      "prettier --write"
-    ]
-  },
-  "volta": {
-    "node": "18.19.0",
-    "npm": "10.2.3"
-  }
+  "packageManager": "cnpm@9.0.0"
 }
