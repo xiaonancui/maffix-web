@@ -12,7 +12,7 @@ export default async function TasksPage() {
   }
 
   // Fetch active tasks
-  let tasks = []
+  let tasks: any[] = []
   let completedTaskIds = new Set<string>()
 
   const isTestAccount = process.env.NODE_ENV === 'development' &&

@@ -91,11 +91,10 @@ export async function POST(request: Request) {
         data: {
           userId: user.id,
           gachaItemId: selectedItem.id,
-          prizeId: selectedItem.prizeId,
           cost: GACHA_COST,
+          won: true,
         },
         include: {
-          prize: true,
           gachaItem: true,
         },
       })
@@ -106,7 +105,7 @@ export async function POST(request: Request) {
           userId: user.id,
           prizeId: selectedItem.prizeId,
           source: 'GACHA',
-          isRedeemed: false,
+          redeemed: false,
         },
         include: {
           prize: true,
@@ -141,12 +140,12 @@ export async function POST(request: Request) {
         description: result.userPrize.prize.description,
         rarity: result.userPrize.prize.rarity,
         type: result.userPrize.prize.type,
-        imageUrl: result.userPrize.prize.imageUrl,
+        imageUrl: result.userPrize.prize.image,
         value: result.userPrize.prize.value,
       },
       userPrize: {
         id: result.userPrize.id,
-        wonAt: result.userPrize.wonAt,
+        wonAt: result.userPrize.acquiredAt,
       },
       cost: GACHA_COST,
       newBalance: result.newBalance,

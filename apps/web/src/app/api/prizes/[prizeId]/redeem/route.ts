@@ -29,7 +29,7 @@ export async function POST(
       return NextResponse.json({ error: 'Prize not found' }, { status: 404 })
     }
 
-    if (userPrize.isRedeemed) {
+    if (userPrize.redeemed) {
       return NextResponse.json(
         { error: 'Prize already redeemed' },
         { status: 400 }
@@ -40,7 +40,7 @@ export async function POST(
     const updatedPrize = await db.userPrize.update({
       where: { id: params.prizeId },
       data: {
-        isRedeemed: true,
+        redeemed: true,
         redeemedAt: new Date(),
       },
       include: {

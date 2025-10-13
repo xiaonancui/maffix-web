@@ -22,7 +22,7 @@ module.exports = {
 
     if (files.some((file) => file.endsWith(".ts") || file.endsWith(".tsx"))) {
       // Run the full TS program check to keep the repo type-safe.
-      commands.push("npm run type-check -- --pretty false");
+      commands.push("npm run type-check");
     }
 
     const prettierCommand = buildPrettierCommand(files);
