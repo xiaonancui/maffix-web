@@ -1,8 +1,14 @@
 {
   "version": 2,
+  "name": "maffix-web",
+  "framework": "nextjs",
+  "buildCommand": "cd apps/web && npm run build",
+  "devCommand": "cd apps/web && npm run dev",
+  "installCommand": "npm install",
+  "outputDirectory": "apps/web/.next",
   "builds": [
     {
-      "src": "frontend/package.json",
+      "src": "apps/web/package.json",
       "use": "@vercel/next",
       "config": {
         "distDir": ".next"
@@ -12,10 +18,19 @@
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "frontend/$1"
+      "dest": "apps/web/$1"
     }
   ],
   "env": {
-    "CI": "true"
+    "CI": "true",
+    "NEXTAUTH_SECRET": "@nextauth_secret",
+    "NEXTAUTH_URL": "@nextauth_url",
+    "DATABASE_URL": "@database_url",
+    "GOOGLE_CLIENT_ID": "@google_client_id",
+    "GOOGLE_CLIENT_SECRET": "@google_client_secret",
+    "TIKTOK_CLIENT_ID": "@tiktok_client_id",
+    "TIKTOK_CLIENT_SECRET": "@tiktok_client_secret",
+    "DISCORD_CLIENT_ID": "@discord_client_id",
+    "DISCORD_CLIENT_SECRET": "@discord_client_secret"
   }
 }
