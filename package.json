@@ -12,6 +12,7 @@
     "build": "turbo run build",
     "start": "turbo run start",
     "lint": "turbo run lint",
+    "type-check": "turbo run type-check",
     "test": "turbo run test",
     "clean": "turbo run clean && rm -rf node_modules",
     "db:generate": "turbo run db:generate",
@@ -52,7 +53,8 @@
     "turbo": "^2.0.0",
     "prettier": "^3.1.0",
     "typescript": "^5.3.0",
-    "@types/node": "^20.10.0"
+    "@types/node": "^20.10.0",
+    "lint-staged": "^16.2.4"
   },
   "packageManager": "cnpm@9.0.0"
 }
