@@ -1,10 +1,12 @@
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { redirect } from 'next/navigation'
-import { db } from '@/lib/db'
 import LogoutButton from '@/components/auth/LogoutButton'
 
 export default async function ProfilePage() {
+  // Dynamic import to avoid build-time database connection
+  const { db } = await import('@/lib/db')
+
   const session = await getServerSession(authOptions)
 
   if (!session) {

@@ -1,6 +1,9 @@
 import { db } from '../src/lib/db'
 
 async function testConnection() {
+  // Dynamic import to avoid build-time database connection
+  const { db } = await import('@/lib/db')
+
   try {
     console.log('🔍 Testing database connection...')
     

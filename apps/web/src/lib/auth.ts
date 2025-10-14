@@ -70,6 +70,11 @@ export const authOptions: NextAuthOptions = {
 
         // Try database authentication
         try {
+          // Skip database auth if no DATABASE_URL in production
+          if (process.env.NODE_ENV === 'production' && !process.env.DATABASE_URL) {
+            throw new Error('Database not available in production')
+          }
+
           const user = await db.user.findUnique({
             where: {
               email: credentials.email,
@@ -139,6 +144,11 @@ export const authOptions: NextAuthOptions = {
 
       // Update last login time for real users
       try {
+        // Skip database updates if no DATABASE_URL in production
+        if (process.env.NODE_ENV === 'production' && !process.env.DATABASE_URL) {
+          return true
+        }
+
         if (user.id) {
           await db.user.update({
             where: { id: user.id },

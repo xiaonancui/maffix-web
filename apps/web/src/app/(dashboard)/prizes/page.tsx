@@ -1,11 +1,13 @@
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { redirect } from 'next/navigation'
-import { db } from '@/lib/db'
 import Link from 'next/link'
 import PrizeRedeemButton from '@/components/dashboard/PrizeRedeemButton'
 
 export default async function PrizesPage() {
+  // Dynamic import to avoid build-time database connection
+  const { db } = await import('@/lib/db')
+
   const session = await getServerSession(authOptions)
 
   if (!session) {

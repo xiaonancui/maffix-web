@@ -1,7 +1,6 @@
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { redirect } from 'next/navigation'
-import { db } from '@/lib/db'
 import Link from 'next/link'
 
 export default async function AdminDashboard() {
@@ -10,6 +9,9 @@ export default async function AdminDashboard() {
   if (!session || session.user.role !== 'ADMIN') {
     redirect('/login')
   }
+
+  // Dynamic import to avoid build-time database connection
+  const { db } = await import('@/lib/db')
 
   // Fetch statistics
   const [

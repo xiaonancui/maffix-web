@@ -1,17 +1,27 @@
 import { NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
-import { db } from '@/lib/db'
 
 const GACHA_COST = 100 // Cost in diamonds per pull
 
 export async function POST(request: Request) {
   try {
+    // Check if we're in build time - return early if so
+    if (process.env.NODE_ENV === 'production' && !process.env.DATABASE_URL) {
+      return NextResponse.json(
+        { error: 'Service temporarily unavailable' },
+        { status: 503 }
+      )
+    }
+
     const session = await getServerSession(authOptions)
 
     if (!session) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
+
+    // Dynamic import to avoid build-time database connection
+    const { db } = await import('@/lib/db')
 
     // Get user with current balance
     const user = await db.user.findUnique({

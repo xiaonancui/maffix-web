@@ -1,6 +1,4 @@
 import { NextResponse } from 'next/server'
-import { db } from '@/lib/db'
-import bcrypt from 'bcryptjs'
 import { z } from 'zod'
 
 const registerSchema = z.object({
@@ -11,28 +9,40 @@ const registerSchema = z.object({
 
 export async function POST(request: Request) {
   try {
+    // Check if we're in build time - return early if so
+    if (process.env.NODE_ENV === 'production' && !process.env.DATABASE_URL) {
+      return NextResponse.json(
+        { error: 'Service temporarily unavailable' },
+        { status: 503 }
+      )
+    }
+
     const body = await request.json()
-    
+
     // Validate input
     const validatedData = registerSchema.parse(body)
-    
+
+    // Dynamic import to avoid build-time database connection
+    const { db } = await import('@/lib/db')
+    const bcrypt = await import('bcryptjs')
+
     // Check if user already exists
     const existingUser = await db.user.findUnique({
       where: {
         email: validatedData.email,
       },
     })
-    
+
     if (existingUser) {
       return NextResponse.json(
         { error: 'User with this email already exists' },
         { status: 400 }
       )
     }
-    
+
     // Hash password
     const hashedPassword = await bcrypt.hash(validatedData.password, 12)
-    
+
     // Create user
     const user = await db.user.create({
       data: {
@@ -49,9 +59,9 @@ export async function POST(request: Request) {
         createdAt: true,
       },
     })
-    
+
     return NextResponse.json(
-      { 
+      {
         message: 'User created successfully',
         user,
       },
@@ -64,7 +74,7 @@ export async function POST(request: Request) {
         { status: 400 }
       )
     }
-    
+
     console.error('Registration error:', error)
     return NextResponse.json(
       { error: 'Internal server error' },

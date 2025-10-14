@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "npm run db:generate && next build",
+    "build:vercel": "node scripts/check-build-env.js && prisma generate && next build",
     "start": "next start",
     "lint": "next lint",
     "type-check": "tsc --noEmit",
@@ -16,7 +17,8 @@
     "db:seed": "tsx prisma/seed.ts",
     "db:reset": "tsx scripts/reset-db.ts",
     "db:setup": "npm run db:push && npm run db:seed",
-    "test:db": "tsx scripts/test-db.ts"
+    "test:db": "tsx scripts/test-db.ts",
+    "postinstall": "prisma generate"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"

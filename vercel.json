@@ -2,7 +2,7 @@
   "version": 2,
   "name": "maffix-web",
   "framework": "nextjs",
-  "buildCommand": "cd apps/web && npm run build",
+  "buildCommand": "cd apps/web && npm run build:vercel",
   "devCommand": "cd apps/web && npm run dev",
   "installCommand": "npm install",
   "outputDirectory": "apps/web/.next",
@@ -21,8 +21,14 @@
       "dest": "apps/web/$1"
     }
   ],
+  "functions": {
+    "apps/web/src/app/api/**/*.ts": {
+      "maxDuration": 30
+    }
+  },
   "env": {
     "CI": "true",
+    "NODE_ENV": "production",
     "NEXTAUTH_SECRET": "@nextauth_secret",
     "NEXTAUTH_URL": "@nextauth_url",
     "DATABASE_URL": "@database_url",

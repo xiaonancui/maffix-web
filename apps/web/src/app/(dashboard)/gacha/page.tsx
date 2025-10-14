@@ -1,12 +1,14 @@
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { redirect } from 'next/navigation'
-import { db } from '@/lib/db'
 import GachaPullButton from '@/components/dashboard/GachaPullButton'
 
 const GACHA_COST = 100 // Cost in diamonds per pull
 
 export default async function GachaPage() {
+  // Dynamic import to avoid build-time database connection
+  const { db } = await import('@/lib/db')
+
   const session = await getServerSession(authOptions)
 
   if (!session) {
