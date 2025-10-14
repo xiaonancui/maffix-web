@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import { useEffect, useState } from 'react'
 
 type Prize = {
@@ -97,9 +98,11 @@ export default function GachaResultModal({
             {/* Prize Image/Icon */}
             <div className="mb-4 text-6xl">
               {result.prize.imageUrl ? (
-                <img
+                <Image
                   src={result.prize.imageUrl}
                   alt={result.prize.name}
+                  width={128}
+                  height={128}
                   className="mx-auto h-32 w-32 rounded-lg object-cover"
                 />
               ) : (
@@ -170,4 +173,3 @@ export default function GachaResultModal({
     </div>
   )
 }
-

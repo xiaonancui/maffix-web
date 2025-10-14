@@ -6,6 +6,7 @@ const nextConfig = {
     serverActions: {
       bodySizeLimit: '2mb',
     },
+    outputFileTracingRoot: process.cwd(),
   },
   images: {
     domains: ['localhost', 'supabase.co'],
@@ -15,11 +16,6 @@ const nextConfig = {
   // Skip build-time static optimization for API routes
   generateBuildId: async () => {
     return 'build-' + Date.now()
-  },
-  // Disable static optimization for pages that use getServerSideProps
-  experimental: {
-    ...nextConfig.experimental,
-    outputFileTracingRoot: process.cwd(),
   },
   // Environment variable validation
   env: {
@@ -38,4 +34,3 @@ const nextConfig = {
 }
 
 module.exports = nextConfig
-
