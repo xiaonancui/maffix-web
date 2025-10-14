@@ -13,31 +13,55 @@ export default async function DashboardPage() {
     redirect('/login')
   }
 
-  // Fetch user data with gamification stats
-  let user
+  type DashboardUser = {
+    id: string
+    name: string
+    email: string
+    avatar: string | null
+    role: string
+    diamondBalance: number
+    points: number
+    level: number
+    createdAt: Date
+    lastLoginAt: Date | null
+  }
 
-  // Use mock data for test accounts in development
-  const isTestAccount = process.env.NODE_ENV === 'development' &&
-    (session.user.id?.includes('test-') || session.user.id?.includes('demo-') || session.user.id?.includes('admin-'))
+  const allowTestAccounts =
+    process.env.NODE_ENV === 'development' || process.env.ENABLE_TEST_ACCOUNTS === 'true'
+
+  const isTestAccount =
+    allowTestAccounts &&
+    (session.user.id?.includes('test-') ||
+      session.user.id?.includes('demo-') ||
+      session.user.id?.includes('admin-'))
+
+  const fallbackUser: DashboardUser = {
+    id: session.user.id ?? 'unknown-user',
+    name: session.user.name ?? 'Maffix User',
+    email: session.user.email ?? 'unknown@maffix.com',
+    avatar: null,
+    role: (session.user.role as string) ?? 'USER',
+    diamondBalance: session.user.role === 'ADMIN' ? 10000 : 0,
+    points: session.user.role === 'ADMIN' ? 5000 : 0,
+    level: session.user.role === 'ADMIN' ? 10 : 1,
+    createdAt: new Date(),
+    lastLoginAt: new Date(),
+  }
+
+  // Fetch user data with gamification stats
+  let user: DashboardUser = fallbackUser
 
   if (isTestAccount) {
     console.log('📊 Using mock data for test account:', session.user.email)
     user = {
-      id: session.user.id,
-      name: session.user.name || 'Test User',
-      email: session.user.email || 'test@maffix.com',
-      avatar: null,
-      role: session.user.role || 'USER',
+      ...fallbackUser,
       diamondBalance: session.user.role === 'ADMIN' ? 10000 : 500,
       points: session.user.role === 'ADMIN' ? 5000 : 100,
-      level: session.user.role === 'ADMIN' ? 10 : 1,
-      createdAt: new Date(),
-      lastLoginAt: new Date(),
     }
   } else {
     // Fetch from database for real users
     try {
-      user = await db.user.findUnique({
+      const dbUser = await db.user.findUnique({
         where: { id: session.user.id },
         select: {
           id: true,
@@ -53,12 +77,13 @@ export default async function DashboardPage() {
         },
       })
 
-      if (!user) {
-        redirect('/login')
+      if (dbUser) {
+        user = dbUser
+      } else {
+        console.warn('No user record found, using fallback data for session user:', session.user.id)
       }
     } catch (error) {
-      console.error('Database fetch failed:', error)
-      redirect('/login')
+      console.error('Database fetch failed, using fallback data instead:', error)
     }
   }
 
@@ -211,4 +236,3 @@ export default async function DashboardPage() {
     </div>
   )
 }
-
