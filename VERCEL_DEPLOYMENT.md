@@ -14,7 +14,7 @@ Configure these environment variables in your Vercel project settings:
 
 ### Required Variables
 ```
-NEXTAUTH_SECRET=your_nextauth_secret_here
+NEXTAUTH_SECRET=Pour-Fence-Balloon-Farther0-Comfortable
 NEXTAUTH_URL=https://your-domain.vercel.app
 DATABASE_URL=your_postgresql_connection_string
 ```
