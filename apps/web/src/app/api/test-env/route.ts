@@ -12,13 +12,14 @@ export async function GET() {
     enableTestAccounts: process.env.ENABLE_TEST_ACCOUNTS,
     hasNextAuthSecret: !!process.env.NEXTAUTH_SECRET,
     hasNextAuthUrl: !!process.env.NEXTAUTH_URL,
+    nextauthUrl: process.env.NEXTAUTH_URL, // Show actual value for debugging
     hasDatabaseUrl: !!process.env.DATABASE_URL,
-    
+
     // Computed values
-    allowTestAccounts: 
-      process.env.NODE_ENV === 'development' || 
+    allowTestAccounts:
+      process.env.NODE_ENV === 'development' ||
       process.env.ENABLE_TEST_ACCOUNTS === 'true',
-    
+
     // Diagnostic info
     timestamp: new Date().toISOString(),
     vercelEnv: process.env.VERCEL_ENV,
