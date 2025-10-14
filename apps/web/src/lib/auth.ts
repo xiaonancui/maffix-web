@@ -27,8 +27,20 @@ export const authOptions: NextAuthOptions = {
           throw new Error('Invalid credentials')
         }
 
-        // Development mode: Allow test accounts without database
-        if (process.env.NODE_ENV === 'development') {
+        // Allow test accounts in development OR when explicitly enabled via environment variable
+        const allowTestAccounts =
+          process.env.NODE_ENV === 'development' ||
+          process.env.ENABLE_TEST_ACCOUNTS === 'true'
+
+        // Detailed logging for debugging
+        console.log('🔍 Auth attempt:', {
+          email: credentials.email,
+          nodeEnv: process.env.NODE_ENV,
+          enableTestAccounts: process.env.ENABLE_TEST_ACCOUNTS,
+          allowTestAccounts,
+        })
+
+        if (allowTestAccounts) {
           const testAccounts = [
             {
               email: 'test@maffix.com',
@@ -58,14 +70,18 @@ export const authOptions: NextAuthOptions = {
           )
 
           if (testAccount) {
-            console.log('✅ Test account login:', testAccount.email)
+            console.log('✅ Test account login SUCCESS:', testAccount.email, '(Environment:', process.env.NODE_ENV, ')')
             return {
               id: testAccount.id,
               email: testAccount.email,
               name: testAccount.name,
               role: testAccount.role,
             }
+          } else {
+            console.log('❌ Test account not found or password mismatch for:', credentials.email)
           }
+        } else {
+          console.log('⚠️ Test accounts are DISABLED. Set ENABLE_TEST_ACCOUNTS=true to enable.')
         }
 
         // Try database authentication
@@ -136,8 +152,14 @@ export const authOptions: NextAuthOptions = {
       return session
     },
     async signIn({ user, account, profile }) {
-      // Skip database operations for test accounts in development
-      if (process.env.NODE_ENV === 'development' && user.id?.includes('test-') || user.id?.includes('demo-') || user.id?.includes('admin-')) {
+      // Skip database operations for test accounts when test accounts are enabled
+      const allowTestAccounts =
+        process.env.NODE_ENV === 'development' ||
+        process.env.ENABLE_TEST_ACCOUNTS === 'true'
+
+      const isTestAccount = user.id?.includes('test-') || user.id?.includes('demo-') || user.id?.includes('admin-')
+
+      if (allowTestAccounts && isTestAccount) {
         console.log('✅ Test account sign in:', user.email)
         return true
       }
@@ -168,8 +190,11 @@ export const authOptions: NextAuthOptions = {
         }
       } catch (error) {
         console.error('Database update failed during sign in:', error)
-        // Continue anyway for test accounts
-        if (process.env.NODE_ENV === 'development') {
+        // Continue anyway for test accounts when enabled
+        const allowTestAccounts =
+          process.env.NODE_ENV === 'development' ||
+          process.env.ENABLE_TEST_ACCOUNTS === 'true'
+        if (allowTestAccounts) {
           return true
         }
       }
