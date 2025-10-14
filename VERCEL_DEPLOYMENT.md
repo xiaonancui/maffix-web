@@ -38,12 +38,12 @@ DISCORD_CLIENT_SECRET=your_discord_client_secret
    - Click "New Project"
    - Import from GitHub: `xiaonancui/maffix-web`
 
-2. **Configure Project**
+2. **Configure Project** ⚠️ IMPORTANT
    - Framework Preset: **Next.js**
-   - Root Directory: **Leave empty** (monorepo auto-detected)
-   - Build Command: `cd apps/web && npm run build`
-   - Output Directory: `apps/web/.next`
-   - Install Command: `npm install`
+   - Root Directory: **apps/web** (⚠️ Set this to apps/web, not empty!)
+   - Build Command: Leave empty (use default)
+   - Output Directory: Leave empty (use default)
+   - Install Command: Leave empty (use default)
 
 3. **Set Environment Variables**
    - Go to Project Settings → Environment Variables
@@ -52,6 +52,13 @@ DISCORD_CLIENT_SECRET=your_discord_client_secret
 4. **Deploy**
    - Click "Deploy"
    - Wait for build to complete
+
+### Why Root Directory = apps/web?
+
+For monorepo projects, Vercel needs to know which subdirectory contains the Next.js app:
+- Setting Root Directory to `apps/web` tells Vercel to treat that as the project root
+- This avoids path duplication issues (e.g., `/apps/web/apps/web/.next`)
+- Vercel will automatically detect Next.js and use the correct build commands
 
 ### Method 2: Vercel CLI
 
@@ -92,10 +99,21 @@ vercel
 
 The project uses these key files for Vercel deployment:
 
-- `vercel.json`: Deployment configuration
+- **No `vercel.json` needed**: Vercel auto-detects Next.js when Root Directory is set correctly
 - `.vercelignore`: Files to exclude from deployment
 - `apps/web/next.config.js`: Next.js configuration
 - `apps/web/package.json`: Build scripts and dependencies
+
+### Important: Vercel Project Settings
+
+Make sure your Vercel project has these settings:
+
+1. **Root Directory**: `apps/web` ⚠️ CRITICAL
+2. **Framework Preset**: Next.js (auto-detected)
+3. **Build Command**: (leave empty, uses `npm run build`)
+4. **Output Directory**: (leave empty, uses `.next`)
+5. **Install Command**: (leave empty, uses `npm install`)
+6. **Node.js Version**: 18.x or higher
 
 ### Monorepo Structure
 
