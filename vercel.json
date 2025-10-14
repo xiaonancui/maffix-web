@@ -11,7 +11,12 @@
       "src": "apps/web/package.json",
       "use": "@vercel/next",
       "config": {
-        "distDir": ".next"
+        "distDir": ".next",
+        "functions": {
+          "apps/web/src/app/api/**/*.ts": {
+            "maxDuration": 30
+          }
+        }
       }
     }
   ],
@@ -21,11 +26,6 @@
       "dest": "apps/web/$1"
     }
   ],
-  "functions": {
-    "apps/web/src/app/api/**/*.ts": {
-      "maxDuration": 30
-    }
-  },
   "env": {
     "CI": "true",
     "NODE_ENV": "production",
