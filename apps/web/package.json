@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "npm run db:generate && next build",
-    "build:vercel": "node scripts/check-build-env.js && prisma generate && next build",
+    "build:vercel": "prisma generate && next build",
     "start": "next start",
     "lint": "next lint",
     "type-check": "tsc --noEmit",
