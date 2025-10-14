@@ -10,6 +10,7 @@
   "scripts": {
     "dev": "turbo run dev",
     "build": "turbo run build",
+    "build:vercel": "cd apps/web && npm run db:generate && npm run build",
     "start": "turbo run start",
     "lint": "turbo run lint",
     "type-check": "turbo run type-check",
