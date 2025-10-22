@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 
 interface MerchandiseItem {
   id: string
@@ -23,7 +24,23 @@ interface MerchandiseItem {
 export default function MerchandiseCard({ item }: { item: MerchandiseItem }) {
   const [selectedSize, setSelectedSize] = useState(item.sizes[0])
   const [selectedColor, setSelectedColor] = useState(item.colors[0])
-  const [showDetails, setShowDetails] = useState(false)
+  const [showToast, setShowToast] = useState(false)
+  const [isAdding, setIsAdding] = useState(false)
+  const router = useRouter()
+
+  const handleAddToCart = () => {
+    setIsAdding(true)
+
+    // Show success toast (demo mode - using mock data)
+    setShowToast(true)
+
+    // Redirect to cart page after 1 second
+    setTimeout(() => {
+      setShowToast(false)
+      setIsAdding(false)
+      router.push('/cart')
+    }, 1000)
+  }
 
   return (
     <div className="group overflow-hidden rounded-lg bg-white shadow-md transition-shadow hover:shadow-xl">
@@ -81,14 +98,22 @@ export default function MerchandiseCard({ item }: { item: MerchandiseItem }) {
                 <button
                   key={color}
                   onClick={() => setSelectedColor(color)}
-                  className={`h-8 w-8 rounded-full border-2 ${
-                    selectedColor === color ? 'border-blue-600' : 'border-gray-300'
+                  className={`relative h-8 w-8 rounded-full border-2 transition-all ${
+                    selectedColor === color
+                      ? 'border-blue-600 ring-2 ring-blue-200 ring-offset-2 scale-110'
+                      : 'border-gray-300 hover:border-gray-400 hover:scale-105'
                   }`}
                   style={{
                     backgroundColor: color.toLowerCase() === 'white' ? '#ffffff' : color.toLowerCase() === 'black' ? '#000000' : color.toLowerCase(),
                   }}
                   title={color}
-                />
+                >
+                  {selectedColor === color && (
+                    <span className="absolute inset-0 flex items-center justify-center text-white text-xs font-bold">
+                      {color.toLowerCase() === 'white' || color.toLowerCase() === 'gray' ? '✓' : '✓'}
+                    </span>
+                  )}
+                </button>
               ))}
             </div>
           </div>
@@ -97,16 +122,16 @@ export default function MerchandiseCard({ item }: { item: MerchandiseItem }) {
         {/* Size Selection */}
         {item.sizes.length > 0 && item.sizes[0] !== 'One Size' && (
           <div className="mb-4">
-            <p className="mb-2 text-xs font-medium text-gray-700">Size:</p>
+            <p className="mb-2 text-xs font-medium text-gray-700">Size: {selectedSize}</p>
             <div className="flex flex-wrap gap-2">
               {item.sizes.map((size) => (
                 <button
                   key={size}
                   onClick={() => setSelectedSize(size)}
-                  className={`rounded border px-3 py-1 text-sm font-medium ${
+                  className={`rounded-lg border-2 px-4 py-2 text-sm font-semibold transition-all ${
                     selectedSize === size
-                      ? 'border-blue-600 bg-blue-50 text-blue-600'
-                      : 'border-gray-300 bg-white text-gray-700 hover:border-gray-400'
+                      ? 'border-blue-600 bg-blue-600 text-white shadow-md scale-105'
+                      : 'border-gray-300 bg-white text-gray-700 hover:border-blue-400 hover:bg-blue-50 hover:scale-105'
                   }`}
                 >
                   {size}
@@ -119,43 +144,30 @@ export default function MerchandiseCard({ item }: { item: MerchandiseItem }) {
         {/* Actions */}
         <div className="space-y-2">
           <button
-            disabled={!item.inStock}
+            onClick={handleAddToCart}
+            disabled={!item.inStock || isAdding}
             className={`w-full rounded-md px-4 py-2 text-sm font-semibold text-white transition-colors ${
-              item.inStock
+              item.inStock && !isAdding
                 ? 'bg-blue-600 hover:bg-blue-700'
                 : 'cursor-not-allowed bg-gray-400'
             }`}
           >
-            {item.inStock ? 'Add to Cart' : 'Out of Stock'}
+            {!item.inStock ? 'Out of Stock' : isAdding ? 'Adding...' : 'Add to Cart'}
           </button>
 
-          <button
-            onClick={() => setShowDetails(!showDetails)}
-            className="w-full rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-50"
+          <Link
+            href={`/store/${item.id}`}
+            className="block w-full rounded-md border border-gray-300 bg-white px-4 py-2 text-center text-sm font-semibold text-gray-700 hover:bg-gray-50"
           >
-            {showDetails ? 'Hide Details' : 'View Details'}
-          </button>
+            View Details
+          </Link>
         </div>
 
-        {/* Details Panel */}
-        {showDetails && (
-          <div className="mt-4 space-y-3 border-t pt-4">
-            {item.material && (
-              <div>
-                <p className="text-xs font-semibold text-gray-700">Material:</p>
-                <p className="text-xs text-gray-600">{item.material}</p>
-              </div>
-            )}
-            {item.features && item.features.length > 0 && (
-              <div>
-                <p className="text-xs font-semibold text-gray-700">Features:</p>
-                <ul className="ml-4 list-disc text-xs text-gray-600">
-                  {item.features.map((feature, index) => (
-                    <li key={index}>{feature}</li>
-                  ))}
-                </ul>
-              </div>
-            )}
+        {/* Toast Notification */}
+        {showToast && (
+          <div className="fixed bottom-4 right-4 z-50 animate-fade-in rounded-lg bg-blue-600 px-6 py-3 text-white shadow-lg">
+            <p className="font-semibold">🛒 Payment integration coming soon!</p>
+            <p className="text-sm opacity-90">支付功能开发中，敬请期待</p>
           </div>
         )}
       </div>

@@ -109,7 +109,7 @@ export default function PremiumPackCard({ pack }: { pack: PremiumPack }) {
     >
       {/* Featured Badge */}
       {pack.featured && (
-        <div className="absolute -top-3 left-1/2 -translate-x-1/2 transform">
+        <div className="absolute -top-3 left-1/2 z-10 -translate-x-1/2 transform">
           <span className="rounded-full bg-gradient-to-r from-yellow-400 to-orange-500 px-4 py-1 text-xs font-bold text-white shadow-md">
             ⭐ FEATURED
           </span>

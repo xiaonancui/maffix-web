@@ -176,12 +176,20 @@ export default function MissionCard({ mission, hasTikTokLinked }: MissionCardPro
           )}
         </div>
 
-        {renderAction({
-          showSubmit,
-          statusKey,
-          hasTikTokLinked,
-          missionId: mission.id,
-        })}
+        <div className="flex gap-2">
+          <Link
+            href={`/missions/${mission.id}`}
+            className="flex-1 rounded-md border border-gray-300 bg-white px-4 py-2 text-center text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-50"
+          >
+            View Details
+          </Link>
+          {renderAction({
+            showSubmit,
+            statusKey,
+            hasTikTokLinked,
+            missionId: mission.id,
+          })}
+        </div>
       </div>
     </div>
   )
@@ -203,36 +211,40 @@ function renderAction({
       return (
         <Link
           href="/profile/link-tiktok"
-          className="inline-flex w-full items-center justify-center rounded-md border border-blue-200 bg-blue-50 px-4 py-2 text-sm font-semibold text-blue-700 transition-colors hover:bg-blue-100"
+          className="inline-flex flex-1 items-center justify-center rounded-md border border-blue-200 bg-blue-50 px-4 py-2 text-sm font-semibold text-blue-700 transition-colors hover:bg-blue-100"
         >
-          Link TikTok account to start
+          Link TikTok
         </Link>
       )
     }
 
-    return <MissionSubmitButton missionId={missionId} />
+    return (
+      <div className="flex-1">
+        <MissionSubmitButton missionId={missionId} />
+      </div>
+    )
   }
 
   if (statusKey === 'PENDING') {
     return (
-      <div className="rounded-md border border-yellow-200 bg-yellow-50 px-4 py-2 text-sm text-yellow-800">
-        Submission received. Verification typically completes within 15 minutes.
+      <div className="flex-1 rounded-md border border-yellow-200 bg-yellow-50 px-4 py-2 text-center text-sm text-yellow-800">
+        ⏳ Verifying...
       </div>
     )
   }
 
   if (statusKey === 'FAILED') {
     return (
-      <div className="rounded-md border border-red-200 bg-red-50 px-4 py-2 text-sm text-red-700">
-        Verification failed. Please review your submission or contact support for assistance.
+      <div className="flex-1 rounded-md border border-red-200 bg-red-50 px-4 py-2 text-center text-sm text-red-700">
+        ✗ Failed
       </div>
     )
   }
 
   if (statusKey === 'APPROVED') {
     return (
-      <div className="rounded-md border border-green-200 bg-green-50 px-4 py-2 text-sm text-green-700">
-        Rewards granted. Great job!
+      <div className="flex-1 rounded-md border border-green-200 bg-green-50 px-4 py-2 text-center text-sm text-green-700">
+        ✓ Completed
       </div>
     )
   }

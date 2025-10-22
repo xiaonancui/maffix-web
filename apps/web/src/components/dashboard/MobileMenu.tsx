@@ -2,9 +2,15 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 
 export default function MobileMenu({ diamondBalance }: { diamondBalance: number }) {
   const [isOpen, setIsOpen] = useState(false)
+  const pathname = usePathname()
+
+  const isActive = (href: string) => {
+    return pathname === href || (href !== '/dashboard' && pathname.startsWith(href))
+  }
 
   return (
     <div className="sm:hidden">
@@ -46,35 +52,77 @@ export default function MobileMenu({ diamondBalance }: { diamondBalance: number 
             {/* Navigation Links */}
             <Link
               href="/dashboard"
-              className="block rounded-md px-3 py-2 text-base font-medium text-gray-900 hover:bg-gray-50"
+              className={`block rounded-md px-3 py-2 text-base font-medium transition-colors ${
+                isActive('/dashboard')
+                  ? 'bg-blue-50 text-blue-600 font-semibold'
+                  : 'text-gray-500 hover:bg-gray-50 hover:text-gray-700'
+              }`}
               onClick={() => setIsOpen(false)}
             >
               Dashboard
             </Link>
             <Link
+              href="/releases"
+              className={`block rounded-md px-3 py-2 text-base font-medium transition-colors ${
+                isActive('/releases')
+                  ? 'bg-blue-50 text-blue-600 font-semibold'
+                  : 'text-gray-500 hover:bg-gray-50 hover:text-gray-700'
+              }`}
+              onClick={() => setIsOpen(false)}
+            >
+              Releases
+            </Link>
+            <Link
               href="/missions"
-              className="block rounded-md px-3 py-2 text-base font-medium text-gray-500 hover:bg-gray-50"
+              className={`block rounded-md px-3 py-2 text-base font-medium transition-colors ${
+                isActive('/missions')
+                  ? 'bg-blue-50 text-blue-600 font-semibold'
+                  : 'text-gray-500 hover:bg-gray-50 hover:text-gray-700'
+              }`}
               onClick={() => setIsOpen(false)}
             >
               Missions
             </Link>
             <Link
               href="/gacha"
-              className="block rounded-md px-3 py-2 text-base font-medium text-gray-500 hover:bg-gray-50"
+              className={`block rounded-md px-3 py-2 text-base font-medium transition-colors ${
+                isActive('/gacha')
+                  ? 'bg-blue-50 text-blue-600 font-semibold'
+                  : 'text-gray-500 hover:bg-gray-50 hover:text-gray-700'
+              }`}
               onClick={() => setIsOpen(false)}
             >
               Gacha
             </Link>
             <Link
+              href="/store"
+              className={`block rounded-md px-3 py-2 text-base font-medium transition-colors ${
+                isActive('/store')
+                  ? 'bg-blue-50 text-blue-600 font-semibold'
+                  : 'text-gray-500 hover:bg-gray-50 hover:text-gray-700'
+              }`}
+              onClick={() => setIsOpen(false)}
+            >
+              Store
+            </Link>
+            <Link
               href="/store/packs"
-              className="block rounded-md px-3 py-2 text-base font-medium text-gray-500 hover:bg-gray-50"
+              className={`block rounded-md px-3 py-2 text-base font-medium transition-colors ${
+                isActive('/store/packs')
+                  ? 'bg-blue-50 text-blue-600 font-semibold'
+                  : 'text-gray-500 hover:bg-gray-50 hover:text-gray-700'
+              }`}
               onClick={() => setIsOpen(false)}
             >
               Premium Packs
             </Link>
             <Link
               href="/prizes"
-              className="block rounded-md px-3 py-2 text-base font-medium text-gray-500 hover:bg-gray-50"
+              className={`block rounded-md px-3 py-2 text-base font-medium transition-colors ${
+                isActive('/prizes')
+                  ? 'bg-blue-50 text-blue-600 font-semibold'
+                  : 'text-gray-500 hover:bg-gray-50 hover:text-gray-700'
+              }`}
               onClick={() => setIsOpen(false)}
             >
               Prizes

@@ -3,6 +3,7 @@ import { authOptions } from '@/lib/auth'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import MobileMenu from '@/components/dashboard/MobileMenu'
+import NavLink from '@/components/dashboard/NavLink'
 
 export default async function DashboardLayout({
   children,
@@ -15,20 +16,24 @@ export default async function DashboardLayout({
     redirect('/login')
   }
 
-  // Fetch user's diamond balance for display
-  const { db } = await import('@/lib/db')
-  let diamondBalance = 0
+  const allowTestAccounts =
+    process.env.NODE_ENV === 'development' || process.env.ENABLE_TEST_ACCOUNTS === 'true'
 
   const isTestAccount =
-    process.env.NODE_ENV === 'development' &&
+    allowTestAccounts &&
     (session.user.id?.includes('test-') ||
       session.user.id?.includes('demo-') ||
       session.user.id?.includes('admin-'))
+
+  // Fetch user's diamond balance for display
+  let diamondBalance = 0
 
   if (isTestAccount) {
     diamondBalance = 500
   } else {
     try {
+      const { db } = await import('@/lib/db')
+
       const user = await db.user.findUnique({
         where: { id: session.user.id },
         select: { diamondBalance: true },
@@ -52,36 +57,13 @@ export default async function DashboardLayout({
                 </Link>
               </div>
               <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
-                <Link
-                  href="/dashboard"
-                  className="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-900 hover:border-gray-300"
-                >
-                  Dashboard
-                </Link>
-                <Link
-                  href="/missions"
-                  className="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"
-                >
-                  Missions
-                </Link>
-                <Link
-                  href="/gacha"
-                  className="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"
-                >
-                  Gacha
-                </Link>
-                <Link
-                  href="/store/packs"
-                  className="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"
-                >
-                  Premium Packs
-                </Link>
-                <Link
-                  href="/prizes"
-                  className="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"
-                >
-                  Prizes
-                </Link>
+                <NavLink href="/dashboard">Dashboard</NavLink>
+                <NavLink href="/releases">Releases</NavLink>
+                <NavLink href="/missions">Missions</NavLink>
+                <NavLink href="/gacha">Gacha</NavLink>
+                <NavLink href="/store">Store</NavLink>
+                <NavLink href="/store/packs">Premium Packs</NavLink>
+                <NavLink href="/prizes">Prizes</NavLink>
               </div>
             </div>
             <div className="flex items-center gap-4">
@@ -127,4 +109,3 @@ export default async function DashboardLayout({
     </div>
   )
 }
-

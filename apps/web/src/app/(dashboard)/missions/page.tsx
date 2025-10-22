@@ -234,6 +234,32 @@ export default async function MissionsPage() {
         estimatedTime: '15 minutes',
       },
     ]
+
+    // Mock user mission statuses to show different states
+    userMissions.set('mission-follow-1', {
+      taskId: 'mission-follow-1',
+      verified: true,
+      verificationStatus: 'APPROVED',
+      submittedAt: new Date('2024-01-15'),
+    })
+    userMissions.set('mission-like-1', {
+      taskId: 'mission-like-1',
+      verified: true,
+      verificationStatus: 'APPROVED',
+      submittedAt: new Date('2024-01-16'),
+    })
+    userMissions.set('mission-follow-2', {
+      taskId: 'mission-follow-2',
+      verified: false,
+      verificationStatus: 'PENDING',
+      submittedAt: new Date(),
+    })
+    userMissions.set('mission-like-2', {
+      taskId: 'mission-like-2',
+      verified: false,
+      verificationStatus: 'PENDING',
+      submittedAt: new Date(),
+    })
   } else {
     try {
       user = await db.user.findUnique({

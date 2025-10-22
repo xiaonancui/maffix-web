@@ -6,9 +6,6 @@ import MerchandiseCard from '@/components/dashboard/MerchandiseCard'
 import MerchandiseFilters from '@/components/dashboard/MerchandiseFilters'
 
 export default async function StorePage() {
-  // Dynamic import to avoid build-time database connection
-  const { db } = await import('@/lib/db')
-
   const session = await getServerSession(authOptions)
 
   if (!session) {
@@ -19,8 +16,11 @@ export default async function StorePage() {
   let merchandise: any[] = []
   let user: any = null
 
+  const allowTestAccounts =
+    process.env.NODE_ENV === 'development' || process.env.ENABLE_TEST_ACCOUNTS === 'true'
+
   const isTestAccount =
-    process.env.NODE_ENV === 'development' &&
+    allowTestAccounts &&
     (session.user.id?.includes('test-') ||
       session.user.id?.includes('demo-') ||
       session.user.id?.includes('admin-'))
@@ -42,7 +42,7 @@ export default async function StorePage() {
         category: 'Hoodies',
         sizes: ['S', 'M', 'L', 'XL', 'XXL'],
         colors: ['Black', 'White', 'Navy', 'Gray'],
-        imageUrl: 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=500',
+        imageUrl: 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=800&q=80',
         inStock: true,
         featured: true,
         tags: ['bestseller', 'new'],
@@ -64,7 +64,7 @@ export default async function StorePage() {
         category: 'Hats',
         sizes: ['One Size'],
         colors: ['Black', 'White', 'Red', 'Navy'],
-        imageUrl: 'https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=500',
+        imageUrl: 'https://images.unsplash.com/photo-1575428652377-a2d80e2277fc?w=800&q=80',
         inStock: true,
         featured: true,
         tags: ['bestseller'],
@@ -86,7 +86,7 @@ export default async function StorePage() {
         category: 'T-Shirts',
         sizes: ['XS', 'S', 'M', 'L', 'XL', 'XXL'],
         colors: ['Black', 'White', 'Vintage Gray'],
-        imageUrl: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=500',
+        imageUrl: 'https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=800&q=80',
         inStock: true,
         featured: false,
         tags: ['limited', 'tour'],
@@ -108,7 +108,7 @@ export default async function StorePage() {
         category: 'Hoodies',
         sizes: ['S', 'M', 'L', 'XL', 'XXL'],
         colors: ['Black', 'Charcoal', 'Navy'],
-        imageUrl: 'https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=500',
+        imageUrl: 'https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=800&q=80',
         inStock: true,
         featured: false,
         tags: ['new'],
@@ -130,7 +130,7 @@ export default async function StorePage() {
         category: 'Hats',
         sizes: ['One Size'],
         colors: ['Black', 'Gray', 'Navy', 'Burgundy'],
-        imageUrl: 'https://images.unsplash.com/photo-1576871337622-98d48d1cf531?w=500',
+        imageUrl: 'https://images.unsplash.com/photo-1576871337622-98d48d1cf531?w=800&q=80',
         inStock: true,
         featured: false,
         tags: [],
@@ -152,7 +152,7 @@ export default async function StorePage() {
         category: 'Sweatshirts',
         sizes: ['S', 'M', 'L', 'XL', 'XXL'],
         colors: ['Black', 'White', 'Sand', 'Forest Green'],
-        imageUrl: 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=500',
+        imageUrl: 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=800&q=80',
         inStock: true,
         featured: true,
         tags: ['bestseller'],
@@ -174,7 +174,7 @@ export default async function StorePage() {
         category: 'Hats',
         sizes: ['One Size'],
         colors: ['Black', 'White', 'Khaki', 'Pink'],
-        imageUrl: 'https://images.unsplash.com/photo-1575428652377-a2d80e2277fc?w=500',
+        imageUrl: 'https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=800&q=80',
         inStock: true,
         featured: false,
         tags: [],
@@ -196,7 +196,7 @@ export default async function StorePage() {
         category: 'T-Shirts',
         sizes: ['S', 'M', 'L', 'XL', 'XXL'],
         colors: ['Black', 'White', 'Olive'],
-        imageUrl: 'https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=500',
+        imageUrl: 'https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=800&q=80',
         inStock: false,
         featured: false,
         tags: ['sold-out'],
@@ -212,6 +212,8 @@ export default async function StorePage() {
     ]
   } else {
     try {
+      const { db } = await import('@/lib/db')
+
       user = await db.user.findUnique({
         where: { id: session.user.id },
         select: {
@@ -542,4 +544,3 @@ export default async function StorePage() {
     </div>
   )
 }
-
