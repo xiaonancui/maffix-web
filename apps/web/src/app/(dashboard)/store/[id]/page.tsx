@@ -1,4 +1,5 @@
 import { getServerSession } from 'next-auth'
+import Image from 'next/image'
 import { authOptions } from '@/lib/auth'
 import { redirect, notFound } from 'next/navigation'
 import { MerchandiseCategory } from '@prisma/client'
@@ -271,11 +272,13 @@ export default async function MerchandiseDetailPage({
                   href={`/store/${product.id}`}
                   className="group rounded-lg bg-white p-4 shadow transition-all hover:shadow-lg"
                 >
-                  <div className="mb-4 aspect-square overflow-hidden rounded-lg bg-gray-100">
-                    <img
-                      src={product.imageUrl}
+                  <div className="relative mb-4 aspect-square overflow-hidden rounded-lg bg-gray-100">
+                    <Image
+                      src={product.imageUrl || 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=400'}
                       alt={product.name}
-                      className="h-full w-full object-cover transition-transform group-hover:scale-105"
+                      fill
+                      sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
+                      className="object-cover transition-transform duration-300 group-hover:scale-105"
                     />
                   </div>
                   <h3 className="mb-2 font-semibold text-gray-900">{product.name}</h3>

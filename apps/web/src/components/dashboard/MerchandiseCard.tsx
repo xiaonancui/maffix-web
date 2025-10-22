@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 
@@ -46,10 +47,12 @@ export default function MerchandiseCard({ item }: { item: MerchandiseItem }) {
     <div className="group overflow-hidden rounded-lg bg-white shadow-md transition-shadow hover:shadow-xl">
       {/* Image */}
       <div className="relative aspect-square overflow-hidden bg-gray-200">
-        <img
+        <Image
           src={item.imageUrl}
           alt={item.name}
-          className="h-full w-full object-cover transition-transform group-hover:scale-105"
+          fill
+          sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
+          className="object-cover transition-transform duration-300 group-hover:scale-105"
         />
         {item.featured && (
           <span className="absolute left-3 top-3 rounded-full bg-yellow-500 px-3 py-1 text-xs font-semibold text-white">

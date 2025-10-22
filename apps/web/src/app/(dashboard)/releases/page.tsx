@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import Image from 'next/image'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 
@@ -27,21 +28,6 @@ export default function ReleasesPage() {
     }
   }, [status, router])
 
-  if (status === 'loading') {
-    return (
-      <div className="flex min-h-screen items-center justify-center">
-        <div className="text-center">
-          <div className="mb-4 text-4xl">⏳</div>
-          <p className="text-gray-600">Loading...</p>
-        </div>
-      </div>
-    )
-  }
-
-  if (!session) {
-    return null
-  }
-
   useEffect(() => {
     if (!selectedRelease) {
       document.body.style.removeProperty('overflow')
@@ -62,6 +48,21 @@ export default function ReleasesPage() {
       document.body.style.removeProperty('overflow')
     }
   }, [selectedRelease])
+
+  if (status === 'loading') {
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <div className="text-center">
+          <div className="mb-4 text-4xl">⏳</div>
+          <p className="text-gray-600">Loading...</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (!session) {
+    return null
+  }
 
   // Mock data for music releases (popular rap songs)
   const releases: Release[] = [
@@ -206,7 +207,7 @@ export default function ReleasesPage() {
 
         {/* Releases Grid */}
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {releases.map((release) => (
+          {releases.map((release, index) => (
             <button
               key={release.id}
               type="button"
@@ -215,10 +216,13 @@ export default function ReleasesPage() {
             >
               {/* Thumbnail */}
               <div className="relative mb-3 aspect-video overflow-hidden rounded-lg bg-gray-200 shadow-md">
-                <img
+                <Image
                   src={release.thumbnailUrl}
                   alt={release.title}
-                  className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  fill
+                  priority={index < 2}
+                  sizes="(min-width: 1280px) 20vw, (min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
+                  className="object-cover transition-transform duration-300 group-hover:scale-105"
                 />
                 {/* Duration Badge */}
                 <div className="absolute bottom-2 right-2 rounded bg-black bg-opacity-80 px-2 py-1 text-xs font-semibold text-white">

@@ -535,7 +535,7 @@ export default async function StorePage() {
               <p className="mt-4 text-sm text-gray-600">
                 Yes! We ship worldwide. International orders over $50 qualify for free shipping.
                 Please note that customs fees and import duties may apply depending on your
-                country's regulations.
+                country&apos;s regulations.
               </p>
             </details>
           </div>

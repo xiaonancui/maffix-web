@@ -329,12 +329,12 @@ export default async function MissionDetailPage({
               >
                 {isCompleted ? (
                   <p>
-                    You've successfully completed this mission and earned {mission.diamonds} diamonds!
+                    You&apos;ve successfully completed this mission and earned {mission.diamonds} diamonds!
                   </p>
                 ) : (
                   <p>
                     Your submission is being verified. This usually takes {mission.verificationTime || '1-5 minutes'}.
-                    You'll be notified once verification is complete.
+                    You&apos;ll be notified once verification is complete.
                   </p>
                 )}
               </div>
@@ -431,4 +431,3 @@ export default async function MissionDetailPage({
     </div>
   )
 }
-

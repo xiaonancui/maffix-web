@@ -178,7 +178,7 @@ export default async function LinkTikTokPage() {
                   </svg>
                 </div>
                 <div className="ml-3 flex-1">
-                  <h3 className="text-sm font-medium text-blue-800">What's Next?</h3>
+                  <h3 className="text-sm font-medium text-blue-800">What&apos;s Next?</h3>
                   <div className="mt-2 text-sm text-blue-700">
                     <p>
                       Head over to the Missions page to start completing TikTok missions
@@ -327,16 +327,16 @@ export default async function LinkTikTokPage() {
               <ol className="space-y-2 text-sm text-gray-700">
                 <li className="flex items-start">
                   <span className="mr-2 font-semibold">1.</span>
-                  <span>Click the "Link TikTok Account" button above</span>
+                  <span>Click the &quot;Link TikTok Account&quot; button above</span>
                 </li>
                 <li className="flex items-start">
                   <span className="mr-2 font-semibold">2.</span>
-                  <span>You'll be redirected to TikTok to authorize the connection</span>
+                  <span>You&apos;ll be redirected to TikTok to authorize the connection</span>
                 </li>
                 <li className="flex items-start">
                   <span className="mr-2 font-semibold">3.</span>
                   <span>
-                    After authorization, you'll be redirected back to Maffix
+                    After authorization, you&apos;ll be redirected back to Maffix
                   </span>
                 </li>
                 <li className="flex items-start">
@@ -351,4 +351,3 @@ export default async function LinkTikTokPage() {
     </div>
   )
 }
-

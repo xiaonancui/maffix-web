@@ -169,7 +169,7 @@ export default async function PurchasesPage() {
             No Purchases Yet
           </h3>
           <p className="text-gray-600 mb-6">
-            You haven't purchased any Premium Packs yet.
+            You haven&apos;t purchased any Premium Packs yet.
           </p>
           <Link
             href="/store/packs"
@@ -325,4 +325,3 @@ export default async function PurchasesPage() {
     </div>
   )
 }
-

@@ -1,4 +1,5 @@
 import { getServerSession } from 'next-auth'
+import Image from 'next/image'
 import { authOptions } from '@/lib/auth'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
@@ -219,9 +220,16 @@ export default async function OrdersPage() {
                 <div className="mb-4 space-y-3">
                   {order.items.map((item: any) => (
                     <div key={item.id} className="flex items-center gap-4">
-                      <img
-                        src={item.imageUrl || item.merchandise?.imageUrl}
+                      <Image
+                        src={
+                          item.imageUrl ||
+                          item.merchandise?.imageUrl ||
+                          'https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=200'
+                        }
                         alt={item.name}
+                        width={64}
+                        height={64}
+                        sizes="64px"
                         className="h-16 w-16 rounded-lg object-cover"
                       />
                       <div className="flex-1">
@@ -274,4 +282,3 @@ export default async function OrdersPage() {
     </div>
   )
 }
-

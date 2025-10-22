@@ -17,11 +17,13 @@ export default function ProductGallery({ images }: { images: ProductImage[] }) {
   return (
     <div className="space-y-4">
       {/* Main Image */}
-      <div className="aspect-square overflow-hidden rounded-lg bg-white shadow-lg">
-        <img
-          src={images[selectedImage]?.url}
+      <div className="relative aspect-square overflow-hidden rounded-lg bg-white shadow-lg">
+        <Image
+          src={images[selectedImage]?.url || 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=800'}
           alt={images[selectedImage]?.altText || 'Product image'}
-          className="h-full w-full object-cover"
+          fill
+          sizes="(min-width: 1024px) 40vw, 100vw"
+          className="object-cover"
         />
       </div>
 
@@ -32,16 +34,18 @@ export default function ProductGallery({ images }: { images: ProductImage[] }) {
             <button
               key={image.id || index}
               onClick={() => setSelectedImage(index)}
-              className={`aspect-square overflow-hidden rounded-lg border-2 transition-all ${
+              className={`relative aspect-square overflow-hidden rounded-lg border-2 transition-all ${
                 selectedImage === index
                   ? 'border-blue-500 ring-2 ring-blue-200'
                   : 'border-gray-200 hover:border-gray-300'
               }`}
             >
-              <img
-                src={image.url}
+              <Image
+                src={image.url || 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=200'}
                 alt={image.altText || `Thumbnail ${index + 1}`}
-                className="h-full w-full object-cover"
+                fill
+                sizes="80px"
+                className="object-cover"
               />
             </button>
           ))}
@@ -50,4 +54,3 @@ export default function ProductGallery({ images }: { images: ProductImage[] }) {
     </div>
   )
 }
-

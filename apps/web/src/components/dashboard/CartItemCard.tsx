@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Image from 'next/image'
 import Link from 'next/link'
 
 type CartItem = {
@@ -50,11 +51,13 @@ export default function CartItemCard({ item }: { item: CartItem }) {
     <div className="relative rounded-lg bg-white p-4 shadow-md">
       <div className="flex gap-4">
         {/* Image */}
-        <Link href={`/store/${item.merchandise.id}`} className="flex-shrink-0">
-          <img
+        <Link href={`/store/${item.merchandise.id}`} className="relative h-24 w-24 flex-shrink-0">
+          <Image
             src={item.merchandise.imageUrl}
             alt={item.merchandise.name}
-            className="h-24 w-24 rounded-lg object-cover"
+            fill
+            sizes="96px"
+            className="rounded-lg object-cover"
           />
         </Link>
 
@@ -137,4 +140,3 @@ export default function CartItemCard({ item }: { item: CartItem }) {
     </div>
   )
 }
-
