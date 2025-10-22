@@ -66,11 +66,11 @@ export default function MobileMenu({ diamondBalance }: { diamondBalance: number 
               Gacha
             </Link>
             <Link
-              href="/store"
+              href="/store/packs"
               className="block rounded-md px-3 py-2 text-base font-medium text-gray-500 hover:bg-gray-50"
               onClick={() => setIsOpen(false)}
             >
-              Store
+              Premium Packs
             </Link>
             <Link
               href="/prizes"

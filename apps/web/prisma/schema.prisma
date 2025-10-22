@@ -57,6 +57,7 @@ model User {
   gachaPulls     GachaPull[]
   drawTickets    DrawTicket[]
   transactions   Transaction[]
+  purchases      Purchase[]
   accounts       Account[]
   sessions       Session[]
 
@@ -227,9 +228,10 @@ model Prize {
   updatedAt   DateTime @updatedAt
 
   // Relations
-  userPrizes  UserPrize[]
-  gachaItems  GachaItem[]
-  gachaPulls  GachaPull[]
+  userPrizes   UserPrize[]
+  gachaItems   GachaItem[]
+  gachaPulls   GachaPull[]
+  premiumPacks PremiumPack[]
 
   @@index([rarity])
   @@index([isActive])
@@ -442,5 +444,97 @@ enum TransactionStatus {
   COMPLETED
   FAILED
   CANCELLED
+}
+
+// =============================================================================
+// Monetization System - Premium Packs
+// =============================================================================
+
+model PremiumPack {
+  id          String   @id @default(uuid())
+  name        String
+  description String   @db.Text
+
+  // Pricing
+  price       Float    // Price in USD (or local currency)
+  currency    String   @default("USD")
+
+  // Pack contents
+  guaranteedPrizeId String?  // Guaranteed merchandise/prize
+  bonusTickets      Int      @default(0)  // Number of bonus draw tickets
+  bonusDiamonds     Int      @default(0)  // Bonus diamonds included
+
+  // Display
+  imageUrl    String?
+  featured    Boolean  @default(false)
+  sortOrder   Int      @default(0)
+
+  // Availability
+  isActive    Boolean  @default(true)
+
+  // Timestamps
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  guaranteedPrize Prize?     @relation(fields: [guaranteedPrizeId], references: [id], onDelete: SetNull)
+  purchases       Purchase[]
+
+  @@index([isActive])
+  @@index([featured])
+  @@map("premium_packs")
+}
+
+model Purchase {
+  id          String   @id @default(uuid())
+  userId      String
+  packId      String
+
+  // Payment details
+  klarnaOrderId   String?  @unique  // Klarna order ID
+  stripeSessionId String?  @unique  // Stripe session ID (alternative)
+  paymentMethod   PaymentMethod @default(KLARNA)
+
+  // Amount
+  amount      Float    // Amount paid
+  currency    String   @default("USD")
+
+  // Status
+  status      PurchaseStatus @default(PENDING)
+
+  // Fulfillment
+  itemsGranted    Boolean  @default(false)  // Whether items were granted to user
+  ticketsGranted  Boolean  @default(false)  // Whether tickets were granted
+  diamondsGranted Boolean  @default(false)  // Whether diamonds were granted
+
+  // Timestamps
+  createdAt   DateTime @default(now())
+  completedAt DateTime?
+
+  // Relations
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  pack        PremiumPack  @relation(fields: [packId], references: [id], onDelete: Restrict)
+
+  @@index([userId])
+  @@index([packId])
+  @@index([status])
+  @@index([klarnaOrderId])
+  @@index([stripeSessionId])
+  @@map("purchases")
+}
+
+enum PaymentMethod {
+  KLARNA
+  STRIPE
+  PAYPAL
+}
+
+enum PurchaseStatus {
+  PENDING       // Payment initiated but not completed
+  PROCESSING    // Payment received, processing fulfillment
+  COMPLETED     // Payment completed and items granted
+  FAILED        // Payment failed
+  CANCELLED     // Payment cancelled by user
+  REFUNDED      // Payment refunded
 }
 
