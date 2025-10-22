@@ -21,8 +21,14 @@ export default async function GachaPage() {
   let gachaItems: any[] = []
   let tickets = { single: 0, multi10x: 0 }
 
-  const isTestAccount = process.env.NODE_ENV === 'development' &&
-    (session.user.id?.includes('test-') || session.user.id?.includes('demo-') || session.user.id?.includes('admin-'))
+  const allowTestAccounts =
+    process.env.NODE_ENV === 'development' || process.env.ENABLE_TEST_ACCOUNTS === 'true'
+
+  const isTestAccount =
+    allowTestAccounts &&
+    (session.user.id?.includes('test-') ||
+      session.user.id?.includes('demo-') ||
+      session.user.id?.includes('admin-'))
 
   if (isTestAccount) {
     user = {

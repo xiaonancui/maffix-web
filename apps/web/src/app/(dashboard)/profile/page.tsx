@@ -17,8 +17,14 @@ export default async function ProfilePage() {
   let user
   let stats
 
-  const isTestAccount = process.env.NODE_ENV === 'development' &&
-    (session.user.id?.includes('test-') || session.user.id?.includes('demo-') || session.user.id?.includes('admin-'))
+  const allowTestAccounts =
+    process.env.NODE_ENV === 'development' || process.env.ENABLE_TEST_ACCOUNTS === 'true'
+
+  const isTestAccount =
+    allowTestAccounts &&
+    (session.user.id?.includes('test-') ||
+      session.user.id?.includes('demo-') ||
+      session.user.id?.includes('admin-'))
 
   if (isTestAccount) {
     user = {

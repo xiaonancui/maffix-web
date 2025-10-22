@@ -12,8 +12,11 @@ export default async function OrdersPage() {
   }
 
   // Check if test account
+  const allowTestAccounts =
+    process.env.NODE_ENV === 'development' || process.env.ENABLE_TEST_ACCOUNTS === 'true'
+
   const isTestAccount =
-    process.env.NODE_ENV === 'development' &&
+    allowTestAccounts &&
     (session.user.id?.includes('test-') ||
       session.user.id?.includes('demo-') ||
       session.user.id?.includes('admin-'))
