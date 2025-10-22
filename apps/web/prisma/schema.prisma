@@ -25,21 +25,25 @@ model User {
   password  String?  // Nullable for OAuth users
   role      Role     @default(USER)
   avatar    String?
-  
+
   // Gamification
   diamondBalance Int      @default(0)
   points         Int      @default(0)
   level          Int      @default(1)
-  
+
   // OAuth
   provider       String?  // google, tiktok, discord, etc.
   providerId     String?  // ID from OAuth provider
-  
+
+  // TikTok integration
+  tiktokUsername String?  // TikTok username
+  tiktokUserId   String?  // TikTok user ID
+
   // Timestamps
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   lastLoginAt DateTime?
-  
+
   // Relations
   completedTasks UserTask[]
   prizes         UserPrize[]
@@ -109,27 +113,30 @@ model Task {
   description String
   type        TaskType
   difficulty  Difficulty @default(EASY)
-  
+
+  // Mission type (for TikTok missions)
+  missionType String?  // FOLLOW, LIKE, REPOST, USE_AUDIO
+
   // Rewards
   points      Int      @default(0)
   diamonds    Int      @default(0)
-  
+
   // Status
   isActive    Boolean  @default(true)
   startDate   DateTime?
   endDate     DateTime?
-  
+
   // Limits
   maxCompletions Int?  // Max times this task can be completed globally
   completionCount Int @default(0)
-  
+
   // Timestamps
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  
+
   // Relations
   completions UserTask[]
-  
+
   @@index([type])
   @@index([isActive])
   @@map("tasks")
@@ -159,25 +166,33 @@ model UserTask {
   id          String   @id @default(uuid())
   userId      String
   taskId      String
-  
+
   // Completion details
-  completedAt DateTime @default(now())
+  submittedAt DateTime @default(now())  // When user submitted
+  completedAt DateTime?  // When task was verified and completed
   pointsEarned Int
   diamondsEarned Int
-  
+
   // Verification
   verified    Boolean  @default(false)
   verifiedAt  DateTime?
   verifiedBy  String?  // Admin user ID
-  
+  verificationStatus VerificationStatus @default(PENDING)
+
   // Relations
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   task        Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
-  
+
   @@unique([userId, taskId])
   @@index([userId])
   @@index([taskId])
   @@map("user_tasks")
+}
+
+enum VerificationStatus {
+  PENDING
+  APPROVED
+  FAILED
 }
 
 // =============================================================================
@@ -189,24 +204,25 @@ model Prize {
   name        String
   description String
   rarity      Rarity
-  
+
   // Prize details
   image       String?
   value       Int      @default(0)  // Diamond value
   type        PrizeType
-  
+
   // Availability
   isActive    Boolean  @default(true)
   stock       Int?     // Null = unlimited
-  
+
   // Timestamps
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  
+
   // Relations
   userPrizes  UserPrize[]
   gachaItems  GachaItem[]
-  
+  gachaPulls  GachaPull[]
+
   @@index([rarity])
   @@index([isActive])
   @@map("prizes")
@@ -293,18 +309,20 @@ model GachaPull {
   id          String   @id @default(uuid())
   userId      String
   gachaItemId String
-  
+  prizeId     String?  // Prize won (if any)
+
   // Pull details
   pulledAt    DateTime @default(now())
   cost        Int      // Diamonds spent
-  
+
   // Result
   won         Boolean  @default(false)
-  
+
   // Relations
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   gachaItem   GachaItem @relation(fields: [gachaItemId], references: [id], onDelete: Cascade)
-  
+  prize       Prize?   @relation(fields: [prizeId], references: [id], onDelete: SetNull)
+
   @@index([userId])
   @@index([gachaItemId])
   @@map("gacha_pulls")

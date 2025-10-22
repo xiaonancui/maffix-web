@@ -25,16 +25,30 @@ type GachaResult = {
   totalPulls: number
 }
 
+type Gacha10xResult = {
+  prizes: Prize[]
+  userPrizes: Array<{
+    id: string
+    wonAt: Date
+  }>
+  cost: number
+  newBalance: number
+  totalPulls: number
+  guaranteedSSR: boolean
+}
+
 export default function GachaPullButton({
   currentBalance,
   cost,
+  pullType = 'single',
 }: {
   currentBalance: number
   cost: number
+  pullType?: 'single' | '10x'
 }) {
   const router = useRouter()
   const [isPulling, setIsPulling] = useState(false)
-  const [result, setResult] = useState<GachaResult | null>(null)
+  const [result, setResult] = useState<GachaResult | Gacha10xResult | null>(null)
   const [showResult, setShowResult] = useState(false)
 
   const handlePull = async () => {
@@ -46,7 +60,8 @@ export default function GachaPullButton({
     setIsPulling(true)
 
     try {
-      const response = await fetch('/api/gacha/pull', {
+      const endpoint = pullType === '10x' ? '/api/gacha/pull-10x' : '/api/gacha/pull'
+      const response = await fetch(endpoint, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -82,19 +97,25 @@ export default function GachaPullButton({
       <button
         onClick={handlePull}
         disabled={isPulling || currentBalance < cost}
-        className="rounded-lg bg-gradient-to-r from-yellow-400 to-orange-500 px-8 py-4 text-xl font-bold text-white shadow-lg transition-all hover:scale-105 hover:shadow-xl disabled:opacity-50 disabled:hover:scale-100"
+        className={`w-full rounded-lg px-6 py-3 font-bold text-white shadow-lg transition-all hover:scale-105 hover:shadow-xl disabled:opacity-50 disabled:hover:scale-100 ${
+          pullType === '10x'
+            ? 'bg-gradient-to-r from-purple-500 to-blue-500 text-lg'
+            : 'bg-gradient-to-r from-yellow-400 to-orange-500 text-base'
+        }`}
       >
         {isPulling ? (
           <>
             <span className="animate-spin">🎰</span> Pulling...
           </>
         ) : (
-          <>🎰 Pull Gacha ({cost} 💎)</>
+          <>
+            🎰 {pullType === '10x' ? 'Pull 10x' : 'Pull Once'} ({cost} 💎)
+          </>
         )}
       </button>
 
       {showResult && result && (
-        <GachaResultModal result={result} onClose={handleCloseModal} />
+        <GachaResultModal result={result} onClose={handleCloseModal} pullType={pullType} />
       )}
     </>
   )

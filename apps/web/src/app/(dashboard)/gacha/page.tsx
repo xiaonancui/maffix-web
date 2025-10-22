@@ -162,17 +162,66 @@ export default async function GachaPage() {
         </div>
       </div>
 
-      {/* Gacha Button */}
-      <div className="mb-8 text-center">
-        <GachaPullButton
-          currentBalance={user?.diamondBalance || 0}
-          cost={GACHA_COST}
-        />
-        <p className="mt-2 text-sm text-gray-600">
-          {(user?.diamondBalance || 0) < GACHA_COST
-            ? 'Not enough diamonds'
-            : `You can pull ${Math.floor((user?.diamondBalance || 0) / GACHA_COST)} times`}
-        </p>
+      {/* Gacha Buttons */}
+      <div className="mb-8">
+        <div className="mb-4 text-center">
+          <h2 className="text-2xl font-bold text-gray-900">Choose Your Draw</h2>
+          <p className="mt-1 text-sm text-gray-600">
+            10x Draw guarantees at least 1 SSR or higher rarity prize!
+          </p>
+        </div>
+
+        <div className="grid gap-4 sm:grid-cols-2">
+          {/* Single Draw */}
+          <div className="rounded-lg border-2 border-gray-300 bg-white p-6 text-center">
+            <div className="mb-4">
+              <div className="text-3xl font-bold text-gray-900">Single Draw</div>
+              <div className="mt-2 text-sm text-gray-600">Try your luck once</div>
+            </div>
+            <div className="mb-4">
+              <div className="text-2xl font-bold text-primary">💎 {GACHA_COST}</div>
+            </div>
+            <GachaPullButton
+              currentBalance={user?.diamondBalance || 0}
+              cost={GACHA_COST}
+              pullType="single"
+            />
+            <p className="mt-2 text-xs text-gray-500">
+              {(user?.diamondBalance || 0) < GACHA_COST
+                ? 'Not enough diamonds'
+                : `You can pull ${Math.floor((user?.diamondBalance || 0) / GACHA_COST)} times`}
+            </p>
+          </div>
+
+          {/* 10x Draw */}
+          <div className="relative rounded-lg border-2 border-primary bg-gradient-to-br from-purple-50 to-blue-50 p-6 text-center">
+            <div className="absolute -top-3 left-1/2 -translate-x-1/2 transform">
+              <span className="rounded-full bg-primary px-3 py-1 text-xs font-semibold text-primary-foreground">
+                SSR GUARANTEED
+              </span>
+            </div>
+            <div className="mb-4">
+              <div className="text-3xl font-bold text-gray-900">10x Draw</div>
+              <div className="mt-2 text-sm text-gray-600">
+                10 draws with guaranteed SSR+
+              </div>
+            </div>
+            <div className="mb-4">
+              <div className="text-2xl font-bold text-primary">💎 {GACHA_COST * 10}</div>
+              <div className="text-xs text-gray-500">Save 0 diamonds (same price)</div>
+            </div>
+            <GachaPullButton
+              currentBalance={user?.diamondBalance || 0}
+              cost={GACHA_COST * 10}
+              pullType="10x"
+            />
+            <p className="mt-2 text-xs text-gray-500">
+              {(user?.diamondBalance || 0) < GACHA_COST * 10
+                ? 'Not enough diamonds'
+                : `You can do ${Math.floor((user?.diamondBalance || 0) / (GACHA_COST * 10))} 10x draws`}
+            </p>
+          </div>
+        </div>
       </div>
 
       {/* Prize Pool */}

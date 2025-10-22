@@ -5,7 +5,8 @@ import { useRouter } from 'next/navigation'
 
 type TaskVerification = {
   id: string
-  completedAt: Date
+  submittedAt: Date
+  completedAt: Date | null
   verifiedAt: Date | null
   pointsEarned: number
   diamondsEarned: number
@@ -142,7 +143,7 @@ export default function TaskVerificationList({
                 <div className="flex items-center gap-1">
                   <span className="font-medium text-gray-700">Submitted:</span>
                   <span className="text-gray-600">
-                    {new Date(item.completedAt).toLocaleString()}
+                    {new Date(item.submittedAt).toLocaleString()}
                   </span>
                 </div>
                 {item.verifiedAt && (

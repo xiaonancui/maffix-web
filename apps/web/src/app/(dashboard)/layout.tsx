@@ -2,6 +2,7 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
+import MobileMenu from '@/components/dashboard/MobileMenu'
 
 export default async function DashboardLayout({
   children,
@@ -12,6 +13,30 @@ export default async function DashboardLayout({
 
   if (!session) {
     redirect('/login')
+  }
+
+  // Fetch user's diamond balance for display
+  const { db } = await import('@/lib/db')
+  let diamondBalance = 0
+
+  const isTestAccount =
+    process.env.NODE_ENV === 'development' &&
+    (session.user.id?.includes('test-') ||
+      session.user.id?.includes('demo-') ||
+      session.user.id?.includes('admin-'))
+
+  if (isTestAccount) {
+    diamondBalance = 500
+  } else {
+    try {
+      const user = await db.user.findUnique({
+        where: { id: session.user.id },
+        select: { diamondBalance: true },
+      })
+      diamondBalance = user?.diamondBalance || 0
+    } catch (error) {
+      console.error('Failed to fetch user balance:', error)
+    }
   }
 
   return (
@@ -34,16 +59,22 @@ export default async function DashboardLayout({
                   Dashboard
                 </Link>
                 <Link
-                  href="/tasks"
+                  href="/missions"
                   className="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"
                 >
-                  Tasks
+                  Missions
                 </Link>
                 <Link
                   href="/gacha"
                   className="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"
                 >
                   Gacha
+                </Link>
+                <Link
+                  href="/store"
+                  className="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"
+                >
+                  Store
                 </Link>
                 <Link
                   href="/prizes"
@@ -53,7 +84,17 @@ export default async function DashboardLayout({
                 </Link>
               </div>
             </div>
-            <div className="flex items-center">
+            <div className="flex items-center gap-4">
+              {/* Diamond Balance */}
+              <Link
+                href="/transactions"
+                className="hidden items-center gap-2 rounded-full bg-blue-50 px-4 py-2 text-sm font-semibold text-blue-600 hover:bg-blue-100 sm:flex"
+              >
+                <span>💎</span>
+                <span>{diamondBalance}</span>
+              </Link>
+
+              {/* Profile Icon */}
               <Link
                 href="/profile"
                 className="rounded-full bg-white p-1 text-gray-400 hover:text-gray-500"
@@ -73,6 +114,9 @@ export default async function DashboardLayout({
                   />
                 </svg>
               </Link>
+
+              {/* Mobile Menu Button */}
+              <MobileMenu diamondBalance={diamondBalance} />
             </div>
           </div>
         </div>

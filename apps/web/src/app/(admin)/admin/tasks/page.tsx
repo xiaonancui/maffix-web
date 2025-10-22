@@ -39,7 +39,7 @@ export default async function AdminTasksPage() {
       },
     },
     orderBy: {
-      completedAt: 'desc',
+      submittedAt: 'desc',
     },
   })
 
