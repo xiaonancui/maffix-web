@@ -5,6 +5,83 @@ import { PrismaAdapter } from '@next-auth/prisma-adapter'
 import { db } from './db'
 import bcrypt from 'bcryptjs'
 
+// Custom TikTok OAuth Provider
+const TikTokProvider = {
+  id: 'tiktok',
+  name: 'TikTok',
+  type: 'oauth' as const,
+  authorization: {
+    url: 'https://www.tiktok.com/v2/auth/authorize/',
+    params: {
+      client_key: process.env.TIKTOK_CLIENT_KEY,
+      response_type: 'code',
+      scope: 'user.info.basic,user.info.profile,user.info.stats',
+      redirect_uri: `${process.env.NEXTAUTH_URL}/api/auth/callback/tiktok`,
+    },
+  },
+  token: {
+    url: 'https://open.tiktokapis.com/v2/oauth/token/',
+    async request(context: any) {
+      const { params } = context
+      const response = await fetch('https://open.tiktokapis.com/v2/oauth/token/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Cache-Control': 'no-cache',
+        },
+        body: new URLSearchParams({
+          client_key: process.env.TIKTOK_CLIENT_KEY!,
+          client_secret: process.env.TIKTOK_CLIENT_SECRET!,
+          code: params.code,
+          grant_type: 'authorization_code',
+          redirect_uri: `${process.env.NEXTAUTH_URL}/api/auth/callback/tiktok`,
+        }),
+      })
+
+      const tokens = await response.json()
+
+      if (tokens.error) {
+        console.error('TikTok token error:', tokens)
+        throw new Error(tokens.error_description || 'Failed to get TikTok access token')
+      }
+
+      return { tokens }
+    },
+  },
+  userinfo: {
+    url: 'https://open.tiktokapis.com/v2/user/info/',
+    async request(context: any) {
+      const { tokens } = context
+      const response = await fetch('https://open.tiktokapis.com/v2/user/info/?fields=open_id,union_id,avatar_url,display_name,username', {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${tokens.access_token}`,
+          'Content-Type': 'application/json',
+        },
+      })
+
+      const result = await response.json()
+
+      if (result.error) {
+        console.error('TikTok userinfo error:', result)
+        throw new Error(result.error.message || 'Failed to get TikTok user info')
+      }
+
+      return result
+    },
+  },
+  profile(profile: any) {
+    return {
+      id: profile.data.user.open_id,
+      name: profile.data.user.display_name || profile.data.user.username,
+      email: null, // TikTok doesn't provide email by default
+      image: profile.data.user.avatar_url,
+      tiktokUsername: profile.data.user.username,
+      tiktokUserId: profile.data.user.union_id || profile.data.user.open_id,
+    }
+  },
+}
+
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(db),
   session: {
@@ -126,20 +203,36 @@ export const authOptions: NextAuthOptions = {
       clientId: process.env.GOOGLE_CLIENT_ID || '',
       clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
     }),
+    ...(process.env.TIKTOK_CLIENT_KEY && process.env.TIKTOK_CLIENT_SECRET
+      ? [TikTokProvider as any]
+      : []),
   ],
   callbacks: {
-    async jwt({ token, user, account }) {
+    async jwt({ token, user, account, profile }) {
       if (user) {
         token.id = user.id
         token.role = user.role
+
+        // Store TikTok data if available
+        if ((user as any).tiktokUsername) {
+          token.tiktokUsername = (user as any).tiktokUsername
+          token.tiktokUserId = (user as any).tiktokUserId
+        }
       }
-      
-      // Store OAuth provider info
+
+      // Store OAuth provider info and tokens
       if (account) {
         token.provider = account.provider
         token.providerId = account.providerAccountId
+
+        // Store TikTok access token for API calls
+        if (account.provider === 'tiktok') {
+          token.tiktokAccessToken = account.access_token
+          token.tiktokRefreshToken = account.refresh_token
+          token.tiktokTokenExpiry = account.expires_at
+        }
       }
-      
+
       return token
     },
     async session({ session, token }) {
@@ -148,6 +241,8 @@ export const authOptions: NextAuthOptions = {
         session.user.role = token.role as string
         session.user.provider = token.provider as string
         session.user.providerId = token.providerId as string
+        session.user.tiktokUsername = token.tiktokUsername as string
+        session.user.tiktokUserId = token.tiktokUserId as string
       }
       return session
     },
@@ -180,12 +275,34 @@ export const authOptions: NextAuthOptions = {
 
         // Store OAuth provider info
         if (account && profile) {
+          const updateData: any = {
+            provider: account.provider,
+            providerId: account.providerAccountId,
+          }
+
+          // Store TikTok-specific data
+          if (account.provider === 'tiktok') {
+            updateData.tiktokAccessToken = account.access_token
+            updateData.tiktokRefreshToken = account.refresh_token
+            updateData.tiktokTokenExpiry = account.expires_at
+              ? new Date(account.expires_at * 1000)
+              : null
+            updateData.tiktokLinkedAt = new Date()
+
+            // Extract TikTok username and user ID from profile
+            if (profile && typeof profile === 'object') {
+              const tiktokProfile = profile as any
+              if (tiktokProfile.data?.user) {
+                updateData.tiktokUsername = tiktokProfile.data.user.username
+                updateData.tiktokUserId =
+                  tiktokProfile.data.user.union_id || tiktokProfile.data.user.open_id
+              }
+            }
+          }
+
           await db.user.update({
             where: { id: user.id },
-            data: {
-              provider: account.provider,
-              providerId: account.providerAccountId,
-            },
+            data: updateData,
           })
         }
       } catch (error) {

@@ -47,6 +47,16 @@ export default function LoginPage() {
     }
   }
 
+  const handleTikTokSignIn = async () => {
+    setIsLoading(true)
+    try {
+      await signIn('tiktok', { callbackUrl: '/dashboard' })
+    } catch (error) {
+      setError('Failed to sign in with TikTok')
+      setIsLoading(false)
+    }
+  }
+
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4 py-12 sm:px-6 lg:px-8">
       <div className="w-full max-w-md space-y-8">
@@ -123,7 +133,7 @@ export default function LoginPage() {
             </div>
           </div>
 
-          <div>
+          <div className="grid gap-3">
             <button
               type="button"
               onClick={handleGoogleSignIn}
@@ -149,6 +159,18 @@ export default function LoginPage() {
                 />
               </svg>
               Sign in with Google
+            </button>
+
+            <button
+              type="button"
+              onClick={handleTikTokSignIn}
+              disabled={isLoading}
+              className="group relative flex w-full justify-center rounded-md border border-gray-300 bg-black px-3 py-2 text-sm font-semibold text-white hover:bg-gray-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-900 disabled:opacity-50"
+            >
+              <svg className="mr-2 h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z" />
+              </svg>
+              Sign in with TikTok
             </button>
           </div>
         </form>

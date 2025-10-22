@@ -12,7 +12,7 @@ export default function TikTokUnlinkButton() {
     setIsUnlinking(true)
 
     try {
-      const response = await fetch('/api/tiktok/unlink', {
+      const response = await fetch('/api/user/unlink-tiktok', {
         method: 'POST',
       })
 

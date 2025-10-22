@@ -36,8 +36,12 @@ model User {
   providerId     String?  // ID from OAuth provider
 
   // TikTok integration
-  tiktokUsername String?  // TikTok username
-  tiktokUserId   String?  // TikTok user ID
+  tiktokUsername      String?   // TikTok username
+  tiktokUserId        String?   // TikTok user ID
+  tiktokAccessToken   String?   @db.Text // TikTok OAuth access token (encrypted)
+  tiktokRefreshToken  String?   @db.Text // TikTok OAuth refresh token (encrypted)
+  tiktokTokenExpiry   DateTime? // When the access token expires
+  tiktokLinkedAt      DateTime? // When TikTok account was linked
 
   // Timestamps
   createdAt DateTime @default(now())

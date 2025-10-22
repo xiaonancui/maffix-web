@@ -8,6 +8,8 @@ declare module 'next-auth' {
       role: string
       provider?: string
       providerId?: string
+      tiktokUsername?: string | null
+      tiktokUserId?: string | null
     } & DefaultSession['user']
   }
 
@@ -15,6 +17,8 @@ declare module 'next-auth' {
     role: string
     provider?: string
     providerId?: string
+    tiktokUsername?: string | null
+    tiktokUserId?: string | null
   }
 }
 
@@ -24,6 +28,10 @@ declare module 'next-auth/jwt' {
     role: string
     provider?: string
     providerId?: string
+    tiktokUsername?: string | null
+    tiktokUserId?: string | null
+    tiktokAccessToken?: string | null
+    tiktokRefreshToken?: string | null
+    tiktokTokenExpiry?: number | null
   }
 }
-

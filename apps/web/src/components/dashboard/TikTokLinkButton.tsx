@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { signIn } from 'next-auth/react'
 
 export default function TikTokLinkButton() {
   const router = useRouter()
@@ -11,23 +12,11 @@ export default function TikTokLinkButton() {
     setIsLinking(true)
 
     try {
-      // Initiate TikTok OAuth flow
-      const response = await fetch('/api/tiktok/auth', {
-        method: 'GET',
+      // Use NextAuth's signIn to initiate TikTok OAuth flow
+      // This will redirect to TikTok and back to the callback URL
+      await signIn('tiktok', {
+        callbackUrl: '/profile/link-tiktok?success=true',
       })
-
-      const data = await response.json()
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Failed to initiate TikTok linking')
-      }
-
-      // Redirect to TikTok OAuth page
-      if (data.authUrl) {
-        window.location.href = data.authUrl
-      } else {
-        throw new Error('No authentication URL received')
-      }
     } catch (error) {
       console.error('TikTok link error:', error)
       alert('Failed to link TikTok account. Please try again.')
