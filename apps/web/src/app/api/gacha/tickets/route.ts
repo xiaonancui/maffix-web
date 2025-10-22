@@ -8,18 +8,58 @@ import { authOptions } from '@/lib/auth'
  */
 export async function GET() {
   try {
-    // Check if we're in build time - return early if so
-    if (process.env.NODE_ENV === 'production' && !process.env.DATABASE_URL) {
-      return NextResponse.json(
-        { error: 'Service temporarily unavailable' },
-        { status: 503 }
-      )
-    }
-
     const session = await getServerSession(authOptions)
 
     if (!session) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
+    // Check if this is a test account - return mock data
+    const allowTestAccounts =
+      process.env.NODE_ENV === 'development' || process.env.ENABLE_TEST_ACCOUNTS === 'true'
+
+    const isTestAccount =
+      allowTestAccounts &&
+      (session.user.id?.includes('test-') ||
+        session.user.id?.includes('demo-') ||
+        session.user.id?.includes('admin-'))
+
+    if (isTestAccount) {
+      // Return mock tickets for test accounts
+      return NextResponse.json({
+        success: true,
+        tickets: {
+          single: {
+            count: 2,
+            tickets: [
+              {
+                id: 'ticket-single-1',
+                source: 'WELCOME_BONUS',
+                createdAt: new Date(),
+                expiresAt: null,
+              },
+              {
+                id: 'ticket-single-2',
+                source: 'DAILY_LOGIN',
+                createdAt: new Date(),
+                expiresAt: null,
+              },
+            ],
+          },
+          multi10x: {
+            count: 1,
+            tickets: [
+              {
+                id: 'ticket-10x-1',
+                source: 'PREMIUM_PACK',
+                createdAt: new Date(),
+                expiresAt: null,
+              },
+            ],
+          },
+        },
+        totalCount: 3,
+      })
     }
 
     // Dynamic import to avoid build-time database connection

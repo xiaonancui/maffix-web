@@ -18,14 +18,6 @@ const useTicketSchema = z.object({
 
 export async function POST(request: Request) {
   try {
-    // Check if we're in build time - return early if so
-    if (process.env.NODE_ENV === 'production' && !process.env.DATABASE_URL) {
-      return NextResponse.json(
-        { error: 'Service temporarily unavailable' },
-        { status: 503 }
-      )
-    }
-
     const session = await getServerSession(authOptions)
 
     if (!session) {
@@ -34,6 +26,25 @@ export async function POST(request: Request) {
 
     const body = await request.json()
     const { ticketType } = useTicketSchema.parse(body)
+
+    // Check if this is a test account - use mock data
+    const allowTestAccounts =
+      process.env.NODE_ENV === 'development' || process.env.ENABLE_TEST_ACCOUNTS === 'true'
+
+    const isTestAccount =
+      allowTestAccounts &&
+      (session.user.id?.includes('test-') ||
+        session.user.id?.includes('demo-') ||
+        session.user.id?.includes('admin-'))
+
+    if (isTestAccount) {
+      // Mock response for test accounts using tickets
+      return NextResponse.json({
+        success: true,
+        message: 'Ticket feature not available for test accounts. Use diamond pulls instead.',
+        error: 'Test accounts cannot use tickets',
+      }, { status: 400 })
+    }
 
     // Dynamic import to avoid build-time database connection
     const { db } = await import('@/lib/db')

@@ -6,14 +6,6 @@ const GACHA_COST = 100 // Cost in diamonds per pull
 
 export async function POST(request: Request) {
   try {
-    // Check if we're in build time - return early if so
-    if (process.env.NODE_ENV === 'production' && !process.env.DATABASE_URL) {
-      return NextResponse.json(
-        { error: 'Service temporarily unavailable' },
-        { status: 503 }
-      )
-    }
-
     const session = await getServerSession(authOptions)
 
     if (!session) {
@@ -21,8 +13,14 @@ export async function POST(request: Request) {
     }
 
     // Check if this is a test account - use mock data
-    const isTestAccount = process.env.NODE_ENV === 'development' &&
-      (session.user.id?.includes('test-') || session.user.id?.includes('demo-') || session.user.id?.includes('admin-'))
+    const allowTestAccounts =
+      process.env.NODE_ENV === 'development' || process.env.ENABLE_TEST_ACCOUNTS === 'true'
+
+    const isTestAccount =
+      allowTestAccounts &&
+      (session.user.id?.includes('test-') ||
+        session.user.id?.includes('demo-') ||
+        session.user.id?.includes('admin-'))
 
     if (isTestAccount) {
       // Mock prizes with different rarities
