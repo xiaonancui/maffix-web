@@ -58,11 +58,13 @@ model User {
   drawTickets    DrawTicket[]
   transactions   Transaction[]
   purchases      Purchase[]
+  verificationJobs MissionVerificationJob[]
   accounts       Account[]
   sessions       Session[]
 
   @@index([email])
   @@index([provider, providerId])
+  @@index([tiktokUsername])
   @@map("users")
 }
 
@@ -124,7 +126,16 @@ model Task {
   difficulty  Difficulty @default(EASY)
 
   // Mission type (for TikTok missions)
-  missionType String?  // FOLLOW, LIKE, REPOST, USE_AUDIO
+  missionType MissionType?
+
+  // TikTok mission targets
+  targetTikTokAccount String?  // TikTok username to follow
+  targetVideoUrl      String?  // TikTok video URL to like/repost
+  targetAudioId       String?  // TikTok audio ID to use
+
+  // Verification settings
+  autoVerify          Boolean  @default(false)  // Auto-verify via API or require manual verification
+  verificationStatus  String?  // Additional verification metadata
 
   // Rewards
   points      Int      @default(0)
@@ -145,9 +156,11 @@ model Task {
 
   // Relations
   completions UserTask[]
+  verificationJobs MissionVerificationJob[]
 
   @@index([type])
   @@index([isActive])
+  @@index([missionType])
   @@map("tasks")
 }
 
@@ -159,6 +172,13 @@ enum TaskType {
   REFERRAL    // Invite friends
   PURCHASE    // Make a purchase
   EVENT       // Attend event
+}
+
+enum MissionType {
+  FOLLOW      // Follow a TikTok account
+  LIKE        // Like a TikTok video
+  REPOST      // Repost/share a TikTok video
+  USE_AUDIO   // Create a video using specific audio
 }
 
 enum Difficulty {
@@ -191,10 +211,12 @@ model UserTask {
   // Relations
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   task        Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  verificationJob MissionVerificationJob?
 
   @@unique([userId, taskId])
   @@index([userId])
   @@index([taskId])
+  @@index([verificationStatus])
   @@map("user_tasks")
 }
 
@@ -536,5 +558,57 @@ enum PurchaseStatus {
   FAILED        // Payment failed
   CANCELLED     // Payment cancelled by user
   REFUNDED      // Payment refunded
+}
+
+// =============================================================================
+// Mission Verification System
+// =============================================================================
+
+model MissionVerificationJob {
+  id          String   @id @default(uuid())
+  userId      String
+  taskId      String
+  userTaskId  String   @unique  // Link to UserTask record
+
+  // Job details
+  missionType MissionType
+  status      JobStatus @default(PENDING)
+
+  // Verification data
+  tiktokUsername  String?  // User's TikTok username
+  targetData      String?  // JSON string with target info (account, video URL, audio ID)
+
+  // Results
+  verificationResult Boolean?  // True if verified, false if failed, null if pending
+  errorMessage       String?   // Error message if verification failed
+
+  // Retry logic
+  attempts    Int      @default(0)
+  maxAttempts Int      @default(3)
+  nextRetryAt DateTime?
+
+  // Timestamps
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  completedAt DateTime?
+
+  // Relations
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  task        Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  userTask    UserTask @relation(fields: [userTaskId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([taskId])
+  @@index([status])
+  @@index([nextRetryAt])
+  @@map("mission_verification_jobs")
+}
+
+enum JobStatus {
+  PENDING       // Job created, waiting to be processed
+  PROCESSING    // Job is being processed
+  COMPLETED     // Job completed successfully
+  FAILED        // Job failed after all retries
+  CANCELLED     // Job was cancelled
 }
 

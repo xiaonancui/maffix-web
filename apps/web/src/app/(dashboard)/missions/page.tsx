@@ -2,6 +2,7 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
+import MissionCard from '@/components/dashboard/MissionCard'
 
 export default async function MissionsPage() {
   // Dynamic import to avoid build-time database connection
@@ -461,70 +462,21 @@ export default async function MissionsPage() {
               <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 {(typeMissions as any[]).map((mission: any) => {
                   const submission = userMissions.get(mission.id)
-                  const isCompleted = submission?.verified
-                  const isPending = submission && !submission.verified
+                  const completionStatus = submission
+                    ? submission.verified
+                      ? 'APPROVED'
+                      : submission.verificationStatus
+                    : 'NOT_STARTED'
 
                   return (
-                    <div
+                    <MissionCard
                       key={mission.id}
-                      className={`rounded-lg bg-white p-6 shadow transition-all hover:shadow-lg ${
-                        isCompleted ? 'opacity-60' : ''
-                      }`}
-                    >
-                      <div className="mb-4 flex items-start justify-between">
-                        <div className="flex items-center gap-2">
-                          <span className="text-3xl">{getMissionTypeIcon(mission.missionType)}</span>
-                          <span
-                            className={`rounded-full border px-2 py-1 text-xs font-medium ${getDifficultyColor(
-                              mission.difficulty
-                            )}`}
-                          >
-                            {mission.difficulty}
-                          </span>
-                        </div>
-                        {getStatusBadge(mission.id)}
-                      </div>
-
-                      <h3 className="mb-2 text-lg font-semibold text-gray-900">
-                        {mission.title}
-                      </h3>
-                      <p className="mb-4 text-sm text-gray-600">{mission.description}</p>
-
-                      <div className="mb-4 space-y-2 text-sm">
-                        <div className="flex items-center justify-between">
-                          <span className="text-gray-500">Reward:</span>
-                          <span className="font-semibold">
-                            💎 {mission.diamonds} • ⭐ {mission.points}
-                          </span>
-                        </div>
-                        <div className="flex items-center justify-between">
-                          <span className="text-gray-500">Est. Time:</span>
-                          <span className="font-medium">{mission.estimatedTime || '5 min'}</span>
-                        </div>
-                      </div>
-
-                      {!isCompleted && !isPending && (
-                        <Link
-                          href={`/missions/${mission.id}`}
-                          className={`block w-full rounded-md px-4 py-2 text-center text-sm font-semibold transition-colors ${
-                            user?.tiktokUsername
-                              ? 'bg-primary text-primary-foreground hover:opacity-90'
-                              : 'cursor-not-allowed bg-gray-300 text-gray-500'
-                          }`}
-                        >
-                          {user?.tiktokUsername ? 'Start Mission' : 'Link TikTok First'}
-                        </Link>
-                      )}
-
-                      {isPending && (
-                        <Link
-                          href={`/missions/${mission.id}`}
-                          className="block w-full rounded-md border border-gray-300 bg-white px-4 py-2 text-center text-sm font-semibold text-gray-700 hover:bg-gray-50"
-                        >
-                          View Status
-                        </Link>
-                      )}
-                    </div>
+                      mission={{
+                        ...mission,
+                        completionStatus,
+                      }}
+                      hasTikTokLinked={!!user?.tiktokUsername}
+                    />
                   )
                 })}
               </div>
