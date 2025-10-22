@@ -60,6 +60,8 @@ export default function GachaResultModal({
     switch (rarity) {
       case 'LEGENDARY':
         return 'from-yellow-400 to-orange-500'
+      case 'SSR':
+        return 'from-amber-400 to-yellow-500'
       case 'EPIC':
         return 'from-purple-400 to-pink-500'
       case 'RARE':
@@ -74,7 +76,9 @@ export default function GachaResultModal({
   const getRarityEmoji = (rarity: string) => {
     switch (rarity) {
       case 'LEGENDARY':
-        return '🌟'
+        return '👑'
+      case 'SSR':
+        return '⭐'
       case 'EPIC':
         return '💜'
       case 'RARE':
@@ -84,6 +88,10 @@ export default function GachaResultModal({
       default:
         return '❓'
     }
+  }
+
+  const isSSROrHigher = (rarity: string) => {
+    return rarity === 'SSR' || rarity === 'LEGENDARY'
   }
 
   // Check if it's a 10x result
@@ -121,8 +129,10 @@ export default function GachaResultModal({
                   <div
                     key={index}
                     className={`rounded-lg border-2 p-3 text-center transition-all hover:scale-105 ${
-                      prize.rarity === 'LEGENDARY' || prize.rarity === 'EPIC'
-                        ? 'border-yellow-400 bg-gradient-to-br from-yellow-50 to-orange-50'
+                      isSSROrHigher(prize.rarity)
+                        ? 'border-yellow-400 bg-gradient-to-br from-yellow-50 to-orange-50 shadow-lg animate-pulse'
+                        : prize.rarity === 'EPIC'
+                        ? 'border-purple-400 bg-gradient-to-br from-purple-50 to-pink-50'
                         : 'border-gray-300 bg-white'
                     }`}
                   >
@@ -131,6 +141,8 @@ export default function GachaResultModal({
                       className={`mb-1 text-xs font-bold ${
                         prize.rarity === 'LEGENDARY'
                           ? 'text-yellow-600'
+                          : prize.rarity === 'SSR'
+                          ? 'text-amber-600'
                           : prize.rarity === 'EPIC'
                           ? 'text-purple-600'
                           : prize.rarity === 'RARE'

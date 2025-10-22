@@ -31,6 +31,9 @@ model User {
   points         Int      @default(0)
   level          Int      @default(1)
 
+  // Gacha pity system
+  gachaPityCounter Int    @default(0)  // Tracks pulls since last SSR+ for guarantee
+
   // OAuth
   provider       String?  // google, tiktok, discord, etc.
   providerId     String?  // ID from OAuth provider
@@ -52,6 +55,7 @@ model User {
   completedTasks UserTask[]
   prizes         UserPrize[]
   gachaPulls     GachaPull[]
+  drawTickets    DrawTicket[]
   transactions   Transaction[]
   accounts       Account[]
   sessions       Session[]
@@ -233,10 +237,11 @@ model Prize {
 }
 
 enum Rarity {
-  COMMON
-  RARE
-  EPIC
-  LEGENDARY
+  COMMON      // 60% - Common items
+  RARE        // 25% - Rare items
+  EPIC        // 10% - Epic items
+  SSR         // 4% - Super Super Rare items
+  LEGENDARY   // 1% - Legendary items (highest rarity)
 }
 
 enum PrizeType {
@@ -319,6 +324,14 @@ model GachaPull {
   pulledAt    DateTime @default(now())
   cost        Int      // Diamonds spent
 
+  // Multi-pull tracking
+  pullType    PullType @default(SINGLE)  // SINGLE or MULTI_10X
+  batchId     String?  // Groups 10x pulls together
+  pullIndex   Int?     // Position in 10x pull (0-9)
+
+  // SSR guarantee tracking
+  wasGuaranteed Boolean @default(false)  // True if this was a forced SSR from guarantee
+
   // Result
   won         Boolean  @default(false)
 
@@ -329,7 +342,53 @@ model GachaPull {
 
   @@index([userId])
   @@index([gachaItemId])
+  @@index([batchId])
   @@map("gacha_pulls")
+}
+
+enum PullType {
+  SINGLE
+  MULTI_10X
+}
+
+// =============================================================================
+// Draw Ticket System
+// =============================================================================
+
+model DrawTicket {
+  id          String   @id @default(uuid())
+  userId      String
+
+  // Ticket details
+  ticketType  TicketType @default(SINGLE)  // SINGLE or MULTI_10X
+  quantity    Int      @default(1)
+
+  // Source
+  source      String   // "PURCHASE", "REWARD", "GIFT", "PREMIUM_PACK"
+  sourceRef   String?  // Reference to purchase/pack ID
+
+  // Expiry
+  expiresAt   DateTime?  // Null = never expires
+
+  // Status
+  used        Boolean  @default(false)
+  usedAt      DateTime?
+
+  // Timestamps
+  createdAt   DateTime @default(now())
+
+  // Relations
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([used])
+  @@index([expiresAt])
+  @@map("draw_tickets")
+}
+
+enum TicketType {
+  SINGLE      // Single draw ticket
+  MULTI_10X   // 10x draw ticket
 }
 
 // =============================================================================

@@ -20,6 +20,91 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
+    // Check if this is a test account - use mock data
+    const isTestAccount = process.env.NODE_ENV === 'development' &&
+      (session.user.id?.includes('test-') || session.user.id?.includes('demo-') || session.user.id?.includes('admin-'))
+
+    if (isTestAccount) {
+      // Mock prizes with different rarities
+      const mockPrizes = [
+        {
+          id: 'prize-legendary-1',
+          name: '🎤 VIP Concert Backstage Pass',
+          description: 'Meet & greet with the artist + front row seat',
+          type: 'EXPERIENCE',
+          rarity: 'LEGENDARY',
+          value: 1000,
+          imageUrl: null,
+        },
+        {
+          id: 'prize-ssr-1',
+          name: '⭐ Limited Edition Signed Vinyl',
+          description: 'Rare signed vinyl record with certificate of authenticity',
+          type: 'PHYSICAL',
+          rarity: 'SSR',
+          value: 500,
+          imageUrl: null,
+        },
+        {
+          id: 'prize-epic-1',
+          name: '💜 Exclusive Merchandise Bundle',
+          description: 'Premium T-shirt, poster, and holographic sticker pack',
+          type: 'PHYSICAL',
+          rarity: 'EPIC',
+          value: 200,
+          imageUrl: null,
+        },
+        {
+          id: 'prize-rare-1',
+          name: '💙 Digital Album + Bonus Tracks',
+          description: 'Full album with 3 unreleased songs and behind-the-scenes content',
+          type: 'DIGITAL',
+          rarity: 'RARE',
+          value: 100,
+          imageUrl: null,
+        },
+        {
+          id: 'prize-common-1',
+          name: '⚪ Fan Club Sticker',
+          description: 'Official fan club holographic sticker',
+          type: 'PHYSICAL',
+          rarity: 'COMMON',
+          value: 20,
+          imageUrl: null,
+        },
+      ]
+
+      // Weighted random selection based on rarity probabilities
+      const random = Math.random() * 100
+      let selectedPrize
+      if (random < 1) {
+        selectedPrize = mockPrizes[0] // LEGENDARY 1%
+      } else if (random < 5) {
+        selectedPrize = mockPrizes[1] // SSR 4%
+      } else if (random < 15) {
+        selectedPrize = mockPrizes[2] // EPIC 10%
+      } else if (random < 40) {
+        selectedPrize = mockPrizes[3] // RARE 25%
+      } else {
+        selectedPrize = mockPrizes[4] // COMMON 60%
+      }
+
+      // Simulate processing delay
+      await new Promise(resolve => setTimeout(resolve, 300))
+
+      return NextResponse.json({
+        success: true,
+        prize: selectedPrize,
+        userPrize: {
+          id: `user-prize-${Date.now()}`,
+          wonAt: new Date(),
+        },
+        cost: GACHA_COST,
+        newBalance: 10000 - GACHA_COST,
+        totalPulls: Math.floor(Math.random() * 50) + 1,
+      })
+    }
+
     // Dynamic import to avoid build-time database connection
     const { db } = await import('@/lib/db')
 
@@ -101,7 +186,9 @@ export async function POST(request: Request) {
         data: {
           userId: user.id,
           gachaItemId: selectedItem.id,
+          prizeId: selectedItem.prizeId,
           cost: GACHA_COST,
+          pullType: 'SINGLE',
           won: true,
         },
         include: {

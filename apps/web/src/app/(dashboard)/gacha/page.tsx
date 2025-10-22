@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation'
 import GachaPullButton from '@/components/dashboard/GachaPullButton'
 
 const GACHA_COST = 100 // Cost in diamonds per pull
+const GACHA_COST_10X = 900 // Cost in diamonds for 10x pull (10% discount)
 
 export default async function GachaPage() {
   // Dynamic import to avoid build-time database connection
@@ -15,9 +16,10 @@ export default async function GachaPage() {
     redirect('/login')
   }
 
-  // Fetch user's diamond balance
+  // Fetch user's diamond balance, pity counter, and tickets
   let user
   let gachaItems: any[] = []
+  let tickets = { single: 0, multi10x: 0 }
 
   const isTestAccount = process.env.NODE_ENV === 'development' &&
     (session.user.id?.includes('test-') || session.user.id?.includes('demo-') || session.user.id?.includes('admin-'))
@@ -25,7 +27,9 @@ export default async function GachaPage() {
   if (isTestAccount) {
     user = {
       diamondBalance: session.user.role === 'ADMIN' ? 10000 : 500,
+      gachaPityCounter: 5,
     }
+    tickets = { single: 2, multi10x: 1 }
 
     // Mock gacha items
     gachaItems = [
@@ -84,6 +88,7 @@ export default async function GachaPage() {
         where: { id: session.user.id },
         select: {
           diamondBalance: true,
+          gachaPityCounter: true,
         },
       })
 
@@ -99,10 +104,28 @@ export default async function GachaPage() {
           probability: 'asc', // Show rarest first
         },
       })
+
+      // Fetch available tickets
+      const availableTickets = await db.drawTicket.findMany({
+        where: {
+          userId: session.user.id,
+          used: false,
+          OR: [
+            { expiresAt: null },
+            { expiresAt: { gt: new Date() } },
+          ],
+        },
+      })
+
+      tickets = {
+        single: availableTickets.filter((t) => t.ticketType === 'SINGLE').length,
+        multi10x: availableTickets.filter((t) => t.ticketType === 'MULTI_10X').length,
+      }
     } catch (error) {
       console.error('Database fetch failed:', error)
-      user = { diamondBalance: 0 }
+      user = { diamondBalance: 0, gachaPityCounter: 0 }
       gachaItems = []
+      tickets = { single: 0, multi10x: 0 }
     }
   }
 
@@ -110,6 +133,8 @@ export default async function GachaPage() {
     switch (rarity) {
       case 'LEGENDARY':
         return 'bg-gradient-to-r from-yellow-400 to-orange-500'
+      case 'SSR':
+        return 'bg-gradient-to-r from-amber-400 to-yellow-500'
       case 'EPIC':
         return 'bg-gradient-to-r from-purple-400 to-pink-500'
       case 'RARE':
@@ -125,6 +150,8 @@ export default async function GachaPage() {
     switch (rarity) {
       case 'LEGENDARY':
         return '👑'
+      case 'SSR':
+        return '⭐'
       case 'EPIC':
         return '💜'
       case 'RARE':
@@ -146,19 +173,41 @@ export default async function GachaPage() {
         </p>
       </div>
 
-      {/* Balance Card */}
-      <div className="mb-8 rounded-lg bg-gradient-to-r from-blue-500 to-purple-600 p-6 text-white shadow-lg">
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="text-sm opacity-90">Your Diamond Balance</p>
-            <p className="text-4xl font-bold">
-              💎 {user?.diamondBalance.toLocaleString() || 0}
-            </p>
+      {/* Balance Cards */}
+      <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {/* Diamond Balance */}
+        <div className="rounded-lg bg-gradient-to-r from-blue-500 to-purple-600 p-6 text-white shadow-lg">
+          <p className="text-sm opacity-90">Diamond Balance</p>
+          <p className="text-4xl font-bold">
+            💎 {user?.diamondBalance.toLocaleString() || 0}
+          </p>
+          <p className="mt-2 text-xs opacity-75">
+            {Math.floor((user?.diamondBalance || 0) / GACHA_COST)} single pulls available
+          </p>
+        </div>
+
+        {/* Draw Tickets */}
+        <div className="rounded-lg bg-gradient-to-r from-green-500 to-teal-600 p-6 text-white shadow-lg">
+          <p className="text-sm opacity-90">Draw Tickets</p>
+          <div className="mt-2 flex items-center gap-4">
+            <div>
+              <p className="text-2xl font-bold">🎫 {tickets.single}</p>
+              <p className="text-xs opacity-75">Single</p>
+            </div>
+            <div>
+              <p className="text-2xl font-bold">🎟️ {tickets.multi10x}</p>
+              <p className="text-xs opacity-75">10x</p>
+            </div>
           </div>
-          <div className="text-right">
-            <p className="text-sm opacity-90">Cost per Pull</p>
-            <p className="text-2xl font-bold">💎 {GACHA_COST}</p>
-          </div>
+        </div>
+
+        {/* Pity Counter */}
+        <div className="rounded-lg bg-gradient-to-r from-amber-500 to-orange-600 p-6 text-white shadow-lg">
+          <p className="text-sm opacity-90">SSR Pity Counter</p>
+          <p className="text-4xl font-bold">{user?.gachaPityCounter || 0} / 90</p>
+          <p className="mt-2 text-xs opacity-75">
+            {90 - (user?.gachaPityCounter || 0)} pulls until guaranteed SSR+
+          </p>
         </div>
       </div>
 
@@ -207,18 +256,20 @@ export default async function GachaPage() {
               </div>
             </div>
             <div className="mb-4">
-              <div className="text-2xl font-bold text-primary">💎 {GACHA_COST * 10}</div>
-              <div className="text-xs text-gray-500">Save 0 diamonds (same price)</div>
+              <div className="text-2xl font-bold text-primary">💎 {GACHA_COST_10X}</div>
+              <div className="text-xs text-green-600 font-semibold">
+                Save {GACHA_COST * 10 - GACHA_COST_10X} diamonds! (10% off)
+              </div>
             </div>
             <GachaPullButton
               currentBalance={user?.diamondBalance || 0}
-              cost={GACHA_COST * 10}
+              cost={GACHA_COST_10X}
               pullType="10x"
             />
             <p className="mt-2 text-xs text-gray-500">
-              {(user?.diamondBalance || 0) < GACHA_COST * 10
+              {(user?.diamondBalance || 0) < GACHA_COST_10X
                 ? 'Not enough diamonds'
-                : `You can do ${Math.floor((user?.diamondBalance || 0) / (GACHA_COST * 10))} 10x draws`}
+                : `You can do ${Math.floor((user?.diamondBalance || 0) / GACHA_COST_10X)} 10x draws`}
             </p>
           </div>
         </div>
