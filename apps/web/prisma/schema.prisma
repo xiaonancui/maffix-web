@@ -59,6 +59,8 @@ model User {
   transactions   Transaction[]
   purchases      Purchase[]
   verificationJobs MissionVerificationJob[]
+  cart           Cart?
+  orders         Order[]
   accounts       Account[]
   sessions       Session[]
 
@@ -610,5 +612,234 @@ enum JobStatus {
   COMPLETED     // Job completed successfully
   FAILED        // Job failed after all retries
   CANCELLED     // Job was cancelled
+}
+
+// =============================================================================
+// Merchandise Store System
+// =============================================================================
+
+model Merchandise {
+  id          String   @id @default(uuid())
+  name        String
+  description String   @db.Text
+  price       Float    // Price in USD
+
+  // Product details
+  category    MerchandiseCategory
+  material    String?  // e.g., "100% Cotton", "Polyester Blend"
+  features    String[] // Array of feature strings
+  tags        String[] // Array of tags for search/filtering
+
+  // Inventory
+  inStock     Boolean  @default(true)
+  featured    Boolean  @default(false)
+  sortOrder   Int      @default(0)
+
+  // Images
+  imageUrl    String   // Primary product image
+
+  // Timestamps
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  variants    MerchandiseVariant[]
+  images      MerchandiseImage[]
+  cartItems   CartItem[]
+  orderItems  OrderItem[]
+
+  @@index([category])
+  @@index([featured])
+  @@index([inStock])
+  @@map("merchandise")
+}
+
+model MerchandiseVariant {
+  id             String   @id @default(uuid())
+  merchandiseId  String
+
+  // Variant details
+  size           String?  // e.g., "S", "M", "L", "XL", "XXL"
+  color          String?  // e.g., "Black", "White", "Red"
+  sku            String   @unique // Stock Keeping Unit
+
+  // Pricing and inventory
+  priceModifier  Float    @default(0) // Additional price for this variant
+  stockQuantity  Int      @default(0)
+  inStock        Boolean  @default(true)
+
+  // Timestamps
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  // Relations
+  merchandise    Merchandise @relation(fields: [merchandiseId], references: [id], onDelete: Cascade)
+  cartItems      CartItem[]
+  orderItems     OrderItem[]
+
+  @@index([merchandiseId])
+  @@index([sku])
+  @@map("merchandise_variants")
+}
+
+model MerchandiseImage {
+  id             String   @id @default(uuid())
+  merchandiseId  String
+
+  // Image details
+  url            String
+  altText        String?
+  sortOrder      Int      @default(0)
+  isPrimary      Boolean  @default(false)
+
+  // Timestamps
+  createdAt      DateTime @default(now())
+
+  // Relations
+  merchandise    Merchandise @relation(fields: [merchandiseId], references: [id], onDelete: Cascade)
+
+  @@index([merchandiseId])
+  @@map("merchandise_images")
+}
+
+enum MerchandiseCategory {
+  CLOTHING      // T-shirts, hoodies, jackets
+  ACCESSORIES   // Hats, bags, jewelry
+  MUSIC         // Vinyl, CDs, digital downloads
+  COLLECTIBLES  // Posters, stickers, pins
+  OTHER         // Miscellaneous items
+}
+
+// =============================================================================
+// Shopping Cart System
+// =============================================================================
+
+model Cart {
+  id        String   @id @default(uuid())
+  userId    String   @unique
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items     CartItem[]
+
+  @@map("carts")
+}
+
+model CartItem {
+  id          String   @id @default(uuid())
+  cartId      String
+  merchandiseId String
+  variantId   String?  // Optional: specific size/color variant
+
+  // Item details
+  quantity    Int      @default(1)
+
+  // Timestamps
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  cart        Cart     @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  merchandise Merchandise @relation(fields: [merchandiseId], references: [id], onDelete: Cascade)
+  variant     MerchandiseVariant? @relation(fields: [variantId], references: [id], onDelete: SetNull)
+
+  @@unique([cartId, merchandiseId, variantId])
+  @@index([cartId])
+  @@index([merchandiseId])
+  @@map("cart_items")
+}
+
+// =============================================================================
+// Order Management System
+// =============================================================================
+
+model Order {
+  id              String   @id @default(uuid())
+  userId          String
+  orderNumber     String   @unique // Human-readable order number
+
+  // Order details
+  status          OrderStatus @default(PENDING)
+  totalAmount     Float
+  currency        String   @default("USD")
+
+  // Shipping information
+  shippingName    String
+  shippingEmail   String
+  shippingAddress String   @db.Text
+  shippingCity    String
+  shippingState   String?
+  shippingZip     String
+  shippingCountry String
+  shippingPhone   String?
+
+  // Payment information
+  paymentMethod   PaymentMethod?
+  paymentId       String?  // Klarna/Stripe payment ID
+  paidAt          DateTime?
+
+  // Tracking
+  trackingNumber  String?
+  shippedAt       DateTime?
+  deliveredAt     DateTime?
+
+  // Notes
+  customerNotes   String?  @db.Text
+  adminNotes      String?  @db.Text
+
+  // Timestamps
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  // Relations
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items           OrderItem[]
+
+  @@index([userId])
+  @@index([orderNumber])
+  @@index([status])
+  @@map("orders")
+}
+
+model OrderItem {
+  id             String   @id @default(uuid())
+  orderId        String
+  merchandiseId  String
+  variantId      String?
+
+  // Item details at time of purchase
+  name           String
+  description    String?  @db.Text
+  price          Float    // Price at time of purchase
+  quantity       Int
+  size           String?
+  color          String?
+  imageUrl       String?
+
+  // Timestamps
+  createdAt      DateTime @default(now())
+
+  // Relations
+  order          Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  merchandise    Merchandise @relation(fields: [merchandiseId], references: [id], onDelete: Restrict)
+  variant        MerchandiseVariant? @relation(fields: [variantId], references: [id], onDelete: SetNull)
+
+  @@index([orderId])
+  @@index([merchandiseId])
+  @@map("order_items")
+}
+
+enum OrderStatus {
+  PENDING       // Order created, awaiting payment
+  PAID          // Payment received
+  PROCESSING    // Order being prepared
+  SHIPPED       // Order shipped
+  DELIVERED     // Order delivered
+  CANCELLED     // Order cancelled
+  REFUNDED      // Order refunded
 }
 

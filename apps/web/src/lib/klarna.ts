@@ -10,9 +10,10 @@
 import axios, { AxiosInstance } from 'axios'
 
 // Klarna API Configuration
-const KLARNA_API_BASE_URL = process.env.KLARNA_API_BASE_URL || 'https://api.playground.klarna.com' // Use playground for testing
-const KLARNA_USERNAME = process.env.KLARNA_USERNAME || ''
-const KLARNA_PASSWORD = process.env.KLARNA_PASSWORD || ''
+const DEFAULT_KLARNA_API_BASE_URL =
+  process.env.KLARNA_API_BASE_URL || 'https://api.playground.klarna.com' // Use playground for testing
+const DEFAULT_KLARNA_USERNAME = process.env.KLARNA_USERNAME || ''
+const DEFAULT_KLARNA_PASSWORD = process.env.KLARNA_PASSWORD || ''
 
 // Types
 export interface KlarnaOrderLine {
@@ -126,16 +127,20 @@ export interface KlarnaOrderResponse {
 /**
  * Klarna API Client
  */
-class KlarnaClient {
+export class KlarnaClient {
   private client: AxiosInstance
 
-  constructor() {
+  constructor(
+    username: string = DEFAULT_KLARNA_USERNAME,
+    password: string = DEFAULT_KLARNA_PASSWORD,
+    baseUrl: string = DEFAULT_KLARNA_API_BASE_URL
+  ) {
     // Create axios instance with basic auth
     this.client = axios.create({
-      baseURL: KLARNA_API_BASE_URL,
+      baseURL: baseUrl,
       auth: {
-        username: KLARNA_USERNAME,
-        password: KLARNA_PASSWORD,
+        username,
+        password,
       },
       headers: {
         'Content-Type': 'application/json',
@@ -155,6 +160,13 @@ class KlarnaClient {
       console.error('Klarna create session error:', error.response?.data || error.message)
       throw new Error(`Failed to create Klarna session: ${error.response?.data?.error_message || error.message}`)
     }
+  }
+
+  /**
+   * Backwards-compatible alias for createSession
+   */
+  async createPaymentSession(data: KlarnaSessionRequest): Promise<KlarnaSessionResponse> {
+    return this.createSession(data)
   }
 
   /**
@@ -259,4 +271,3 @@ export function formatPrice(cents: number, currency: string = 'USD'): string {
     currency: currency,
   }).format(dollars)
 }
-

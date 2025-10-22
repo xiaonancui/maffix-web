@@ -81,49 +81,77 @@ export async function POST(request: Request) {
  */
 async function handleOrderAuthorized(payload: any) {
   const { db } = await import('@/lib/db')
-  
+
   const orderId = payload.order_id
-  const merchantReference1 = payload.merchant_reference1 // User ID
-  const merchantReference2 = payload.merchant_reference2 // Pack ID
-  
+  const merchantReference1 = payload.merchant_reference1 // Order number or User ID
+  const merchantReference2 = payload.merchant_reference2 // Order ID or Pack ID
+
   try {
-    // Find the pending purchase
-    const purchase = await db.purchase.findFirst({
-      where: {
+    // Check if this is a merchandise order (starts with ORD-)
+    if (merchantReference1 && merchantReference1.startsWith('ORD-')) {
+      // Handle merchandise order
+      const order = await db.order.findUnique({
+        where: { id: merchantReference2 },
+      })
+
+      if (!order) {
+        console.error('Merchandise order not found:', merchantReference2)
+        return
+      }
+
+      // Update order status
+      await db.order.update({
+        where: { id: order.id },
+        data: {
+          paymentId: orderId,
+          status: 'PAID',
+        },
+      })
+
+      console.log('Merchandise order authorized:', {
+        orderId: order.id,
+        orderNumber: order.orderNumber,
+        klarnaOrderId: orderId,
+      })
+    } else {
+      // Handle Premium Pack purchase
+      const purchase = await db.purchase.findFirst({
+        where: {
+          userId: merchantReference1,
+          packId: merchantReference2,
+          status: 'PENDING',
+        },
+        include: {
+          pack: {
+            include: {
+              guaranteedPrize: true,
+            },
+          },
+          user: true,
+        },
+      })
+
+      if (!purchase) {
+        console.error('Purchase not found for order:', orderId)
+        return
+      }
+
+      // Update purchase with Klarna order ID and status
+      await db.purchase.update({
+        where: { id: purchase.id },
+        data: {
+          klarnaOrderId: orderId,
+          status: 'PROCESSING',
+        },
+      })
+
+      console.log('Premium pack order authorized:', {
+        purchaseId: purchase.id,
+        orderId,
         userId: merchantReference1,
         packId: merchantReference2,
-        status: 'PENDING',
-      },
-      include: {
-        pack: {
-          include: {
-            guaranteedPrize: true,
-          },
-        },
-        user: true,
-      },
-    })
-
-    if (!purchase) {
-      console.error('Purchase not found for order:', orderId)
-      return
+      })
     }
-
-    // Update purchase with Klarna order ID and status
-    await db.purchase.update({
-      where: { id: purchase.id },
-      data: {
-        klarnaOrderId: orderId,
-        status: 'PROCESSING',
-      },
-    })
-
-    console.log('Order authorized:', {
-      purchaseId: purchase.id,
-      orderId,
-      userId: merchantReference1,
-      packId: merchantReference2,
-    })
 
     // Note: We'll grant items in ORDER_CAPTURED event
     // ORDER_AUTHORIZED just means the payment is approved but not yet captured
@@ -140,11 +168,36 @@ async function handleOrderAuthorized(payload: any) {
  */
 async function handleOrderCaptured(payload: any) {
   const { db } = await import('@/lib/db')
-  
+
   const orderId = payload.order_id
-  
+
   try {
-    // Find the purchase by Klarna order ID
+    // Check if this is a merchandise order
+    const merchandiseOrder = await db.order.findFirst({
+      where: { paymentId: orderId },
+    })
+
+    if (merchandiseOrder) {
+      // Handle merchandise order completion
+      if (merchandiseOrder.status === 'PAID') {
+        await db.order.update({
+          where: { id: merchandiseOrder.id },
+          data: {
+            status: 'PROCESSING',
+            paidAt: new Date(),
+          },
+        })
+
+        console.log('Merchandise order captured:', {
+          orderId: merchandiseOrder.id,
+          orderNumber: merchandiseOrder.orderNumber,
+          amount: merchandiseOrder.totalAmount,
+        })
+      }
+      return
+    }
+
+    // Handle Premium Pack purchase
     const purchase = await db.purchase.findUnique({
       where: { klarnaOrderId: orderId },
       include: {
