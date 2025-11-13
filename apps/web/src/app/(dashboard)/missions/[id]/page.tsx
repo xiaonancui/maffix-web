@@ -216,13 +216,13 @@ export default async function MissionDetailPage({
         <div className="grid gap-4 sm:grid-cols-3">
           <div className="rounded-lg bg-blue-50 p-4">
             <div className="text-sm text-gray-600">Reward</div>
-            <div className="mt-1 text-2xl font-bold text-blue-600">
+            <div className="mt-1 text-2xl font-bold text-[#FF5656]">
               💎 {mission.diamonds}
             </div>
           </div>
           <div className="rounded-lg bg-purple-50 p-4">
             <div className="text-sm text-gray-600">Points</div>
-            <div className="mt-1 text-2xl font-bold text-purple-600">
+            <div className="mt-1 text-2xl font-bold text-[#FF5656]">
               ⭐ {mission.points}
             </div>
           </div>

@@ -23,7 +23,7 @@ export default function CartPage() {
     return (
       <div className="flex min-h-screen items-center justify-center">
         <div className="text-center">
-          <div className="mb-4 h-12 w-12 animate-spin rounded-full border-4 border-blue-600 border-t-transparent mx-auto"></div>
+          <div className="mb-4 h-12 w-12 animate-spin rounded-full border-4 border-[#FF5656] border-t-transparent mx-auto"></div>
           <p className="text-gray-600">Loading cart...</p>
         </div>
       </div>
@@ -137,7 +137,7 @@ export default function CartPage() {
 
               <button
                 onClick={() => alert('Checkout feature coming soon!')}
-                className="mt-6 w-full rounded-md bg-blue-600 px-6 py-3 font-semibold text-white hover:bg-blue-700"
+                className="mt-6 w-full rounded-md bg-[#FF5656] px-6 py-3 font-semibold text-white hover:bg-[#FF5656]/90"
               >
                 Proceed to Checkout
               </button>

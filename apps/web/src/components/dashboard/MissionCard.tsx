@@ -133,7 +133,7 @@ export default function MissionCard({ mission, hasTikTokLinked }: MissionCardPro
                   href={accountUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="truncate font-medium text-blue-600 hover:underline"
+                  className="truncate font-medium text-[#FF5656] hover:underline"
                 >
                   @{accountSlug}
                 </Link>
@@ -150,7 +150,7 @@ export default function MissionCard({ mission, hasTikTokLinked }: MissionCardPro
                 href={mission.targetVideoUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="truncate font-medium text-blue-600 hover:underline"
+                className="truncate font-medium text-[#FF5656] hover:underline"
               >
                 View on TikTok
               </Link>

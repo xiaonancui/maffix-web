@@ -144,9 +144,9 @@ export default async function PurchasesPage() {
       case 'SSR':
         return 'text-amber-600'
       case 'EPIC':
-        return 'text-purple-600'
+        return 'text-[#FF5656]'
       case 'RARE':
-        return 'text-blue-600'
+        return 'text-[#FF5656]'
       case 'COMMON':
         return 'text-gray-600'
       default:
@@ -301,7 +301,7 @@ export default async function PurchasesPage() {
           </h3>
           <div className="grid gap-4 sm:grid-cols-3">
             <div className="text-center">
-              <p className="text-3xl font-bold text-purple-600">
+              <p className="text-3xl font-bold text-[#FF5656]">
                 {purchases.length}
               </p>
               <p className="text-sm text-gray-600">Total Purchases</p>
@@ -317,7 +317,7 @@ export default async function PurchasesPage() {
               <p className="text-sm text-gray-600">Total Spent</p>
             </div>
             <div className="text-center">
-              <p className="text-3xl font-bold text-blue-600">
+              <p className="text-3xl font-bold text-[#FF5656]">
                 {purchases.filter((p) => p.status === 'COMPLETED').length}
               </p>
               <p className="text-sm text-gray-600">Completed</p>

@@ -251,7 +251,7 @@ export default function ReleasesPage() {
 
                 {/* Details */}
                 <div className="flex-1 min-w-0">
-                  <h3 className="mb-1 font-semibold text-gray-900 line-clamp-2 group-hover:text-blue-600">
+                  <h3 className="mb-1 font-semibold text-gray-900 line-clamp-2 group-hover:text-[#FF5656]">
                     {release.title}
                   </h3>
                   <p className="text-sm text-gray-600">{release.artist}</p>

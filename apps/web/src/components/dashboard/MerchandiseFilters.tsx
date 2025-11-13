@@ -21,7 +21,7 @@ export default function MerchandiseFilters({ categories }: { categories: string[
                 onClick={() => setSelectedCategory(category)}
                 className={`rounded-full border px-4 py-2 text-sm font-medium transition-colors ${
                   selectedCategory === category
-                    ? 'border-blue-600 bg-blue-600 text-white'
+                    ? 'border-[#FF5656] bg-[#FF5656] text-white'
                     : 'border-gray-300 bg-white text-gray-700 hover:border-gray-400 hover:bg-gray-50'
                 }`}
               >

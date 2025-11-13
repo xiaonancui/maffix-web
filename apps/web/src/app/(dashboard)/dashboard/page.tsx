@@ -339,7 +339,7 @@ export default async function DashboardPage() {
                 <h2 className="text-xl font-bold text-gray-900">Recent Activity 📊</h2>
                 <Link
                   href="/transactions"
-                  className="text-sm font-medium text-blue-600 hover:text-blue-700"
+                  className="text-sm font-medium text-[#FF5656] hover:text-blue-700"
                 >
                   View All →
                 </Link>
@@ -350,7 +350,7 @@ export default async function DashboardPage() {
                   <p className="text-gray-500">No recent activity yet. Start completing missions!</p>
                   <Link
                     href="/missions"
-                    className="mt-4 inline-block rounded-lg bg-blue-600 px-6 py-2 text-sm font-semibold text-white hover:bg-blue-700"
+                    className="mt-4 inline-block rounded-lg bg-[#FF5656] px-6 py-2 text-sm font-semibold text-white hover:bg-[#FF5656]/90"
                   >
                     Browse Missions
                   </Link>

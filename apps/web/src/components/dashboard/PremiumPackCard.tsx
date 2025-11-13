@@ -36,9 +36,9 @@ export default function PremiumPackCard({ pack }: { pack: PremiumPack }) {
       case 'SSR':
         return 'text-amber-600 bg-amber-50 border-amber-200'
       case 'EPIC':
-        return 'text-purple-600 bg-purple-50 border-purple-200'
+        return 'text-[#FF5656] bg-purple-50 border-purple-200'
       case 'RARE':
-        return 'text-blue-600 bg-blue-50 border-blue-200'
+        return 'text-[#FF5656] bg-blue-50 border-blue-200'
       case 'COMMON':
         return 'text-gray-600 bg-gray-50 border-gray-200'
       default:
@@ -173,7 +173,7 @@ export default function PremiumPackCard({ pack }: { pack: PremiumPack }) {
               <span className="text-sm font-medium text-blue-900">
                 💎 Bonus Diamonds
               </span>
-              <span className="text-sm font-bold text-blue-600">
+              <span className="text-sm font-bold text-[#FF5656]">
                 +{pack.bonusDiamonds.toLocaleString()}
               </span>
             </div>
@@ -183,7 +183,7 @@ export default function PremiumPackCard({ pack }: { pack: PremiumPack }) {
               <span className="text-sm font-medium text-purple-900">
                 🎫 Draw Tickets
               </span>
-              <span className="text-sm font-bold text-purple-600">
+              <span className="text-sm font-bold text-[#FF5656]">
                 +{pack.bonusTickets}
               </span>
             </div>

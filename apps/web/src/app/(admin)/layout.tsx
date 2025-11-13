@@ -15,9 +15,9 @@ export default async function AdminLayout({
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-black">
       {/* Admin Navigation */}
-      <nav className="bg-red-600 shadow">
+      <nav className="bg-[#FF5656] shadow-lg">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 justify-between">
             <div className="flex">
@@ -29,25 +29,25 @@ export default async function AdminLayout({
               <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
                 <Link
                   href="/admin"
-                  className="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-white hover:border-white"
+                  className="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-white hover:border-white transition-colors"
                 >
                   Dashboard
                 </Link>
                 <Link
                   href="/admin/tasks"
-                  className="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-white hover:border-white"
+                  className="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-white hover:border-white transition-colors"
                 >
                   Task Verification
                 </Link>
                 <Link
                   href="/admin/users"
-                  className="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-white hover:border-white"
+                  className="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-white hover:border-white transition-colors"
                 >
                   Users
                 </Link>
                 <Link
                   href="/admin/prizes"
-                  className="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-white hover:border-white"
+                  className="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-white hover:border-white transition-colors"
                 >
                   Prizes
                 </Link>
@@ -56,7 +56,7 @@ export default async function AdminLayout({
             <div className="flex items-center gap-4">
               <Link
                 href="/dashboard"
-                className="text-sm font-medium text-white hover:underline"
+                className="text-sm font-medium text-white hover:underline transition-colors"
               >
                 ← Back to User Dashboard
               </Link>

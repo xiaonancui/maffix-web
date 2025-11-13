@@ -144,9 +144,9 @@ export default function GachaResultModal({
                           : prize.rarity === 'SSR'
                           ? 'text-amber-600'
                           : prize.rarity === 'EPIC'
-                          ? 'text-purple-600'
+                          ? 'text-[#FF5656]'
                           : prize.rarity === 'RARE'
-                          ? 'text-blue-600'
+                          ? 'text-[#FF5656]'
                           : 'text-gray-600'
                       }`}
                     >
@@ -163,13 +163,13 @@ export default function GachaResultModal({
               <div className="mb-6 grid grid-cols-3 gap-4">
                 <div className="rounded-lg bg-blue-50 p-4 text-center">
                   <p className="text-sm text-gray-600">New Balance</p>
-                  <p className="text-xl font-bold text-blue-600">
+                  <p className="text-xl font-bold text-[#FF5656]">
                     💎 {result10x.newBalance}
                   </p>
                 </div>
                 <div className="rounded-lg bg-purple-50 p-4 text-center">
                   <p className="text-sm text-gray-600">Total Pulls</p>
-                  <p className="text-xl font-bold text-purple-600">
+                  <p className="text-xl font-bold text-[#FF5656]">
                     {result10x.totalPulls}
                   </p>
                 </div>

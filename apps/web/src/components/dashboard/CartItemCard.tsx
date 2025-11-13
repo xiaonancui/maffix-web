@@ -66,7 +66,7 @@ export default function CartItemCard({ item }: { item: CartItem }) {
           <div>
             <Link
               href={`/store/${item.merchandise.id}`}
-              className="text-lg font-semibold text-gray-900 hover:text-blue-600"
+              className="text-lg font-semibold text-gray-900 hover:text-[#FF5656]"
             >
               {item.merchandise.name}
             </Link>
@@ -132,7 +132,7 @@ export default function CartItemCard({ item }: { item: CartItem }) {
 
       {/* Toast Notification */}
       {showToast && (
-        <div className="fixed bottom-4 right-4 z-50 animate-fade-in rounded-lg bg-blue-600 px-6 py-3 text-white shadow-lg">
+        <div className="fixed bottom-4 right-4 z-50 animate-fade-in rounded-lg bg-[#FF5656] px-6 py-3 text-white shadow-lg">
           <p className="font-semibold">🛒 Cart update coming soon!</p>
           <p className="text-sm opacity-90">购物车功能开发中</p>
         </div>

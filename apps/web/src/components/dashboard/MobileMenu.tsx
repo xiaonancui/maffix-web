@@ -54,7 +54,7 @@ export default function MobileMenu({ diamondBalance }: { diamondBalance: number 
               href="/dashboard"
               className={`block rounded-md px-3 py-2 text-base font-medium transition-colors ${
                 isActive('/dashboard')
-                  ? 'bg-blue-50 text-blue-600 font-semibold'
+                  ? 'bg-blue-50 text-[#FF5656] font-semibold'
                   : 'text-gray-500 hover:bg-gray-50 hover:text-gray-700'
               }`}
               onClick={() => setIsOpen(false)}
@@ -65,7 +65,7 @@ export default function MobileMenu({ diamondBalance }: { diamondBalance: number 
               href="/releases"
               className={`block rounded-md px-3 py-2 text-base font-medium transition-colors ${
                 isActive('/releases')
-                  ? 'bg-blue-50 text-blue-600 font-semibold'
+                  ? 'bg-blue-50 text-[#FF5656] font-semibold'
                   : 'text-gray-500 hover:bg-gray-50 hover:text-gray-700'
               }`}
               onClick={() => setIsOpen(false)}
@@ -76,7 +76,7 @@ export default function MobileMenu({ diamondBalance }: { diamondBalance: number 
               href="/missions"
               className={`block rounded-md px-3 py-2 text-base font-medium transition-colors ${
                 isActive('/missions')
-                  ? 'bg-blue-50 text-blue-600 font-semibold'
+                  ? 'bg-blue-50 text-[#FF5656] font-semibold'
                   : 'text-gray-500 hover:bg-gray-50 hover:text-gray-700'
               }`}
               onClick={() => setIsOpen(false)}
@@ -87,7 +87,7 @@ export default function MobileMenu({ diamondBalance }: { diamondBalance: number 
               href="/gacha"
               className={`block rounded-md px-3 py-2 text-base font-medium transition-colors ${
                 isActive('/gacha')
-                  ? 'bg-blue-50 text-blue-600 font-semibold'
+                  ? 'bg-blue-50 text-[#FF5656] font-semibold'
                   : 'text-gray-500 hover:bg-gray-50 hover:text-gray-700'
               }`}
               onClick={() => setIsOpen(false)}
@@ -98,7 +98,7 @@ export default function MobileMenu({ diamondBalance }: { diamondBalance: number 
               href="/store"
               className={`block rounded-md px-3 py-2 text-base font-medium transition-colors ${
                 isActive('/store')
-                  ? 'bg-blue-50 text-blue-600 font-semibold'
+                  ? 'bg-blue-50 text-[#FF5656] font-semibold'
                   : 'text-gray-500 hover:bg-gray-50 hover:text-gray-700'
               }`}
               onClick={() => setIsOpen(false)}
@@ -109,7 +109,7 @@ export default function MobileMenu({ diamondBalance }: { diamondBalance: number 
               href="/store/packs"
               className={`block rounded-md px-3 py-2 text-base font-medium transition-colors ${
                 isActive('/store/packs')
-                  ? 'bg-blue-50 text-blue-600 font-semibold'
+                  ? 'bg-blue-50 text-[#FF5656] font-semibold'
                   : 'text-gray-500 hover:bg-gray-50 hover:text-gray-700'
               }`}
               onClick={() => setIsOpen(false)}
@@ -120,7 +120,7 @@ export default function MobileMenu({ diamondBalance }: { diamondBalance: number 
               href="/prizes"
               className={`block rounded-md px-3 py-2 text-base font-medium transition-colors ${
                 isActive('/prizes')
-                  ? 'bg-blue-50 text-blue-600 font-semibold'
+                  ? 'bg-blue-50 text-[#FF5656] font-semibold'
                   : 'text-gray-500 hover:bg-gray-50 hover:text-gray-700'
               }`}
               onClick={() => setIsOpen(false)}

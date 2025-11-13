@@ -173,7 +173,7 @@ export default async function TransactionsPage() {
       {/* Summary Cards */}
       <div className="mb-8 grid gap-6 sm:grid-cols-3">
         <div className="rounded-lg bg-gradient-to-br from-blue-50 to-blue-100 p-6 shadow">
-          <div className="mb-2 text-sm font-medium text-blue-600">
+          <div className="mb-2 text-sm font-medium text-[#FF5656]">
             Current Balance
           </div>
           <div className="text-3xl font-bold text-blue-900">
@@ -194,7 +194,7 @@ export default async function TransactionsPage() {
         </div>
 
         <div className="rounded-lg bg-gradient-to-br from-purple-50 to-purple-100 p-6 shadow">
-          <div className="mb-2 text-sm font-medium text-purple-600">
+          <div className="mb-2 text-sm font-medium text-[#FF5656]">
             Total Spent
           </div>
           <div className="text-3xl font-bold text-purple-900">
@@ -270,7 +270,7 @@ export default async function TransactionsPage() {
         <div className="flex items-start">
           <div className="flex-shrink-0">
             <svg
-              className="h-6 w-6 text-blue-600"
+              className="h-6 w-6 text-[#FF5656]"
               fill="none"
               viewBox="0 0 24 24"
               strokeWidth="1.5"

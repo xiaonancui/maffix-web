@@ -344,7 +344,7 @@ export default async function StorePage() {
             <div className="mb-4 flex justify-center">
               <div className="flex h-16 w-16 items-center justify-center rounded-full bg-blue-100">
                 <svg
-                  className="h-8 w-8 text-blue-600"
+                  className="h-8 w-8 text-[#FF5656]"
                   fill="none"
                   viewBox="0 0 24 24"
                   strokeWidth="1.5"
@@ -392,7 +392,7 @@ export default async function StorePage() {
             <div className="mb-4 flex justify-center">
               <div className="flex h-16 w-16 items-center justify-center rounded-full bg-purple-100">
                 <svg
-                  className="h-8 w-8 text-purple-600"
+                  className="h-8 w-8 text-[#FF5656]"
                   fill="none"
                   viewBox="0 0 24 24"
                   strokeWidth="1.5"

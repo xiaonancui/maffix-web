@@ -164,7 +164,7 @@ export default async function LinkTikTokPage() {
               <div className="flex items-start">
                 <div className="flex-shrink-0">
                   <svg
-                    className="h-6 w-6 text-blue-600"
+                    className="h-6 w-6 text-[#FF5656]"
                     fill="none"
                     viewBox="0 0 24 24"
                     strokeWidth="1.5"
@@ -189,7 +189,7 @@ export default async function LinkTikTokPage() {
                   <div className="mt-4">
                     <Link
                       href="/missions"
-                      className="inline-flex items-center rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700"
+                      className="inline-flex items-center rounded-md bg-[#FF5656] px-4 py-2 text-sm font-semibold text-white hover:bg-[#FF5656]/90"
                     >
                       Browse Missions →
                     </Link>

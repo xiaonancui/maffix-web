@@ -158,13 +158,13 @@ export default async function ProfilePage() {
             </h3>
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="rounded-lg bg-blue-50 p-4">
-                <div className="text-2xl font-bold text-blue-600">
+                <div className="text-2xl font-bold text-[#FF5656]">
                   {stats.totalTasks}
                 </div>
                 <div className="text-sm text-gray-600">Tasks Completed</div>
               </div>
               <div className="rounded-lg bg-purple-50 p-4">
-                <div className="text-2xl font-bold text-purple-600">
+                <div className="text-2xl font-bold text-[#FF5656]">
                   {stats.totalPrizes}
                 </div>
                 <div className="text-sm text-gray-600">Prizes Won</div>

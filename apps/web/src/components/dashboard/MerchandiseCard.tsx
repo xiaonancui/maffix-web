@@ -103,7 +103,7 @@ export default function MerchandiseCard({ item }: { item: MerchandiseItem }) {
                   onClick={() => setSelectedColor(color)}
                   className={`relative h-8 w-8 rounded-full border-2 transition-all ${
                     selectedColor === color
-                      ? 'border-blue-600 ring-2 ring-blue-200 ring-offset-2 scale-110'
+                      ? 'border-[#FF5656] ring-2 ring-blue-200 ring-offset-2 scale-110'
                       : 'border-gray-300 hover:border-gray-400 hover:scale-105'
                   }`}
                   style={{
@@ -133,7 +133,7 @@ export default function MerchandiseCard({ item }: { item: MerchandiseItem }) {
                   onClick={() => setSelectedSize(size)}
                   className={`rounded-lg border-2 px-4 py-2 text-sm font-semibold transition-all ${
                     selectedSize === size
-                      ? 'border-blue-600 bg-blue-600 text-white shadow-md scale-105'
+                      ? 'border-[#FF5656] bg-[#FF5656] text-white shadow-md scale-105'
                       : 'border-gray-300 bg-white text-gray-700 hover:border-blue-400 hover:bg-blue-50 hover:scale-105'
                   }`}
                 >
@@ -151,7 +151,7 @@ export default function MerchandiseCard({ item }: { item: MerchandiseItem }) {
             disabled={!item.inStock || isAdding}
             className={`w-full rounded-md px-4 py-2 text-sm font-semibold text-white transition-colors ${
               item.inStock && !isAdding
-                ? 'bg-blue-600 hover:bg-blue-700'
+                ? 'bg-[#FF5656] hover:bg-[#FF5656]/90'
                 : 'cursor-not-allowed bg-gray-400'
             }`}
           >
@@ -168,7 +168,7 @@ export default function MerchandiseCard({ item }: { item: MerchandiseItem }) {
 
         {/* Toast Notification */}
         {showToast && (
-          <div className="fixed bottom-4 right-4 z-50 animate-fade-in rounded-lg bg-blue-600 px-6 py-3 text-white shadow-lg">
+          <div className="fixed bottom-4 right-4 z-50 animate-fade-in rounded-lg bg-[#FF5656] px-6 py-3 text-white shadow-lg">
             <p className="font-semibold">🛒 Payment integration coming soon!</p>
             <p className="text-sm opacity-90">支付功能开发中，敬请期待</p>
           </div>

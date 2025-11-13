@@ -282,7 +282,7 @@ export default async function MerchandiseDetailPage({
                     />
                   </div>
                   <h3 className="mb-2 font-semibold text-gray-900">{product.name}</h3>
-                  <p className="text-lg font-bold text-blue-600">${product.price.toFixed(2)}</p>
+                  <p className="text-lg font-bold text-[#FF5656]">${product.price.toFixed(2)}</p>
                 </a>
               ))}
             </div>

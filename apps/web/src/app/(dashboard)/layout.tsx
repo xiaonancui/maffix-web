@@ -70,7 +70,7 @@ export default async function DashboardLayout({
               {/* Diamond Balance */}
               <Link
                 href="/transactions"
-                className="hidden items-center gap-2 rounded-full bg-blue-50 px-4 py-2 text-sm font-semibold text-blue-600 hover:bg-blue-100 sm:flex"
+                className="hidden items-center gap-2 rounded-full bg-blue-50 px-4 py-2 text-sm font-semibold text-[#FF5656] hover:bg-blue-100 sm:flex"
               >
                 <span>💎</span>
                 <span>{diamondBalance}</span>

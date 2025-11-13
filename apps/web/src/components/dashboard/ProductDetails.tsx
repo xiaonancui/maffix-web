@@ -99,7 +99,7 @@ export default function ProductDetails({
       <div className="mb-6">
         <h1 className="mb-2 text-3xl font-bold text-gray-900">{merchandise.name}</h1>
         <div className="flex items-baseline gap-2">
-          <span className="text-3xl font-bold text-blue-600">
+          <span className="text-3xl font-bold text-[#FF5656]">
             ${merchandise.price.toFixed(2)}
           </span>
           <span className="text-sm text-gray-500">{merchandise.currency || 'USD'}</span>
