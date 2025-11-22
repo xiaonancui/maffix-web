@@ -71,11 +71,11 @@ export default function AdminBreadcrumbs() {
           <div key={breadcrumb.href} className="flex items-center gap-2">
             {index > 0 && <span className="text-gray-600">/</span>}
             {isLast ? (
-              <span className="font-semibold text-white">{breadcrumb.name}</span>
+              <span className="font-semibold text-foreground">{breadcrumb.name}</span>
             ) : (
               <Link
                 href={breadcrumb.href}
-                className="hover:text-white transition-colors"
+                className="hover:text-foreground transition-colors"
               >
                 {breadcrumb.name}
               </Link>

@@ -9,6 +9,7 @@ import FilterDropdown from '@/components/admin/FilterDropdown'
 import SearchBar from '@/components/admin/SearchBar'
 import ConfirmDialog from '@/components/admin/ConfirmDialog'
 import ActionMenu from '@/components/admin/ActionMenu'
+import { Plus, Star, Edit, Trash2 } from 'lucide-react'
 
 interface MerchandiseVariant {
   id: string
@@ -190,11 +191,11 @@ export default function MerchandisePage() {
           <img
             src={item.imageUrl}
             alt={item.name}
-            className="w-16 h-16 rounded-lg object-cover border border-red-500/20"
+            className="w-16 h-16 rounded-lg object-cover border border-border"
           />
           <div>
-            <div className="font-medium text-white">{item.name}</div>
-            <div className="text-sm text-gray-400 line-clamp-1">{item.description}</div>
+            <div className="font-medium text-foreground">{item.name}</div>
+            <div className="text-sm text-muted-foreground line-clamp-1">{item.description}</div>
           </div>
         </div>
       ),
@@ -212,14 +213,14 @@ export default function MerchandisePage() {
       key: 'price',
       label: 'Price',
       render: (item: Merchandise) => (
-        <span className="text-white font-medium">${item.price.toFixed(2)}</span>
+        <span className="text-foreground font-medium">${item.price.toFixed(2)}</span>
       ),
     },
     {
       key: 'variants',
       label: 'Variants',
       render: (item: Merchandise) => (
-        <span className="text-gray-300">{item.variants.length} variant(s)</span>
+        <span className="text-muted-foreground">{item.variants.length} variant(s)</span>
       ),
     },
     {
@@ -238,7 +239,7 @@ export default function MerchandisePage() {
       key: 'orders',
       label: 'Orders',
       render: (item: Merchandise) => (
-        <span className="text-gray-300">{item._count.orderItems}</span>
+        <span className="text-muted-foreground">{item._count.orderItems}</span>
       ),
     },
     {
@@ -246,7 +247,14 @@ export default function MerchandisePage() {
       label: 'Featured',
       render: (item: Merchandise) => (
         <StatusBadge variant={item.featured ? 'warning' : 'gray'}>
-          {item.featured ? '⭐ Yes' : 'No'}
+          {item.featured ? (
+            <span className="flex items-center gap-1">
+              <Star className="h-3 w-3" />
+              Yes
+            </span>
+          ) : (
+            'No'
+          )}
         </StatusBadge>
       ),
     },
@@ -267,14 +275,17 @@ export default function MerchandisePage() {
           items={[
             {
               label: 'Edit',
+              icon: <Edit className="h-4 w-4" />,
               onClick: () => router.push(`/admin/merchandise/${item.id}/edit`),
             },
             {
               label: 'Manage Variants',
+              icon: <Plus className="h-4 w-4" />,
               onClick: () => router.push(`/admin/merchandise/${item.id}/variants`),
             },
             {
               label: item.featured ? 'Unfeature' : 'Feature',
+              icon: <Star className="h-4 w-4" />,
               onClick: () => handleToggleFeatured(item.id, item.featured),
             },
             {
@@ -283,6 +294,7 @@ export default function MerchandisePage() {
             },
             {
               label: 'Delete',
+              icon: <Trash2 className="h-4 w-4" />,
               onClick: () => {
                 setItemToDelete(item.id)
                 setDeleteDialogOpen(true)
@@ -301,19 +313,19 @@ export default function MerchandisePage() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-white tracking-tight">Merchandise</h1>
-            <p className="text-gray-400 mt-1">Manage store products and inventory</p>
+            <h1 className="text-3xl font-bold text-foreground tracking-tight">Merchandise</h1>
+            <p className="text-muted-foreground mt-1">Manage store products and inventory</p>
           </div>
           <Link
             href="/admin/merchandise/new"
-            className="px-4 py-2 bg-gradient-to-r from-red-600 to-red-500 text-white rounded-lg hover:from-red-700 hover:to-red-600 transition-all shadow-lg shadow-red-500/30 font-medium"
+            className="px-4 py-2 border-2 border-primary bg-transparent text-primary rounded-lg hover:bg-primary/10 transition-all dark:shadow-lg dark:shadow-red-500/30 font-medium dark:bg-gradient-to-r dark:from-red-600 dark:to-red-500 dark:text-primary-foreground dark:border-transparent dark:hover:from-red-700 dark:hover:to-red-600"
           >
             + Add Product
         </Link>
       </div>
 
       {/* Filters */}
-      <div className="bg-[#1a1a1a] border border-red-500/20 rounded-lg p-6 shadow-lg shadow-red-500/10">
+      <div className="bg-card border border-border rounded-lg p-6 dark:shadow-lg dark:shadow-red-500/10">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <SearchBar
             onSearch={setSearchQuery}
@@ -356,7 +368,7 @@ export default function MerchandisePage() {
       </div>
 
       {/* Table */}
-      <div className="bg-[#1a1a1a] border border-red-500/20 rounded-lg shadow-lg shadow-red-500/10">
+      <div className="bg-card border border-border rounded-lg dark:shadow-lg dark:shadow-red-500/10">
         <DataTable
           columns={columns}
           data={merchandise}

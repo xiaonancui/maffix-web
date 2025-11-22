@@ -2,12 +2,9 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
-import LogoutButton from '@/components/auth/LogoutButton'
+import { Gem, Target, TrendingUp, TrendingDown, Trophy, Sparkles, Gift, ArrowRight } from 'lucide-react'
 
 export default async function DashboardPage() {
-  // Dynamic import to avoid build-time database connection
-  const { db } = await import('@/lib/db')
-
   const session = await getServerSession(authOptions)
 
   if (!session) {
@@ -27,29 +24,20 @@ export default async function DashboardPage() {
     lastLoginAt: Date | null
   }
 
-  const allowTestAccounts =
-    process.env.NODE_ENV === 'development' || process.env.ENABLE_TEST_ACCOUNTS === 'true'
-
-  const isTestAccount =
-    allowTestAccounts &&
-    (session.user.id?.includes('test-') ||
-      session.user.id?.includes('demo-') ||
-      session.user.id?.includes('admin-'))
-
   const fallbackUser: DashboardUser = {
     id: session.user.id ?? 'unknown-user',
     name: session.user.name ?? 'Maffix User',
     email: session.user.email ?? 'unknown@maffix.com',
     avatar: null,
     role: (session.user.role as string) ?? 'USER',
-    diamondBalance: session.user.role === 'ADMIN' ? 10000 : 0,
-    points: session.user.role === 'ADMIN' ? 5000 : 0,
-    level: session.user.role === 'ADMIN' ? 10 : 1,
+    diamondBalance: session.user.role === 'ADMIN' ? 10000 : 500,
+    points: session.user.role === 'ADMIN' ? 5000 : 250,
+    level: session.user.role === 'ADMIN' ? 10 : 3,
     createdAt: new Date(),
     lastLoginAt: new Date(),
   }
 
-  // Fetch user data with gamification stats
+  // Use mock data for all users (database not connected)
   let user: DashboardUser = fallbackUser
   let missions: any[] = []
   let completedMissions = 0
@@ -58,8 +46,9 @@ export default async function DashboardPage() {
   let recentTransactions: any[] = []
   let rarityStats = { SSR: 0, LEGENDARY: 0, EPIC: 0, RARE: 0, COMMON: 0 }
 
-  if (isTestAccount) {
-    console.log('📊 Using mock data for test account:', session.user.email)
+  // Always use mock data
+  if (true) {
+    console.log('📊 Using mock data for user:', session.user.email)
     user = {
       ...fallbackUser,
       diamondBalance: session.user.role === 'ADMIN' ? 10000 : 1250,
@@ -135,68 +124,6 @@ export default async function DashboardPage() {
         createdAt: new Date(Date.now() - 1000 * 60 * 60 * 5),
       },
     ]
-  } else {
-    // Fetch from database for real users
-    try {
-      const dbUser = await db.user.findUnique({
-        where: { id: session.user.id },
-        select: {
-          id: true,
-          name: true,
-          email: true,
-          avatar: true,
-          role: true,
-          diamondBalance: true,
-          points: true,
-          level: true,
-          createdAt: true,
-          lastLoginAt: true,
-        },
-      })
-
-      if (dbUser) {
-        user = dbUser
-      } else {
-        console.warn('No user record found, using fallback data for session user:', session.user.id)
-      }
-
-      // Fetch mission stats
-      const userMissions = await db.userTask.findMany({
-        where: { userId: session.user.id },
-        select: { verified: true, verificationStatus: true },
-      })
-      completedMissions = userMissions.filter((m) => m.verified).length
-      pendingMissions = userMissions.filter((m) => !m.verified && m.verificationStatus === 'PENDING').length
-
-      // Fetch recent gacha pulls
-      gachaPulls = await db.gachaPull.findMany({
-        where: { userId: session.user.id },
-        include: { prize: { select: { name: true, rarity: true } } },
-        orderBy: { pulledAt: 'desc' },
-        take: 5,
-      })
-
-      // Calculate rarity stats
-      const allPulls = await db.gachaPull.findMany({
-        where: { userId: session.user.id },
-        include: { prize: { select: { rarity: true } } },
-      })
-      allPulls.forEach((pull) => {
-        if (pull.prize) {
-          const rarity = pull.prize.rarity as keyof typeof rarityStats
-          if (rarity in rarityStats) rarityStats[rarity]++
-        }
-      })
-
-      // Fetch recent transactions
-      recentTransactions = await db.transaction.findMany({
-        where: { userId: session.user.id },
-        orderBy: { createdAt: 'desc' },
-        take: 5,
-      })
-    } catch (error) {
-      console.error('Database fetch failed, using fallback data instead:', error)
-    }
   }
 
   // Calculate stats
@@ -213,117 +140,127 @@ export default async function DashboardPage() {
   const diamondTrend = recentIncome - recentExpense
 
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen bg-background">
       <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="mb-8 flex items-center justify-between">
-          <div>
-            <h1 className="text-4xl font-bold text-white">
-              Welcome back, {user.name}! 👋
-            </h1>
-            <p className="mt-2 text-sm text-gray-400">
-              Level {user.level} • {user.role} • Member since {new Date(user.createdAt).toLocaleDateString()}
-            </p>
-          </div>
-          <LogoutButton />
+        <div className="mb-8">
+          <h1 className="text-4xl font-bold text-foreground flex items-center gap-3">
+            Welcome back, {user.name}!
+          </h1>
+          <p className="mt-2 text-sm text-muted-foreground">
+            Level {user.level} • {user.role} • Member since {new Date(user.createdAt).toLocaleDateString()}
+          </p>
         </div>
 
         {/* Enhanced Stats Grid */}
         <div className="mb-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {/* Diamond Balance with Trend */}
-          <div className="group relative overflow-hidden rounded-xl bg-gray-900 border border-gray-800 p-6 shadow-lg transition-all hover:border-[#FF5656] hover:shadow-2xl">
-            <div className="absolute right-0 top-0 h-32 w-32 translate-x-8 -translate-y-8 transform rounded-full bg-[#FF5656] opacity-10"></div>
+          <div className="group relative overflow-hidden rounded-xl bg-card border border-border p-6 shadow-lg transition-all hover:border-primary hover:shadow-2xl">
+            <div className="absolute right-0 top-0 h-32 w-32 translate-x-8 -translate-y-8 transform rounded-full bg-primary opacity-10"></div>
             <div className="relative">
               <div className="mb-2 flex items-center justify-between">
-                <span className="text-sm font-medium text-gray-400">Diamond Balance</span>
+                <span className="text-sm font-medium text-muted-foreground flex items-center gap-2">
+                  <Gem className="h-4 w-4" />
+                  Diamond Balance
+                </span>
                 {diamondTrend !== 0 && (
                   <span
-                    className={`flex items-center text-xs font-semibold ${
-                      diamondTrend > 0 ? 'text-[#FF5656]' : 'text-red-400'
+                    className={`flex items-center gap-1 text-xs font-semibold ${
+                      diamondTrend > 0 ? 'text-primary' : 'text-red-400'
                     }`}
                   >
-                    {diamondTrend > 0 ? '↑' : '↓'} {Math.abs(diamondTrend)}
+                    {diamondTrend > 0 ? <TrendingUp className="h-3 w-3" /> : <TrendingDown className="h-3 w-3" />}
+                    {Math.abs(diamondTrend)}
                   </span>
                 )}
               </div>
-              <div className="flex items-baseline">
-                <span className="text-4xl font-bold text-white">{user.diamondBalance.toLocaleString()}</span>
-                <span className="ml-2 text-2xl text-gray-400">💎</span>
+              <div className="flex items-baseline gap-2">
+                <span className="text-4xl font-bold text-foreground">{user.diamondBalance.toLocaleString()}</span>
+                <Gem className="h-6 w-6 text-primary" />
               </div>
-              <p className="mt-2 text-xs text-gray-500">
+              <p className="mt-2 text-xs text-muted-foreground">
                 {diamondTrend > 0 ? 'Earning well!' : diamondTrend < 0 ? 'Spending active' : 'Stable balance'}
               </p>
             </div>
           </div>
 
           {/* Mission Completion */}
-          <div className="group relative overflow-hidden rounded-xl bg-gray-900 border border-gray-800 p-6 shadow-lg transition-all hover:border-[#FF5656] hover:shadow-2xl">
-            <div className="absolute right-0 top-0 h-32 w-32 translate-x-8 -translate-y-8 transform rounded-full bg-[#FF5656] opacity-10"></div>
+          <div className="group relative overflow-hidden rounded-xl bg-card border border-border p-6 shadow-lg transition-all hover:border-primary hover:shadow-2xl">
+            <div className="absolute right-0 top-0 h-32 w-32 translate-x-8 -translate-y-8 transform rounded-full bg-primary opacity-10"></div>
             <div className="relative">
               <div className="mb-2 flex items-center justify-between">
-                <span className="text-sm font-medium text-gray-400">Mission Stats</span>
-                <span className="text-xs font-semibold text-[#FF5656]">{completionRate}%</span>
+                <span className="text-sm font-medium text-muted-foreground flex items-center gap-2">
+                  <Target className="h-4 w-4" />
+                  Mission Stats
+                </span>
+                <span className="text-xs font-semibold text-primary">{completionRate}%</span>
               </div>
               <div className="flex items-baseline">
-                <span className="text-4xl font-bold text-white">{completedMissions}</span>
-                <span className="ml-2 text-xl text-gray-400">/ {totalMissions}</span>
+                <span className="text-4xl font-bold text-foreground">{completedMissions}</span>
+                <span className="ml-2 text-xl text-muted-foreground">/ {totalMissions}</span>
               </div>
-              <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-gray-700">
+              <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-secondary">
                 <div
-                  className="h-full rounded-full bg-[#FF5656] transition-all duration-500"
+                  className="h-full rounded-full bg-primary transition-all duration-500"
                   style={{ width: `${completionRate}%` }}
                 ></div>
               </div>
-              <p className="mt-2 text-xs text-gray-500">
+              <p className="mt-2 text-xs text-muted-foreground">
                 {pendingMissions > 0 ? `${pendingMissions} pending verification` : 'All caught up! 🎉'}
               </p>
             </div>
           </div>
 
           {/* Gacha Stats */}
-          <div className="group relative overflow-hidden rounded-xl bg-gray-900 border border-gray-800 p-6 shadow-lg transition-all hover:border-[#FF5656] hover:shadow-2xl">
-            <div className="absolute right-0 top-0 h-32 w-32 translate-x-8 -translate-y-8 transform rounded-full bg-[#FF5656] opacity-10"></div>
+          <div className="group relative overflow-hidden rounded-xl bg-card border border-border p-6 shadow-lg transition-all hover:border-primary hover:shadow-2xl">
+            <div className="absolute right-0 top-0 h-32 w-32 translate-x-8 -translate-y-8 transform rounded-full bg-primary opacity-10"></div>
             <div className="relative">
               <div className="mb-2 flex items-center justify-between">
-                <span className="text-sm font-medium text-gray-400">Gacha Pulls</span>
-                <span className="text-2xl">🎰</span>
+                <span className="text-sm font-medium text-muted-foreground flex items-center gap-2">
+                  <Gift className="h-4 w-4" />
+                  Gacha Pulls
+                </span>
+                <Sparkles className="h-5 w-5 text-primary" />
               </div>
               <div className="flex items-baseline">
-                <span className="text-4xl font-bold text-white">{totalGachaPulls}</span>
-                <span className="ml-2 text-xl text-gray-400">total</span>
+                <span className="text-4xl font-bold text-foreground">{totalGachaPulls}</span>
+                <span className="ml-2 text-xl text-muted-foreground">total</span>
               </div>
-              <div className="mt-3 flex gap-1 text-xs text-gray-400">
+              <div className="mt-3 flex gap-1 text-xs text-muted-foreground">
                 <span title="SSR">⭐⭐⭐: {rarityStats.SSR}</span>
                 <span className="mx-1">•</span>
                 <span title="Legendary">🌟: {rarityStats.LEGENDARY}</span>
                 <span className="mx-1">•</span>
                 <span title="Epic">✨: {rarityStats.EPIC}</span>
               </div>
-              <p className="mt-2 text-xs text-gray-500">
+              <p className="mt-2 text-xs text-muted-foreground">
                 {rarityStats.SSR + rarityStats.LEGENDARY > 0 ? 'Lucky streak! 🍀' : 'Keep pulling!'}
               </p>
             </div>
           </div>
 
           {/* Level & XP */}
-          <div className="group relative overflow-hidden rounded-xl bg-gray-900 border border-gray-800 p-6 shadow-lg transition-all hover:border-[#FF5656] hover:shadow-2xl">
-            <div className="absolute right-0 top-0 h-32 w-32 translate-x-8 -translate-y-8 transform rounded-full bg-[#FF5656] opacity-10"></div>
+          <div className="group relative overflow-hidden rounded-xl bg-card border border-border p-6 shadow-lg transition-all hover:border-primary hover:shadow-2xl">
+            <div className="absolute right-0 top-0 h-32 w-32 translate-x-8 -translate-y-8 transform rounded-full bg-primary opacity-10"></div>
             <div className="relative">
               <div className="mb-2 flex items-center justify-between">
-                <span className="text-sm font-medium text-gray-400">Level & XP</span>
-                <span className="text-2xl">🏆</span>
+                <span className="text-sm font-medium text-muted-foreground flex items-center gap-2">
+                  <Trophy className="h-4 w-4" />
+                  Level & XP
+                </span>
+                <Trophy className="h-5 w-5 text-primary" />
               </div>
               <div className="flex items-baseline">
-                <span className="text-4xl font-bold text-white">Lv.{user.level}</span>
-                <span className="ml-2 text-xl text-gray-400">{user.points.toLocaleString()} pts</span>
+                <span className="text-4xl font-bold text-foreground">Lv.{user.level}</span>
+                <span className="ml-2 text-xl text-muted-foreground">{user.points.toLocaleString()} pts</span>
               </div>
-              <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-gray-700">
+              <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-secondary">
                 <div
-                  className="h-full rounded-full bg-[#FF5656] transition-all duration-500"
+                  className="h-full rounded-full bg-primary transition-all duration-500"
                   style={{ width: `${xpProgress}%` }}
                 ></div>
               </div>
-              <p className="mt-2 text-xs text-gray-500">
+              <p className="mt-2 text-xs text-muted-foreground">
                 {Math.round(100 - xpProgress)}% to Level {user.level + 1}
               </p>
             </div>
@@ -334,24 +271,29 @@ export default async function DashboardPage() {
         <div className="grid gap-8 lg:grid-cols-3">
           {/* Left Column - Recent Activity */}
           <div className="lg:col-span-2">
-            <div className="rounded-xl bg-gray-900 border border-gray-800 p-6 shadow-lg">
+            <div className="rounded-xl bg-card border border-border p-6 shadow-lg">
               <div className="mb-6 flex items-center justify-between">
-                <h2 className="text-xl font-bold text-white">Recent Activity 📊</h2>
+                <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
+                  <Target className="h-5 w-5 text-primary" />
+                  Recent Activity
+                </h2>
                 <Link
                   href="/transactions"
-                  className="text-sm font-medium text-[#FF5656] hover:text-[#ff3333] transition-colors"
+                  className="text-sm font-medium text-primary hover:text-primary/80 transition-colors flex items-center gap-1"
                 >
-                  View All →
+                  View All
+                  <ArrowRight className="h-4 w-4" />
                 </Link>
               </div>
 
               {recentTransactions.length === 0 && gachaPulls.length === 0 ? (
                 <div className="py-12 text-center">
-                  <p className="text-gray-400">No recent activity yet. Start completing missions!</p>
+                  <p className="text-muted-foreground">No recent activity yet. Start completing missions!</p>
                   <Link
                     href="/missions"
-                    className="mt-4 inline-block rounded-lg bg-[#FF5656] px-6 py-2 text-sm font-semibold text-white hover:bg-[#ff3333] transition-all"
+                    className="mt-4 inline-flex items-center gap-2 rounded-lg border-2 border-primary bg-transparent px-6 py-2 text-sm font-semibold text-primary hover:bg-primary/10 transition-all dark:bg-primary dark:text-primary-foreground dark:hover:bg-primary/90"
                   >
+                    <Target className="h-4 w-4" />
                     Browse Missions
                   </Link>
                 </div>
@@ -379,38 +321,39 @@ export default async function DashboardPage() {
                         return (
                           <div
                             key={`tx-${tx.id}`}
-                            className="flex items-start gap-4 rounded-lg border border-gray-700 bg-gray-800 p-4 transition-all hover:border-[#FF5656] hover:shadow-md"
+                            className="flex items-start gap-4 rounded-lg border border-border bg-secondary p-4 transition-all hover:border-primary hover:shadow-md"
                           >
                             <div
                               className={`flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full ${
-                                isIncome ? 'bg-[#FF5656]/20' : 'bg-red-900/20'
+                                isIncome ? 'bg-primary/20' : 'bg-red-900/20'
                               }`}
                             >
-                              <span className="text-lg">
-                                {tx.type === 'MISSION_REWARD'
-                                  ? '🎯'
-                                  : tx.type === 'GACHA_PULL'
-                                    ? '🎰'
-                                    : tx.type === 'PREMIUM_PACK'
-                                      ? '💳'
-                                      : '💎'}
-                              </span>
+                              {tx.type === 'MISSION_REWARD' ? (
+                                <Target className="h-5 w-5 text-primary" />
+                              ) : tx.type === 'GACHA_PULL' ? (
+                                <Gift className="h-5 w-5 text-primary" />
+                              ) : tx.type === 'PREMIUM_PACK' ? (
+                                <Sparkles className="h-5 w-5 text-primary" />
+                              ) : (
+                                <Gem className="h-5 w-5 text-primary" />
+                              )}
                             </div>
                             <div className="flex-1">
                               <div className="flex items-start justify-between">
                                 <div>
-                                  <p className="font-medium text-white">{tx.description}</p>
-                                  <p className="mt-1 text-xs text-gray-500">
+                                  <p className="font-medium text-foreground">{tx.description}</p>
+                                  <p className="mt-1 text-xs text-muted-foreground">
                                     {new Date(tx.createdAt).toLocaleString()}
                                   </p>
                                 </div>
                                 <span
-                                  className={`ml-4 text-lg font-bold ${
-                                    isIncome ? 'text-[#FF5656]' : 'text-red-400'
+                                  className={`ml-4 text-lg font-bold flex items-center gap-1 ${
+                                    isIncome ? 'text-primary' : 'text-red-400'
                                   }`}
                                 >
                                   {isIncome ? '+' : ''}
-                                  {tx.amount} 💎
+                                  {tx.amount}
+                                  <Gem className="h-4 w-4" />
                                 </span>
                               </div>
                             </div>
@@ -419,48 +362,48 @@ export default async function DashboardPage() {
                       } else {
                         const pull = activity.data
                         const rarityColors = {
-                          SSR: 'from-[#FF5656] to-[#ff3333]',
-                          LEGENDARY: 'from-[#FF5656] to-[#ff3333]',
-                          EPIC: 'from-gray-600 to-gray-700',
-                          RARE: 'from-gray-700 to-gray-800',
-                          COMMON: 'from-gray-800 to-gray-900',
+                          SSR: 'from-primary to-primary/80',
+                          LEGENDARY: 'from-primary to-primary/80',
+                          EPIC: 'from-purple-600 to-purple-700',
+                          RARE: 'from-blue-600 to-blue-700',
+                          COMMON: 'from-secondary to-secondary',
                         }
                         const rarityColor =
                           rarityColors[pull.prize.rarity as keyof typeof rarityColors] ||
-                          'from-gray-800 to-gray-900'
+                          'from-secondary to-secondary'
 
                         return (
                           <div
                             key={`pull-${pull.id}`}
-                            className="flex items-start gap-4 rounded-lg border border-gray-700 bg-gray-800 p-4 transition-all hover:border-[#FF5656] hover:shadow-md"
+                            className="flex items-start gap-4 rounded-lg border border-border bg-secondary p-4 transition-all hover:border-primary hover:shadow-md"
                           >
                             <div
                               className={`flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-gradient-to-br ${rarityColor}`}
                             >
-                              <span className="text-lg">🎁</span>
+                              <Gift className="h-5 w-5 text-primary-foreground" />
                             </div>
                             <div className="flex-1">
                               <div className="flex items-start justify-between">
                                 <div>
-                                  <p className="font-medium text-white">
+                                  <p className="font-medium text-foreground">
                                     Won: {pull.prize.name}
                                   </p>
                                   <div className="mt-1 flex items-center gap-2">
                                     <span
-                                      className={`rounded-full bg-gradient-to-r ${rarityColor} px-2 py-0.5 text-xs font-bold text-white`}
+                                      className={`rounded-full bg-gradient-to-r ${rarityColor} px-2 py-0.5 text-xs font-bold text-primary-foreground`}
                                     >
                                       {pull.prize.rarity}
                                     </span>
-                                    <span className="text-xs text-gray-500">
+                                    <span className="text-xs text-muted-foreground">
                                       {new Date(pull.createdAt).toLocaleString()}
                                     </span>
                                   </div>
                                 </div>
-                                <span className="ml-4 text-2xl">
-                                  {pull.prize.rarity === 'SSR' || pull.prize.rarity === 'LEGENDARY'
-                                    ? '✨'
-                                    : '🎉'}
-                                </span>
+                                {pull.prize.rarity === 'SSR' || pull.prize.rarity === 'LEGENDARY' ? (
+                                  <Sparkles className="ml-4 h-6 w-6 text-primary" />
+                                ) : (
+                                  <Gift className="ml-4 h-6 w-6 text-primary" />
+                                )}
                               </div>
                             </div>
                           </div>
@@ -475,97 +418,63 @@ export default async function DashboardPage() {
           {/* Right Column - Quick Actions & Stats */}
           <div className="space-y-6">
             {/* Quick Actions */}
-            <div className="rounded-xl bg-gray-900 border border-gray-800 p-6 shadow-lg">
-              <h2 className="mb-4 text-xl font-bold text-white">Quick Actions ⚡</h2>
+            <div className="rounded-xl bg-card border border-border p-6 shadow-lg">
+              <h2 className="mb-4 text-xl font-bold text-foreground flex items-center gap-2">
+                <Sparkles className="h-5 w-5 text-primary" />
+                Quick Actions
+              </h2>
               <div className="space-y-3">
                 <Link
                   href="/missions"
-                  className="group flex items-center gap-3 rounded-lg border-2 border-gray-700 bg-gray-800 p-4 transition-all hover:border-[#FF5656] hover:shadow-md"
+                  className="group flex items-center gap-3 rounded-lg border-2 border-border bg-secondary p-4 transition-all hover:border-primary hover:shadow-md"
                 >
-                  <span className="text-2xl">🎯</span>
+                  <Target className="h-5 w-5 text-primary" />
                   <div className="flex-1">
-                    <p className="font-semibold text-white">Browse Missions</p>
-                    <p className="text-xs text-gray-400">Earn diamonds & rewards</p>
+                    <p className="font-semibold text-foreground">Browse Missions</p>
+                    <p className="text-xs text-muted-foreground">Earn diamonds & rewards</p>
                   </div>
-                  <span className="text-gray-500 transition-transform group-hover:translate-x-1">
-                    →
-                  </span>
+                  <ArrowRight className="h-4 w-4 text-muted-foreground transition-transform group-hover:translate-x-1" />
                 </Link>
 
                 <Link
                   href="/gacha"
-                  className="group flex items-center gap-3 rounded-lg border-2 border-gray-700 bg-gray-800 p-4 transition-all hover:border-[#FF5656] hover:shadow-md"
+                  className="group flex items-center gap-3 rounded-lg border-2 border-border bg-secondary p-4 transition-all hover:border-primary hover:shadow-md"
                 >
-                  <span className="text-2xl">🎰</span>
+                  <Gift className="h-5 w-5 text-primary" />
                   <div className="flex-1">
-                    <p className="font-semibold text-white">Try Your Luck</p>
-                    <p className="text-xs text-gray-400">Win exclusive prizes</p>
+                    <p className="font-semibold text-foreground">Try Your Luck</p>
+                    <p className="text-xs text-muted-foreground">Win exclusive prizes</p>
                   </div>
-                  <span className="text-gray-500 transition-transform group-hover:translate-x-1">
-                    →
-                  </span>
+                  <ArrowRight className="h-4 w-4 text-muted-foreground transition-transform group-hover:translate-x-1" />
                 </Link>
 
                 <Link
                   href="/store"
-                  className="group flex items-center gap-3 rounded-lg border-2 border-gray-700 bg-gray-800 p-4 transition-all hover:border-[#FF5656] hover:shadow-md"
+                  className="group flex items-center gap-3 rounded-lg border-2 border-border bg-secondary p-4 transition-all hover:border-primary hover:shadow-md"
                 >
-                  <span className="text-2xl">🛍️</span>
+                  <Sparkles className="h-5 w-5 text-primary" />
                   <div className="flex-1">
-                    <p className="font-semibold text-white">Shop Merch</p>
-                    <p className="text-xs text-gray-400">Official merchandise</p>
+                    <p className="font-semibold text-foreground">Shop Merch</p>
+                    <p className="text-xs text-muted-foreground">Official merchandise</p>
                   </div>
-                  <span className="text-gray-500 transition-transform group-hover:translate-x-1">
-                    →
-                  </span>
+                  <ArrowRight className="h-4 w-4 text-muted-foreground transition-transform group-hover:translate-x-1" />
                 </Link>
 
                 <Link
                   href="/prizes"
-                  className="group flex items-center gap-3 rounded-lg border-2 border-gray-700 bg-gray-800 p-4 transition-all hover:border-[#FF5656] hover:shadow-md"
+                  className="group flex items-center gap-3 rounded-lg border-2 border-border bg-secondary p-4 transition-all hover:border-primary hover:shadow-md"
                 >
-                  <span className="text-2xl">🏆</span>
+                  <Trophy className="h-5 w-5 text-primary" />
                   <div className="flex-1">
-                    <p className="font-semibold text-white">My Prizes</p>
-                    <p className="text-xs text-gray-400">View your collection</p>
+                    <p className="font-semibold text-foreground">My Prizes</p>
+                    <p className="text-xs text-muted-foreground">View your collection</p>
                   </div>
-                  <span className="text-gray-500 transition-transform group-hover:translate-x-1">
-                    →
-                  </span>
+                  <ArrowRight className="h-4 w-4 text-muted-foreground transition-transform group-hover:translate-x-1" />
                 </Link>
               </div>
             </div>
 
-            {/* Account Summary */}
-            <div className="rounded-xl bg-gray-900 border border-gray-800 p-6 shadow-lg">
-              <h2 className="mb-4 text-xl font-bold text-white">Account Info 👤</h2>
-              <div className="space-y-3">
-                <div className="flex items-center justify-between rounded-lg bg-gray-800 border border-gray-700 p-3">
-                  <span className="text-sm font-medium text-gray-400">Email</span>
-                  <span className="text-sm text-white">{user.email}</span>
-                </div>
-                <div className="flex items-center justify-between rounded-lg bg-gray-800 border border-gray-700 p-3">
-                  <span className="text-sm font-medium text-gray-400">Role</span>
-                  <span className="rounded-full bg-[#FF5656] px-3 py-1 text-xs font-semibold text-white">
-                    {user.role}
-                  </span>
-                </div>
-                <div className="flex items-center justify-between rounded-lg bg-gray-800 border border-gray-700 p-3">
-                  <span className="text-sm font-medium text-gray-400">Member Since</span>
-                  <span className="text-sm text-white">
-                    {new Date(user.createdAt).toLocaleDateString()}
-                  </span>
-                </div>
-                <div className="flex items-center justify-between rounded-lg bg-gray-800 border border-gray-700 p-3">
-                  <span className="text-sm font-medium text-gray-400">Last Login</span>
-                  <span className="text-sm text-white">
-                    {user.lastLoginAt
-                      ? new Date(user.lastLoginAt).toLocaleDateString()
-                      : 'First time!'}
-                  </span>
-                </div>
-              </div>
-            </div>
+
           </div>
         </div>
       </div>

@@ -48,9 +48,9 @@ export default function FormField({
   const fieldId = name || `${sanitizedLabel}-${reactId}`
   const helpMessage = help ?? helpText
 
-  const baseInputClasses = `w-full rounded-lg bg-[#1a1a1a] border ${
-    error ? 'border-red-500' : 'border-red-500/20'
-  } px-4 py-2 text-white placeholder-gray-500 focus:border-red-500/40 focus:outline-none focus:ring-2 focus:ring-red-500/20 disabled:opacity-50 disabled:cursor-not-allowed transition-all`
+  const baseInputClasses = `w-full rounded-lg bg-card border ${
+    error ? 'border-red-500' : 'border-border'
+  } px-4 py-2 text-foreground placeholder-muted-foreground focus:border-primary/40 focus:outline-none focus:ring-2 focus:ring-ring disabled:opacity-50 disabled:cursor-not-allowed transition-all`
 
   const renderInput = () => {
     if (type === 'textarea') {
@@ -127,7 +127,7 @@ export default function FormField({
 
   return (
     <div className="space-y-2">
-      <label htmlFor={fieldId} className="block text-sm font-semibold text-white">
+      <label htmlFor={fieldId} className="block text-sm font-semibold text-foreground">
         {label}
         {required && <span className="text-red-400 ml-1">*</span>}
       </label>

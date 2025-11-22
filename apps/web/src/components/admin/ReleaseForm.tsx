@@ -134,8 +134,8 @@ export default function ReleaseForm({
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       {/* Basic Information */}
-      <div className="rounded-lg border border-red-500/20 bg-[#1a1a1a] p-6 shadow-lg shadow-red-500/10">
-        <h3 className="mb-4 text-lg font-bold text-white">Basic Information</h3>
+      <div className="rounded-lg border border-red-500/20 bg-card p-6 dark:shadow-lg dark:shadow-red-500/10">
+        <h3 className="mb-4 text-lg font-bold text-foreground">Basic Information</h3>
         
         <div className="space-y-4">
           <FormField
@@ -210,8 +210,8 @@ export default function ReleaseForm({
       </div>
 
       {/* Video Details */}
-      <div className="rounded-lg border border-red-500/20 bg-[#1a1a1a] p-6 shadow-lg shadow-red-500/10">
-        <h3 className="mb-4 text-lg font-bold text-white">Video Details</h3>
+      <div className="rounded-lg border border-red-500/20 bg-card p-6 dark:shadow-lg dark:shadow-red-500/10">
+        <h3 className="mb-4 text-lg font-bold text-foreground">Video Details</h3>
 
         <div className="space-y-4">
           <FormField
@@ -276,8 +276,8 @@ export default function ReleaseForm({
       </div>
 
       {/* Streaming Links */}
-      <div className="rounded-lg border border-red-500/20 bg-[#1a1a1a] p-6 shadow-lg shadow-red-500/10">
-        <h3 className="mb-4 text-lg font-bold text-white">Streaming Links</h3>
+      <div className="rounded-lg border border-red-500/20 bg-card p-6 dark:shadow-lg dark:shadow-red-500/10">
+        <h3 className="mb-4 text-lg font-bold text-foreground">Streaming Links</h3>
 
         <div className="space-y-4">
           <FormField
@@ -327,8 +327,8 @@ export default function ReleaseForm({
       </div>
 
       {/* Display Settings */}
-      <div className="rounded-lg border border-red-500/20 bg-[#1a1a1a] p-6 shadow-lg shadow-red-500/10">
-        <h3 className="mb-4 text-lg font-bold text-white">Display Settings</h3>
+      <div className="rounded-lg border border-red-500/20 bg-card p-6 dark:shadow-lg dark:shadow-red-500/10">
+        <h3 className="mb-4 text-lg font-bold text-foreground">Display Settings</h3>
 
         <div className="space-y-4">
           <div className="flex items-center gap-3">
@@ -384,14 +384,14 @@ export default function ReleaseForm({
           type="button"
           onClick={onCancel}
           disabled={isLoading}
-          className="rounded-lg border border-red-500/30 bg-gray-800 px-6 py-2 text-sm font-semibold text-white hover:bg-gray-700 disabled:opacity-50"
+          className="rounded-lg border border-red-500/30 bg-gray-800 px-6 py-2 text-sm font-semibold text-foreground hover:bg-gray-700 disabled:opacity-50"
         >
           Cancel
         </button>
         <button
           type="submit"
           disabled={isLoading}
-          className="flex items-center gap-2 rounded-lg bg-gradient-to-r from-red-600 to-red-500 px-6 py-2 text-sm font-semibold text-white shadow-lg shadow-red-500/30 hover:shadow-red-500/50 disabled:opacity-50"
+          className="flex items-center gap-2 rounded-lg border-2 border-primary bg-transparent px-6 py-2 text-sm font-semibold text-primary dark:shadow-lg dark:shadow-red-500/30 hover:dark:shadow-red-500/50 hover:bg-primary/10 disabled:opacity-50 dark:bg-gradient-to-r dark:from-red-600 dark:to-red-500 dark:text-primary-foreground dark:border-transparent"
         >
           {isLoading ? (
             <>

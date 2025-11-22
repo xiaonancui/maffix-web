@@ -32,12 +32,12 @@ export default function NewPrizePage() {
       <div>
         <button
           onClick={handleCancel}
-          className="text-gray-400 hover:text-white mb-2 flex items-center gap-2"
+          className="text-muted-foreground hover:text-foreground mb-2 flex items-center gap-2"
         >
           ← Back to Prizes
         </button>
-        <h1 className="text-3xl font-bold text-white tracking-tight">Create New Prize</h1>
-        <p className="text-gray-400 mt-1">Add a new prize to the catalog</p>
+        <h1 className="text-3xl font-bold text-foreground tracking-tight">Create New Prize</h1>
+        <p className="text-muted-foreground mt-1">Add a new prize to the catalog</p>
       </div>
 
       {/* Form */}

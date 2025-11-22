@@ -84,7 +84,7 @@ export default function NewReleasePage() {
         </div>
       )}
 
-      <div className="rounded-lg border border-red-500/20 bg-[#1a1a1a] p-6 shadow-lg shadow-red-500/10">
+      <div className="rounded-lg border border-border bg-card p-6 dark:shadow-lg dark:shadow-red-500/10">
         <ReleaseForm
           mode="create"
           onSubmit={handleSubmit}

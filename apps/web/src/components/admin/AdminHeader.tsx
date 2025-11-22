@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { useState } from 'react'
+import { ThemeToggle } from '@/components/theme/ThemeToggle'
 
 interface AdminHeaderProps {
   userName: string
@@ -12,14 +13,14 @@ export default function AdminHeader({ userName, onMobileMenuToggle }: AdminHeade
   const [isSearchExpanded, setIsSearchExpanded] = useState(false)
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-[#1a1a1a] border-b-2 border-red-500/30 shadow-lg">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-card border-b-2 border-border dark:shadow-lg">
       <div className="flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Left Section */}
         <div className="flex items-center gap-4">
           {/* Mobile Menu Toggle */}
           <button
             onClick={onMobileMenuToggle}
-            className="lg:hidden rounded-md p-2 text-white hover:bg-white/10 transition-colors"
+            className="lg:hidden rounded-md p-2 text-foreground hover:bg-secondary transition-colors"
             aria-label="Toggle mobile menu"
           >
             <svg
@@ -40,7 +41,7 @@ export default function AdminHeader({ userName, onMobileMenuToggle }: AdminHeade
           {/* Logo */}
           <Link
             href="/admin"
-            className="flex items-center text-xl font-bold tracking-tight text-white hover:opacity-90 transition-opacity"
+            className="flex items-center text-xl font-bold tracking-tight text-foreground hover:opacity-90 transition-opacity"
           >
             <span>Maffix Admin</span>
           </Link>
@@ -52,12 +53,12 @@ export default function AdminHeader({ userName, onMobileMenuToggle }: AdminHeade
             <input
               type="text"
               placeholder="Search users, missions, prizes..."
-              className="w-full rounded-lg bg-white/10 px-4 py-2 pl-10 text-sm text-white placeholder-white/60 backdrop-blur-sm border border-white/20 focus:border-white/40 focus:outline-none focus:ring-2 focus:ring-white/20 transition-all"
+              className="w-full rounded-lg bg-secondary px-4 py-2 pl-10 text-sm text-foreground placeholder-muted-foreground backdrop-blur-sm border border-border focus:border-ring focus:outline-none focus:ring-2 focus:ring-ring transition-all"
               onFocus={() => setIsSearchExpanded(true)}
               onBlur={() => setIsSearchExpanded(false)}
             />
             <svg
-              className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/60"
+              className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -74,9 +75,12 @@ export default function AdminHeader({ userName, onMobileMenuToggle }: AdminHeade
 
         {/* Right Section */}
         <div className="flex items-center gap-3">
+          {/* Theme Toggle */}
+          <ThemeToggle />
+
           {/* Mobile Search Icon */}
           <button
-            className="md:hidden rounded-md p-2 text-white hover:bg-white/10 transition-colors"
+            className="md:hidden rounded-md p-2 text-foreground hover:bg-secondary transition-colors"
             aria-label="Search"
           >
             <svg
@@ -96,7 +100,7 @@ export default function AdminHeader({ userName, onMobileMenuToggle }: AdminHeade
 
           {/* Notifications */}
           <button
-            className="relative rounded-md p-2 text-white hover:bg-white/10 transition-colors"
+            className="relative rounded-md p-2 text-foreground hover:bg-secondary transition-colors"
             aria-label="Notifications"
           >
             <svg
@@ -113,18 +117,18 @@ export default function AdminHeader({ userName, onMobileMenuToggle }: AdminHeade
               />
             </svg>
             {/* Notification Badge */}
-            <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-yellow-400 ring-2 ring-red-600" />
+            <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-yellow-400 ring-2 ring-yellow-600" />
           </button>
 
           {/* Admin Badge */}
-          <span className="hidden sm:inline-flex items-center gap-1.5 rounded-full bg-white/20 px-3 py-1 text-xs font-bold text-white backdrop-blur-sm border border-white/30">
-            🛡️ ADMIN MODE
+          <span className="hidden sm:inline-flex items-center gap-1.5 rounded-full bg-primary/20 px-3 py-1 text-xs font-bold text-foreground backdrop-blur-sm border border-border">
+            ADMIN MODE
           </span>
 
           {/* User Profile / Back to User View */}
           <Link
             href="/dashboard"
-            className="group relative flex items-center gap-2 rounded-lg bg-gradient-to-r from-blue-600/20 to-blue-500/20 px-4 py-2 text-sm font-bold text-white hover:from-blue-600/30 hover:to-blue-500/30 transition-all backdrop-blur-sm border-2 border-blue-500/40 hover:border-blue-500/60 shadow-lg shadow-blue-500/20 hover:shadow-blue-500/30 animate-pulse hover:animate-none"
+            className="group relative flex items-center gap-2 rounded-lg bg-gradient-to-r from-blue-600/20 to-blue-500/20 px-4 py-2 text-sm font-bold text-foreground hover:from-blue-600/30 hover:to-blue-500/30 transition-all backdrop-blur-sm border-2 border-blue-500/40 hover:border-blue-500/60 dark:shadow-lg animate-pulse hover:animate-none"
             title="Switch to user dashboard view"
           >
             <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">

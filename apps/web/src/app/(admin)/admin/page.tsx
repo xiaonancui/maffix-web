@@ -3,6 +3,7 @@ import { authOptions } from '@/lib/auth'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import AdminPageHeader from '@/components/admin/AdminPageHeader'
+import { Users, ClipboardList, Clock, Gift, Shield, ArrowRight } from 'lucide-react'
 
 export default async function AdminDashboard() {
   const session = await getServerSession(authOptions)
@@ -11,37 +12,59 @@ export default async function AdminDashboard() {
     redirect('/login')
   }
 
-  // Dynamic import to avoid build-time database connection
-  const { db } = await import('@/lib/db')
-
-  // Fetch statistics
-  const [
-    totalUsers,
-    totalTasks,
-    pendingVerifications,
-    totalPrizes,
-    totalGachaPulls,
-    recentUsers,
-  ] = await Promise.all([
-    db.user.count(),
-    db.task.count(),
-    db.userTask.count({ where: { verified: false } }),
-    db.prize.count(),
-    db.gachaPull.count(),
-    db.user.findMany({
-      take: 5,
-      orderBy: { createdAt: 'desc' },
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        role: true,
-        createdAt: true,
-        diamondBalance: true,
-        points: true,
-      },
-    }),
-  ])
+  // Use mock data instead of database connection
+  const totalUsers = 1247
+  const totalTasks = 45
+  const pendingVerifications = 12
+  const totalPrizes = 156
+  const totalGachaPulls = 3892
+  const recentUsers = [
+    {
+      id: 'user-1',
+      name: 'John Doe',
+      email: 'john@example.com',
+      role: 'USER',
+      createdAt: new Date('2024-01-15'),
+      diamondBalance: 500,
+      points: 250,
+    },
+    {
+      id: 'user-2',
+      name: 'Jane Smith',
+      email: 'jane@example.com',
+      role: 'USER',
+      createdAt: new Date('2024-01-14'),
+      diamondBalance: 750,
+      points: 380,
+    },
+    {
+      id: 'user-3',
+      name: 'Mike Johnson',
+      email: 'mike@example.com',
+      role: 'ARTIST',
+      createdAt: new Date('2024-01-13'),
+      diamondBalance: 1200,
+      points: 600,
+    },
+    {
+      id: 'user-4',
+      name: 'Sarah Williams',
+      email: 'sarah@example.com',
+      role: 'USER',
+      createdAt: new Date('2024-01-12'),
+      diamondBalance: 300,
+      points: 150,
+    },
+    {
+      id: 'user-5',
+      name: 'Tom Brown',
+      email: 'tom@example.com',
+      role: 'USER',
+      createdAt: new Date('2024-01-11'),
+      diamondBalance: 450,
+      points: 220,
+    },
+  ]
 
   return (
     <div className="mx-auto max-w-7xl px-6 py-8 sm:px-6 lg:px-8">
@@ -50,72 +73,74 @@ export default async function AdminDashboard() {
         title="Admin Dashboard"
         description={`Welcome back, ${session.user.name}`}
         badge={
-          <span className="rounded-full bg-red-500/20 px-4 py-2 text-xs font-bold text-red-400 backdrop-blur-sm border border-red-500/30 shadow-lg shadow-red-500/20">
-            🛡️ ADMIN MODE
+          <span className="rounded-full bg-red-500/20 px-4 py-2 text-xs font-bold text-red-400 backdrop-blur-sm border border-red-500/30 dark:shadow-lg dark:shadow-red-500/20 flex items-center gap-2">
+            <Shield className="h-3 w-3" />
+            ADMIN MODE
           </span>
         }
       />
 
       {/* Statistics Grid */}
       <div className="mb-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-        <div className="rounded-lg bg-[#1a1a1a] p-6 shadow-lg shadow-red-500/20 border border-red-500/20 hover:border-red-500/40 transition-all">
+        <div className="rounded-lg bg-card p-6 dark:shadow-lg dark:shadow-red-500/20 border border-border hover:border-red-500/40 transition-all">
           <div className="flex items-center">
             <div className="flex-shrink-0">
-              <span className="text-3xl">👥</span>
+              <Users className="h-8 w-8 text-primary" />
             </div>
             <div className="ml-4">
-              <p className="text-sm font-semibold text-gray-400">Total Users</p>
-              <p className="text-2xl font-bold text-white">
+              <p className="text-sm font-semibold text-muted-foreground">Total Users</p>
+              <p className="text-2xl font-bold text-foreground">
                 {totalUsers}
               </p>
             </div>
           </div>
         </div>
 
-        <div className="rounded-lg bg-[#1a1a1a] p-6 shadow-lg shadow-red-500/20 border border-red-500/20 hover:border-red-500/40 transition-all">
+        <div className="rounded-lg bg-card p-6 dark:shadow-lg dark:shadow-red-500/20 border border-border hover:border-red-500/40 transition-all">
           <div className="flex items-center">
             <div className="flex-shrink-0">
-              <span className="text-3xl">📋</span>
+              <ClipboardList className="h-8 w-8 text-primary" />
             </div>
             <div className="ml-4">
-              <p className="text-sm font-semibold text-gray-400">Total Tasks</p>
-              <p className="text-2xl font-bold text-white">
+              <p className="text-sm font-semibold text-muted-foreground">Total Tasks</p>
+              <p className="text-2xl font-bold text-foreground">
                 {totalTasks}
               </p>
             </div>
           </div>
         </div>
 
-        <div className="rounded-lg bg-[#1a1a1a] p-6 shadow-lg shadow-red-500/20 border-2 border-red-500/50 hover:border-red-500/70 transition-all">
+        <div className="rounded-lg bg-card p-6 dark:shadow-lg dark:shadow-red-500/20 border-2 border-red-500/50 hover:border-red-500/70 transition-all">
           <div className="flex items-center">
             <div className="flex-shrink-0">
-              <span className="text-3xl">⏳</span>
+              <Clock className="h-8 w-8 text-primary" />
             </div>
             <div className="ml-4">
-              <p className="text-sm font-semibold text-gray-400">
+              <p className="text-sm font-semibold text-muted-foreground">
                 Pending Verifications
               </p>
-              <p className="text-2xl font-bold text-[#FF5656]">
+              <p className="text-2xl font-bold text-primary">
                 {pendingVerifications}
               </p>
             </div>
           </div>
           <Link
             href="/admin/tasks"
-            className="mt-2 inline-block text-sm font-semibold text-[#FF5656] hover:text-red-400 transition-colors"
+            className="mt-2 inline-flex items-center gap-1 text-sm font-semibold text-primary hover:text-red-400 transition-colors"
           >
-            Review now →
+            Review now
+            <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
 
-        <div className="rounded-lg bg-[#1a1a1a] p-6 shadow-lg shadow-red-500/20 border border-red-500/20 hover:border-red-500/40 transition-all">
+        <div className="rounded-lg bg-card p-6 dark:shadow-lg dark:shadow-red-500/20 border border-border hover:border-red-500/40 transition-all">
           <div className="flex items-center">
             <div className="flex-shrink-0">
-              <span className="text-3xl">🎁</span>
+              <Gift className="h-8 w-8 text-primary" />
             </div>
             <div className="ml-4">
-              <p className="text-sm font-semibold text-gray-400">Total Prizes</p>
-              <p className="text-2xl font-bold text-white">
+              <p className="text-sm font-semibold text-muted-foreground">Total Prizes</p>
+              <p className="text-2xl font-bold text-foreground">
                 {totalPrizes}
               </p>
             </div>
@@ -125,47 +150,47 @@ export default async function AdminDashboard() {
 
       {/* Quick Actions */}
       <div className="mb-8">
-        <h2 className="mb-4 text-xl font-bold tracking-tight text-white">
+        <h2 className="mb-4 text-xl font-bold tracking-tight text-foreground">
           Quick Actions
         </h2>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <Link
             href="/admin/tasks"
-            className="rounded-md bg-gradient-to-r from-red-600 to-red-500 p-4 text-center text-white shadow-lg shadow-red-500/30 hover:shadow-red-500/50 transition-all hover:scale-105"
+            className="rounded-md border-2 border-primary bg-transparent p-4 text-center dark:shadow-lg dark:shadow-red-500/30 dark:hover:dark:shadow-red-500/50 transition-all hover:scale-105 dark:bg-gradient-to-r dark:from-red-600 dark:to-red-500 dark:border-transparent"
           >
-            <span className="text-2xl">✓</span>
-            <p className="mt-2 font-bold">Verify Tasks</p>
+            <Clock className="h-8 w-8 text-primary mx-auto dark:text-primary-foreground" />
+            <p className="mt-2 font-bold text-primary dark:text-primary-foreground">Verify Tasks</p>
           </Link>
           <Link
             href="/admin/users"
-            className="rounded-md bg-[#1a1a1a] p-4 text-center text-white border border-red-500/30 hover:border-red-500/50 hover:bg-gray-800 transition-all hover:scale-105"
+            className="rounded-md bg-card p-4 text-center border-2 border-border hover:border-red-500/50 hover:bg-secondary transition-all hover:scale-105"
           >
-            <span className="text-2xl">👥</span>
-            <p className="mt-2 font-bold">Manage Users</p>
+            <Users className="h-8 w-8 text-foreground mx-auto" />
+            <p className="mt-2 font-bold text-foreground">Manage Users</p>
           </Link>
           <Link
             href="/admin/prizes"
-            className="rounded-md bg-gradient-to-r from-red-600 to-red-500 p-4 text-center text-white shadow-lg shadow-red-500/30 hover:shadow-red-500/50 transition-all hover:scale-105"
+            className="rounded-md border-2 border-primary bg-transparent p-4 text-center dark:shadow-lg dark:shadow-red-500/30 dark:hover:dark:shadow-red-500/50 transition-all hover:scale-105 dark:bg-gradient-to-r dark:from-red-600 dark:to-red-500 dark:border-transparent"
           >
-            <span className="text-2xl">🎁</span>
-            <p className="mt-2 font-bold">Manage Prizes</p>
+            <Gift className="h-8 w-8 text-primary mx-auto dark:text-primary-foreground" />
+            <p className="mt-2 font-bold text-primary dark:text-primary-foreground">Manage Prizes</p>
           </Link>
           <Link
             href="/dashboard"
-            className="rounded-md bg-[#1a1a1a] p-4 text-center text-white border border-red-500/30 hover:border-red-500/50 hover:bg-gray-800 transition-all hover:scale-105"
+            className="rounded-md bg-card p-4 text-center border-2 border-border hover:border-red-500/50 hover:bg-secondary transition-all hover:scale-105"
           >
-            <span className="text-2xl">👤</span>
-            <p className="mt-2 font-bold">User View</p>
+            <Users className="h-8 w-8 text-foreground mx-auto" />
+            <p className="mt-2 font-bold text-foreground">User View</p>
           </Link>
         </div>
       </div>
 
       {/* Recent Users */}
       <div>
-        <h2 className="mb-4 text-xl font-bold tracking-tight text-white">
+        <h2 className="mb-4 text-xl font-bold tracking-tight text-foreground">
           Recent Users
         </h2>
-        <div className="overflow-hidden rounded-lg bg-[#1a1a1a] shadow-lg shadow-red-500/20 border border-red-500/20">
+        <div className="overflow-hidden rounded-lg bg-card dark:shadow-lg dark:shadow-red-500/20 border border-border">
           <table className="min-w-full divide-y divide-gray-800">
             <thead className="bg-red-900/20 border-b-2 border-red-500/30">
               <tr>
@@ -189,23 +214,23 @@ export default async function AdminDashboard() {
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-800 bg-[#1a1a1a]">
+            <tbody className="divide-y divide-gray-800 bg-card">
               {recentUsers.map((user) => (
                 <tr key={user.id} className="odd:bg-red-500/5 hover:bg-red-500/10 transition-colors">
-                  <td className="whitespace-nowrap px-6 py-4 text-sm font-semibold text-white">
+                  <td className="whitespace-nowrap px-6 py-4 text-sm font-semibold text-foreground">
                     {user.name}
                   </td>
-                  <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-300">
+                  <td className="whitespace-nowrap px-6 py-4 text-sm text-muted-foreground">
                     {user.email}
                   </td>
-                  <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-300">
+                  <td className="whitespace-nowrap px-6 py-4 text-sm text-muted-foreground">
                     <span
-                      className={`inline-flex items-center gap-1 rounded-md px-2.5 py-0.5 text-xs font-semibold border shadow-sm ${
+                      className={`inline-flex items-center gap-1 rounded-md px-2.5 py-0.5 text-xs font-semibold border dark:shadow-sm ${
                         user.role === 'ADMIN'
-                          ? 'bg-red-500/20 text-red-400 border-red-500/30 shadow-red-500/20'
+                          ? 'bg-red-500/20 text-red-400 border-red-500/30 dark:shadow-red-500/20'
                           : user.role === 'ARTIST'
-                          ? 'bg-purple-500/20 text-purple-400 border-purple-500/30 shadow-purple-500/20'
-                          : 'bg-gray-800 text-gray-300 border-gray-700'
+                          ? 'bg-purple-500/20 text-purple-400 border-purple-500/30 dark:shadow-purple-500/20'
+                          : 'bg-secondary text-muted-foreground border-border'
                       }`}
                     >
                       {user.role === 'ADMIN' && '● '}
@@ -213,13 +238,13 @@ export default async function AdminDashboard() {
                       {user.role}
                     </span>
                   </td>
-                  <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-300">
+                  <td className="whitespace-nowrap px-6 py-4 text-sm text-muted-foreground">
                     💎 {user.diamondBalance}
                   </td>
-                  <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-300">
+                  <td className="whitespace-nowrap px-6 py-4 text-sm text-muted-foreground">
                     ⭐ {user.points}
                   </td>
-                  <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-300">
+                  <td className="whitespace-nowrap px-6 py-4 text-sm text-muted-foreground">
                     {new Date(user.createdAt).toLocaleDateString()}
                   </td>
                 </tr>

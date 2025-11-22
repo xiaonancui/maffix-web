@@ -102,7 +102,7 @@ export default function ProductDetails({
           <span className="text-3xl font-bold text-[#FF5656]">
             ${merchandise.price.toFixed(2)}
           </span>
-          <span className="text-sm text-gray-500">{merchandise.currency || 'USD'}</span>
+          <span className="text-sm text-muted-foreground">{merchandise.currency || 'USD'}</span>
         </div>
       </div>
 
@@ -143,8 +143,8 @@ export default function ProductDetails({
                     selectedSize === size
                       ? 'border-blue-500 bg-blue-50 text-blue-700'
                       : sizeInStock
-                      ? 'border-gray-300 bg-white text-gray-700 hover:border-gray-400'
-                      : 'border-gray-200 bg-gray-100 text-gray-400 cursor-not-allowed line-through'
+                      ? 'border-border bg-white text-gray-700 hover:border-gray-400'
+                      : 'border-border bg-gray-100 text-muted-foreground cursor-not-allowed line-through'
                   }`}
                 >
                   {size}
@@ -173,8 +173,8 @@ export default function ProductDetails({
                     selectedColor === color
                       ? 'border-blue-500 bg-blue-50 text-blue-700'
                       : colorInStock
-                      ? 'border-gray-300 bg-white text-gray-700 hover:border-gray-400'
-                      : 'border-gray-200 bg-gray-100 text-gray-400 cursor-not-allowed line-through'
+                      ? 'border-border bg-white text-gray-700 hover:border-gray-400'
+                      : 'border-border bg-gray-100 text-muted-foreground cursor-not-allowed line-through'
                   }`}
                 >
                   {color}
@@ -192,7 +192,7 @@ export default function ProductDetails({
           <button
             onClick={() => setQuantity(Math.max(1, quantity - 1))}
             disabled={quantity <= 1}
-            className="rounded-lg border-2 border-gray-300 bg-white px-4 py-2 font-bold text-gray-700 transition-all hover:border-gray-400 disabled:opacity-50"
+            className="rounded-lg border-2 border-border bg-white px-4 py-2 font-bold text-gray-700 transition-all hover:border-gray-400 disabled:opacity-50"
           >
             −
           </button>
@@ -200,7 +200,7 @@ export default function ProductDetails({
           <button
             onClick={() => setQuantity(Math.min(maxQuantity, quantity + 1))}
             disabled={quantity >= maxQuantity}
-            className="rounded-lg border-2 border-gray-300 bg-white px-4 py-2 font-bold text-gray-700 transition-all hover:border-gray-400 disabled:opacity-50"
+            className="rounded-lg border-2 border-border bg-white px-4 py-2 font-bold text-gray-700 transition-all hover:border-gray-400 disabled:opacity-50"
           >
             +
           </button>
@@ -224,7 +224,7 @@ export default function ProductDetails({
       <button
         onClick={handleAddToCart}
         disabled={!isInStock || isAdding}
-        className="w-full rounded-lg bg-gradient-to-r from-blue-500 to-purple-500 px-6 py-3 font-bold text-white transition-all hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
+        className="w-full rounded-lg border-2 border-blue-600 bg-transparent px-6 py-3 font-bold text-blue-600 transition-all hover:scale-105 hover:bg-blue-600/10 disabled:opacity-50 disabled:cursor-not-allowed dark:bg-gradient-to-r dark:from-blue-500 dark:to-purple-500 dark:text-primary-foreground dark:border-transparent"
       >
         {isAdding ? '⏳ Adding...' : isInStock ? '🛒 Add to Cart' : '✗ Out of Stock'}
       </button>

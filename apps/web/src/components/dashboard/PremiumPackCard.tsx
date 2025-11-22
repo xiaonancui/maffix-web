@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Image from 'next/image'
+import { ShoppingCart, Loader2, Star, Sparkles } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 
 type Prize = {
@@ -40,9 +41,9 @@ export default function PremiumPackCard({ pack }: { pack: PremiumPack }) {
       case 'RARE':
         return 'text-[#FF5656] bg-blue-50 border-blue-200'
       case 'COMMON':
-        return 'text-gray-600 bg-gray-50 border-gray-200'
+        return 'text-muted-foreground bg-gray-50 border-border'
       default:
-        return 'text-gray-600 bg-gray-50 border-gray-200'
+        return 'text-muted-foreground bg-gray-50 border-border'
     }
   }
 
@@ -103,21 +104,22 @@ export default function PremiumPackCard({ pack }: { pack: PremiumPack }) {
 
   return (
     <div
-      className={`relative rounded-lg border-2 bg-white shadow-lg transition-all hover:shadow-xl ${
-        pack.featured ? 'border-yellow-400' : 'border-gray-200'
+      className={`relative rounded-lg border-2 bg-card shadow-lg transition-all hover:shadow-xl ${
+        pack.featured ? 'border-yellow-600' : 'border-border'
       }`}
     >
       {/* Featured Badge */}
       {pack.featured && (
         <div className="absolute -top-3 left-1/2 z-10 -translate-x-1/2 transform">
-          <span className="rounded-full bg-gradient-to-r from-yellow-400 to-orange-500 px-4 py-1 text-xs font-bold text-white shadow-md">
-            ⭐ FEATURED
+          <span className="rounded-full bg-gradient-to-r from-yellow-400 to-orange-500 px-4 py-1 text-xs font-bold text-foreground shadow-md flex items-center gap-1">
+            <Star className="h-3 w-3 fill-current" />
+            FEATURED
           </span>
         </div>
       )}
 
       {/* Pack Image */}
-      <div className="relative h-48 w-full overflow-hidden rounded-t-lg bg-gradient-to-br from-purple-100 to-pink-100">
+      <div className="relative aspect-square w-full overflow-hidden rounded-t-lg bg-gradient-to-br from-purple-100 to-pink-100 dark:from-purple-900/20 dark:to-pink-900/20">
         {pack.imageUrl ? (
           <Image
             src={pack.imageUrl}
@@ -126,8 +128,8 @@ export default function PremiumPackCard({ pack }: { pack: PremiumPack }) {
             className="object-cover"
           />
         ) : (
-          <div className="flex h-full items-center justify-center text-6xl">
-            📦
+          <div className="flex h-full items-center justify-center">
+            <Sparkles className="h-16 w-16 text-primary" />
           </div>
         )}
       </div>
@@ -135,20 +137,20 @@ export default function PremiumPackCard({ pack }: { pack: PremiumPack }) {
       {/* Pack Details */}
       <div className="p-6">
         {/* Name */}
-        <h3 className="mb-2 text-xl font-bold text-gray-900">{pack.name}</h3>
+        <h3 className="mb-2 text-xl font-bold text-foreground">{pack.name}</h3>
 
         {/* Description */}
-        <p className="mb-4 text-sm text-gray-600 line-clamp-2">
+        <p className="mb-4 text-sm text-muted-foreground line-clamp-2">
           {pack.description}
         </p>
 
         {/* Price */}
         <div className="mb-4 rounded-lg bg-gradient-to-r from-green-50 to-emerald-50 p-4 text-center">
-          <p className="text-sm text-gray-600">Price</p>
+          <p className="text-sm text-muted-foreground">Price</p>
           <p className="text-3xl font-bold text-green-600">
             ${pack.price.toFixed(2)}
           </p>
-          <p className="text-xs text-gray-500">{pack.currency}</p>
+          <p className="text-xs text-muted-foreground">{pack.currency}</p>
         </div>
 
         {/* Guaranteed Prize */}
@@ -194,26 +196,30 @@ export default function PremiumPackCard({ pack }: { pack: PremiumPack }) {
         <button
           onClick={handlePurchase}
           disabled={isPurchasing || !pack.isActive}
-          className={`w-full rounded-lg px-6 py-3 font-bold text-white shadow-lg transition-all hover:scale-105 hover:shadow-xl disabled:opacity-50 disabled:hover:scale-100 ${
+          className={`w-full rounded-lg px-6 py-3 font-bold shadow-lg transition-all hover:scale-105 hover:shadow-xl disabled:opacity-50 disabled:hover:scale-100 flex items-center justify-center gap-2 ${
             pack.featured
-              ? 'bg-gradient-to-r from-yellow-400 to-orange-500'
-              : 'bg-gradient-to-r from-purple-500 to-pink-500'
+              ? 'border-2 border-yellow-600 bg-transparent text-yellow-600 hover:bg-yellow-600/10 dark:bg-gradient-to-r dark:from-yellow-400 dark:to-orange-500 dark:text-foreground dark:border-transparent'
+              : 'border-2 border-purple-600 bg-transparent text-purple-600 hover:bg-purple-600/10 dark:bg-gradient-to-r dark:from-purple-500 dark:to-pink-500 dark:text-primary-foreground dark:border-transparent'
           }`}
         >
           {isPurchasing ? (
             <>
-              <span className="animate-spin">⏳</span> Processing...
+              <Loader2 className="h-5 w-5 animate-spin" />
+              <span>Processing...</span>
             </>
           ) : !pack.isActive ? (
             'Unavailable'
           ) : (
-            <>🛒 Purchase Now</>
+            <>
+              <ShoppingCart className="h-5 w-5" />
+              <span>Purchase Now</span>
+            </>
           )}
         </button>
 
         {/* Value Indicator */}
         <div className="mt-3 text-center">
-          <p className="text-xs text-gray-500">
+          <p className="text-xs text-muted-foreground">
             Total Value: $
             {(
               pack.price +

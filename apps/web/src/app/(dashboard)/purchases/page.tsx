@@ -148,9 +148,9 @@ export default async function PurchasesPage() {
       case 'RARE':
         return 'text-[#FF5656]'
       case 'COMMON':
-        return 'text-gray-600'
+        return 'text-muted-foreground'
       default:
-        return 'text-gray-600'
+        return 'text-muted-foreground'
     }
   }
 
@@ -159,7 +159,7 @@ export default async function PurchasesPage() {
       {/* Header */}
       <div className="mb-8">
         <h1 className="text-4xl font-bold text-gray-900 mb-2">Purchase History</h1>
-        <p className="text-lg text-gray-600">
+        <p className="text-lg text-muted-foreground">
           View your Premium Pack purchases and receipts
         </p>
       </div>
@@ -171,12 +171,12 @@ export default async function PurchasesPage() {
           <h3 className="text-2xl font-bold text-gray-900 mb-2">
             No Purchases Yet
           </h3>
-          <p className="text-gray-600 mb-6">
+          <p className="text-muted-foreground mb-6">
             You haven&apos;t purchased any Premium Packs yet.
           </p>
           <Link
             href="/store/packs"
-            className="inline-block rounded-lg bg-gradient-to-r from-purple-500 to-pink-500 px-6 py-3 font-bold text-white shadow-lg transition-all hover:scale-105 hover:shadow-xl"
+            className="inline-block rounded-lg border-2 border-purple-600 bg-transparent px-6 py-3 font-bold text-purple-600 shadow-lg transition-all hover:scale-105 hover:shadow-xl hover:bg-purple-600/10 dark:bg-gradient-to-r dark:from-purple-500 dark:to-pink-500 dark:text-primary-foreground dark:border-transparent"
           >
             Browse Premium Packs
           </Link>
@@ -186,7 +186,7 @@ export default async function PurchasesPage() {
           {purchases.map((purchase) => (
             <div
               key={purchase.id}
-              className="rounded-lg border-2 border-gray-200 bg-white p-6 shadow-lg transition-all hover:shadow-xl"
+              className="rounded-lg border-2 border-border bg-white p-6 shadow-lg transition-all hover:shadow-xl"
             >
               {/* Purchase Header */}
               <div className="mb-4 flex items-start justify-between">
@@ -194,7 +194,7 @@ export default async function PurchasesPage() {
                   <h3 className="text-xl font-bold text-gray-900">
                     {purchase.pack.name}
                   </h3>
-                  <p className="text-sm text-gray-500">
+                  <p className="text-sm text-muted-foreground">
                     Purchased on {new Date(purchase.createdAt).toLocaleDateString('en-US', {
                       year: 'numeric',
                       month: 'long',
@@ -206,7 +206,7 @@ export default async function PurchasesPage() {
                   <p className="text-2xl font-bold text-gray-900">
                     ${purchase.amount.toFixed(2)}
                   </p>
-                  <p className="text-sm text-gray-500">{purchase.currency}</p>
+                  <p className="text-sm text-muted-foreground">{purchase.currency}</p>
                 </div>
               </div>
 
@@ -275,14 +275,14 @@ export default async function PurchasesPage() {
               <div className="flex gap-3">
                 <button
                   onClick={() => alert('Receipt download feature coming soon!')}
-                  className="flex-1 rounded-lg border-2 border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-700 transition-all hover:border-gray-400 hover:bg-gray-50"
+                  className="flex-1 rounded-lg border-2 border-border bg-white px-4 py-2 text-sm font-semibold text-gray-700 transition-all hover:border-gray-400 hover:bg-gray-50"
                 >
                   📄 Download Receipt
                 </button>
                 {purchase.status === 'COMPLETED' && (
                   <Link
                     href="/store/packs"
-                    className="flex-1 rounded-lg bg-gradient-to-r from-purple-500 to-pink-500 px-4 py-2 text-center text-sm font-semibold text-white transition-all hover:scale-105"
+                    className="flex-1 rounded-lg border-2 border-purple-600 bg-transparent px-4 py-2 text-center text-sm font-semibold text-purple-600 transition-all hover:scale-105 hover:bg-purple-600/10 dark:bg-gradient-to-r dark:from-purple-500 dark:to-pink-500 dark:text-primary-foreground dark:border-transparent"
                   >
                     🛍️ Buy Again
                   </Link>
@@ -295,7 +295,7 @@ export default async function PurchasesPage() {
 
       {/* Summary Stats */}
       {purchases.length > 0 && (
-        <div className="mt-8 rounded-lg border-2 border-gray-200 bg-white p-6">
+        <div className="mt-8 rounded-lg border-2 border-border bg-white p-6">
           <h3 className="mb-4 text-lg font-bold text-gray-900">
             Purchase Summary
           </h3>
@@ -304,7 +304,7 @@ export default async function PurchasesPage() {
               <p className="text-3xl font-bold text-[#FF5656]">
                 {purchases.length}
               </p>
-              <p className="text-sm text-gray-600">Total Purchases</p>
+              <p className="text-sm text-muted-foreground">Total Purchases</p>
             </div>
             <div className="text-center">
               <p className="text-3xl font-bold text-green-600">
@@ -314,13 +314,13 @@ export default async function PurchasesPage() {
                   .reduce((sum, p) => sum + p.amount, 0)
                   .toFixed(2)}
               </p>
-              <p className="text-sm text-gray-600">Total Spent</p>
+              <p className="text-sm text-muted-foreground">Total Spent</p>
             </div>
             <div className="text-center">
               <p className="text-3xl font-bold text-[#FF5656]">
                 {purchases.filter((p) => p.status === 'COMPLETED').length}
               </p>
-              <p className="text-sm text-gray-600">Completed</p>
+              <p className="text-sm text-muted-foreground">Completed</p>
             </div>
           </div>
         </div>

@@ -110,14 +110,14 @@ export default function NewGachaItemPage() {
     <div className="max-w-3xl mx-auto space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold text-white tracking-tight">Add Gacha Item</h1>
-        <p className="text-gray-400 mt-1">Create a new gacha item from an existing prize</p>
+        <h1 className="text-3xl font-bold text-foreground tracking-tight">Add Gacha Item</h1>
+        <p className="text-muted-foreground mt-1">Create a new gacha item from an existing prize</p>
       </div>
 
       {/* Form */}
       <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="bg-[#1a1a1a] border border-red-500/20 rounded-lg p-6 shadow-lg shadow-red-500/10 space-y-6">
-          <h2 className="text-lg font-bold text-white">Gacha Item Details</h2>
+        <div className="bg-card border border-border rounded-lg p-6 dark:shadow-lg dark:shadow-red-500/10 space-y-6">
+          <h2 className="text-lg font-bold text-foreground">Gacha Item Details</h2>
 
           <FormField
             label="Prize"
@@ -140,25 +140,25 @@ export default function NewGachaItemPage() {
           />
 
           {selectedPrize && (
-            <div className="p-4 bg-gray-900/50 border border-red-500/20 rounded-lg">
+            <div className="p-4 bg-secondary/50 border border-border rounded-lg">
               <div className="flex items-start gap-4">
                 {selectedPrize.image && (
                   <img
                     src={selectedPrize.image}
                     alt={selectedPrize.name}
-                    className="w-20 h-20 rounded-lg object-cover border border-red-500/20"
+                    className="w-20 h-20 rounded-lg object-cover border border-border"
                   />
                 )}
                 <div className="flex-1 space-y-2">
                   <div className="flex items-center gap-3">
-                    <h3 className="text-lg font-bold text-white">{selectedPrize.name}</h3>
+                    <h3 className="text-lg font-bold text-foreground">{selectedPrize.name}</h3>
                     <StatusBadge variant={getRarityColor(selectedPrize.rarity)}>
                       {selectedPrize.rarity}
                     </StatusBadge>
                   </div>
-                  <p className="text-gray-400 text-sm">{selectedPrize.description}</p>
+                  <p className="text-muted-foreground text-sm">{selectedPrize.description}</p>
                   <div className="flex items-center gap-4 text-sm">
-                    <span className="text-gray-400">Type: {selectedPrize.type}</span>
+                    <span className="text-muted-foreground">Type: {selectedPrize.type}</span>
                     <span className="text-yellow-400">
                       💎 {selectedPrize.value.toLocaleString()}
                     </span>
@@ -208,14 +208,14 @@ export default function NewGachaItemPage() {
             <button
               type="submit"
               disabled={submitting || loading}
-              className="px-6 py-2 bg-gradient-to-r from-red-600 to-red-500 text-white rounded-lg hover:from-red-700 hover:to-red-600 transition-all shadow-lg shadow-red-500/30 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-6 py-2 border-2 border-primary bg-transparent text-primary rounded-lg hover:bg-primary/10 transition-all dark:shadow-lg dark:shadow-red-500/30 font-medium disabled:opacity-50 disabled:cursor-not-allowed dark:bg-gradient-to-r dark:from-red-600 dark:to-red-500 dark:text-primary-foreground dark:border-transparent dark:hover:from-red-700 dark:hover:to-red-600"
             >
               {submitting ? 'Creating...' : 'Create Gacha Item'}
             </button>
             <button
               type="button"
               onClick={() => router.push('/admin/gacha')}
-              className="px-6 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-colors border border-red-500/30"
+              className="px-6 py-2 bg-secondary text-foreground rounded-lg hover:bg-gray-700 transition-colors border border-red-500/30"
             >
               Cancel
             </button>

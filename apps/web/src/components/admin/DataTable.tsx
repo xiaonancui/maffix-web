@@ -73,7 +73,7 @@ export default function DataTable<T>({
 
   if (loading) {
     return (
-      <div className="rounded-lg bg-[#1a1a1a] border border-red-500/20 p-12 text-center shadow-lg shadow-red-500/20">
+      <div className="rounded-lg bg-card border border-red-500/20 p-12 text-center dark:shadow-lg shadow-red-500/20">
         <div className="flex items-center justify-center gap-3">
           <svg
             className="animate-spin h-8 w-8 text-red-400"
@@ -102,7 +102,7 @@ export default function DataTable<T>({
 
   if (data.length === 0) {
     return (
-      <div className="rounded-lg bg-[#1a1a1a] border border-red-500/20 p-12 text-center shadow-lg shadow-red-500/20">
+      <div className="rounded-lg bg-card border border-red-500/20 p-12 text-center dark:shadow-lg shadow-red-500/20">
         <div className="text-6xl mb-4">📋</div>
         <p className="text-gray-400">{emptyMessage}</p>
       </div>
@@ -110,7 +110,7 @@ export default function DataTable<T>({
   }
 
   return (
-    <div className="overflow-hidden rounded-lg bg-[#1a1a1a] shadow-lg shadow-red-500/20 border border-red-500/20">
+    <div className="overflow-hidden rounded-lg bg-card dark:shadow-lg shadow-red-500/20 border border-red-500/20">
       <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-800">
           <thead className="bg-red-900/20 border-b-2 border-red-500/30">
@@ -123,7 +123,7 @@ export default function DataTable<T>({
                       resolvedSelectedIds.length === data.length && data.length > 0
                     }
                     onChange={handleSelectAll}
-                    className="rounded border-red-500/30 bg-[#1a1a1a] text-red-500 focus:ring-red-500/20"
+                    className="rounded border-red-500/30 bg-card text-red-500 focus:ring-red-500/20"
                   />
                 </th>
               )}
@@ -148,7 +148,7 @@ export default function DataTable<T>({
               ))}
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-800 bg-[#1a1a1a]">
+          <tbody className="divide-y divide-gray-800 bg-card">
             {data.map((item) => {
               const id = keyExtractor(item)
               const isSelected = resolvedSelectedIds.includes(id)
@@ -170,7 +170,7 @@ export default function DataTable<T>({
                           e.stopPropagation()
                           handleSelectRow(id)
                         }}
-                        className="rounded border-red-500/30 bg-[#1a1a1a] text-red-500 focus:ring-red-500/20"
+                        className="rounded border-red-500/30 bg-card text-red-500 focus:ring-red-500/20"
                       />
                     </td>
                   )}
@@ -189,7 +189,7 @@ export default function DataTable<T>({
       </div>
 
       {pagination && onPageChange && (
-        <div className="px-6 py-4 border-t border-gray-800 bg-[#1a1a1a]">
+        <div className="px-6 py-4 border-t border-gray-800 bg-card">
           <Pagination
             currentPage={pagination.page}
             totalPages={pagination.totalPages || 1}

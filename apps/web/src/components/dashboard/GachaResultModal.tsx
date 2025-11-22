@@ -100,11 +100,11 @@ export default function GachaResultModal({
   if (is10x) {
     const result10x = result as Gacha10xResult
     return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-90 p-4">
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-background bg-opacity-90 p-4">
         <div className="relative w-full max-w-6xl max-h-[95vh] overflow-y-auto">
           {isRevealing ? (
             // Revealing animation for 10x with Gundam GIF
-            <div className="rounded-lg bg-black p-8 text-center shadow-2xl min-h-[70vh] flex flex-col justify-center">
+            <div className="rounded-lg bg-background p-8 text-center shadow-2xl min-h-[70vh] flex flex-col justify-center">
               <div className="mb-6 flex justify-center">
                 <div className="relative w-[80.5vw] h-[57.5vh] max-w-5xl">
                   <Image
@@ -117,7 +117,7 @@ export default function GachaResultModal({
                   />
                 </div>
               </div>
-              <p className="text-4xl font-bold text-white animate-bounce mb-2">Opening 10 Prizes...</p>
+              <p className="text-4xl font-bold text-foreground animate-bounce mb-2">Opening 10 Prizes...</p>
               {result10x.guaranteedSSR && (
                 <p className="text-xl text-yellow-300 animate-pulse">✨ SSR Guaranteed! ✨</p>
               )}
@@ -144,7 +144,7 @@ export default function GachaResultModal({
                         ? 'border-yellow-400 bg-gradient-to-br from-yellow-50 to-orange-50 shadow-lg animate-pulse'
                         : prize.rarity === 'EPIC'
                         ? 'border-purple-400 bg-gradient-to-br from-purple-50 to-pink-50'
-                        : 'border-gray-300 bg-white'
+                        : 'border-border bg-white'
                     }`}
                   >
                     <div className="mb-2 text-3xl">{getRarityEmoji(prize.rarity)}</div>
@@ -158,7 +158,7 @@ export default function GachaResultModal({
                           ? 'text-[#FF5656]'
                           : prize.rarity === 'RARE'
                           ? 'text-[#FF5656]'
-                          : 'text-gray-600'
+                          : 'text-muted-foreground'
                       }`}
                     >
                       {prize.rarity}
@@ -173,19 +173,19 @@ export default function GachaResultModal({
               {/* Stats */}
               <div className="mb-6 grid grid-cols-3 gap-4">
                 <div className="rounded-lg bg-blue-50 p-4 text-center">
-                  <p className="text-sm text-gray-600">New Balance</p>
+                  <p className="text-sm text-muted-foreground">New Balance</p>
                   <p className="text-xl font-bold text-[#FF5656]">
                     💎 {result10x.newBalance}
                   </p>
                 </div>
                 <div className="rounded-lg bg-purple-50 p-4 text-center">
-                  <p className="text-sm text-gray-600">Total Pulls</p>
+                  <p className="text-sm text-muted-foreground">Total Pulls</p>
                   <p className="text-xl font-bold text-[#FF5656]">
                     {result10x.totalPulls}
                   </p>
                 </div>
                 <div className="rounded-lg bg-green-50 p-4 text-center">
-                  <p className="text-sm text-gray-600">Prizes Won</p>
+                  <p className="text-sm text-muted-foreground">Prizes Won</p>
                   <p className="text-xl font-bold text-green-600">
                     {result10x.prizes.length}
                   </p>
@@ -225,11 +225,11 @@ export default function GachaResultModal({
   // Single pull result
   const singleResult = result as GachaResult
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-90 p-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-background bg-opacity-90 p-4">
       <div className="relative w-full max-w-5xl">
         {isRevealing ? (
           // Revealing animation with Gundam GIF
-          <div className="rounded-lg bg-black p-8 text-center shadow-2xl min-h-[70vh] flex flex-col justify-center">
+          <div className="rounded-lg bg-background p-8 text-center shadow-2xl min-h-[70vh] flex flex-col justify-center">
             <div className="mb-6 flex justify-center">
               <div className="relative w-[80.5vw] h-[57.5vh] max-w-4xl">
                 <Image
@@ -242,7 +242,7 @@ export default function GachaResultModal({
                 />
               </div>
             </div>
-            <p className="text-3xl font-bold text-white animate-bounce">Opening...</p>
+            <p className="text-3xl font-bold text-foreground animate-bounce">Opening...</p>
           </div>
         ) : (
           // Result display
@@ -253,7 +253,7 @@ export default function GachaResultModal({
           >
             {/* Rarity Badge */}
             <div className="mb-4">
-              <span className="inline-block rounded-full bg-white bg-opacity-30 px-4 py-2 text-sm font-bold text-white backdrop-blur-sm">
+              <span className="inline-block rounded-full bg-white bg-opacity-30 px-4 py-2 text-sm font-bold text-foreground backdrop-blur-sm">
                 {getRarityEmoji(singleResult.prize.rarity)} {singleResult.prize.rarity}
               </span>
             </div>
@@ -274,19 +274,19 @@ export default function GachaResultModal({
             </div>
 
             {/* Prize Name */}
-            <h2 className="mb-2 text-3xl font-bold text-white">
+            <h2 className="mb-2 text-3xl font-bold text-foreground">
               {singleResult.prize.name}
             </h2>
 
             {/* Prize Description */}
-            <p className="mb-4 text-white opacity-90">
+            <p className="mb-4 text-foreground opacity-90">
               {singleResult.prize.description}
             </p>
 
             {/* Prize Value */}
             <div className="mb-6 rounded-lg bg-white bg-opacity-20 p-4 backdrop-blur-sm">
-              <p className="text-sm text-white opacity-90">Value</p>
-              <p className="text-2xl font-bold text-white">
+              <p className="text-sm text-foreground opacity-90">Value</p>
+              <p className="text-2xl font-bold text-foreground">
                 💎 {singleResult.prize.value}
               </p>
             </div>
@@ -294,14 +294,14 @@ export default function GachaResultModal({
             {/* Stats */}
             <div className="mb-6 grid grid-cols-2 gap-4">
               <div className="rounded-lg bg-white bg-opacity-20 p-3 backdrop-blur-sm">
-                <p className="text-xs text-white opacity-90">New Balance</p>
-                <p className="text-lg font-bold text-white">
+                <p className="text-xs text-foreground opacity-90">New Balance</p>
+                <p className="text-lg font-bold text-foreground">
                   💎 {singleResult.newBalance}
                 </p>
               </div>
               <div className="rounded-lg bg-white bg-opacity-20 p-3 backdrop-blur-sm">
-                <p className="text-xs text-white opacity-90">Total Pulls</p>
-                <p className="text-lg font-bold text-white">
+                <p className="text-xs text-foreground opacity-90">Total Pulls</p>
+                <p className="text-lg font-bold text-foreground">
                   {singleResult.totalPulls}
                 </p>
               </div>

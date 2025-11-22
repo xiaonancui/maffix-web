@@ -4,7 +4,7 @@ import { useState, useRef, useEffect, ReactNode } from 'react'
 
 export interface ActionMenuItem {
   label: string
-  icon?: string
+  icon?: string | ReactNode
   onClick: () => void
   variant?: 'default' | 'danger' | 'success'
   disabled?: boolean
@@ -33,7 +33,7 @@ export default function ActionMenu({ items, actions, trigger }: ActionMenuProps)
   }, [])
 
   const variantStyles = {
-    default: 'text-gray-300 hover:bg-red-500/10 hover:text-white',
+    default: 'text-gray-300 hover:bg-red-500/10 hover:text-foreground',
     danger: 'text-red-400 hover:bg-red-500/20 hover:text-red-300',
     success: 'text-green-400 hover:bg-green-500/20 hover:text-green-300',
   }
@@ -43,7 +43,7 @@ export default function ActionMenu({ items, actions, trigger }: ActionMenuProps)
       {/* Trigger Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="rounded-md p-2 text-gray-400 hover:bg-red-500/10 hover:text-white transition-colors"
+        className="rounded-md p-2 text-gray-400 hover:bg-red-500/10 hover:text-foreground transition-colors"
         aria-label="Open menu"
       >
         {trigger || (
@@ -55,7 +55,7 @@ export default function ActionMenu({ items, actions, trigger }: ActionMenuProps)
 
       {/* Dropdown Menu */}
       {isOpen && (
-        <div className="absolute right-0 z-10 mt-2 w-48 rounded-lg bg-[#1a1a1a] border border-red-500/20 shadow-xl shadow-red-500/20 overflow-hidden">
+        <div className="absolute right-0 z-10 mt-2 w-48 rounded-lg bg-card border border-red-500/20 dark:shadow-xl shadow-red-500/20 overflow-hidden">
           {menuItems.map((item, index) => (
             <button
               key={index}
@@ -72,7 +72,13 @@ export default function ActionMenu({ items, actions, trigger }: ActionMenuProps)
                   : variantStyles[item.variant || 'default']
               }`}
             >
-              {item.icon && <span className="text-lg">{item.icon}</span>}
+              {item.icon && (
+                typeof item.icon === 'string' ? (
+                  <span className="text-lg">{item.icon}</span>
+                ) : (
+                  <span>{item.icon}</span>
+                )
+              )}
               <span>{item.label}</span>
             </button>
           ))}

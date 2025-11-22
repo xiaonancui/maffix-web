@@ -11,6 +11,7 @@ import BulkActions, { BulkAction } from '@/components/admin/BulkActions'
 import StatusBadge, { BadgeVariant } from '@/components/admin/StatusBadge'
 import ActionMenu, { ActionMenuItem } from '@/components/admin/ActionMenu'
 import ConfirmDialog from '@/components/admin/ConfirmDialog'
+import { Plus, Gem, Star, Edit, Play, Pause, Trash2 } from 'lucide-react'
 
 interface Mission {
   id: string
@@ -123,8 +124,8 @@ export default function MissionsPage() {
       label: 'Mission',
       render: (mission) => (
         <div>
-          <div className="font-semibold text-white">{mission.title}</div>
-          <div className="text-xs text-gray-400">ID: {mission.id.slice(0, 8)}</div>
+          <div className="font-semibold text-foreground">{mission.title}</div>
+          <div className="text-xs text-muted-foreground">ID: {mission.id.slice(0, 8)}</div>
         </div>
       ),
       width: '30%',
@@ -151,8 +152,14 @@ export default function MissionsPage() {
       label: 'Rewards',
       render: (mission) => (
         <div className="text-sm">
-          <div>💎 {mission.diamonds}</div>
-          <div className="text-gray-400">⭐ {mission.points}</div>
+          <div className="flex items-center gap-1">
+            <Gem className="h-4 w-4 text-yellow-400" />
+            {mission.diamonds}
+          </div>
+          <div className="flex items-center gap-1 text-muted-foreground">
+            <Star className="h-4 w-4 text-blue-400" />
+            {mission.points}
+          </div>
         </div>
       ),
     },
@@ -160,7 +167,7 @@ export default function MissionsPage() {
       key: 'completions',
       label: 'Completions',
       render: (mission) => (
-        <span className="text-white font-semibold">{mission._count.completions}</span>
+        <span className="text-foreground font-semibold">{mission._count.completions}</span>
       ),
     },
     {
@@ -179,17 +186,17 @@ export default function MissionsPage() {
         const menuItems: ActionMenuItem[] = [
           {
             label: 'Edit',
-            icon: '✏️',
+            icon: <Edit className="h-4 w-4" />,
             onClick: () => window.location.href = `/admin/missions/${mission.id}/edit`,
           },
           {
             label: mission.isActive ? 'Deactivate' : 'Activate',
-            icon: mission.isActive ? '⏸️' : '▶️',
+            icon: mission.isActive ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />,
             onClick: () => handleToggleStatus(mission.id, mission.isActive),
           },
           {
             label: 'Delete',
-            icon: '🗑️',
+            icon: <Trash2 className="h-4 w-4" />,
             onClick: () => {
               setMissionToDelete(mission.id)
               setDeleteDialogOpen(true)
@@ -281,9 +288,9 @@ export default function MissionsPage() {
         actions={
           <Link
             href="/admin/missions/new"
-            className="flex items-center gap-2 rounded-lg bg-gradient-to-r from-red-600 to-red-500 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-red-500/30 hover:shadow-red-500/50 transition-all"
+            className="flex items-center gap-2 rounded-lg border-2 border-primary bg-transparent px-4 py-2 text-sm font-semibold text-primary dark:shadow-lg dark:shadow-red-500/30 hover:dark:shadow-red-500/50 hover:bg-primary/10 transition-all dark:bg-gradient-to-r dark:from-red-600 dark:to-red-500 dark:text-primary-foreground dark:border-transparent"
           >
-            <span>➕</span>
+            <Plus className="h-5 w-5" />
             Create Mission
           </Link>
         }

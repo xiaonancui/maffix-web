@@ -94,8 +94,8 @@ export default async function ProfilePage() {
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-white">Profile</h1>
-        <p className="mt-2 text-sm text-gray-400">
+        <h1 className="text-3xl font-bold text-foreground">Profile</h1>
+        <p className="mt-2 text-sm text-muted-foreground">
           Manage your account and view your statistics
         </p>
       </div>
@@ -103,42 +103,42 @@ export default async function ProfilePage() {
       <div className="grid gap-6 lg:grid-cols-3">
         {/* Profile Card */}
         <div className="lg:col-span-1">
-          <div className="rounded-lg bg-gray-900 border border-gray-800 p-6 shadow">
+          <div className="rounded-lg bg-card border border-border p-6 shadow">
             <div className="mb-6 text-center">
-              <div className="mx-auto mb-4 flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-r from-[#FF5656] to-[#ff3333] text-4xl text-white">
+              <div className="mx-auto mb-4 flex h-24 w-24 items-center justify-center rounded-full border-4 border-primary bg-transparent text-4xl text-primary dark:bg-gradient-to-r dark:from-primary dark:to-red-500 dark:text-primary-foreground dark:border-transparent">
                 {user.avatar || '👤'}
               </div>
-              <h2 className="text-xl font-bold text-white">{user.name}</h2>
-              <p className="text-sm text-gray-400">{user.email}</p>
+              <h2 className="text-xl font-bold text-foreground">{user.name}</h2>
+              <p className="text-sm text-muted-foreground">{user.email}</p>
               <div className="mt-2">
-                <span className="rounded-full bg-[#FF5656] px-3 py-1 text-xs font-medium text-white">
+                <span className="rounded-full border-2 border-primary bg-transparent px-3 py-1 text-xs font-medium text-primary dark:bg-primary dark:text-primary-foreground dark:border-transparent">
                   {user.role}
                 </span>
               </div>
             </div>
 
-            <div className="space-y-4 border-t border-gray-800 pt-4">
+            <div className="space-y-4 border-t border-border pt-4">
               <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-500">Level</span>
-                <span className="font-semibold text-white">
+                <span className="text-sm text-muted-foreground">Level</span>
+                <span className="font-semibold text-foreground">
                   {user.level}
                 </span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-500">Diamonds</span>
-                <span className="font-semibold text-white">
+                <span className="text-sm text-muted-foreground">Diamonds</span>
+                <span className="font-semibold text-foreground">
                   💎 {user.diamondBalance.toLocaleString()}
                 </span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-500">Points</span>
-                <span className="font-semibold text-white">
+                <span className="text-sm text-muted-foreground">Points</span>
+                <span className="font-semibold text-foreground">
                   ⭐ {user.points.toLocaleString()}
                 </span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-500">Member Since</span>
-                <span className="font-semibold text-white">
+                <span className="text-sm text-muted-foreground">Member Since</span>
+                <span className="font-semibold text-foreground">
                   {new Date(user.createdAt).toLocaleDateString()}
                 </span>
               </div>
@@ -152,57 +152,57 @@ export default async function ProfilePage() {
 
         {/* Statistics */}
         <div className="lg:col-span-2">
-          <div className="mb-6 rounded-lg bg-gray-900 border border-gray-800 p-6 shadow">
-            <h3 className="mb-4 text-lg font-semibold text-white">
+          <div className="mb-6 rounded-lg bg-card border border-border p-6 shadow">
+            <h3 className="mb-4 text-lg font-semibold text-foreground">
               Statistics
             </h3>
             <div className="grid gap-4 sm:grid-cols-2">
-              <div className="rounded-lg bg-gray-800 border border-gray-700 p-4">
+              <div className="rounded-lg bg-secondary border border-border p-4">
                 <div className="text-2xl font-bold text-[#FF5656]">
                   {stats.totalTasks}
                 </div>
-                <div className="text-sm text-gray-400">Tasks Completed</div>
+                <div className="text-sm text-muted-foreground">Tasks Completed</div>
               </div>
-              <div className="rounded-lg bg-gray-800 border border-gray-700 p-4">
+              <div className="rounded-lg bg-secondary border border-border p-4">
                 <div className="text-2xl font-bold text-[#FF5656]">
                   {stats.totalPrizes}
                 </div>
-                <div className="text-sm text-gray-400">Prizes Won</div>
+                <div className="text-sm text-muted-foreground">Prizes Won</div>
               </div>
-              <div className="rounded-lg bg-gray-800 border border-gray-700 p-4">
+              <div className="rounded-lg bg-secondary border border-border p-4">
                 <div className="text-2xl font-bold text-[#FF5656]">
                   {stats.redeemedPrizes}
                 </div>
-                <div className="text-sm text-gray-400">Prizes Redeemed</div>
+                <div className="text-sm text-muted-foreground">Prizes Redeemed</div>
               </div>
-              <div className="rounded-lg bg-gray-800 border border-gray-700 p-4">
+              <div className="rounded-lg bg-secondary border border-border p-4">
                 <div className="text-2xl font-bold text-[#FF5656]">
                   💎 {stats.totalEarned.toLocaleString()}
                 </div>
-                <div className="text-sm text-gray-400">Total Earned</div>
+                <div className="text-sm text-muted-foreground">Total Earned</div>
               </div>
             </div>
           </div>
 
           {/* Recent Transactions */}
-          <div className="rounded-lg bg-gray-900 border border-gray-800 p-6 shadow">
-            <h3 className="mb-4 text-lg font-semibold text-white">
+          <div className="rounded-lg bg-card border border-border p-6 shadow">
+            <h3 className="mb-4 text-lg font-semibold text-foreground">
               Recent Transactions
             </h3>
             {user.transactions.length === 0 ? (
-              <p className="text-center text-gray-400">No transactions yet</p>
+              <p className="text-center text-muted-foreground">No transactions yet</p>
             ) : (
               <div className="space-y-3">
                 {user.transactions.map((transaction) => (
                   <div
                     key={transaction.id}
-                    className="flex items-center justify-between rounded-lg border border-gray-700 bg-gray-800 p-3 hover:border-[#FF5656] transition-colors"
+                    className="flex items-center justify-between rounded-lg border border-border bg-secondary p-3 hover:border-[#FF5656] transition-colors"
                   >
                     <div className="flex-1">
-                      <p className="text-sm font-medium text-white">
+                      <p className="text-sm font-medium text-foreground">
                         {transaction.description}
                       </p>
-                      <p className="text-xs text-gray-500">
+                      <p className="text-xs text-muted-foreground">
                         {new Date(transaction.createdAt).toLocaleString()}
                       </p>
                     </div>
@@ -224,7 +224,7 @@ export default async function ProfilePage() {
                         {transaction.amount}{' '}
                         {transaction.currency === 'DIAMONDS' ? '💎' : '⭐'}
                       </p>
-                      <p className="text-xs text-gray-500">
+                      <p className="text-xs text-muted-foreground">
                         {transaction.type}
                       </p>
                     </div>

@@ -5,28 +5,17 @@ import Link from 'next/link'
 import PrizeRedeemButton from '@/components/dashboard/PrizeRedeemButton'
 
 export default async function PrizesPage() {
-  // Dynamic import to avoid build-time database connection
-  const { db } = await import('@/lib/db')
-
   const session = await getServerSession(authOptions)
 
   if (!session) {
     redirect('/login')
   }
 
-  // Fetch user's prizes
+  // Use mock data for all users (database not connected)
   let userPrizes: any[] = []
 
-  const allowTestAccounts =
-    process.env.NODE_ENV === 'development' || process.env.ENABLE_TEST_ACCOUNTS === 'true'
-
-  const isTestAccount =
-    allowTestAccounts &&
-    (session.user.id?.includes('test-') ||
-      session.user.id?.includes('demo-') ||
-      session.user.id?.includes('admin-'))
-
-  if (isTestAccount) {
+  // Always use mock data
+  if (true) {
     // Mock prizes for test accounts
     userPrizes = [
       {
@@ -174,23 +163,6 @@ export default async function PrizesPage() {
         },
       },
     ]
-  } else {
-    try {
-      userPrizes = await db.userPrize.findMany({
-        where: {
-          userId: session.user.id,
-        },
-        include: {
-          prize: true,
-        },
-        orderBy: {
-          acquiredAt: 'desc',
-        },
-      })
-    } catch (error) {
-      console.error('Database fetch failed:', error)
-      userPrizes = []
-    }
   }
 
   const getRarityColor = (rarity: string) => {
@@ -204,9 +176,9 @@ export default async function PrizesPage() {
       case 'RARE':
         return 'border-blue-400 bg-gradient-to-br from-blue-900/20 to-cyan-900/20'
       case 'COMMON':
-        return 'border-gray-400 bg-gray-800'
+        return 'border-gray-400 bg-secondary'
       default:
-        return 'border-gray-600 bg-gray-900'
+        return 'border-gray-600 bg-card'
     }
   }
 
@@ -228,31 +200,31 @@ export default async function PrizesPage() {
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-white">My Prizes</h1>
-        <p className="mt-2 text-sm text-gray-400">
+        <h1 className="text-3xl font-bold text-foreground">My Prizes</h1>
+        <p className="mt-2 text-sm text-muted-foreground">
           View and manage your collected prizes
         </p>
       </div>
 
       {userPrizes.length === 0 ? (
-        <div className="rounded-lg bg-gray-900 border border-gray-800 p-12 text-center shadow">
+        <div className="rounded-lg bg-card border border-border p-12 text-center shadow">
           <div className="mb-4 text-6xl">🎁</div>
-          <h3 className="mb-2 text-lg font-semibold text-white">
+          <h3 className="mb-2 text-lg font-semibold text-foreground">
             No prizes yet
           </h3>
-          <p className="mb-6 text-gray-400">
+          <p className="mb-6 text-muted-foreground">
             Complete tasks and try the gacha to win prizes!
           </p>
           <div className="flex justify-center gap-4">
             <a
               href="/tasks"
-              className="rounded-md bg-[#FF5656] px-4 py-2 text-sm font-semibold text-white hover:bg-[#ff3333] transition-all"
+              className="rounded-md bg-[#FF5656] px-4 py-2 text-sm font-semibold text-foreground hover:bg-[#ff3333] transition-all"
             >
               View Tasks
             </a>
             <a
               href="/gacha"
-              className="rounded-md border border-gray-700 bg-gray-900 px-4 py-2 text-sm font-semibold text-white hover:border-[#FF5656] hover:bg-gray-800 transition-all"
+              className="rounded-md border border-border bg-card px-4 py-2 text-sm font-semibold text-foreground hover:border-[#FF5656] hover:bg-secondary transition-all"
             >
               Try Gacha
             </a>
@@ -277,39 +249,39 @@ export default async function PrizesPage() {
                       ✓ Redeemed
                     </span>
                   ) : (
-                    <span className="rounded-full bg-gray-700 px-2 py-1 text-xs font-medium text-gray-300">
+                    <span className="rounded-full bg-gray-700 px-2 py-1 text-xs font-medium text-muted-foreground">
                       Available
                     </span>
                   )}
                 </div>
               </div>
 
-              <h3 className="mb-2 text-lg font-semibold text-white">
+              <h3 className="mb-2 text-lg font-semibold text-foreground">
                 {userPrize.prize.name}
               </h3>
-              <p className="mb-4 text-sm text-gray-400">
+              <p className="mb-4 text-sm text-muted-foreground">
                 {userPrize.prize.description}
               </p>
 
               <div className="mb-4 space-y-2 text-sm">
                 <div className="flex justify-between">
-                  <span className="text-gray-500">Rarity:</span>
-                  <span className="font-medium text-gray-300">{userPrize.prize.rarity}</span>
+                  <span className="text-muted-foreground">Rarity:</span>
+                  <span className="font-medium text-muted-foreground">{userPrize.prize.rarity}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-500">Type:</span>
-                  <span className="font-medium text-gray-300">{userPrize.prize.type}</span>
+                  <span className="text-muted-foreground">Type:</span>
+                  <span className="font-medium text-muted-foreground">{userPrize.prize.type}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-500">Acquired:</span>
-                  <span className="font-medium text-gray-300">
+                  <span className="text-muted-foreground">Acquired:</span>
+                  <span className="font-medium text-muted-foreground">
                     {new Date(userPrize.acquiredAt).toLocaleDateString()}
                   </span>
                 </div>
                 {userPrize.redeemed && userPrize.redeemedAt && (
                   <div className="flex justify-between">
-                    <span className="text-gray-500">Redeemed:</span>
-                    <span className="font-medium text-gray-300">
+                    <span className="text-muted-foreground">Redeemed:</span>
+                    <span className="font-medium text-muted-foreground">
                       {new Date(userPrize.redeemedAt).toLocaleDateString()}
                     </span>
                   </div>

@@ -192,21 +192,21 @@ export default function MerchandiseVariantsPage({ params }: { params: { id: stri
       key: 'sku',
       label: 'SKU',
       render: (variant: Variant) => (
-        <span className="font-mono text-white">{variant.sku}</span>
+        <span className="font-mono text-foreground">{variant.sku}</span>
       ),
     },
     {
       key: 'size',
       label: 'Size',
       render: (variant: Variant) => (
-        <span className="text-gray-300">{variant.size || '-'}</span>
+        <span className="text-muted-foreground">{variant.size || '-'}</span>
       ),
     },
     {
       key: 'color',
       label: 'Color',
       render: (variant: Variant) => (
-        <span className="text-gray-300">{variant.color || '-'}</span>
+        <span className="text-muted-foreground">{variant.color || '-'}</span>
       ),
     },
     {
@@ -217,7 +217,7 @@ export default function MerchandiseVariantsPage({ params }: { params: { id: stri
         const totalPrice = merchandise ? merchandise.price + modifier : modifier
         return (
           <div>
-            <div className="text-white font-medium">${totalPrice.toFixed(2)}</div>
+            <div className="text-foreground font-medium">${totalPrice.toFixed(2)}</div>
             {modifier !== 0 && (
               <div className={`text-sm ${modifier > 0 ? 'text-green-400' : 'text-red-400'}`}>
                 {modifier > 0 ? '+' : ''}${modifier.toFixed(2)}
@@ -280,22 +280,22 @@ export default function MerchandiseVariantsPage({ params }: { params: { id: stri
         <div>
           <button
             onClick={() => router.push('/admin/merchandise')}
-            className="text-gray-400 hover:text-white mb-2 flex items-center gap-2"
+            className="text-muted-foreground hover:text-foreground mb-2 flex items-center gap-2"
           >
             ← Back to Merchandise
           </button>
-          <h1 className="text-3xl font-bold text-white tracking-tight">
+          <h1 className="text-3xl font-bold text-foreground tracking-tight">
             Manage Variants
           </h1>
           {merchandise && (
-            <p className="text-gray-400 mt-1">
+            <p className="text-muted-foreground mt-1">
               {merchandise.name} - Base Price: ${merchandise.price.toFixed(2)}
             </p>
           )}
         </div>
         <button
           onClick={handleAddVariant}
-          className="px-4 py-2 bg-gradient-to-r from-red-600 to-red-500 text-white rounded-lg hover:from-red-700 hover:to-red-600 transition-all shadow-lg shadow-red-500/30 font-medium"
+          className="px-4 py-2 border-2 border-primary bg-transparent text-primary rounded-lg hover:bg-primary/10 transition-all dark:shadow-lg dark:shadow-red-500/30 font-medium dark:bg-gradient-to-r dark:from-red-600 dark:to-red-500 dark:text-primary-foreground dark:border-transparent dark:hover:from-red-700 dark:hover:to-red-600"
         >
           + Add Variant
         </button>
@@ -303,8 +303,8 @@ export default function MerchandiseVariantsPage({ params }: { params: { id: stri
 
       {/* Add/Edit Form */}
       {showAddForm && (
-        <div className="bg-[#1a1a1a] border border-red-500/20 rounded-lg p-6 shadow-lg shadow-red-500/10">
-          <h2 className="text-lg font-bold text-white mb-4">
+        <div className="bg-card border border-border rounded-lg p-6 dark:shadow-lg dark:shadow-red-500/10">
+          <h2 className="text-lg font-bold text-foreground mb-4">
             {editingVariant ? 'Edit Variant' : 'Add New Variant'}
           </h2>
           <form onSubmit={handleSubmitVariant} className="space-y-4">
@@ -388,7 +388,7 @@ export default function MerchandiseVariantsPage({ params }: { params: { id: stri
               <button
                 type="submit"
                 disabled={submitting}
-                className="px-6 py-2 bg-gradient-to-r from-red-600 to-red-500 text-white rounded-lg hover:from-red-700 hover:to-red-600 transition-all shadow-lg shadow-red-500/30 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-6 py-2 border-2 border-primary bg-transparent text-primary rounded-lg hover:bg-primary/10 transition-all dark:shadow-lg dark:shadow-red-500/30 font-medium disabled:opacity-50 disabled:cursor-not-allowed dark:bg-gradient-to-r dark:from-red-600 dark:to-red-500 dark:text-primary-foreground dark:border-transparent dark:hover:from-red-700 dark:hover:to-red-600"
               >
                 {submitting ? 'Saving...' : editingVariant ? 'Save Changes' : 'Add Variant'}
               </button>
@@ -399,7 +399,7 @@ export default function MerchandiseVariantsPage({ params }: { params: { id: stri
                   setEditingVariant(null)
                 }}
                 disabled={submitting}
-                className="px-6 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-colors border border-red-500/30"
+                className="px-6 py-2 bg-secondary text-foreground rounded-lg hover:bg-gray-700 transition-colors border border-red-500/30"
               >
                 Cancel
               </button>
@@ -409,7 +409,7 @@ export default function MerchandiseVariantsPage({ params }: { params: { id: stri
       )}
 
       {/* Variants Table */}
-      <div className="bg-[#1a1a1a] border border-red-500/20 rounded-lg shadow-lg shadow-red-500/10">
+      <div className="bg-card border border-border rounded-lg dark:shadow-lg dark:shadow-red-500/10">
         <DataTable
           columns={columns}
           data={variants}

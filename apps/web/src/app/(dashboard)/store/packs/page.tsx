@@ -151,23 +151,23 @@ export default async function PremiumPacksPage() {
       {/* Header */}
       <div className="mb-8">
         <h1 className="text-4xl font-bold text-gray-900 mb-2">Premium Packs</h1>
-        <p className="text-lg text-gray-600">
+        <p className="text-lg text-muted-foreground">
           Get exclusive merchandise, bonus diamonds, and draw tickets!
         </p>
       </div>
 
       {/* User Balance */}
-      <div className="mb-8 rounded-lg bg-gradient-to-r from-purple-500 to-pink-600 p-6 text-white shadow-lg">
+      <div className="mb-8 rounded-lg border-2 border-purple-600 bg-transparent p-6 shadow-lg dark:bg-gradient-to-r dark:from-purple-500 dark:to-pink-600 dark:border-transparent">
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-sm opacity-90">Your Diamond Balance</p>
-            <p className="text-4xl font-bold">
+            <p className="text-sm text-muted-foreground dark:text-primary-foreground dark:opacity-90">Your Diamond Balance</p>
+            <p className="text-4xl font-bold text-foreground dark:text-primary-foreground">
               💎 {user?.diamondBalance?.toLocaleString() || 0}
             </p>
           </div>
           <div className="text-right">
-            <p className="text-sm opacity-90">Premium Packs Available</p>
-            <p className="text-3xl font-bold">{packs.length}</p>
+            <p className="text-sm text-muted-foreground dark:text-primary-foreground dark:opacity-90">Premium Packs Available</p>
+            <p className="text-3xl font-bold text-foreground dark:text-primary-foreground">{packs.length}</p>
           </div>
         </div>
       </div>
@@ -200,7 +200,7 @@ export default async function PremiumPacksPage() {
           <h3 className="text-2xl font-bold text-gray-900 mb-2">
             No Premium Packs Available
           </h3>
-          <p className="text-gray-600">
+          <p className="text-muted-foreground">
             Check back soon for exclusive pack offers!
           </p>
         </div>
@@ -213,29 +213,29 @@ export default async function PremiumPacksPage() {
       )}
 
       {/* Payment Methods */}
-      <div className="mt-12 rounded-lg border border-gray-200 bg-white p-6">
+      <div className="mt-12 rounded-lg border border-border bg-white p-6">
         <h3 className="text-lg font-bold text-gray-900 mb-4">
           Secure Payment Methods
         </h3>
         <div className="flex flex-wrap items-center gap-4">
-          <div className="flex items-center gap-2 text-gray-600">
+          <div className="flex items-center gap-2 text-muted-foreground">
             <span className="text-2xl">💳</span>
             <span>Credit Card</span>
           </div>
-          <div className="flex items-center gap-2 text-gray-600">
+          <div className="flex items-center gap-2 text-muted-foreground">
             <span className="text-2xl">🏦</span>
             <span>Bank Transfer</span>
           </div>
-          <div className="flex items-center gap-2 text-gray-600">
+          <div className="flex items-center gap-2 text-muted-foreground">
             <span className="text-2xl">📱</span>
             <span>Klarna</span>
           </div>
-          <div className="flex items-center gap-2 text-gray-600">
+          <div className="flex items-center gap-2 text-muted-foreground">
             <span className="text-2xl">🔒</span>
             <span>Secure Checkout</span>
           </div>
         </div>
-        <p className="mt-4 text-sm text-gray-500">
+        <p className="mt-4 text-sm text-muted-foreground">
           All payments are processed securely through Klarna. Your payment information is never stored on our servers.
         </p>
       </div>
@@ -246,29 +246,29 @@ export default async function PremiumPacksPage() {
           Frequently Asked Questions
         </h3>
         <div className="space-y-4">
-          <details className="rounded-lg border border-gray-200 bg-white p-4">
+          <details className="rounded-lg border border-border bg-white p-4">
             <summary className="cursor-pointer font-semibold text-gray-900">
               How do I receive my items?
             </summary>
-            <p className="mt-2 text-gray-600">
+            <p className="mt-2 text-muted-foreground">
               Digital items (diamonds and tickets) are added to your account immediately after payment.
               Physical merchandise will be shipped to your registered address within 5-7 business days.
             </p>
           </details>
-          <details className="rounded-lg border border-gray-200 bg-white p-4">
+          <details className="rounded-lg border border-border bg-white p-4">
             <summary className="cursor-pointer font-semibold text-gray-900">
               Can I refund a Premium Pack?
             </summary>
-            <p className="mt-2 text-gray-600">
+            <p className="mt-2 text-muted-foreground">
               Digital items (diamonds and tickets) are non-refundable once granted. Physical merchandise
               can be returned within 30 days if unopened and in original condition.
             </p>
           </details>
-          <details className="rounded-lg border border-gray-200 bg-white p-4">
+          <details className="rounded-lg border border-border bg-white p-4">
             <summary className="cursor-pointer font-semibold text-gray-900">
               Are Premium Packs limited time offers?
             </summary>
-            <p className="mt-2 text-gray-600">
+            <p className="mt-2 text-muted-foreground">
               Some packs may be limited time or limited quantity. Check the pack details for availability.
               Featured packs are usually available for a limited period.
             </p>

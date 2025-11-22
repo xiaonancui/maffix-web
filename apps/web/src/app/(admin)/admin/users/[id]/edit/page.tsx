@@ -113,7 +113,7 @@ export default function EditUserPage({ params }: { params: { id: string } }) {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <div className="text-gray-400">Loading user...</div>
+        <div className="text-muted-foreground">Loading user...</div>
       </div>
     )
   }
@@ -128,19 +128,19 @@ export default function EditUserPage({ params }: { params: { id: string } }) {
       <div>
         <button
           onClick={() => router.push(`/admin/users/${params.id}`)}
-          className="text-gray-400 hover:text-white mb-2 flex items-center gap-2"
+          className="text-muted-foreground hover:text-foreground mb-2 flex items-center gap-2"
         >
           ← Back to User Details
         </button>
-        <h1 className="text-3xl font-bold text-white tracking-tight">Edit User</h1>
-        <p className="text-gray-400 mt-1">{user.email}</p>
+        <h1 className="text-3xl font-bold text-foreground tracking-tight">Edit User</h1>
+        <p className="text-muted-foreground mt-1">{user.email}</p>
       </div>
 
       {/* Form */}
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Basic Information */}
-        <div className="bg-[#1a1a1a] border border-red-500/20 rounded-lg p-6 shadow-lg shadow-red-500/10 space-y-6">
-          <h2 className="text-lg font-bold text-white">Basic Information</h2>
+        <div className="bg-card border border-border rounded-lg p-6 dark:shadow-lg dark:shadow-red-500/10 space-y-6">
+          <h2 className="text-lg font-bold text-foreground">Basic Information</h2>
 
           <FormField
             label="Name"
@@ -175,8 +175,8 @@ export default function EditUserPage({ params }: { params: { id: string } }) {
         </div>
 
         {/* Gamification */}
-        <div className="bg-[#1a1a1a] border border-red-500/20 rounded-lg p-6 shadow-lg shadow-red-500/10 space-y-6">
-          <h2 className="text-lg font-bold text-white">Gamification</h2>
+        <div className="bg-card border border-border rounded-lg p-6 dark:shadow-lg dark:shadow-red-500/10 space-y-6">
+          <h2 className="text-lg font-bold text-foreground">Gamification</h2>
 
           <FormField
             label="Diamond Balance"
@@ -236,7 +236,7 @@ export default function EditUserPage({ params }: { params: { id: string } }) {
           <button
             type="submit"
             disabled={submitting}
-            className="px-6 py-2 bg-gradient-to-r from-red-600 to-red-500 text-white rounded-lg hover:from-red-700 hover:to-red-600 transition-all shadow-lg shadow-red-500/30 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-6 py-2 border-2 border-primary bg-transparent text-primary rounded-lg hover:bg-primary/10 transition-all dark:shadow-lg dark:shadow-red-500/30 font-medium disabled:opacity-50 disabled:cursor-not-allowed dark:bg-gradient-to-r dark:from-red-600 dark:to-red-500 dark:text-primary-foreground dark:border-transparent dark:hover:from-red-700 dark:hover:to-red-600"
           >
             {submitting ? 'Saving...' : 'Save Changes'}
           </button>
@@ -244,7 +244,7 @@ export default function EditUserPage({ params }: { params: { id: string } }) {
             type="button"
             onClick={() => router.push(`/admin/users/${params.id}`)}
             disabled={submitting}
-            className="px-6 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-colors border border-red-500/30 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-6 py-2 bg-secondary text-foreground rounded-lg hover:bg-gray-700 transition-colors border border-red-500/30 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Cancel
           </button>

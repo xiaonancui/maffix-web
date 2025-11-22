@@ -29,7 +29,7 @@ export default function RegisterPage() {
     if (/[^a-zA-Z\d]/.test(password)) score++
 
     const labels = ['', 'Weak', 'Fair', 'Good', 'Strong', 'Very Strong']
-    const colors = ['', 'bg-red-500', 'bg-[#FF5656]/60', 'bg-[#FF5656]/80', 'bg-[#FF5656]', 'bg-[#FF5656]']
+    const colors = ['', 'bg-red-500', 'bg-primary/60', 'bg-primary/80', 'bg-primary', 'bg-primary']
 
     return {
       score,
@@ -214,7 +214,7 @@ export default function RegisterPage() {
             <button
               type="submit"
               disabled={isLoading}
-              className="group relative flex w-full justify-center rounded-md bg-[#FF5656] px-3 py-2 text-sm font-semibold text-white hover:bg-[#ff3333] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#FF5656] disabled:opacity-50 transition-all"
+              className="group relative flex w-full justify-center rounded-md bg-primary px-3 py-2 text-sm font-semibold text-white hover:bg-primary/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:opacity-50 transition-all"
             >
               {isLoading ? 'Creating account...' : 'Create account'}
             </button>

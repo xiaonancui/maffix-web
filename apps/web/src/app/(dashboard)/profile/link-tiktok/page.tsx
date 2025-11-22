@@ -62,7 +62,7 @@ export default async function LinkTikTokPage() {
       <div className="mb-6">
         <Link
           href="/profile"
-          className="inline-flex items-center text-sm font-medium text-gray-500 hover:text-gray-700"
+          className="inline-flex items-center text-sm font-medium text-muted-foreground hover:text-gray-700"
         >
           <svg
             className="mr-2 h-4 w-4"
@@ -85,7 +85,7 @@ export default async function LinkTikTokPage() {
       <div className="mb-8 text-center">
         <div className="mb-4 text-6xl">📱</div>
         <h1 className="text-4xl font-bold text-gray-900">Link TikTok Account</h1>
-        <p className="mt-3 text-lg text-gray-600">
+        <p className="mt-3 text-lg text-muted-foreground">
           Connect your TikTok account to complete missions and earn rewards
         </p>
       </div>
@@ -144,16 +144,16 @@ export default async function LinkTikTokPage() {
               <h3 className="mb-3 text-lg font-semibold text-gray-900">
                 Connected Account
               </h3>
-              <div className="flex items-center justify-between rounded-lg border border-gray-300 bg-gray-50 p-4">
+              <div className="flex items-center justify-between rounded-lg border border-border bg-gray-50 p-4">
                 <div className="flex items-center gap-3">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-black text-2xl text-white">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-background text-2xl text-foreground">
                     📱
                   </div>
                   <div>
                     <div className="font-semibold text-gray-900">
                       {user.tiktokUsername}
                     </div>
-                    <div className="text-sm text-gray-500">TikTok Account</div>
+                    <div className="text-sm text-muted-foreground">TikTok Account</div>
                   </div>
                 </div>
                 <TikTokUnlinkButton />
@@ -189,7 +189,7 @@ export default async function LinkTikTokPage() {
                   <div className="mt-4">
                     <Link
                       href="/missions"
-                      className="inline-flex items-center rounded-md bg-[#FF5656] px-4 py-2 text-sm font-semibold text-white hover:bg-[#FF5656]/90"
+                      className="inline-flex items-center rounded-md bg-[#FF5656] px-4 py-2 text-sm font-semibold text-foreground hover:bg-[#FF5656]/90"
                     >
                       Browse Missions →
                     </Link>
@@ -320,7 +320,7 @@ export default async function LinkTikTokPage() {
               <TikTokLinkButton />
             </div>
 
-            <div className="rounded-lg border border-gray-300 bg-gray-50 p-6">
+            <div className="rounded-lg border border-border bg-gray-50 p-6">
               <h3 className="mb-3 text-sm font-semibold text-gray-900">
                 How It Works
               </h3>

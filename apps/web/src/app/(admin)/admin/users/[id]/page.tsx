@@ -102,7 +102,7 @@ export default function UserDetailPage({ params }: { params: { id: string } }) {
     return (
       <div className="mx-auto max-w-7xl px-6 py-8">
         <div className="flex items-center justify-center min-h-[400px]">
-          <div className="text-gray-400">Loading user...</div>
+          <div className="text-muted-foreground">Loading user...</div>
         </div>
       </div>
     )
@@ -120,52 +120,52 @@ export default function UserDetailPage({ params }: { params: { id: string } }) {
         <div>
           <button
             onClick={() => router.push('/admin/users')}
-            className="text-gray-400 hover:text-white mb-2 flex items-center gap-2"
+            className="text-muted-foreground hover:text-foreground mb-2 flex items-center gap-2"
           >
             ← Back to Users
           </button>
-          <h1 className="text-3xl font-bold text-white tracking-tight">User Details</h1>
-          <p className="text-gray-400 mt-1">{user.email}</p>
+          <h1 className="text-3xl font-bold text-foreground tracking-tight">User Details</h1>
+          <p className="text-muted-foreground mt-1">{user.email}</p>
         </div>
         <Link
           href={`/admin/users/${user.id}/edit`}
-          className="px-4 py-2 bg-gradient-to-r from-red-600 to-red-500 text-white rounded-lg hover:from-red-700 hover:to-red-600 transition-all shadow-lg shadow-red-500/30 font-medium"
+          className="px-4 py-2 border-2 border-primary bg-transparent text-primary rounded-lg hover:bg-primary/10 transition-all dark:shadow-lg dark:shadow-red-500/30 font-medium dark:bg-gradient-to-r dark:from-red-600 dark:to-red-500 dark:text-primary-foreground dark:border-transparent dark:hover:from-red-700 dark:hover:to-red-600"
         >
           Edit User
         </Link>
       </div>
 
       {/* User Profile Card */}
-      <div className="bg-[#1a1a1a] border border-red-500/20 rounded-lg p-6 shadow-lg shadow-red-500/10">
+      <div className="bg-card border border-border rounded-lg p-6 dark:shadow-lg dark:shadow-red-500/10">
         <div className="flex items-start gap-6">
           {user.avatar ? (
             <img
               src={user.avatar}
               alt={user.name}
-              className="w-24 h-24 rounded-full border-2 border-red-500/20"
+              className="w-24 h-24 rounded-full border-2 border-border"
             />
           ) : (
-            <div className="w-24 h-24 rounded-full bg-gradient-to-br from-purple-500/20 to-pink-500/20 border-2 border-red-500/20 flex items-center justify-center text-white font-bold text-3xl">
+            <div className="w-24 h-24 rounded-full bg-gradient-to-br from-purple-500/20 to-pink-500/20 border-2 border-border flex items-center justify-center text-foreground font-bold text-3xl">
               {user.name.charAt(0).toUpperCase()}
             </div>
           )}
           <div className="flex-1">
             <div className="flex items-center gap-3 mb-2">
-              <h2 className="text-2xl font-bold text-white">{user.name}</h2>
+              <h2 className="text-2xl font-bold text-foreground">{user.name}</h2>
               <StatusBadge variant={getRoleColor(user.role)}>{user.role}</StatusBadge>
             </div>
-            <div className="space-y-1 text-gray-300">
+            <div className="space-y-1 text-muted-foreground">
               <div>📧 {user.email}</div>
               {user.tiktokUsername && (
                 <div>
                   🎵 TikTok: @{user.tiktokUsername}
-                  <span className="text-gray-500 ml-2 text-sm">
+                  <span className="text-muted-foreground ml-2 text-sm">
                     (Linked {formatDate(user.tiktokLinkedAt)})
                   </span>
                 </div>
               )}
               {user.provider && (
-                <div className="text-gray-400">
+                <div className="text-muted-foreground">
                   🔐 OAuth Provider: {user.provider}
                 </div>
               )}
@@ -176,28 +176,28 @@ export default function UserDetailPage({ params }: { params: { id: string } }) {
 
       {/* Statistics Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div className="bg-[#1a1a1a] border border-red-500/20 rounded-lg p-6 shadow-lg shadow-red-500/10">
-          <div className="text-gray-400 text-sm mb-1">Diamond Balance</div>
+        <div className="bg-card border border-border rounded-lg p-6 dark:shadow-lg dark:shadow-red-500/10">
+          <div className="text-muted-foreground text-sm mb-1">Diamond Balance</div>
           <div className="text-3xl font-bold text-yellow-400">
             💎 {user.diamondBalance.toLocaleString()}
           </div>
         </div>
-        <div className="bg-[#1a1a1a] border border-red-500/20 rounded-lg p-6 shadow-lg shadow-red-500/10">
-          <div className="text-gray-400 text-sm mb-1">Points</div>
+        <div className="bg-card border border-border rounded-lg p-6 dark:shadow-lg dark:shadow-red-500/10">
+          <div className="text-muted-foreground text-sm mb-1">Points</div>
           <div className="text-3xl font-bold text-blue-400">
             ⭐ {user.points.toLocaleString()}
           </div>
         </div>
-        <div className="bg-[#1a1a1a] border border-red-500/20 rounded-lg p-6 shadow-lg shadow-red-500/10">
-          <div className="text-gray-400 text-sm mb-1">Level</div>
+        <div className="bg-card border border-border rounded-lg p-6 dark:shadow-lg dark:shadow-red-500/10">
+          <div className="text-muted-foreground text-sm mb-1">Level</div>
           <div className="text-3xl font-bold text-green-400">🎯 {user.level}</div>
         </div>
-        <div className="bg-[#1a1a1a] border border-red-500/20 rounded-lg p-6 shadow-lg shadow-red-500/10">
-          <div className="text-gray-400 text-sm mb-1">Gacha Pity</div>
+        <div className="bg-card border border-border rounded-lg p-6 dark:shadow-lg dark:shadow-red-500/10">
+          <div className="text-muted-foreground text-sm mb-1">Gacha Pity</div>
           <div className="text-3xl font-bold text-purple-400">
             {user.gachaPityCounter}/10
           </div>
-          <div className="text-xs text-gray-500 mt-1">
+          <div className="text-xs text-muted-foreground mt-1">
             {user.hasCompletedTenDraw ? '✅ Has 10x draw' : '❌ No 10x draw'}
           </div>
         </div>
@@ -205,36 +205,36 @@ export default function UserDetailPage({ params }: { params: { id: string } }) {
 
       {/* Activity Statistics */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-[#1a1a1a] border border-red-500/20 rounded-lg p-6 shadow-lg shadow-red-500/10">
-          <h3 className="text-lg font-bold text-white mb-4">Missions</h3>
+        <div className="bg-card border border-border rounded-lg p-6 dark:shadow-lg dark:shadow-red-500/10">
+          <h3 className="text-lg font-bold text-foreground mb-4">Missions</h3>
           <div className="space-y-2">
-            <div className="flex justify-between text-gray-300">
+            <div className="flex justify-between text-muted-foreground">
               <span>Completed Tasks:</span>
               <span className="font-bold">{user._count.completedTasks}</span>
             </div>
           </div>
         </div>
-        <div className="bg-[#1a1a1a] border border-red-500/20 rounded-lg p-6 shadow-lg shadow-red-500/10">
-          <h3 className="text-lg font-bold text-white mb-4">Gacha</h3>
+        <div className="bg-card border border-border rounded-lg p-6 dark:shadow-lg dark:shadow-red-500/10">
+          <h3 className="text-lg font-bold text-foreground mb-4">Gacha</h3>
           <div className="space-y-2">
-            <div className="flex justify-between text-gray-300">
+            <div className="flex justify-between text-muted-foreground">
               <span>Total Pulls:</span>
               <span className="font-bold">{user._count.gachaPulls}</span>
             </div>
-            <div className="flex justify-between text-gray-300">
+            <div className="flex justify-between text-muted-foreground">
               <span>Prizes Won:</span>
               <span className="font-bold">{user._count.prizes}</span>
             </div>
           </div>
         </div>
-        <div className="bg-[#1a1a1a] border border-red-500/20 rounded-lg p-6 shadow-lg shadow-red-500/10">
-          <h3 className="text-lg font-bold text-white mb-4">Purchases</h3>
+        <div className="bg-card border border-border rounded-lg p-6 dark:shadow-lg dark:shadow-red-500/10">
+          <h3 className="text-lg font-bold text-foreground mb-4">Purchases</h3>
           <div className="space-y-2">
-            <div className="flex justify-between text-gray-300">
+            <div className="flex justify-between text-muted-foreground">
               <span>Premium Packs:</span>
               <span className="font-bold">{user._count.purchases}</span>
             </div>
-            <div className="flex justify-between text-gray-300">
+            <div className="flex justify-between text-muted-foreground">
               <span>Orders:</span>
               <span className="font-bold">{user._count.orders}</span>
             </div>
@@ -243,38 +243,38 @@ export default function UserDetailPage({ params }: { params: { id: string } }) {
       </div>
 
       {/* Account Information */}
-      <div className="bg-[#1a1a1a] border border-red-500/20 rounded-lg p-6 shadow-lg shadow-red-500/10">
-        <h3 className="text-lg font-bold text-white mb-4">Account Information</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-300">
+      <div className="bg-card border border-border rounded-lg p-6 dark:shadow-lg dark:shadow-red-500/10">
+        <h3 className="text-lg font-bold text-foreground mb-4">Account Information</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-muted-foreground">
           <div>
-            <span className="text-gray-400">Created:</span>{' '}
+            <span className="text-muted-foreground">Created:</span>{' '}
             <span className="font-medium">{formatDate(user.createdAt)}</span>
           </div>
           <div>
-            <span className="text-gray-400">Last Updated:</span>{' '}
+            <span className="text-muted-foreground">Last Updated:</span>{' '}
             <span className="font-medium">{formatDate(user.updatedAt)}</span>
           </div>
           <div>
-            <span className="text-gray-400">Last Login:</span>{' '}
+            <span className="text-muted-foreground">Last Login:</span>{' '}
             <span className="font-medium">{formatDate(user.lastLoginAt)}</span>
           </div>
           <div>
-            <span className="text-gray-400">User ID:</span>{' '}
+            <span className="text-muted-foreground">User ID:</span>{' '}
             <span className="font-mono text-sm">{user.id}</span>
           </div>
         </div>
       </div>
 
       {/* Recent Activity Tabs */}
-      <div className="bg-[#1a1a1a] border border-red-500/20 rounded-lg shadow-lg shadow-red-500/10">
-        <div className="border-b border-red-500/20 p-6">
-          <h3 className="text-lg font-bold text-white">Recent Activity</h3>
+      <div className="bg-card border border-border rounded-lg dark:shadow-lg dark:shadow-red-500/10">
+        <div className="border-b border-border p-6">
+          <h3 className="text-lg font-bold text-foreground">Recent Activity</h3>
         </div>
 
         {/* Completed Tasks */}
         {user.completedTasks.length > 0 && (
-          <div className="p-6 border-b border-red-500/20">
-            <h4 className="text-md font-bold text-white mb-4">Recent Completed Tasks</h4>
+          <div className="p-6 border-b border-border">
+            <h4 className="text-md font-bold text-foreground mb-4">Recent Completed Tasks</h4>
             <div className="space-y-3">
               {user.completedTasks.slice(0, 5).map((userTask: any) => (
                 <div
@@ -282,16 +282,16 @@ export default function UserDetailPage({ params }: { params: { id: string } }) {
                   className="flex items-center justify-between p-3 bg-[#0a0a0a] rounded-lg"
                 >
                   <div>
-                    <div className="font-medium text-white">{userTask.task.title}</div>
-                    <div className="text-sm text-gray-400">
+                    <div className="font-medium text-foreground">{userTask.task.title}</div>
+                    <div className="text-sm text-muted-foreground">
                       {userTask.task.type} • {userTask.task.difficulty}
                     </div>
                   </div>
                   <div className="text-right">
-                    <div className="text-sm text-gray-300">
+                    <div className="text-sm text-muted-foreground">
                       +{userTask.pointsEarned} pts, +{userTask.diamondsEarned} 💎
                     </div>
-                    <div className="text-xs text-gray-500">
+                    <div className="text-xs text-muted-foreground">
                       {formatDate(userTask.submittedAt)}
                     </div>
                   </div>
@@ -303,8 +303,8 @@ export default function UserDetailPage({ params }: { params: { id: string } }) {
 
         {/* Recent Prizes */}
         {user.prizes.length > 0 && (
-          <div className="p-6 border-b border-red-500/20">
-            <h4 className="text-md font-bold text-white mb-4">Recent Prizes</h4>
+          <div className="p-6 border-b border-border">
+            <h4 className="text-md font-bold text-foreground mb-4">Recent Prizes</h4>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               {user.prizes.slice(0, 6).map((userPrize: any) => (
                 <div
@@ -319,12 +319,12 @@ export default function UserDetailPage({ params }: { params: { id: string } }) {
                     />
                   )}
                   <div className="flex-1">
-                    <div className="font-medium text-white">{userPrize.prize.name}</div>
+                    <div className="font-medium text-foreground">{userPrize.prize.name}</div>
                     <div className="flex items-center gap-2">
                       <StatusBadge variant={getRarityColor(userPrize.prize.rarity)}>
                         {userPrize.prize.rarity}
                       </StatusBadge>
-                      <span className="text-xs text-gray-500">
+                      <span className="text-xs text-muted-foreground">
                         {formatDate(userPrize.acquiredAt)}
                       </span>
                     </div>
@@ -338,7 +338,7 @@ export default function UserDetailPage({ params }: { params: { id: string } }) {
         {/* Recent Purchases */}
         {user.purchases.length > 0 && (
           <div className="p-6">
-            <h4 className="text-md font-bold text-white mb-4">Recent Purchases</h4>
+            <h4 className="text-md font-bold text-foreground mb-4">Recent Purchases</h4>
             <div className="space-y-3">
               {user.purchases.slice(0, 5).map((purchase: any) => (
                 <div
@@ -346,8 +346,8 @@ export default function UserDetailPage({ params }: { params: { id: string } }) {
                   className="flex items-center justify-between p-3 bg-[#0a0a0a] rounded-lg"
                 >
                   <div>
-                    <div className="font-medium text-white">{purchase.pack.name}</div>
-                    <div className="text-sm text-gray-400">
+                    <div className="font-medium text-foreground">{purchase.pack.name}</div>
+                    <div className="text-sm text-muted-foreground">
                       {purchase.status} • {purchase.paymentMethod}
                     </div>
                   </div>
@@ -355,7 +355,7 @@ export default function UserDetailPage({ params }: { params: { id: string } }) {
                     <div className="text-lg font-bold text-green-400">
                       ${purchase.amount.toFixed(2)}
                     </div>
-                    <div className="text-xs text-gray-500">
+                    <div className="text-xs text-muted-foreground">
                       {formatDate(purchase.createdAt)}
                     </div>
                   </div>

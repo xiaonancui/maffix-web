@@ -67,7 +67,7 @@ export default function EditPremiumPackPage({ params }: { params: { id: string }
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <div className="text-gray-400">Loading premium pack...</div>
+        <div className="text-muted-foreground">Loading premium pack...</div>
       </div>
     )
   }
@@ -80,8 +80,8 @@ export default function EditPremiumPackPage({ params }: { params: { id: string }
     <div className="max-w-4xl mx-auto space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold text-white tracking-tight">Edit Premium Pack</h1>
-        <p className="text-gray-400 mt-1">Update premium pack details</p>
+        <h1 className="text-3xl font-bold text-foreground tracking-tight">Edit Premium Pack</h1>
+        <p className="text-muted-foreground mt-1">Update premium pack details</p>
       </div>
 
       {/* Form */}

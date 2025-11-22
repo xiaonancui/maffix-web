@@ -26,8 +26,8 @@ export default function NewMerchandisePage() {
     <div className="max-w-4xl mx-auto space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold text-white tracking-tight">Add Product</h1>
-        <p className="text-gray-400 mt-1">Create a new merchandise product</p>
+        <h1 className="text-3xl font-bold text-foreground tracking-tight">Add Product</h1>
+        <p className="text-muted-foreground mt-1">Create a new merchandise product</p>
       </div>
 
       {/* Form */}

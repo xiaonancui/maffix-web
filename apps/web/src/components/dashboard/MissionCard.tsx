@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import MissionSubmitButton from '@/components/dashboard/MissionSubmitButton'
+import { Gem, Trophy } from 'lucide-react'
 
 type MissionCompletionStatus = 'NOT_STARTED' | 'PENDING' | 'FAILED' | 'APPROVED' | string
 
@@ -33,27 +34,27 @@ const missionTypeLabels: Record<string, string> = {
 }
 
 const difficultyClasses: Record<string, string> = {
-  EASY: 'border-green-600 bg-green-900/20 text-green-400',
-  MEDIUM: 'border-yellow-600 bg-yellow-900/20 text-yellow-400',
-  HARD: 'border-red-600 bg-red-900/20 text-red-400',
+  EASY: 'border-green-600 bg-background text-green-600 dark:bg-green-900/20 dark:text-green-400',
+  MEDIUM: 'border-yellow-600 bg-background text-yellow-600 dark:bg-yellow-900/20 dark:text-yellow-400',
+  HARD: 'border-red-600 bg-background text-red-600 dark:bg-red-900/20 dark:text-red-400',
 }
 
 const statusStyles: Record<string, { label: string; className: string }> = {
   NOT_STARTED: {
     label: 'Available',
-    className: 'border-blue-600 bg-blue-900/20 text-blue-400',
+    className: 'border-blue-600 bg-background text-blue-600 dark:bg-blue-900/20 dark:text-blue-400',
   },
   PENDING: {
     label: 'Verification Pending',
-    className: 'border-yellow-600 bg-yellow-900/20 text-yellow-400',
+    className: 'border-yellow-600 bg-background text-yellow-600 dark:bg-yellow-900/20 dark:text-yellow-400',
   },
   FAILED: {
     label: 'Verification Failed',
-    className: 'border-red-600 bg-red-900/20 text-red-400',
+    className: 'border-red-600 bg-background text-red-600 dark:bg-red-900/20 dark:text-red-400',
   },
   APPROVED: {
     label: 'Completed',
-    className: 'border-green-600 bg-green-900/20 text-green-400',
+    className: 'border-green-600 bg-background text-green-600 dark:bg-green-900/20 dark:text-green-400',
   },
 }
 
@@ -64,9 +65,9 @@ const getMissionTypeLabel = (type?: string | null) => {
 
 const getDifficultyBadgeClasses = (difficulty?: string | null) => {
   if (!difficulty) {
-    return 'border-gray-600 bg-gray-800 text-gray-400'
+    return 'border-gray-600 bg-background text-gray-600 dark:bg-secondary dark:text-muted-foreground'
   }
-  return difficultyClasses[difficulty] || 'border-gray-600 bg-gray-800 text-gray-400'
+  return difficultyClasses[difficulty] || 'border-gray-600 bg-background text-gray-600 dark:bg-secondary dark:text-muted-foreground'
 }
 
 const sanitizeTikTokAccount = (account?: string | null) => {
@@ -84,14 +85,14 @@ export default function MissionCard({ mission, hasTikTokLinked }: MissionCardPro
   const hasRewards = (mission.diamonds || 0) > 0 || (mission.points || 0) > 0
 
   return (
-    <div className="flex h-full flex-col justify-between rounded-lg border border-gray-800 bg-gray-900 p-6 shadow-sm transition-all hover:shadow-md hover:border-[#FF5656]">
+    <div className="flex h-full flex-col justify-between rounded-lg border border-border bg-secondary p-6 shadow-sm transition-all hover:shadow-md hover:border-primary">
       <div className="space-y-4">
         <div className="flex items-start justify-between gap-3">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wide text-gray-400">
+            <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
               {getMissionTypeLabel(mission.missionType)}
             </p>
-            <h3 className="mt-1 text-lg font-bold text-white">{mission.title}</h3>
+            <h3 className="mt-1 text-lg font-bold text-foreground">{mission.title}</h3>
           </div>
           <span
             className={`rounded-full border px-3 py-1 text-xs font-semibold ${getDifficultyBadgeClasses(
@@ -102,55 +103,61 @@ export default function MissionCard({ mission, hasTikTokLinked }: MissionCardPro
           </span>
         </div>
 
-        <p className="text-sm text-gray-300">{mission.description}</p>
+        <p className="text-sm text-muted-foreground">{mission.description}</p>
 
         {hasRewards && (
-          <div className="grid grid-cols-2 gap-3 rounded-md border border-gray-700 bg-gray-800 p-3 text-sm">
-            <div>
-              <p className="text-xs uppercase text-gray-400">Diamonds</p>
-              <p className="text-base font-semibold text-white">{mission.diamonds ?? 0}</p>
+          <div className="grid grid-cols-2 gap-3 rounded-md border border-border bg-card p-3 text-sm">
+            <div className="flex items-center gap-2">
+              <Gem className="h-4 w-4 text-primary" />
+              <div>
+                <p className="text-xs uppercase text-muted-foreground">Diamonds</p>
+                <p className="text-base font-semibold text-foreground">{mission.diamonds ?? 0}</p>
+              </div>
             </div>
-            <div>
-              <p className="text-xs uppercase text-gray-400">Points</p>
-              <p className="text-base font-semibold text-white">{mission.points ?? 0}</p>
+            <div className="flex items-center gap-2">
+              <Trophy className="h-4 w-4 text-primary" />
+              <div>
+                <p className="text-xs uppercase text-muted-foreground">Points</p>
+                <p className="text-base font-semibold text-foreground">{mission.points ?? 0}</p>
+              </div>
             </div>
           </div>
         )}
 
-        <div className="space-y-2 text-sm text-gray-300">
+        <div className="space-y-2 text-sm text-muted-foreground">
           {mission.estimatedTime && (
             <div className="flex items-center justify-between">
-              <span className="text-gray-400">Estimated time</span>
-              <span className="font-medium text-white">~{mission.estimatedTime}</span>
+              <span className="text-muted-foreground">Estimated time</span>
+              <span className="font-medium text-foreground">~{mission.estimatedTime}</span>
             </div>
           )}
 
           {mission.targetTikTokAccount && (
             <div className="flex items-center justify-between gap-2">
-              <span className="text-gray-400">Target account</span>
+              <span className="text-muted-foreground">Target account</span>
               {accountUrl ? (
                 <Link
                   href={accountUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="truncate font-medium text-[#FF5656] hover:underline"
+                  className="truncate font-medium text-primary hover:underline"
                 >
                   @{accountSlug}
                 </Link>
               ) : (
-                <span className="truncate font-medium text-white">{mission.targetTikTokAccount}</span>
+                <span className="truncate font-medium text-foreground">{mission.targetTikTokAccount}</span>
               )}
             </div>
           )}
 
           {mission.targetVideoUrl && (
             <div className="flex items-center justify-between gap-2">
-              <span className="text-gray-400">Target video</span>
+              <span className="text-muted-foreground">Target video</span>
               <Link
                 href={mission.targetVideoUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="truncate font-medium text-[#FF5656] hover:underline"
+                className="truncate font-medium text-primary hover:underline"
               >
                 View on TikTok
               </Link>
@@ -159,8 +166,8 @@ export default function MissionCard({ mission, hasTikTokLinked }: MissionCardPro
 
           {mission.targetAudioId && (
             <div className="flex items-center justify-between gap-2">
-              <span className="text-gray-400">Audio ID</span>
-              <span className="truncate font-medium text-white">{mission.targetAudioId}</span>
+              <span className="text-muted-foreground">Audio ID</span>
+              <span className="truncate font-medium text-foreground">{mission.targetAudioId}</span>
             </div>
           )}
         </div>
@@ -172,14 +179,14 @@ export default function MissionCard({ mission, hasTikTokLinked }: MissionCardPro
             {completionLabel}
           </span>
           {mission.estimatedTime && (
-            <span className="text-xs text-gray-400">Typical completion: ~{mission.estimatedTime}</span>
+            <span className="text-xs text-muted-foreground">Typical completion: ~{mission.estimatedTime}</span>
           )}
         </div>
 
         <div className="flex gap-2">
           <Link
             href={`/missions/${mission.id}`}
-            className="flex-1 rounded-md border border-gray-700 bg-gray-800 px-4 py-2 text-center text-sm font-semibold text-gray-300 transition-colors hover:bg-gray-700 hover:text-white"
+            className="flex-1 rounded-md border-2 border-border bg-background px-4 py-2 text-center text-sm font-semibold text-foreground transition-colors hover:bg-secondary hover:border-primary dark:bg-card"
           >
             View Details
           </Link>
@@ -211,7 +218,7 @@ function renderAction({
       return (
         <Link
           href="/profile/link-tiktok"
-          className="inline-flex flex-1 items-center justify-center rounded-md border border-blue-600 bg-blue-900/20 px-4 py-2 text-sm font-semibold text-blue-400 transition-colors hover:bg-blue-900/30"
+          className="inline-flex flex-1 items-center justify-center rounded-md border-2 border-blue-600 bg-background px-4 py-2 text-sm font-semibold text-blue-600 transition-colors hover:bg-blue-600/10 dark:bg-blue-600 dark:text-primary-foreground dark:hover:bg-blue-700"
         >
           Link TikTok
         </Link>
@@ -227,7 +234,7 @@ function renderAction({
 
   if (statusKey === 'PENDING') {
     return (
-      <div className="flex-1 rounded-md border border-yellow-600 bg-yellow-900/20 px-4 py-2 text-center text-sm text-yellow-400">
+      <div className="flex-1 rounded-md border-2 border-yellow-600 bg-background px-4 py-2 text-center text-sm font-semibold text-yellow-600 dark:bg-yellow-600 dark:text-primary-foreground">
         ⏳ Verifying...
       </div>
     )
@@ -235,7 +242,7 @@ function renderAction({
 
   if (statusKey === 'FAILED') {
     return (
-      <div className="flex-1 rounded-md border border-red-600 bg-red-900/20 px-4 py-2 text-center text-sm text-red-400">
+      <div className="flex-1 rounded-md border-2 border-red-600 bg-background px-4 py-2 text-center text-sm font-semibold text-red-600 dark:bg-red-600 dark:text-primary-foreground">
         ✗ Failed
       </div>
     )
@@ -243,7 +250,7 @@ function renderAction({
 
   if (statusKey === 'APPROVED') {
     return (
-      <div className="flex-1 rounded-md border border-green-600 bg-green-900/20 px-4 py-2 text-center text-sm text-green-400">
+      <div className="flex-1 rounded-md border-2 border-green-600 bg-background px-4 py-2 text-center text-sm font-semibold text-green-600 dark:bg-green-600 dark:text-primary-foreground">
         ✓ Completed
       </div>
     )

@@ -28,10 +28,10 @@ export default function TikTokLinkButton() {
     <button
       onClick={handleLink}
       disabled={isLinking}
-      className={`rounded-md px-6 py-3 text-base font-semibold text-white transition-colors ${
+      className={`rounded-md px-6 py-3 text-base font-semibold text-foreground transition-colors ${
         isLinking
           ? 'cursor-not-allowed bg-gray-400'
-          : 'bg-black hover:bg-gray-800'
+          : 'bg-background hover:bg-secondary'
       }`}
     >
       {isLinking ? (

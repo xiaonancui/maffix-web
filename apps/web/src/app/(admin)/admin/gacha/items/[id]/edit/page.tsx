@@ -118,7 +118,7 @@ export default function EditGachaItemPage({ params }: { params: { id: string } }
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <div className="text-gray-400">Loading gacha item...</div>
+        <div className="text-muted-foreground">Loading gacha item...</div>
       </div>
     )
   }
@@ -131,33 +131,33 @@ export default function EditGachaItemPage({ params }: { params: { id: string } }
     <div className="max-w-3xl mx-auto space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold text-white tracking-tight">Edit Gacha Item</h1>
-        <p className="text-gray-400 mt-1">Update probability and status for this gacha item</p>
+        <h1 className="text-3xl font-bold text-foreground tracking-tight">Edit Gacha Item</h1>
+        <p className="text-muted-foreground mt-1">Update probability and status for this gacha item</p>
       </div>
 
       {/* Prize Information */}
-      <div className="bg-[#1a1a1a] border border-red-500/20 rounded-lg p-6 shadow-lg shadow-red-500/10">
-        <h2 className="text-lg font-bold text-white mb-4">Prize Information</h2>
+      <div className="bg-card border border-border rounded-lg p-6 dark:shadow-lg dark:shadow-red-500/10">
+        <h2 className="text-lg font-bold text-foreground mb-4">Prize Information</h2>
         <div className="flex items-start gap-4">
           {gachaItem.prize.image && (
             <img
               src={gachaItem.prize.image}
               alt={gachaItem.prize.name}
-              className="w-24 h-24 rounded-lg object-cover border border-red-500/20"
+              className="w-24 h-24 rounded-lg object-cover border border-border"
             />
           )}
           <div className="flex-1 space-y-2">
             <div className="flex items-center gap-3">
-              <h3 className="text-xl font-bold text-white">{gachaItem.prize.name}</h3>
+              <h3 className="text-xl font-bold text-foreground">{gachaItem.prize.name}</h3>
               <StatusBadge variant={getRarityColor(gachaItem.prize.rarity)}>
                 {gachaItem.prize.rarity}
               </StatusBadge>
             </div>
-            <p className="text-gray-400">{gachaItem.prize.description}</p>
+            <p className="text-muted-foreground">{gachaItem.prize.description}</p>
             <div className="flex items-center gap-4 text-sm">
-              <span className="text-gray-400">Type: {gachaItem.prize.type}</span>
+              <span className="text-muted-foreground">Type: {gachaItem.prize.type}</span>
               <span className="text-yellow-400">💎 {gachaItem.prize.value.toLocaleString()}</span>
-              <span className="text-gray-400">
+              <span className="text-muted-foreground">
                 Total Pulls: {gachaItem._count.pulls.toLocaleString()}
               </span>
             </div>
@@ -167,8 +167,8 @@ export default function EditGachaItemPage({ params }: { params: { id: string } }
 
       {/* Edit Form */}
       <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="bg-[#1a1a1a] border border-red-500/20 rounded-lg p-6 shadow-lg shadow-red-500/10 space-y-6">
-          <h2 className="text-lg font-bold text-white">Gacha Settings</h2>
+        <div className="bg-card border border-border rounded-lg p-6 dark:shadow-lg dark:shadow-red-500/10 space-y-6">
+          <h2 className="text-lg font-bold text-foreground">Gacha Settings</h2>
 
           <FormField
             label="Probability (%)"
@@ -210,14 +210,14 @@ export default function EditGachaItemPage({ params }: { params: { id: string } }
             <button
               type="submit"
               disabled={submitting}
-              className="px-6 py-2 bg-gradient-to-r from-red-600 to-red-500 text-white rounded-lg hover:from-red-700 hover:to-red-600 transition-all shadow-lg shadow-red-500/30 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-6 py-2 border-2 border-primary bg-transparent text-primary rounded-lg hover:bg-primary/10 transition-all dark:shadow-lg dark:shadow-red-500/30 font-medium disabled:opacity-50 disabled:cursor-not-allowed dark:bg-gradient-to-r dark:from-red-600 dark:to-red-500 dark:text-primary-foreground dark:border-transparent dark:hover:from-red-700 dark:hover:to-red-600"
             >
               {submitting ? 'Saving...' : 'Save Changes'}
             </button>
             <button
               type="button"
               onClick={() => router.push('/admin/gacha')}
-              className="px-6 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-colors border border-red-500/30"
+              className="px-6 py-2 bg-secondary text-foreground rounded-lg hover:bg-gray-700 transition-colors border border-red-500/30"
             >
               Cancel
             </button>

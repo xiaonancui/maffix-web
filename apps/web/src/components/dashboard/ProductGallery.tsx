@@ -37,7 +37,7 @@ export default function ProductGallery({ images }: { images: ProductImage[] }) {
               className={`relative aspect-square overflow-hidden rounded-lg border-2 transition-all ${
                 selectedImage === index
                   ? 'border-blue-500 ring-2 ring-blue-200'
-                  : 'border-gray-200 hover:border-gray-300'
+                  : 'border-border hover:border-border'
               }`}
             >
               <Image

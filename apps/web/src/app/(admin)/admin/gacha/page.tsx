@@ -8,6 +8,7 @@ import StatusBadge from '@/components/admin/StatusBadge'
 import FilterDropdown from '@/components/admin/FilterDropdown'
 import ConfirmDialog from '@/components/admin/ConfirmDialog'
 import ActionMenu from '@/components/admin/ActionMenu'
+import { Plus, Gem, Edit, Play, Pause, Trash2 } from 'lucide-react'
 
 interface GachaStats {
   totalPulls: number
@@ -185,12 +186,12 @@ export default function GachaManagementPage() {
             <img
               src={item.prize.image}
               alt={item.prize.name}
-              className="w-12 h-12 rounded-lg object-cover border border-red-500/20"
+              className="w-12 h-12 rounded-lg object-cover border border-border"
             />
           )}
           <div>
-            <div className="font-medium text-white">{item.prize.name}</div>
-            <div className="text-sm text-gray-400">{item.prize.type}</div>
+            <div className="font-medium text-foreground">{item.prize.name}</div>
+            <div className="text-sm text-muted-foreground">{item.prize.type}</div>
           </div>
         </div>
       ),
@@ -208,21 +209,24 @@ export default function GachaManagementPage() {
       key: 'probability',
       label: 'Probability',
       render: (item: GachaItem) => (
-        <span className="text-white font-medium">{item.probability.toFixed(2)}%</span>
+        <span className="text-foreground font-medium">{item.probability.toFixed(2)}%</span>
       ),
     },
     {
       key: '_count.pulls',
       label: 'Total Pulls',
       render: (item: GachaItem) => (
-        <span className="text-gray-300">{item._count.pulls.toLocaleString()}</span>
+        <span className="text-muted-foreground">{item._count.pulls.toLocaleString()}</span>
       ),
     },
     {
       key: 'prize.value',
       label: 'Value',
       render: (item: GachaItem) => (
-        <span className="text-yellow-400">💎 {item.prize.value.toLocaleString()}</span>
+        <span className="flex items-center gap-1 text-yellow-400">
+          <Gem className="h-4 w-4" />
+          {item.prize.value.toLocaleString()}
+        </span>
       ),
     },
     {
@@ -242,14 +246,17 @@ export default function GachaManagementPage() {
           items={[
             {
               label: item.isActive ? 'Deactivate' : 'Activate',
+              icon: item.isActive ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />,
               onClick: () => handleToggleActive(item.id, item.isActive),
             },
             {
               label: 'Edit Probability',
+              icon: <Edit className="h-4 w-4" />,
               onClick: () => router.push(`/admin/gacha/items/${item.id}/edit`),
             },
             {
               label: 'Delete',
+              icon: <Trash2 className="h-4 w-4" />,
               onClick: () => {
                 setItemToDelete(item.id)
                 setDeleteDialogOpen(true)
@@ -268,56 +275,58 @@ export default function GachaManagementPage() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-white tracking-tight">Gacha System</h1>
-            <p className="text-gray-400 mt-1">Manage gacha items and view statistics</p>
+            <h1 className="text-3xl font-bold text-foreground tracking-tight">Gacha System</h1>
+            <p className="text-muted-foreground mt-1">Manage gacha items and view statistics</p>
           </div>
           <Link
             href="/admin/gacha/items/new"
-            className="px-4 py-2 bg-gradient-to-r from-red-600 to-red-500 text-white rounded-lg hover:from-red-700 hover:to-red-600 transition-all shadow-lg shadow-red-500/30 font-medium"
+            className="flex items-center gap-2 px-4 py-2 border-2 border-primary bg-transparent text-primary rounded-lg hover:bg-primary/10 transition-all dark:shadow-lg dark:shadow-red-500/30 font-medium dark:bg-gradient-to-r dark:from-red-600 dark:to-red-500 dark:text-primary-foreground dark:border-transparent dark:hover:from-red-700 dark:hover:to-red-600"
           >
-            + Add Gacha Item
+            <Plus className="h-5 w-5" />
+            Add Gacha Item
           </Link>
         </div>
 
       {/* Statistics Dashboard */}
       {statsLoading ? (
-        <div className="bg-[#1a1a1a] border border-red-500/20 rounded-lg p-8 text-center">
-          <div className="text-gray-400">Loading statistics...</div>
+        <div className="bg-card border border-border rounded-lg p-8 text-center">
+          <div className="text-muted-foreground">Loading statistics...</div>
         </div>
       ) : stats ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {/* Total Pulls */}
-          <div className="bg-[#1a1a1a] border border-red-500/20 rounded-lg p-6 shadow-lg shadow-red-500/10">
-            <div className="text-gray-400 text-sm font-medium mb-2">Total Pulls</div>
-            <div className="text-3xl font-bold text-white">{stats.totalPulls.toLocaleString()}</div>
-            <div className="text-sm text-gray-500 mt-1">
+          <div className="bg-card border border-border rounded-lg p-6 dark:shadow-lg dark:shadow-red-500/10">
+            <div className="text-muted-foreground text-sm font-medium mb-2">Total Pulls</div>
+            <div className="text-3xl font-bold text-foreground">{stats.totalPulls.toLocaleString()}</div>
+            <div className="text-sm text-muted-foreground mt-1">
               {stats.recentPulls24h} in last 24h
             </div>
           </div>
 
           {/* Total Revenue */}
-          <div className="bg-[#1a1a1a] border border-red-500/20 rounded-lg p-6 shadow-lg shadow-red-500/10">
-            <div className="text-gray-400 text-sm font-medium mb-2">Total Revenue</div>
-            <div className="text-3xl font-bold text-yellow-400">
-              💎 {stats.totalRevenue.toLocaleString()}
+          <div className="bg-card border border-border rounded-lg p-6 dark:shadow-lg dark:shadow-red-500/10">
+            <div className="text-muted-foreground text-sm font-medium mb-2">Total Revenue</div>
+            <div className="flex items-center gap-2 text-3xl font-bold text-yellow-400">
+              <Gem className="h-8 w-8" />
+              {stats.totalRevenue.toLocaleString()}
             </div>
-            <div className="text-sm text-gray-500 mt-1">Diamonds spent</div>
+            <div className="text-sm text-muted-foreground mt-1">Diamonds spent</div>
           </div>
 
           {/* SSR Rate */}
-          <div className="bg-[#1a1a1a] border border-red-500/20 rounded-lg p-6 shadow-lg shadow-red-500/10">
-            <div className="text-gray-400 text-sm font-medium mb-2">SSR Rate</div>
+          <div className="bg-card border border-border rounded-lg p-6 dark:shadow-lg dark:shadow-red-500/10">
+            <div className="text-muted-foreground text-sm font-medium mb-2">SSR Rate</div>
             <div className="text-3xl font-bold text-yellow-400">{stats.ssrRate}%</div>
-            <div className="text-sm text-gray-500 mt-1">
+            <div className="text-sm text-muted-foreground mt-1">
               {stats.guaranteedSSRCount} guaranteed
             </div>
           </div>
 
           {/* Active Items */}
-          <div className="bg-[#1a1a1a] border border-red-500/20 rounded-lg p-6 shadow-lg shadow-red-500/10">
-            <div className="text-gray-400 text-sm font-medium mb-2">Active Items</div>
-            <div className="text-3xl font-bold text-white">{stats.activeItemsCount}</div>
-            <div className="text-sm text-gray-500 mt-1">
+          <div className="bg-card border border-border rounded-lg p-6 dark:shadow-lg dark:shadow-red-500/10">
+            <div className="text-muted-foreground text-sm font-medium mb-2">Active Items</div>
+            <div className="text-3xl font-bold text-foreground">{stats.activeItemsCount}</div>
+            <div className="text-sm text-muted-foreground mt-1">
               {stats.uniqueUsersCount} unique users
             </div>
           </div>
@@ -326,8 +335,8 @@ export default function GachaManagementPage() {
 
       {/* Prize Distribution */}
       {stats && stats.prizeDistribution.length > 0 && (
-        <div className="bg-[#1a1a1a] border border-red-500/20 rounded-lg p-6 shadow-lg shadow-red-500/10">
-          <h2 className="text-xl font-bold text-white mb-4">Prize Distribution</h2>
+        <div className="bg-card border border-border rounded-lg p-6 dark:shadow-lg dark:shadow-red-500/10">
+          <h2 className="text-xl font-bold text-foreground mb-4">Prize Distribution</h2>
           <div className="space-y-3">
             {stats.prizeDistribution.map((item) => (
               <div key={item.rarity} className="flex items-center justify-between">
@@ -335,16 +344,16 @@ export default function GachaManagementPage() {
                   <StatusBadge variant={getRarityColor(item.rarity)}>
                     {item.rarity}
                   </StatusBadge>
-                  <span className="text-gray-300">{item.count.toLocaleString()} pulls</span>
+                  <span className="text-muted-foreground">{item.count.toLocaleString()} pulls</span>
                 </div>
                 <div className="flex items-center gap-4">
-                  <div className="w-48 bg-gray-800 rounded-full h-2">
+                  <div className="w-48 bg-secondary rounded-full h-2">
                     <div
                       className="bg-gradient-to-r from-red-600 to-red-500 h-2 rounded-full"
                       style={{ width: `${item.percentage}%` }}
                     />
                   </div>
-                  <span className="text-white font-medium w-16 text-right">
+                  <span className="text-foreground font-medium w-16 text-right">
                     {item.percentage.toFixed(1)}%
                   </span>
                 </div>
@@ -355,10 +364,10 @@ export default function GachaManagementPage() {
       )}
 
       {/* Gacha Items Table */}
-      <div className="bg-[#1a1a1a] border border-red-500/20 rounded-lg shadow-lg shadow-red-500/10">
-        <div className="p-6 border-b border-red-500/20">
+      <div className="bg-card border border-border rounded-lg dark:shadow-lg dark:shadow-red-500/10">
+        <div className="p-6 border-b border-border">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-bold text-white">Gacha Items</h2>
+            <h2 className="text-xl font-bold text-foreground">Gacha Items</h2>
             <div className="flex items-center gap-3">
               <FilterDropdown
                 label="Rarity"

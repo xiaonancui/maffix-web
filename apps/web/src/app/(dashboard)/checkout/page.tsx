@@ -36,96 +36,96 @@ export default function CheckoutPage() {
 
   if (status === 'loading' || isLoading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-black">
+      <div className="flex min-h-screen items-center justify-center bg-background">
         <div className="text-center">
           <div className="mb-4 h-12 w-12 animate-spin rounded-full border-4 border-[#FF5656] border-t-transparent mx-auto"></div>
-          <p className="text-gray-400">Loading checkout...</p>
+          <p className="text-muted-foreground">Loading checkout...</p>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-black py-8">
+    <div className="min-h-screen bg-background py-8">
       <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-white">Checkout</h1>
-          <p className="mt-2 text-gray-400">Complete your purchase</p>
+          <h1 className="text-3xl font-bold text-foreground">Checkout</h1>
+          <p className="mt-2 text-muted-foreground">Complete your purchase</p>
         </div>
 
         <div className="grid gap-8 lg:grid-cols-2">
           {/* Payment Form */}
           <div className="space-y-6">
             {/* Shipping Information */}
-            <div className="rounded-lg bg-gray-900 border border-gray-800 p-6">
-              <h2 className="mb-4 text-xl font-bold text-white">Shipping Information</h2>
+            <div className="rounded-lg bg-card border border-border p-6">
+              <h2 className="mb-4 text-xl font-bold text-foreground">Shipping Information</h2>
               <div className="grid gap-4 sm:grid-cols-2">
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                  <label className="block text-sm font-medium text-muted-foreground mb-2">
                     First Name
                   </label>
                   <input
                     type="text"
                     defaultValue={session?.user?.name?.split(' ')[0] || ''}
-                    className="w-full rounded-md border border-gray-600 bg-gray-800 px-3 py-2 text-white focus:border-[#FF5656] focus:outline-none focus:ring-2 focus:ring-[#FF5656]/50"
+                    className="w-full rounded-md border border-gray-600 bg-secondary px-3 py-2 text-foreground focus:border-[#FF5656] focus:outline-none focus:ring-2 focus:ring-[#FF5656]/50"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                  <label className="block text-sm font-medium text-muted-foreground mb-2">
                     Last Name
                   </label>
                   <input
                     type="text"
                     defaultValue={session?.user?.name?.split(' ')[1] || ''}
-                    className="w-full rounded-md border border-gray-600 bg-gray-800 px-3 py-2 text-white focus:border-[#FF5656] focus:outline-none focus:ring-2 focus:ring-[#FF5656]/50"
+                    className="w-full rounded-md border border-gray-600 bg-secondary px-3 py-2 text-foreground focus:border-[#FF5656] focus:outline-none focus:ring-2 focus:ring-[#FF5656]/50"
                   />
                 </div>
                 <div className="sm:col-span-2">
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                  <label className="block text-sm font-medium text-muted-foreground mb-2">
                     Email
                   </label>
                   <input
                     type="email"
                     defaultValue={session?.user?.email || ''}
-                    className="w-full rounded-md border border-gray-600 bg-gray-800 px-3 py-2 text-white focus:border-[#FF5656] focus:outline-none focus:ring-2 focus:ring-[#FF5656]/50"
+                    className="w-full rounded-md border border-gray-600 bg-secondary px-3 py-2 text-foreground focus:border-[#FF5656] focus:outline-none focus:ring-2 focus:ring-[#FF5656]/50"
                   />
                 </div>
                 <div className="sm:col-span-2">
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                  <label className="block text-sm font-medium text-muted-foreground mb-2">
                     Address
                   </label>
                   <input
                     type="text"
                     placeholder="123 Main Street"
-                    className="w-full rounded-md border border-gray-600 bg-gray-800 px-3 py-2 text-white focus:border-[#FF5656] focus:outline-none focus:ring-2 focus:ring-[#FF5656]/50"
+                    className="w-full rounded-md border border-gray-600 bg-secondary px-3 py-2 text-foreground focus:border-[#FF5656] focus:outline-none focus:ring-2 focus:ring-[#FF5656]/50"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                  <label className="block text-sm font-medium text-muted-foreground mb-2">
                     City
                   </label>
                   <input
                     type="text"
                     placeholder="New York"
-                    className="w-full rounded-md border border-gray-600 bg-gray-800 px-3 py-2 text-white focus:border-[#FF5656] focus:outline-none focus:ring-2 focus:ring-[#FF5656]/50"
+                    className="w-full rounded-md border border-gray-600 bg-secondary px-3 py-2 text-foreground focus:border-[#FF5656] focus:outline-none focus:ring-2 focus:ring-[#FF5656]/50"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                  <label className="block text-sm font-medium text-muted-foreground mb-2">
                     ZIP Code
                   </label>
                   <input
                     type="text"
                     placeholder="10001"
-                    className="w-full rounded-md border border-gray-600 bg-gray-800 px-3 py-2 text-white focus:border-[#FF5656] focus:outline-none focus:ring-2 focus:ring-[#FF5656]/50"
+                    className="w-full rounded-md border border-gray-600 bg-secondary px-3 py-2 text-foreground focus:border-[#FF5656] focus:outline-none focus:ring-2 focus:ring-[#FF5656]/50"
                   />
                 </div>
               </div>
             </div>
 
             {/* Payment Method */}
-            <div className="rounded-lg bg-gray-900 border border-gray-800 p-6">
-              <h2 className="mb-4 text-xl font-bold text-white">Payment Method</h2>
+            <div className="rounded-lg bg-card border border-border p-6">
+              <h2 className="mb-4 text-xl font-bold text-foreground">Payment Method</h2>
               <div className="space-y-4">
                 <div className="flex items-center space-x-3">
                   <input
@@ -134,9 +134,9 @@ export default function CheckoutPage() {
                     value="card"
                     checked={paymentMethod === 'card'}
                     onChange={(e) => setPaymentMethod(e.target.value)}
-                    className="h-4 w-4 text-[#FF5656] focus:ring-[#FF5656] border-gray-600 bg-gray-800"
+                    className="h-4 w-4 text-[#FF5656] focus:ring-[#FF5656] border-gray-600 bg-secondary"
                   />
-                  <label htmlFor="card" className="text-white">
+                  <label htmlFor="card" className="text-foreground">
                     💳 Credit/Debit Card
                   </label>
                 </div>
@@ -147,9 +147,9 @@ export default function CheckoutPage() {
                     value="paypal"
                     checked={paymentMethod === 'paypal'}
                     onChange={(e) => setPaymentMethod(e.target.value)}
-                    className="h-4 w-4 text-[#FF5656] focus:ring-[#FF5656] border-gray-600 bg-gray-800"
+                    className="h-4 w-4 text-[#FF5656] focus:ring-[#FF5656] border-gray-600 bg-secondary"
                   />
-                  <label htmlFor="paypal" className="text-white">
+                  <label htmlFor="paypal" className="text-foreground">
                     🅿️ PayPal
                   </label>
                 </div>
@@ -160,9 +160,9 @@ export default function CheckoutPage() {
                     value="apple"
                     checked={paymentMethod === 'apple'}
                     onChange={(e) => setPaymentMethod(e.target.value)}
-                    className="h-4 w-4 text-[#FF5656] focus:ring-[#FF5656] border-gray-600 bg-gray-800"
+                    className="h-4 w-4 text-[#FF5656] focus:ring-[#FF5656] border-gray-600 bg-secondary"
                   />
-                  <label htmlFor="apple" className="text-white">
+                  <label htmlFor="apple" className="text-foreground">
                     🍎 Apple Pay
                   </label>
                 </div>
@@ -171,34 +171,34 @@ export default function CheckoutPage() {
               {paymentMethod === 'card' && (
                 <div className="mt-6 space-y-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                    <label className="block text-sm font-medium text-muted-foreground mb-2">
                       Card Number
                     </label>
                     <input
                       type="text"
                       placeholder="1234 5678 9012 3456"
-                      className="w-full rounded-md border border-gray-600 bg-gray-800 px-3 py-2 text-white focus:border-[#FF5656] focus:outline-none focus:ring-2 focus:ring-[#FF5656]/50"
+                      className="w-full rounded-md border border-gray-600 bg-secondary px-3 py-2 text-foreground focus:border-[#FF5656] focus:outline-none focus:ring-2 focus:ring-[#FF5656]/50"
                     />
                   </div>
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">
+                      <label className="block text-sm font-medium text-muted-foreground mb-2">
                         Expiry Date
                       </label>
                       <input
                         type="text"
                         placeholder="MM/YY"
-                        className="w-full rounded-md border border-gray-600 bg-gray-800 px-3 py-2 text-white focus:border-[#FF5656] focus:outline-none focus:ring-2 focus:ring-[#FF5656]/50"
+                        className="w-full rounded-md border border-gray-600 bg-secondary px-3 py-2 text-foreground focus:border-[#FF5656] focus:outline-none focus:ring-2 focus:ring-[#FF5656]/50"
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">
+                      <label className="block text-sm font-medium text-muted-foreground mb-2">
                         CVV
                       </label>
                       <input
                         type="text"
                         placeholder="123"
-                        className="w-full rounded-md border border-gray-600 bg-gray-800 px-3 py-2 text-white focus:border-[#FF5656] focus:outline-none focus:ring-2 focus:ring-[#FF5656]/50"
+                        className="w-full rounded-md border border-gray-600 bg-secondary px-3 py-2 text-foreground focus:border-[#FF5656] focus:outline-none focus:ring-2 focus:ring-[#FF5656]/50"
                       />
                     </div>
                   </div>
@@ -209,25 +209,25 @@ export default function CheckoutPage() {
 
           {/* Order Summary */}
           <div className="lg:col-span-1">
-            <div className="sticky top-4 rounded-lg bg-gray-900 border border-gray-800 p-6 shadow-lg">
-              <h2 className="mb-4 text-xl font-bold text-white">Order Summary</h2>
+            <div className="sticky top-4 rounded-lg bg-card border border-border p-6 shadow-lg">
+              <h2 className="mb-4 text-xl font-bold text-foreground">Order Summary</h2>
               
-              <div className="space-y-3 border-b border-gray-700 pb-4">
-                <div className="flex justify-between text-gray-400">
+              <div className="space-y-3 border-b border-border pb-4">
+                <div className="flex justify-between text-muted-foreground">
                   <span>Subtotal</span>
                   <span>${total}</span>
                 </div>
-                <div className="flex justify-between text-gray-400">
+                <div className="flex justify-between text-muted-foreground">
                   <span>Shipping</span>
                   <span>FREE</span>
                 </div>
-                <div className="flex justify-between text-gray-400">
+                <div className="flex justify-between text-muted-foreground">
                   <span>Tax</span>
                   <span>$0.00</span>
                 </div>
               </div>
 
-              <div className="mt-4 flex justify-between text-lg font-bold text-white">
+              <div className="mt-4 flex justify-between text-lg font-bold text-foreground">
                 <span>Total</span>
                 <span>${total}</span>
               </div>
@@ -236,7 +236,7 @@ export default function CheckoutPage() {
                 <button
                   onClick={handlePayment}
                   disabled={isProcessing}
-                  className={`w-full rounded-md px-6 py-3 font-semibold text-white transition-colors ${
+                  className={`w-full rounded-md px-6 py-3 font-semibold text-foreground transition-colors ${
                     isProcessing
                       ? 'bg-gray-600 cursor-not-allowed'
                       : 'bg-[#FF5656] hover:bg-[#ff3333]'
@@ -244,7 +244,7 @@ export default function CheckoutPage() {
                 >
                   {isProcessing ? (
                     <span className="flex items-center justify-center">
-                      <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-foreground" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                       </svg>
@@ -257,14 +257,14 @@ export default function CheckoutPage() {
 
                 <Link
                   href="/cart"
-                  className="block w-full rounded-md border border-gray-600 bg-gray-800 px-6 py-3 text-center font-semibold text-gray-300 hover:bg-gray-700 hover:text-white transition-colors"
+                  className="block w-full rounded-md border border-gray-600 bg-secondary px-6 py-3 text-center font-semibold text-muted-foreground hover:bg-gray-700 hover:text-foreground transition-colors"
                 >
                   Back to Cart
                 </Link>
               </div>
 
               <div className="mt-4 text-center">
-                <p className="text-xs text-gray-400">
+                <p className="text-xs text-muted-foreground">
                   🔒 This is a demo checkout. No real payment will be processed.
                 </p>
               </div>

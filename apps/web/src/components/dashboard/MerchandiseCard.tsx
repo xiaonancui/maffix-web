@@ -4,6 +4,7 @@ import { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import { ShoppingCart, Eye, Star } from 'lucide-react'
 
 interface MerchandiseItem {
   id: string
@@ -44,9 +45,9 @@ export default function MerchandiseCard({ item }: { item: MerchandiseItem }) {
   }
 
   return (
-    <div className="group overflow-hidden rounded-lg bg-gray-900 border border-gray-800 shadow-md transition-all hover:shadow-xl hover:border-[#FF5656]">
+    <div className="group overflow-hidden rounded-lg bg-secondary border border-border shadow-md transition-all hover:shadow-xl hover:border-primary">
       {/* Image */}
-      <div className="relative aspect-square overflow-hidden bg-gray-800">
+      <div className="relative aspect-square overflow-hidden bg-secondary">
         <Image
           src={item.imageUrl}
           alt={item.name}
@@ -55,12 +56,13 @@ export default function MerchandiseCard({ item }: { item: MerchandiseItem }) {
           className="object-cover transition-transform duration-300 group-hover:scale-105"
         />
         {item.featured && (
-          <span className="absolute left-3 top-3 rounded-full bg-yellow-600 px-3 py-1 text-xs font-semibold text-white">
-            ⭐ Featured
+          <span className="absolute left-3 top-3 rounded-full bg-yellow-600 px-3 py-1 text-xs font-semibold text-foreground flex items-center gap-1">
+            <Star className="h-3 w-3 fill-current" />
+            Featured
           </span>
         )}
         {!item.inStock && (
-          <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="absolute inset-0 flex items-center justify-center bg-background bg-opacity-50">
             <span className="rounded-lg bg-white px-4 py-2 text-sm font-bold text-red-600">
               Out of Stock
             </span>
@@ -72,7 +74,7 @@ export default function MerchandiseCard({ item }: { item: MerchandiseItem }) {
       <div className="p-4">
         {/* Category & Tags */}
         <div className="mb-2 flex items-center gap-2">
-          <span className="text-xs font-medium text-gray-400">{item.category}</span>
+          <span className="text-xs font-medium text-muted-foreground">{item.category}</span>
           {item.tags.includes('bestseller') && (
             <span className="rounded-full bg-blue-900/20 border border-blue-600 px-2 py-0.5 text-xs font-semibold text-blue-400">
               Bestseller
@@ -86,16 +88,16 @@ export default function MerchandiseCard({ item }: { item: MerchandiseItem }) {
         </div>
 
         {/* Name & Price */}
-        <h3 className="mb-1 text-lg font-bold text-white">{item.name}</h3>
-        <p className="mb-3 text-sm text-gray-400 line-clamp-2">{item.description}</p>
-        <p className="mb-4 text-2xl font-bold text-white">
-          ${item.price.toFixed(2)} <span className="text-sm font-normal text-gray-400">{item.currency}</span>
+        <h3 className="mb-1 text-lg font-bold text-foreground">{item.name}</h3>
+        <p className="mb-3 text-sm text-muted-foreground line-clamp-2">{item.description}</p>
+        <p className="mb-4 text-2xl font-bold text-foreground">
+          ${item.price.toFixed(2)} <span className="text-sm font-normal text-muted-foreground">{item.currency}</span>
         </p>
 
         {/* Color Selection */}
         {item.colors.length > 0 && (
           <div className="mb-3">
-            <p className="mb-2 text-xs font-medium text-gray-300">Color: {selectedColor}</p>
+            <p className="mb-2 text-xs font-medium text-muted-foreground">Color: {selectedColor}</p>
             <div className="flex gap-2">
               {item.colors.map((color) => (
                 <button
@@ -112,7 +114,7 @@ export default function MerchandiseCard({ item }: { item: MerchandiseItem }) {
                   title={color}
                 >
                   {selectedColor === color && (
-                    <span className="absolute inset-0 flex items-center justify-center text-white text-xs font-bold">
+                    <span className="absolute inset-0 flex items-center justify-center text-foreground text-xs font-bold">
                       {color.toLowerCase() === 'white' || color.toLowerCase() === 'gray' ? '✓' : '✓'}
                     </span>
                   )}
@@ -125,7 +127,7 @@ export default function MerchandiseCard({ item }: { item: MerchandiseItem }) {
         {/* Size Selection */}
         {item.sizes.length > 0 && item.sizes[0] !== 'One Size' && (
           <div className="mb-4">
-            <p className="mb-2 text-xs font-medium text-gray-300">Size: {selectedSize}</p>
+            <p className="mb-2 text-xs font-medium text-muted-foreground">Size: {selectedSize}</p>
             <div className="flex flex-wrap gap-2">
               {item.sizes.map((size) => (
                 <button
@@ -133,8 +135,8 @@ export default function MerchandiseCard({ item }: { item: MerchandiseItem }) {
                   onClick={() => setSelectedSize(size)}
                   className={`rounded-lg border-2 px-4 py-2 text-sm font-semibold transition-all ${
                     selectedSize === size
-                      ? 'border-[#FF5656] bg-[#FF5656] text-white shadow-md scale-105'
-                      : 'border-gray-600 bg-gray-800 text-gray-300 hover:border-gray-500 hover:bg-gray-700 hover:scale-105'
+                      ? 'border-[#FF5656] bg-[#FF5656] text-foreground shadow-md scale-105'
+                      : 'border-gray-600 bg-secondary text-muted-foreground hover:border-gray-500 hover:bg-gray-700 hover:scale-105'
                   }`}
                 >
                   {size}
@@ -149,26 +151,36 @@ export default function MerchandiseCard({ item }: { item: MerchandiseItem }) {
           <button
             onClick={handleAddToCart}
             disabled={!item.inStock || isAdding}
-            className={`w-full rounded-md px-4 py-2 text-sm font-semibold text-white transition-colors ${
+            className={`w-full rounded-md px-4 py-2 text-sm font-semibold transition-colors flex items-center justify-center gap-2 ${
               item.inStock && !isAdding
-                ? 'bg-[#FF5656] hover:bg-[#FF5656]/90'
-                : 'cursor-not-allowed bg-gray-400'
+                ? 'border-2 border-primary bg-transparent text-primary hover:bg-primary/10 dark:bg-primary dark:text-primary-foreground dark:hover:bg-primary/90'
+                : 'cursor-not-allowed bg-secondary text-muted-foreground border-2 border-border'
             }`}
           >
-            {!item.inStock ? 'Out of Stock' : isAdding ? 'Adding...' : 'Add to Cart'}
+            {!item.inStock ? (
+              'Out of Stock'
+            ) : isAdding ? (
+              'Adding...'
+            ) : (
+              <>
+                <ShoppingCart className="h-4 w-4" />
+                Add to Cart
+              </>
+            )}
           </button>
 
           <Link
             href={`/store/${item.id}`}
-            className="block w-full rounded-md border border-gray-600 bg-gray-800 px-4 py-2 text-center text-sm font-semibold text-gray-300 hover:bg-gray-700 hover:text-white transition-colors"
+            className="flex items-center justify-center gap-2 w-full rounded-md border-2 border-border bg-transparent px-4 py-2 text-center text-sm font-semibold text-muted-foreground hover:border-primary hover:text-foreground transition-colors"
           >
+            <Eye className="h-4 w-4" />
             View Details
           </Link>
         </div>
 
         {/* Toast Notification */}
         {showToast && (
-          <div className="fixed bottom-4 right-4 z-50 animate-fade-in rounded-lg bg-[#FF5656] px-6 py-3 text-white shadow-lg">
+          <div className="fixed bottom-4 right-4 z-50 animate-fade-in rounded-lg bg-[#FF5656] px-6 py-3 text-foreground shadow-lg">
             <p className="font-semibold">🛒 Payment integration coming soon!</p>
             <p className="text-sm opacity-90">支付功能开发中，敬请期待</p>
           </div>

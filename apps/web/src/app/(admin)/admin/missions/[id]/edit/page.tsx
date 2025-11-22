@@ -134,7 +134,7 @@ export default function EditMissionPage({ params }: { params: { id: string } }) 
       <div className="flex min-h-[400px] items-center justify-center">
         <div className="text-center">
           <div className="mb-4 text-4xl">⏳</div>
-          <p className="text-gray-400">Loading mission...</p>
+          <p className="text-muted-foreground">Loading mission...</p>
         </div>
       </div>
     )
@@ -176,7 +176,7 @@ export default function EditMissionPage({ params }: { params: { id: string } }) 
         </div>
       )}
 
-      <div className="rounded-lg border border-red-500/20 bg-[#1a1a1a] p-6 shadow-lg shadow-red-500/10">
+      <div className="rounded-lg border border-border bg-card p-6 dark:shadow-lg dark:shadow-red-500/10">
         <MissionForm
           mode="edit"
           initialData={getInitialData()}

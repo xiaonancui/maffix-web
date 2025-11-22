@@ -124,8 +124,8 @@ export function PremiumPackForm({
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       {/* Basic Information */}
-      <div className="bg-[#1a1a1a] border border-red-500/20 rounded-lg p-6 shadow-lg shadow-red-500/10 space-y-6">
-        <h2 className="text-lg font-bold text-white">Basic Information</h2>
+      <div className="bg-card border border-border rounded-lg p-6 dark:shadow-lg dark:shadow-lg space-y-6">
+        <h2 className="text-lg font-bold text-foreground">Basic Information</h2>
 
         <FormField
           label="Pack Name"
@@ -156,8 +156,8 @@ export function PremiumPackForm({
       </div>
 
       {/* Pricing */}
-      <div className="bg-[#1a1a1a] border border-red-500/20 rounded-lg p-6 shadow-lg shadow-red-500/10 space-y-6">
-        <h2 className="text-lg font-bold text-white">Pricing</h2>
+      <div className="bg-card border border-border rounded-lg p-6 dark:shadow-lg dark:shadow-lg space-y-6">
+        <h2 className="text-lg font-bold text-foreground">Pricing</h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <FormField
@@ -191,8 +191,8 @@ export function PremiumPackForm({
       </div>
 
       {/* Pack Contents */}
-      <div className="bg-[#1a1a1a] border border-red-500/20 rounded-lg p-6 shadow-lg shadow-red-500/10 space-y-6">
-        <h2 className="text-lg font-bold text-white">Pack Contents</h2>
+      <div className="bg-card border border-border rounded-lg p-6 dark:shadow-lg dark:shadow-lg space-y-6">
+        <h2 className="text-lg font-bold text-foreground">Pack Contents</h2>
 
         <FormField
           label="Guaranteed Prize"
@@ -222,7 +222,7 @@ export function PremiumPackForm({
                 />
               )}
               <div>
-                <div className="font-medium text-white">{selectedPrize.name}</div>
+                <div className="font-medium text-foreground">{selectedPrize.name}</div>
                 <div className="text-sm text-gray-400">
                   {selectedPrize.rarity} • {selectedPrize.type}
                 </div>
@@ -263,8 +263,8 @@ export function PremiumPackForm({
       </div>
 
       {/* Display Settings */}
-      <div className="bg-[#1a1a1a] border border-red-500/20 rounded-lg p-6 shadow-lg shadow-red-500/10 space-y-6">
-        <h2 className="text-lg font-bold text-white">Display Settings</h2>
+      <div className="bg-card border border-border rounded-lg p-6 dark:shadow-lg dark:shadow-lg space-y-6">
+        <h2 className="text-lg font-bold text-foreground">Display Settings</h2>
 
         <FormField
           label="Image URL"
@@ -283,7 +283,7 @@ export function PremiumPackForm({
             <img
               src={formData.imageUrl}
               alt="Pack preview"
-              className="w-48 h-48 object-cover rounded-lg border border-red-500/20"
+              className="w-48 h-48 object-cover rounded-lg border border-border"
               onError={(e) => {
                 e.currentTarget.style.display = 'none'
               }}
@@ -336,7 +336,7 @@ export function PremiumPackForm({
 
       {/* Error Display */}
       {errors.submit && (
-        <div className="p-4 bg-red-500/10 border border-red-500/30 rounded-lg text-red-400 text-sm">
+        <div className="p-4 bg-red-500/10 border border-border rounded-lg text-red-400 text-sm">
           {errors.submit}
         </div>
       )}
@@ -346,7 +346,7 @@ export function PremiumPackForm({
         <button
           type="submit"
           disabled={submitting || loadingPrizes}
-          className="px-6 py-2 bg-gradient-to-r from-red-600 to-red-500 text-white rounded-lg hover:from-red-700 hover:to-red-600 transition-all shadow-lg shadow-red-500/30 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+          className="px-6 py-2 border-2 border-primary bg-transparent text-primary rounded-lg hover:bg-primary/10 transition-all dark:shadow-lg dark:shadow-red-500/30 font-medium disabled:opacity-50 disabled:cursor-not-allowed dark:bg-gradient-to-r dark:from-red-600 dark:to-red-500 dark:text-primary-foreground dark:border-transparent dark:hover:from-red-700 dark:hover:to-red-600"
         >
           {submitting ? 'Saving...' : submitLabel}
         </button>
@@ -354,7 +354,7 @@ export function PremiumPackForm({
           type="button"
           onClick={onCancel}
           disabled={submitting}
-          className="px-6 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-colors border border-red-500/30 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="px-6 py-2 bg-gray-800 text-foreground rounded-lg hover:bg-gray-700 transition-colors border border-border disabled:opacity-50 disabled:cursor-not-allowed"
         >
           Cancel
         </button>

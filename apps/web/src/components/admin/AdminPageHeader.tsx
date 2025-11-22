@@ -26,7 +26,7 @@ export default function AdminPageHeader({
         <button
           onClick={action.onClick}
           disabled={action.disabled}
-          className="inline-flex items-center justify-center rounded-md bg-gradient-to-r from-red-600 to-red-500 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-red-500/30 hover:from-red-700 hover:to-red-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+          className="inline-flex items-center justify-center rounded-md border-2 border-primary bg-transparent px-4 py-2 text-sm font-semibold text-primary dark:shadow-lg dark:shadow-red-500/30 hover:bg-primary/10 disabled:opacity-50 disabled:cursor-not-allowed transition-all dark:bg-gradient-to-r dark:from-red-600 dark:to-red-500 dark:text-primary-foreground dark:border-transparent dark:hover:from-red-700 dark:hover:to-red-600"
         >
           {action.label}
         </button>
@@ -40,7 +40,7 @@ export default function AdminPageHeader({
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div className="flex-1">
           <div className="flex items-center gap-3">
-            <h1 className="text-3xl font-bold tracking-tight text-white">
+            <h1 className="text-3xl font-bold tracking-tight text-foreground">
               {title}
             </h1>
             {badge}

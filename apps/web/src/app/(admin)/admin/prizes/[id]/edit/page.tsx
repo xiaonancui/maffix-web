@@ -68,7 +68,7 @@ export default function EditPrizePage({ params }: { params: { id: string } }) {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <div className="text-gray-400">Loading prize...</div>
+        <div className="text-muted-foreground">Loading prize...</div>
       </div>
     )
   }
@@ -83,12 +83,12 @@ export default function EditPrizePage({ params }: { params: { id: string } }) {
       <div>
         <button
           onClick={handleCancel}
-          className="text-gray-400 hover:text-white mb-2 flex items-center gap-2"
+          className="text-muted-foreground hover:text-foreground mb-2 flex items-center gap-2"
         >
           ← Back to Prizes
         </button>
-        <h1 className="text-3xl font-bold text-white tracking-tight">Edit Prize</h1>
-        <p className="text-gray-400 mt-1">{prize.name}</p>
+        <h1 className="text-3xl font-bold text-foreground tracking-tight">Edit Prize</h1>
+        <p className="text-muted-foreground mt-1">{prize.name}</p>
       </div>
 
       {/* Form */}

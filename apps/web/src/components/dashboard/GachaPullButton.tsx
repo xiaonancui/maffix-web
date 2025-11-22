@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import GachaResultModal from './GachaResultModal'
+import { Loader2, Sparkles } from 'lucide-react'
 
 type Prize = {
   id: string
@@ -97,19 +98,21 @@ export default function GachaPullButton({
       <button
         onClick={handlePull}
         disabled={isPulling || currentBalance < cost}
-        className={`w-full rounded-lg px-6 py-3 font-bold text-white shadow-lg transition-all hover:scale-105 hover:shadow-xl disabled:opacity-50 disabled:hover:scale-100 ${
+        className={`w-full rounded-lg px-6 py-3 font-bold shadow-lg transition-all hover:scale-105 hover:shadow-xl disabled:opacity-50 disabled:hover:scale-100 flex items-center justify-center gap-2 ${
           pullType === '10x'
-            ? 'bg-gradient-to-r from-purple-500 to-blue-500 text-lg'
-            : 'bg-gradient-to-r from-yellow-400 to-orange-500 text-base'
+            ? 'border-2 border-purple-600 bg-transparent text-purple-600 hover:bg-purple-600/10 text-lg dark:bg-gradient-to-r dark:from-purple-500 dark:to-blue-500 dark:text-primary-foreground dark:border-transparent'
+            : 'border-2 border-primary bg-transparent text-primary hover:bg-primary/10 text-base dark:bg-gradient-to-r dark:from-yellow-400 dark:to-orange-500 dark:text-foreground dark:border-transparent'
         }`}
       >
         {isPulling ? (
           <>
-            <span className="animate-spin">🎰</span> Pulling...
+            <Loader2 className="h-5 w-5 animate-spin" />
+            <span>Pulling...</span>
           </>
         ) : (
           <>
-            🎰 {pullType === '10x' ? 'Pull 10x' : 'Pull Once'} ({cost} 💎)
+            <Sparkles className="h-5 w-5" />
+            <span>{pullType === '10x' ? 'Pull 10x' : 'Pull Once'} ({cost})</span>
           </>
         )}
       </button>

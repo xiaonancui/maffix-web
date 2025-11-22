@@ -32,16 +32,16 @@ export default function BulkActions({
   if (selectedCount === 0) return null
 
   const variantStyles = {
-    default: 'bg-[#1a1a1a] border-red-500/30 text-white hover:border-red-500/50',
-    danger: 'bg-red-500/20 border-red-500/50 text-red-400 hover:bg-red-500/30',
+    default: 'bg-card border-border text-foreground hover:border-primary/50',
+    danger: 'bg-red-500/20 border-primary/50 text-red-400 hover:bg-red-500/30',
     success: 'bg-green-500/20 border-green-500/50 text-green-400 hover:bg-green-500/30',
   }
 
   return (
-    <div className="flex items-center justify-between rounded-lg bg-red-500/10 border border-red-500/30 px-4 py-3 mb-4">
+    <div className="flex items-center justify-between rounded-lg bg-red-500/10 border border-border px-4 py-3 mb-4">
       {/* Selection Info */}
       <div className="flex items-center gap-4">
-        <span className="text-sm font-semibold text-white">
+        <span className="text-sm font-semibold text-foreground">
           {selectedCount} {selectedCount === 1 ? 'item' : 'items'} selected
         </span>
         {totalCount && selectedCount < totalCount ? (

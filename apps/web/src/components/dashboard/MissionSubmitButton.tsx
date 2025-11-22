@@ -41,21 +41,21 @@ export default function MissionSubmitButton({ missionId }: { missionId: string }
   if (showConfirm) {
     return (
       <div className="space-y-2">
-        <p className="text-sm text-gray-600">
+        <p className="text-sm text-muted-foreground">
           Submit this mission for verification?
         </p>
         <div className="flex gap-2">
           <button
             onClick={handleSubmit}
             disabled={isSubmitting}
-            className="flex-1 rounded-md bg-green-600 px-4 py-2 text-sm font-semibold text-white hover:bg-green-500 disabled:opacity-50"
+            className="flex-1 rounded-md border-2 border-green-600 bg-background px-4 py-2 text-sm font-semibold text-green-600 hover:bg-green-600/10 disabled:opacity-50 dark:bg-green-600 dark:text-primary-foreground dark:hover:bg-green-700"
           >
             {isSubmitting ? 'Submitting...' : 'Yes, Submit'}
           </button>
           <button
             onClick={() => setShowConfirm(false)}
             disabled={isSubmitting}
-            className="flex-1 rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-50 disabled:opacity-50"
+            className="flex-1 rounded-md border-2 border-gray-600 bg-background px-4 py-2 text-sm font-semibold text-gray-600 hover:bg-gray-600/10 disabled:opacity-50 dark:bg-gray-600 dark:text-primary-foreground dark:hover:bg-gray-700"
           >
             Cancel
           </button>
@@ -67,7 +67,7 @@ export default function MissionSubmitButton({ missionId }: { missionId: string }
   return (
     <button
       onClick={() => setShowConfirm(true)}
-      className="w-full rounded-md bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:opacity-90"
+      className="w-full rounded-md border-2 border-primary bg-background px-4 py-2 text-sm font-semibold text-primary hover:bg-primary/10 dark:bg-primary dark:text-primary-foreground dark:hover:bg-primary/90"
     >
       Submit for Verification
     </button>

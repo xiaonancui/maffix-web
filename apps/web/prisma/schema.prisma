@@ -47,6 +47,9 @@ model User {
   tiktokTokenExpiry   DateTime? // When the access token expires
   tiktokLinkedAt      DateTime? // When TikTok account was linked
 
+  // User preferences
+  themePreference     String?   @default("system") // Theme preference: light, dark, or system
+
   // Timestamps
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

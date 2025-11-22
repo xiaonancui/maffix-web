@@ -9,6 +9,7 @@ import SearchBar from '@/components/admin/SearchBar'
 import FilterDropdown from '@/components/admin/FilterDropdown'
 import ActionMenu from '@/components/admin/ActionMenu'
 import ConfirmDialog from '@/components/admin/ConfirmDialog'
+import { Plus, Gem, Edit, Play, Pause, Trash2 } from 'lucide-react'
 
 interface Prize {
   id: string
@@ -164,16 +165,16 @@ export default function PrizesPage() {
             <img
               src={prize.image}
               alt={prize.name}
-              className="w-16 h-16 rounded-lg object-cover border border-red-500/20"
+              className="w-16 h-16 rounded-lg object-cover border border-border"
             />
           ) : (
-            <div className="w-16 h-16 rounded-lg bg-gradient-to-br from-purple-500/20 to-pink-500/20 border border-red-500/20 flex items-center justify-center text-2xl">
+            <div className="w-16 h-16 rounded-lg bg-gradient-to-br from-purple-500/20 to-pink-500/20 border border-border flex items-center justify-center text-2xl">
               🎁
             </div>
           )}
           <div>
-            <div className="font-medium text-white">{prize.name}</div>
-            <div className="text-sm text-gray-400 line-clamp-1">
+            <div className="font-medium text-foreground">{prize.name}</div>
+            <div className="text-sm text-muted-foreground line-clamp-1">
               {prize.description}
             </div>
           </div>
@@ -200,8 +201,9 @@ export default function PrizesPage() {
       key: 'value',
       label: 'Value',
       render: (prize: Prize) => (
-        <div className="text-yellow-400 font-medium">
-          💎 {prize.value.toLocaleString()}
+        <div className="flex items-center gap-1 text-yellow-400 font-medium">
+          <Gem className="h-4 w-4" />
+          {prize.value.toLocaleString()}
         </div>
       ),
     },
@@ -209,7 +211,7 @@ export default function PrizesPage() {
       key: 'stock',
       label: 'Stock',
       render: (prize: Prize) => (
-        <div className="text-gray-300">
+        <div className="text-muted-foreground">
           {prize.stock === null ? '∞ Unlimited' : prize.stock.toLocaleString()}
         </div>
       ),
@@ -218,7 +220,7 @@ export default function PrizesPage() {
       key: 'usage',
       label: 'Usage',
       render: (prize: Prize) => (
-        <div className="space-y-1 text-sm text-gray-300">
+        <div className="space-y-1 text-sm text-muted-foreground">
           <div>👥 {prize._count.userPrizes} owned</div>
           <div>🎰 {prize._count.gachaPulls} pulls</div>
           <div>📦 {prize._count.premiumPacks} packs</div>
@@ -242,14 +244,17 @@ export default function PrizesPage() {
           items={[
             {
               label: 'Edit',
+              icon: <Edit className="h-4 w-4" />,
               onClick: () => router.push(`/admin/prizes/${prize.id}/edit`),
             },
             {
               label: prize.isActive ? 'Deactivate' : 'Activate',
+              icon: prize.isActive ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />,
               onClick: () => handleToggleActive(prize),
             },
             {
               label: 'Delete',
+              icon: <Trash2 className="h-4 w-4" />,
               onClick: () => handleDeleteClick(prize),
               variant: 'danger',
             },
@@ -264,12 +269,12 @@ export default function PrizesPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-white tracking-tight">Prizes</h1>
-          <p className="text-gray-400 mt-1">Manage prize catalog and inventory</p>
+          <h1 className="text-3xl font-bold text-foreground tracking-tight">Prizes</h1>
+          <p className="text-muted-foreground mt-1">Manage prize catalog and inventory</p>
         </div>
         <Link
           href="/admin/prizes/new"
-          className="px-4 py-2 bg-gradient-to-r from-red-600 to-red-500 text-white rounded-lg hover:from-red-700 hover:to-red-600 transition-all shadow-lg shadow-red-500/30 font-medium"
+          className="px-4 py-2 border-2 border-primary bg-transparent text-primary rounded-lg hover:bg-primary/10 transition-all dark:shadow-lg dark:shadow-red-500/30 font-medium dark:bg-gradient-to-r dark:from-red-600 dark:to-red-500 dark:text-primary-foreground dark:border-transparent dark:hover:from-red-700 dark:hover:to-red-600"
         >
           + Add Prize
         </Link>
@@ -277,24 +282,24 @@ export default function PrizesPage() {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <div className="bg-[#1a1a1a] border border-red-500/20 rounded-lg p-6 shadow-lg shadow-red-500/10">
-          <div className="text-gray-400 text-sm mb-1">Total Prizes</div>
-          <div className="text-3xl font-bold text-white">{pagination.total}</div>
+        <div className="bg-card border border-border rounded-lg p-6 dark:shadow-lg dark:shadow-red-500/10">
+          <div className="text-muted-foreground text-sm mb-1">Total Prizes</div>
+          <div className="text-3xl font-bold text-foreground">{pagination.total}</div>
         </div>
-        <div className="bg-[#1a1a1a] border border-red-500/20 rounded-lg p-6 shadow-lg shadow-red-500/10">
-          <div className="text-gray-400 text-sm mb-1">Active</div>
+        <div className="bg-card border border-border rounded-lg p-6 dark:shadow-lg dark:shadow-red-500/10">
+          <div className="text-muted-foreground text-sm mb-1">Active</div>
           <div className="text-3xl font-bold text-green-400">
             {prizes.filter((p) => p.isActive).length}
           </div>
         </div>
-        <div className="bg-[#1a1a1a] border border-red-500/20 rounded-lg p-6 shadow-lg shadow-red-500/10">
-          <div className="text-gray-400 text-sm mb-1">SSR Prizes</div>
+        <div className="bg-card border border-border rounded-lg p-6 dark:shadow-lg dark:shadow-red-500/10">
+          <div className="text-muted-foreground text-sm mb-1">SSR Prizes</div>
           <div className="text-3xl font-bold text-red-400">
             {prizes.filter((p) => p.rarity === 'SSR').length}
           </div>
         </div>
-        <div className="bg-[#1a1a1a] border border-red-500/20 rounded-lg p-6 shadow-lg shadow-red-500/10">
-          <div className="text-gray-400 text-sm mb-1">Legendary</div>
+        <div className="bg-card border border-border rounded-lg p-6 dark:shadow-lg dark:shadow-red-500/10">
+          <div className="text-muted-foreground text-sm mb-1">Legendary</div>
           <div className="text-3xl font-bold text-yellow-400">
             {prizes.filter((p) => p.rarity === 'LEGENDARY').length}
           </div>
@@ -302,7 +307,7 @@ export default function PrizesPage() {
       </div>
 
       {/* Filters */}
-      <div className="bg-[#1a1a1a] border border-red-500/20 rounded-lg p-6 shadow-lg shadow-red-500/10">
+      <div className="bg-card border border-border rounded-lg p-6 dark:shadow-lg dark:shadow-red-500/10">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <SearchBar
             onSearch={setSearchQuery}
@@ -348,7 +353,7 @@ export default function PrizesPage() {
       </div>
 
       {/* Table */}
-      <div className="bg-[#1a1a1a] border border-red-500/20 rounded-lg shadow-lg shadow-red-500/10">
+      <div className="bg-card border border-border rounded-lg dark:shadow-lg dark:shadow-red-500/10">
         <DataTable
           columns={columns}
           data={prizes}

@@ -39,7 +39,7 @@ export default function TikTokUnlinkButton() {
         <button
           onClick={handleUnlink}
           disabled={isUnlinking}
-          className={`rounded-md px-4 py-2 text-sm font-semibold text-white transition-colors ${
+          className={`rounded-md px-4 py-2 text-sm font-semibold text-foreground transition-colors ${
             isUnlinking
               ? 'cursor-not-allowed bg-gray-400'
               : 'bg-red-600 hover:bg-red-700'
@@ -50,7 +50,7 @@ export default function TikTokUnlinkButton() {
         <button
           onClick={() => setShowConfirm(false)}
           disabled={isUnlinking}
-          className="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-50"
+          className="rounded-md border border-border bg-white px-4 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-50"
         >
           Cancel
         </button>

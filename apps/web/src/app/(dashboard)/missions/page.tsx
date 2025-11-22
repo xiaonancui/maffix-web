@@ -4,32 +4,22 @@ import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import MissionCard from '@/components/dashboard/MissionCard'
 import MissionsHeader from '@/components/dashboard/MissionsHeader'
+import { AlertTriangle } from 'lucide-react'
 
 export default async function MissionsPage() {
-  // Dynamic import to avoid build-time database connection
-  const { db } = await import('@/lib/db')
-
   const session = await getServerSession(authOptions)
 
   if (!session) {
     redirect('/login')
   }
 
-  // Fetch user's TikTok connection status
+  // Use mock data for all users (database not connected)
   let user
   let missions: any[] = []
   let userMissions = new Map<string, any>()
 
-  const allowTestAccounts =
-    process.env.NODE_ENV === 'development' || process.env.ENABLE_TEST_ACCOUNTS === 'true'
-
-  const isTestAccount =
-    allowTestAccounts &&
-    (session.user.id?.includes('test-') ||
-      session.user.id?.includes('demo-') ||
-      session.user.id?.includes('admin-'))
-
-  if (isTestAccount) {
+  // Always use mock data
+  if (true) {
     // Mock data for test accounts
     user = {
       id: session.user.id,
@@ -264,49 +254,6 @@ export default async function MissionsPage() {
       verificationStatus: 'PENDING',
       submittedAt: new Date(),
     })
-  } else {
-    try {
-      user = await db.user.findUnique({
-        where: { id: session.user.id },
-        select: {
-          id: true,
-          tiktokUsername: true,
-          diamondBalance: true,
-        },
-      })
-
-      // Fetch active missions
-      missions = await db.task.findMany({
-        where: {
-          isActive: true,
-          missionType: { not: null },
-        },
-        orderBy: {
-          diamonds: 'desc',
-        },
-      })
-
-      // Fetch user's mission submissions
-      const submissions = await db.userTask.findMany({
-        where: {
-          userId: session.user.id,
-        },
-        select: {
-          taskId: true,
-          verified: true,
-          verificationStatus: true,
-          submittedAt: true,
-        },
-      })
-
-      submissions.forEach((sub) => {
-        userMissions.set(sub.taskId, sub)
-      })
-    } catch (error) {
-      console.error('Database fetch failed:', error)
-      user = { id: session.user.id, tiktokUsername: null, diamondBalance: 0 }
-      missions = []
-    }
   }
 
   const getMissionTypeIcon = (type: string) => {
@@ -333,7 +280,7 @@ export default async function MissionsPage() {
       case 'HARD':
         return 'bg-red-100 text-red-800 border-red-300'
       default:
-        return 'bg-gray-100 text-gray-800 border-gray-300'
+        return 'bg-gray-100 text-gray-800 border-border'
     }
   }
 
@@ -390,28 +337,14 @@ export default async function MissionsPage() {
 
       {/* TikTok Connection Status */}
       {!user?.tiktokUsername && (
-        <div className="mb-8 rounded-lg border-2 border-yellow-600 bg-yellow-900/20 p-6">
-          <div className="flex items-start">
-            <div className="flex-shrink-0">
-              <svg
-                className="h-6 w-6 text-yellow-400"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth="1.5"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"
-                />
-              </svg>
-            </div>
-            <div className="ml-3 flex-1">
-              <h3 className="text-sm font-medium text-yellow-300">
+        <div className="mb-8 rounded-lg border-2 border-yellow-600 bg-transparent p-6 dark:bg-yellow-900/20">
+          <div className="flex items-start gap-3">
+            <AlertTriangle className="h-6 w-6 text-yellow-600 flex-shrink-0" />
+            <div className="flex-1">
+              <h3 className="text-sm font-medium text-yellow-600 dark:text-yellow-300">
                 TikTok Account Not Linked
               </h3>
-              <div className="mt-2 text-sm text-yellow-400">
+              <div className="mt-2 text-sm text-yellow-700 dark:text-yellow-400">
                 <p>
                   You need to link your TikTok account to complete missions and earn rewards.
                 </p>
@@ -419,7 +352,7 @@ export default async function MissionsPage() {
               <div className="mt-4">
                 <Link
                   href="/profile/link-tiktok"
-                  className="inline-flex items-center rounded-md bg-yellow-600 px-3 py-2 text-sm font-semibold text-white hover:bg-yellow-700 transition-colors"
+                  className="inline-flex items-center rounded-md border-2 border-yellow-600 bg-transparent px-3 py-2 text-sm font-semibold text-yellow-600 hover:bg-yellow-600/10 transition-colors dark:bg-yellow-600 dark:text-primary-foreground dark:hover:bg-yellow-700"
                 >
                   Link TikTok Account
                 </Link>
@@ -431,40 +364,40 @@ export default async function MissionsPage() {
 
       {/* User Stats */}
       <div className="mb-8 grid gap-4 sm:grid-cols-3">
-        <div className="rounded-lg bg-gray-900 border border-gray-800 p-4 shadow hover:border-[#FF5656] transition-colors">
+        <div className="rounded-lg bg-card border border-border p-4 shadow hover:border-[#FF5656] transition-colors">
           <div className="flex items-center">
             <div className="flex-shrink-0">
               <span className="text-2xl">💎</span>
             </div>
             <div className="ml-3">
-              <p className="text-sm font-medium text-gray-400">Your Diamonds</p>
-              <p className="text-xl font-semibold text-white">
+              <p className="text-sm font-medium text-muted-foreground">Your Diamonds</p>
+              <p className="text-xl font-semibold text-foreground">
                 {user?.diamondBalance.toLocaleString() || 0}
               </p>
             </div>
           </div>
         </div>
-        <div className="rounded-lg bg-gray-900 border border-gray-800 p-4 shadow hover:border-[#FF5656] transition-colors">
+        <div className="rounded-lg bg-card border border-border p-4 shadow hover:border-[#FF5656] transition-colors">
           <div className="flex items-center">
             <div className="flex-shrink-0">
               <span className="text-2xl">✅</span>
             </div>
             <div className="ml-3">
-              <p className="text-sm font-medium text-gray-400">Completed</p>
-              <p className="text-xl font-semibold text-white">
+              <p className="text-sm font-medium text-muted-foreground">Completed</p>
+              <p className="text-xl font-semibold text-foreground">
                 {userMissions.size}
               </p>
             </div>
           </div>
         </div>
-        <div className="rounded-lg bg-gray-900 border border-gray-800 p-4 shadow hover:border-[#FF5656] transition-colors">
+        <div className="rounded-lg bg-card border border-border p-4 shadow hover:border-[#FF5656] transition-colors">
           <div className="flex items-center">
             <div className="flex-shrink-0">
               <span className="text-2xl">🎯</span>
             </div>
             <div className="ml-3">
-              <p className="text-sm font-medium text-gray-400">Available</p>
-              <p className="text-xl font-semibold text-white">
+              <p className="text-sm font-medium text-muted-foreground">Available</p>
+              <p className="text-xl font-semibold text-foreground">
                 {missions.length}
               </p>
             </div>
@@ -474,14 +407,14 @@ export default async function MissionsPage() {
 
       {/* Missions by Type */}
       {missions.length === 0 ? (
-        <div className="rounded-lg bg-gray-900 border border-gray-800 p-12 text-center shadow">
-          <p className="text-gray-400">No missions available at the moment.</p>
+        <div className="rounded-lg bg-card border border-border p-12 text-center shadow">
+          <p className="text-muted-foreground">No missions available at the moment.</p>
         </div>
       ) : (
         <div className="space-y-8">
           {Object.entries(missionsByType).map(([type, typeMissions]) => (
             <div key={type}>
-              <h2 className="mb-4 text-xl font-bold text-white">
+              <h2 className="mb-4 text-xl font-bold text-foreground">
                 {getMissionTypeIcon(type)} {missionTypeNames[type as keyof typeof missionTypeNames] || type}
               </h2>
               <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">

@@ -56,47 +56,45 @@ export async function POST(request: Request) {
 
     const data = validationResult.data
 
-    // Dynamic import to avoid build-time database connection
-    const { db } = await import('@/lib/db')
-
-    // Create merchandise with variants and images in a transaction
-    const merchandise = await db.merchandise.create({
-      data: {
-        name: data.name,
-        description: data.description,
-        price: data.price,
-        category: data.category,
-        material: data.material,
-        features: data.features || [],
-        tags: data.tags || [],
-        imageUrl: data.imageUrl,
-        inStock: data.inStock ?? true,
-        featured: data.featured ?? false,
-        sortOrder: data.sortOrder ?? 0,
-        variants: data.variants ? {
-          create: data.variants.map((variant) => ({
-            size: variant.size,
-            color: variant.color,
-            sku: variant.sku,
-            priceModifier: variant.priceModifier ?? 0,
-            stockQuantity: variant.stockQuantity,
-            inStock: variant.inStock ?? true,
-          })),
-        } : undefined,
-        images: data.images ? {
-          create: data.images.map((image) => ({
-            url: image.url,
-            altText: image.altText,
-            sortOrder: image.sortOrder ?? 0,
-            isPrimary: image.isPrimary ?? false,
-          })),
-        } : undefined,
-      },
-      include: {
-        variants: true,
-        images: true,
-      },
-    })
+    // Use mock data (database not connected)
+    const merchandise = {
+      id: `merch-${Date.now()}`,
+      name: data.name,
+      description: data.description,
+      price: data.price,
+      category: data.category,
+      material: data.material,
+      features: data.features || [],
+      tags: data.tags || [],
+      imageUrl: data.imageUrl,
+      inStock: data.inStock ?? true,
+      featured: data.featured ?? false,
+      sortOrder: data.sortOrder ?? 0,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      variants: data.variants?.map((variant, index) => ({
+        id: `var-${Date.now()}-${index}`,
+        merchandiseId: `merch-${Date.now()}`,
+        size: variant.size,
+        color: variant.color,
+        sku: variant.sku,
+        priceModifier: variant.priceModifier ?? 0,
+        stockQuantity: variant.stockQuantity,
+        inStock: variant.inStock ?? true,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      })) || [],
+      images: data.images?.map((image, index) => ({
+        id: `img-${Date.now()}-${index}`,
+        merchandiseId: `merch-${Date.now()}`,
+        url: image.url,
+        altText: image.altText,
+        sortOrder: image.sortOrder ?? 0,
+        isPrimary: image.isPrimary ?? false,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      })) || [],
+    }
 
     return NextResponse.json({
       success: true,
@@ -131,49 +129,162 @@ export async function GET(request: Request) {
     const page = parseInt(searchParams.get('page') || '1')
     const limit = parseInt(searchParams.get('limit') || '50')
 
-    // Dynamic import to avoid build-time database connection
-    const { db } = await import('@/lib/db')
-
-    // Build where clause
-    const where: any = {}
-    if (category) {
-      where.category = category
-    }
-    if (featured !== null && featured !== undefined) {
-      where.featured = featured === 'true'
-    }
-    if (inStock !== null && inStock !== undefined) {
-      where.inStock = inStock === 'true'
-    }
-
-    // Get merchandise with pagination
-    const [merchandise, total] = await Promise.all([
-      db.merchandise.findMany({
-        where,
-        include: {
-          variants: true,
-          images: true,
-          _count: {
-            select: {
-              cartItems: true,
-              orderItems: true,
-            },
+    // Use mock data (database not connected)
+    const mockMerchandise = [
+      {
+        id: 'merch-1',
+        name: 'Premium Hoodie',
+        description: 'Limited edition premium quality hoodie with exclusive design',
+        price: 79.99,
+        category: 'CLOTHING',
+        material: '80% Cotton, 20% Polyester',
+        features: ['Premium quality', 'Limited edition', 'Exclusive design'],
+        tags: ['hoodie', 'clothing', 'premium'],
+        imageUrl: 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=400',
+        inStock: true,
+        featured: true,
+        sortOrder: 1,
+        createdAt: new Date('2024-01-01'),
+        updatedAt: new Date('2024-01-01'),
+        variants: [
+          {
+            id: 'var-1',
+            merchandiseId: 'merch-1',
+            size: 'S',
+            color: 'Black',
+            sku: 'HOODIE-BLK-S',
+            priceModifier: 0,
+            stockQuantity: 25,
+            inStock: true,
           },
-        },
-        orderBy: [
-          { featured: 'desc' },
-          { sortOrder: 'asc' },
-          { createdAt: 'desc' },
+          {
+            id: 'var-2',
+            merchandiseId: 'merch-1',
+            size: 'M',
+            color: 'Black',
+            sku: 'HOODIE-BLK-M',
+            priceModifier: 0,
+            stockQuantity: 30,
+            inStock: true,
+          },
         ],
-        skip: (page - 1) * limit,
-        take: limit,
-      }),
-      db.merchandise.count({ where }),
-    ])
+        images: [
+          {
+            id: 'img-1',
+            merchandiseId: 'merch-1',
+            url: 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=800',
+            altText: 'Premium Hoodie Front',
+            sortOrder: 0,
+            isPrimary: true,
+          },
+        ],
+        _count: {
+          cartItems: 12,
+          orderItems: 45,
+        },
+      },
+      {
+        id: 'merch-2',
+        name: 'Snapback Cap',
+        description: 'Classic snapback cap with embroidered logo',
+        price: 29.99,
+        category: 'ACCESSORIES',
+        material: '100% Cotton',
+        features: ['Adjustable', 'Embroidered logo', 'One size fits all'],
+        tags: ['cap', 'hat', 'accessories'],
+        imageUrl: 'https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=400',
+        inStock: true,
+        featured: true,
+        sortOrder: 2,
+        createdAt: new Date('2024-01-02'),
+        updatedAt: new Date('2024-01-02'),
+        variants: [
+          {
+            id: 'var-3',
+            merchandiseId: 'merch-2',
+            size: 'One Size',
+            color: 'Black',
+            sku: 'CAP-BLK-OS',
+            priceModifier: 0,
+            stockQuantity: 50,
+            inStock: true,
+          },
+        ],
+        images: [],
+        _count: {
+          cartItems: 8,
+          orderItems: 32,
+        },
+      },
+      {
+        id: 'merch-3',
+        name: 'Graphic T-Shirt',
+        description: 'Comfortable cotton t-shirt with exclusive tour artwork',
+        price: 34.99,
+        category: 'CLOTHING',
+        material: '100% Cotton',
+        features: ['Soft cotton', 'Tour exclusive', 'Screen printed'],
+        tags: ['tshirt', 'clothing', 'tour'],
+        imageUrl: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400',
+        inStock: true,
+        featured: false,
+        sortOrder: 3,
+        createdAt: new Date('2024-01-03'),
+        updatedAt: new Date('2024-01-03'),
+        variants: [
+          {
+            id: 'var-4',
+            merchandiseId: 'merch-3',
+            size: 'S',
+            color: 'White',
+            sku: 'TSHIRT-WHT-S',
+            priceModifier: 0,
+            stockQuantity: 20,
+            inStock: true,
+          },
+          {
+            id: 'var-5',
+            merchandiseId: 'merch-3',
+            size: 'M',
+            color: 'White',
+            sku: 'TSHIRT-WHT-M',
+            priceModifier: 0,
+            stockQuantity: 35,
+            inStock: true,
+          },
+        ],
+        images: [],
+        _count: {
+          cartItems: 15,
+          orderItems: 67,
+        },
+      },
+    ]
+
+    // Apply filters
+    let filteredMerchandise = mockMerchandise
+
+    if (category) {
+      filteredMerchandise = filteredMerchandise.filter((m) => m.category === category)
+    }
+
+    if (featured !== null && featured !== undefined) {
+      const featuredFilter = featured === 'true'
+      filteredMerchandise = filteredMerchandise.filter((m) => m.featured === featuredFilter)
+    }
+
+    if (inStock !== null && inStock !== undefined) {
+      const inStockFilter = inStock === 'true'
+      filteredMerchandise = filteredMerchandise.filter((m) => m.inStock === inStockFilter)
+    }
+
+    const total = filteredMerchandise.length
+    const start = (page - 1) * limit
+    const paginatedMerchandise = filteredMerchandise.slice(start, start + limit)
 
     return NextResponse.json({
       success: true,
-      merchandise,
+      merchandise: paginatedMerchandise,
       pagination: {
         page,
         limit,

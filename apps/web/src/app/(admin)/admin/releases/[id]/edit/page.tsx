@@ -143,7 +143,7 @@ export default function EditReleasePage({ params }: { params: { id: string } }) 
       <div className="flex min-h-[400px] items-center justify-center">
         <div className="text-center">
           <div className="mb-4 text-4xl">⏳</div>
-          <p className="text-gray-400">Loading release...</p>
+          <p className="text-muted-foreground">Loading release...</p>
         </div>
       </div>
     )
@@ -185,7 +185,7 @@ export default function EditReleasePage({ params }: { params: { id: string } }) 
         </div>
       )}
 
-      <div className="rounded-lg border border-red-500/20 bg-[#1a1a1a] p-6 shadow-lg shadow-red-500/10">
+      <div className="rounded-lg border border-border bg-card p-6 dark:shadow-lg dark:shadow-red-500/10">
         <ReleaseForm
           mode="edit"
           initialData={getInitialData()}

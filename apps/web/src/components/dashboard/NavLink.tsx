@@ -18,8 +18,8 @@ export default function NavLink({ href, children, className = '' }: NavLinkProps
       href={href}
       className={`inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium transition-colors ${
         isActive
-          ? 'border-[#FF5656] text-white'
-          : 'border-transparent text-white/80 hover:border-[#FF5656]/50 hover:text-white'
+          ? 'border-[#FF5656] text-foreground'
+          : 'border-transparent text-foreground/80 hover:border-[#FF5656]/50 hover:text-foreground'
       } ${className}`}
     >
       {children}

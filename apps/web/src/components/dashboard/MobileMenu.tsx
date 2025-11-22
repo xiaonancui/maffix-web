@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useUserRole } from '@/lib/rbac'
 import { signOut } from 'next-auth/react'
+import { NavIcon } from '@/components/icons/Icon'
 
 export default function MobileMenu({
   diamondBalance,
@@ -27,35 +28,23 @@ export default function MobileMenu({
       {/* Mobile menu button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="rounded-md p-2 text-white/80 hover:bg-white/20 hover:text-white transition-colors"
+        className="rounded-md p-2 text-foreground/80 hover:bg-white/20 hover:text-foreground transition-colors"
       >
         <span className="sr-only">Open menu</span>
-        <svg
-          className="h-6 w-6"
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth="1.5"
-          stroke="currentColor"
-        >
-          {isOpen ? (
-            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-          ) : (
-            <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-          )}
-        </svg>
+        <NavIcon name={isOpen ? 'times' : 'bars'} />
       </button>
 
       {/* Mobile menu panel */}
       {isOpen && (
-        <div className="absolute left-0 right-0 top-16 z-50 border-b border-gray-800 bg-gray-900 shadow-lg">
+        <div className="absolute left-0 right-0 top-16 z-50 border-b border-border bg-secondary shadow-lg">
           <div className="space-y-1 px-4 pb-3 pt-2">
             {/* Diamond Balance */}
             <Link
               href="/transactions"
-              className="flex items-center gap-2 rounded-md px-3 py-2 text-base font-medium text-white hover:bg-gray-800 transition-colors"
+              className="flex items-center gap-2 rounded-md px-3 py-2 text-base font-medium text-foreground hover:bg-secondary transition-colors"
               onClick={() => setIsOpen(false)}
             >
-              <span>💎</span>
+              <NavIcon name="gem" label="Diamonds" />
               <span className="text-[#FF5656]">{diamondBalance} Diamonds</span>
             </Link>
 
@@ -63,10 +52,9 @@ export default function MobileMenu({
             {isAdmin && (
               <Link
                 href="/admin"
-                className="flex items-center gap-2 rounded-md bg-[#FF5656] px-3 py-2 text-base font-medium text-white hover:bg-[#ff3333] transition-colors"
+                className="flex items-center gap-2 rounded-md bg-background border-2 border-[#FF5656] px-3 py-2 text-base font-medium text-[#FF5656] hover:bg-[#FF5656]/10 transition-colors dark:bg-[#FF5656] dark:text-foreground dark:border-transparent dark:hover:bg-[#ff3333]"
                 onClick={() => setIsOpen(false)}
               >
-                <span>🛡️</span>
                 <span>Admin Panel</span>
               </Link>
             )}
@@ -77,7 +65,7 @@ export default function MobileMenu({
               className={`block rounded-md px-3 py-2 text-base font-medium transition-colors ${
                 isActive('/dashboard')
                   ? 'bg-[#FF5656]/20 text-[#FF5656] font-semibold'
-                  : 'text-gray-300 hover:bg-gray-800 hover:text-white'
+                  : 'text-muted-foreground hover:bg-secondary hover:text-foreground'
               }`}
               onClick={() => setIsOpen(false)}
             >
@@ -88,7 +76,7 @@ export default function MobileMenu({
               className={`block rounded-md px-3 py-2 text-base font-medium transition-colors ${
                 isActive('/releases')
                   ? 'bg-[#FF5656]/20 text-[#FF5656] font-semibold'
-                  : 'text-gray-300 hover:bg-gray-800 hover:text-white'
+                  : 'text-muted-foreground hover:bg-secondary hover:text-foreground'
               }`}
               onClick={() => setIsOpen(false)}
             >
@@ -99,7 +87,7 @@ export default function MobileMenu({
               className={`block rounded-md px-3 py-2 text-base font-medium transition-colors ${
                 isActive('/missions')
                   ? 'bg-[#FF5656]/20 text-[#FF5656] font-semibold'
-                  : 'text-gray-300 hover:bg-gray-800 hover:text-white'
+                  : 'text-muted-foreground hover:bg-secondary hover:text-foreground'
               }`}
               onClick={() => setIsOpen(false)}
             >
@@ -110,7 +98,7 @@ export default function MobileMenu({
               className={`block rounded-md px-3 py-2 text-base font-medium transition-colors ${
                 isActive('/gacha')
                   ? 'bg-[#FF5656]/20 text-[#FF5656] font-semibold'
-                  : 'text-gray-300 hover:bg-gray-800 hover:text-white'
+                  : 'text-muted-foreground hover:bg-secondary hover:text-foreground'
               }`}
               onClick={() => setIsOpen(false)}
             >
@@ -123,7 +111,7 @@ export default function MobileMenu({
                 className={`block rounded-md px-3 py-2 text-base font-medium transition-colors ${
                   isActive('/store')
                     ? 'bg-[#FF5656]/20 text-[#FF5656] font-semibold'
-                    : 'text-gray-300 hover:bg-gray-800 hover:text-white'
+                    : 'text-muted-foreground hover:bg-secondary hover:text-foreground'
                 }`}
                 onClick={() => setIsOpen(false)}
               >
@@ -136,7 +124,7 @@ export default function MobileMenu({
               className={`block rounded-md px-3 py-2 text-base font-medium transition-colors ${
                 isActive('/store/packs')
                   ? 'bg-[#FF5656]/20 text-[#FF5656] font-semibold'
-                  : 'text-gray-300 hover:bg-gray-800 hover:text-white'
+                  : 'text-muted-foreground hover:bg-secondary hover:text-foreground'
               }`}
               onClick={() => setIsOpen(false)}
             >
@@ -147,7 +135,7 @@ export default function MobileMenu({
               className={`block rounded-md px-3 py-2 text-base font-medium transition-colors ${
                 isActive('/music-detection')
                   ? 'bg-[#FF5656]/20 text-[#FF5656] font-semibold'
-                  : 'text-gray-300 hover:bg-gray-800 hover:text-white'
+                  : 'text-muted-foreground hover:bg-secondary hover:text-foreground'
               }`}
               onClick={() => setIsOpen(false)}
             >
@@ -155,19 +143,19 @@ export default function MobileMenu({
             </Link>
             <Link
               href="/profile"
-              className="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-800 hover:text-white transition-colors"
+              className="block rounded-md px-3 py-2 text-base font-medium text-muted-foreground hover:bg-secondary hover:text-foreground transition-colors"
               onClick={() => setIsOpen(false)}
             >
               Profile
             </Link>
 
             {/* Sign Out Button */}
-            <div className="mt-4 border-t border-gray-800 pt-4">
+            <div className="mt-4 border-t border-border pt-4">
               <button
                 onClick={() => signOut({ callbackUrl: '/' })}
                 className="w-full flex items-center gap-2 rounded-md px-3 py-2 text-base font-medium text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-colors border border-red-500/20 hover:border-red-500/40"
               >
-                <span>🚪</span>
+                <NavIcon name="sign-out-alt" label="Sign Out" />
                 <span>Sign Out</span>
               </button>
             </div>

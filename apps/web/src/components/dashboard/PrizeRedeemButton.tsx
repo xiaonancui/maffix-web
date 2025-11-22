@@ -40,21 +40,21 @@ export default function PrizeRedeemButton({ prizeId }: { prizeId: string }) {
   if (showConfirm) {
     return (
       <div className="space-y-2">
-        <p className="text-sm text-gray-600">
+        <p className="text-sm text-muted-foreground">
           Redeem this prize? You will receive instructions via email.
         </p>
         <div className="flex gap-2">
           <button
             onClick={handleRedeem}
             disabled={isRedeeming}
-            className="flex-1 rounded-md bg-green-600 px-4 py-2 text-sm font-semibold text-white hover:bg-green-500 disabled:opacity-50"
+            className="flex-1 rounded-md bg-green-600 px-4 py-2 text-sm font-semibold text-foreground hover:bg-green-500 disabled:opacity-50"
           >
             {isRedeeming ? 'Redeeming...' : 'Yes, Redeem'}
           </button>
           <button
             onClick={() => setShowConfirm(false)}
             disabled={isRedeeming}
-            className="flex-1 rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-50 disabled:opacity-50"
+            className="flex-1 rounded-md border border-border bg-white px-4 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-50 disabled:opacity-50"
           >
             Cancel
           </button>
@@ -66,7 +66,7 @@ export default function PrizeRedeemButton({ prizeId }: { prizeId: string }) {
   return (
     <button
       onClick={() => setShowConfirm(true)}
-      className="w-full rounded-md bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:opacity-90"
+      className="w-full rounded-md border-2 border-primary bg-background px-4 py-2 text-sm font-semibold text-primary hover:bg-primary/10 dark:bg-primary dark:text-primary-foreground dark:hover:opacity-90 dark:border-transparent"
     >
       Redeem Prize
     </button>

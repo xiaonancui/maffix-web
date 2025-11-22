@@ -76,28 +76,27 @@ export async function POST(request: Request) {
       }
     }
 
-    // Dynamic import to avoid build-time database connection
-    const { db } = await import('@/lib/db')
-
-    const mission = await db.task.create({
-      data: {
-        title: data.title,
-        description: data.description,
-        type: data.type,
-        difficulty: data.difficulty || 'EASY',
-        missionType: data.missionType,
-        targetTikTokAccount: data.targetTikTokAccount,
-        targetVideoUrl: data.targetVideoUrl,
-        targetAudioId: data.targetAudioId,
-        autoVerify: data.autoVerify ?? true,
-        points: data.points || 0,
-        diamonds: data.diamonds || 0,
-        isActive: data.isActive ?? true,
-        startDate: data.startDate ? new Date(data.startDate) : null,
-        endDate: data.endDate ? new Date(data.endDate) : null,
-        maxCompletions: data.maxCompletions,
-      },
-    })
+    // Use mock data (database not connected)
+    const mission = {
+      id: `mission-${Date.now()}`,
+      title: data.title,
+      description: data.description,
+      type: data.type,
+      difficulty: data.difficulty || 'EASY',
+      missionType: data.missionType || null,
+      targetTikTokAccount: data.targetTikTokAccount || null,
+      targetVideoUrl: data.targetVideoUrl || null,
+      targetAudioId: data.targetAudioId || null,
+      autoVerify: data.autoVerify ?? true,
+      points: data.points || 0,
+      diamonds: data.diamonds || 0,
+      isActive: data.isActive ?? true,
+      startDate: data.startDate ? new Date(data.startDate) : null,
+      endDate: data.endDate ? new Date(data.endDate) : null,
+      maxCompletions: data.maxCompletions || null,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    }
 
     // Log admin action
     logAdminAction('CREATE_MISSION', auth.session.user.id, auth.session.user.email, {
@@ -129,38 +128,170 @@ export async function GET(request: Request) {
     const page = parseInt(searchParams.get('page') || '1')
     const limit = parseInt(searchParams.get('limit') || '50')
 
-    // Dynamic import to avoid build-time database connection
-    const { db } = await import('@/lib/db')
-
-    // Build where clause
-    const where: any = {}
-    if (type) where.type = type
-    if (missionType) where.missionType = missionType
-    if (isActive !== null) where.isActive = isActive === 'true'
-
-    // Get missions with completion statistics
-    const [missions, total] = await Promise.all([
-      db.task.findMany({
-        where,
-        include: {
-          _count: {
-            select: {
-              completions: true,
-            },
-          },
+    // Use mock data (database not connected)
+    const mockMissions = [
+      {
+        id: 'mission-1',
+        title: 'Follow Official TikTok Account',
+        description: 'Follow @maffix_official on TikTok to stay updated with latest releases',
+        type: 'SOCIAL',
+        difficulty: 'EASY',
+        missionType: 'FOLLOW',
+        targetTikTokAccount: '@maffix_official',
+        targetVideoUrl: null,
+        targetAudioId: null,
+        autoVerify: true,
+        points: 50,
+        diamonds: 100,
+        isActive: true,
+        startDate: null,
+        endDate: null,
+        maxCompletions: null,
+        createdAt: new Date('2024-01-01'),
+        updatedAt: new Date('2024-01-01'),
+        _count: {
+          completions: 245,
         },
-        orderBy: [
-          { isActive: 'desc' },
-          { createdAt: 'desc' },
-        ],
-        skip: (page - 1) * limit,
-        take: limit,
-      }),
-      db.task.count({ where }),
-    ])
+      },
+      {
+        id: 'mission-2',
+        title: 'Like New Single Release',
+        description: 'Like the latest music video on TikTok',
+        type: 'SOCIAL',
+        difficulty: 'EASY',
+        missionType: 'LIKE',
+        targetTikTokAccount: null,
+        targetVideoUrl: 'https://www.tiktok.com/@maffix/video/1234567890',
+        targetAudioId: null,
+        autoVerify: true,
+        points: 30,
+        diamonds: 60,
+        isActive: true,
+        startDate: null,
+        endDate: null,
+        maxCompletions: null,
+        createdAt: new Date('2024-01-05'),
+        updatedAt: new Date('2024-01-05'),
+        _count: {
+          completions: 189,
+        },
+      },
+      {
+        id: 'mission-3',
+        title: 'Repost New Music Video',
+        description: 'Repost the latest music video to your TikTok profile',
+        type: 'SOCIAL',
+        difficulty: 'MEDIUM',
+        missionType: 'REPOST',
+        targetTikTokAccount: null,
+        targetVideoUrl: 'https://www.tiktok.com/@maffix/video/1234567890',
+        targetAudioId: null,
+        autoVerify: false,
+        points: 100,
+        diamonds: 150,
+        isActive: true,
+        startDate: null,
+        endDate: null,
+        maxCompletions: null,
+        createdAt: new Date('2024-01-08'),
+        updatedAt: new Date('2024-01-08'),
+        _count: {
+          completions: 87,
+        },
+      },
+      {
+        id: 'mission-4',
+        title: 'Create Video with "Midnight Dreams"',
+        description: 'Create a TikTok video using the song "Midnight Dreams"',
+        type: 'CONTENT',
+        difficulty: 'HARD',
+        missionType: 'USE_AUDIO',
+        targetTikTokAccount: null,
+        targetVideoUrl: null,
+        targetAudioId: 'audio-midnight-dreams-123',
+        autoVerify: false,
+        points: 200,
+        diamonds: 400,
+        isActive: true,
+        startDate: null,
+        endDate: null,
+        maxCompletions: null,
+        createdAt: new Date('2024-01-10'),
+        updatedAt: new Date('2024-01-10'),
+        _count: {
+          completions: 52,
+        },
+      },
+      {
+        id: 'mission-5',
+        title: 'Daily Login Bonus',
+        description: 'Log in daily to claim your bonus diamonds',
+        type: 'DAILY',
+        difficulty: 'EASY',
+        missionType: null,
+        targetTikTokAccount: null,
+        targetVideoUrl: null,
+        targetAudioId: null,
+        autoVerify: true,
+        points: 10,
+        diamonds: 20,
+        isActive: true,
+        startDate: null,
+        endDate: null,
+        maxCompletions: null,
+        createdAt: new Date('2024-01-01'),
+        updatedAt: new Date('2024-01-01'),
+        _count: {
+          completions: 1523,
+        },
+      },
+      {
+        id: 'mission-6',
+        title: 'Share Profile Link',
+        description: 'Share your Maffix profile link on TikTok',
+        type: 'PROFILE',
+        difficulty: 'MEDIUM',
+        missionType: null,
+        targetTikTokAccount: null,
+        targetVideoUrl: null,
+        targetAudioId: null,
+        autoVerify: false,
+        points: 75,
+        diamonds: 120,
+        isActive: false,
+        startDate: null,
+        endDate: null,
+        maxCompletions: null,
+        createdAt: new Date('2024-01-03'),
+        updatedAt: new Date('2024-01-15'),
+        _count: {
+          completions: 34,
+        },
+      },
+    ]
+
+    // Apply filters
+    let filteredMissions = mockMissions
+
+    if (type) {
+      filteredMissions = filteredMissions.filter((m) => m.type === type)
+    }
+
+    if (missionType) {
+      filteredMissions = filteredMissions.filter((m) => m.missionType === missionType)
+    }
+
+    if (isActive !== null) {
+      const activeFilter = isActive === 'true'
+      filteredMissions = filteredMissions.filter((m) => m.isActive === activeFilter)
+    }
+
+    const total = filteredMissions.length
+    const start = (page - 1) * limit
+    const paginatedMissions = filteredMissions.slice(start, start + limit)
 
     return successResponse({
-      missions,
+      missions: paginatedMissions,
       pagination: {
         page,
         limit,

@@ -22,10 +22,10 @@ export default function CartPage() {
 
   if (status === 'loading' || isLoading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-black">
+      <div className="flex min-h-screen items-center justify-center bg-background">
         <div className="text-center">
           <div className="mb-4 h-12 w-12 animate-spin rounded-full border-4 border-[#FF5656] border-t-transparent mx-auto"></div>
-          <p className="text-gray-400">Loading cart...</p>
+          <p className="text-muted-foreground">Loading cart...</p>
         </div>
       </div>
     )
@@ -96,11 +96,11 @@ export default function CartPage() {
   const total = subtotal + shipping + tax
 
   return (
-    <div className="min-h-screen bg-black py-8">
+    <div className="min-h-screen bg-background py-8">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-white">Shopping Cart</h1>
-          <p className="mt-2 text-gray-400">
+          <h1 className="text-3xl font-bold text-foreground">Shopping Cart</h1>
+          <p className="mt-2 text-muted-foreground">
             {cartItems.length} {cartItems.length === 1 ? 'item' : 'items'} in your cart
           </p>
         </div>
@@ -113,25 +113,25 @@ export default function CartPage() {
           </div>
 
           <div className="lg:col-span-1">
-            <div className="sticky top-4 rounded-lg bg-gray-900 border border-gray-800 p-6 shadow-lg">
-              <h2 className="mb-4 text-xl font-bold text-white">Order Summary</h2>
+            <div className="sticky top-4 rounded-lg bg-card border border-border p-6 shadow-lg">
+              <h2 className="mb-4 text-xl font-bold text-foreground">Order Summary</h2>
 
-              <div className="space-y-3 border-b border-gray-700 pb-4">
-                <div className="flex justify-between text-gray-400">
+              <div className="space-y-3 border-b border-border pb-4">
+                <div className="flex justify-between text-muted-foreground">
                   <span>Subtotal</span>
                   <span>${subtotal.toFixed(2)}</span>
                 </div>
-                <div className="flex justify-between text-gray-400">
+                <div className="flex justify-between text-muted-foreground">
                   <span>Shipping</span>
                   <span>{shipping === 0 ? 'FREE' : `$${shipping.toFixed(2)}`}</span>
                 </div>
-                <div className="flex justify-between text-gray-400">
+                <div className="flex justify-between text-muted-foreground">
                   <span>Tax</span>
                   <span>${tax.toFixed(2)}</span>
                 </div>
               </div>
 
-              <div className="mt-4 flex justify-between text-lg font-bold text-white">
+              <div className="mt-4 flex justify-between text-lg font-bold text-foreground">
                 <span>Total</span>
                 <span>${total.toFixed(2)}</span>
               </div>
@@ -167,7 +167,7 @@ export default function CartPage() {
 
               <Link
                 href="/store"
-                className="mt-3 block w-full rounded-md border border-gray-600 bg-gray-800 px-6 py-3 text-center font-semibold text-gray-300 hover:bg-gray-700 hover:text-white transition-colors"
+                className="mt-3 block w-full rounded-md border border-gray-600 bg-secondary px-6 py-3 text-center font-semibold text-muted-foreground hover:bg-gray-700 hover:text-foreground transition-colors"
               >
                 Continue Shopping
               </Link>

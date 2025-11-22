@@ -47,19 +47,19 @@ export default function ConfirmDialog({
     <div className="fixed inset-0 z-50 flex items-center justify-center">
       {/* Backdrop */}
       <div
-        className="absolute inset-0 bg-black/70 backdrop-blur-sm"
+        className="absolute inset-0 bg-background/80 backdrop-blur-sm"
         onClick={handleClose}
       />
 
       {/* Dialog */}
-      <div className="relative z-10 w-full max-w-md rounded-lg bg-[#1a1a1a] border-2 border-red-500/30 shadow-2xl shadow-red-500/40 p-6">
+      <div className="relative z-10 w-full max-w-md rounded-lg bg-card border-2 border-border dark:shadow-2xl p-6">
         {/* Header */}
         <div className="mb-4">
-          <h3 className="text-xl font-bold text-white">{title}</h3>
+          <h3 className="text-xl font-bold text-foreground">{title}</h3>
         </div>
 
         {/* Message */}
-        <div className="mb-6 text-sm text-gray-300">
+        <div className="mb-6 text-sm text-muted-foreground">
           {typeof message === 'string' ? <p>{message}</p> : message}
         </div>
 
@@ -68,14 +68,14 @@ export default function ConfirmDialog({
           <button
             onClick={handleClose}
             disabled={isLoading}
-            className="rounded-md bg-gray-800 px-4 py-2 text-sm font-semibold text-white border border-red-500/30 hover:bg-gray-700 hover:border-red-500/50 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+            className="rounded-md bg-secondary px-4 py-2 text-sm font-semibold text-foreground border border-border hover:bg-secondary/80 hover:border-border disabled:opacity-50 disabled:cursor-not-allowed transition-all"
           >
             {cancelText}
           </button>
           <button
             onClick={onConfirm}
             disabled={isLoading}
-            className={`rounded-md bg-gradient-to-r ${variantStyles[variant]} px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-red-500/30 hover:shadow-red-500/50 disabled:opacity-50 disabled:cursor-not-allowed transition-all`}
+            className={`rounded-md bg-gradient-to-r ${variantStyles[variant]} px-4 py-2 text-sm font-semibold text-foreground dark:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all`}
           >
             {isLoading ? (
               <span className="flex items-center gap-2">

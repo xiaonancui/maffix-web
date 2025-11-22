@@ -1,5 +1,7 @@
 'use client'
 
+import { ChevronLeft, ChevronRight } from 'lucide-react'
+
 interface PaginationProps {
   currentPage: number
   totalPages: number
@@ -30,19 +32,19 @@ export default function Pagination({
   }
 
   return (
-    <div className="flex items-center justify-between border-t border-red-500/20 pt-4">
+    <div className="flex items-center justify-between border-t border-border pt-4">
       {/* Info */}
       {totalItems !== undefined && itemsPerPage !== undefined && (
         <div className="text-sm text-gray-400">
           Showing{' '}
-          <span className="font-semibold text-white">
+          <span className="font-semibold text-foreground">
             {Math.min((currentPage - 1) * itemsPerPage + 1, totalItems)}
           </span>{' '}
           to{' '}
-          <span className="font-semibold text-white">
+          <span className="font-semibold text-foreground">
             {Math.min(currentPage * itemsPerPage, totalItems)}
           </span>{' '}
-          of <span className="font-semibold text-white">{totalItems}</span> results
+          of <span className="font-semibold text-foreground">{totalItems}</span> results
         </div>
       )}
 
@@ -52,8 +54,9 @@ export default function Pagination({
         <button
           onClick={() => onPageChange(currentPage - 1)}
           disabled={currentPage === 1}
-          className="rounded-md bg-[#1a1a1a] border border-red-500/20 px-3 py-2 text-sm font-semibold text-white hover:border-red-500/40 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+          className="flex items-center gap-1 rounded-md bg-card border border-border px-3 py-2 text-sm font-semibold text-foreground hover:border-primary/40 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
         >
+          <ChevronLeft className="h-4 w-4" />
           Previous
         </button>
 
@@ -62,7 +65,7 @@ export default function Pagination({
           <>
             <button
               onClick={() => onPageChange(1)}
-              className="rounded-md bg-[#1a1a1a] border border-red-500/20 px-3 py-2 text-sm font-semibold text-white hover:border-red-500/40 transition-all"
+              className="rounded-md bg-card border border-border px-3 py-2 text-sm font-semibold text-foreground hover:border-primary/40 transition-all"
             >
               1
             </button>
@@ -76,8 +79,8 @@ export default function Pagination({
             onClick={() => onPageChange(page)}
             className={`rounded-md px-3 py-2 text-sm font-semibold transition-all ${
               page === currentPage
-                ? 'bg-red-500/20 border-2 border-red-500 text-white'
-                : 'bg-[#1a1a1a] border border-red-500/20 text-white hover:border-red-500/40'
+                ? 'bg-primary/20 border-2 border-primary text-foreground'
+                : 'bg-card border border-border text-foreground hover:border-primary/40'
             }`}
           >
             {page}
@@ -89,7 +92,7 @@ export default function Pagination({
             {endPage < totalPages - 1 && <span className="text-gray-500">...</span>}
             <button
               onClick={() => onPageChange(totalPages)}
-              className="rounded-md bg-[#1a1a1a] border border-red-500/20 px-3 py-2 text-sm font-semibold text-white hover:border-red-500/40 transition-all"
+              className="rounded-md bg-card border border-border px-3 py-2 text-sm font-semibold text-foreground hover:border-primary/40 transition-all"
             >
               {totalPages}
             </button>
@@ -100,9 +103,10 @@ export default function Pagination({
         <button
           onClick={() => onPageChange(currentPage + 1)}
           disabled={currentPage === totalPages}
-          className="rounded-md bg-[#1a1a1a] border border-red-500/20 px-3 py-2 text-sm font-semibold text-white hover:border-red-500/40 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+          className="flex items-center gap-1 rounded-md bg-card border border-border px-3 py-2 text-sm font-semibold text-foreground hover:border-primary/40 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
         >
           Next
+          <ChevronRight className="h-4 w-4" />
         </button>
       </div>
     </div>

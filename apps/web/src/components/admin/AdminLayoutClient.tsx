@@ -4,6 +4,7 @@ import { useState, useEffect, ReactNode } from 'react'
 import AdminHeader from './AdminHeader'
 import AdminSidebar from './AdminSidebar'
 import AdminBreadcrumbs from './AdminBreadcrumbs'
+import AdminFooter from './AdminFooter'
 
 interface AdminLayoutClientProps {
   children: ReactNode
@@ -40,7 +41,7 @@ export default function AdminLayoutClient({ children, userName }: AdminLayoutCli
   }
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a]">
+    <div className="min-h-screen bg-background flex flex-col">
       {/* Header */}
       <AdminHeader userName={userName} onMobileMenuToggle={toggleMobileMenu} />
 
@@ -54,7 +55,7 @@ export default function AdminLayoutClient({ children, userName }: AdminLayoutCli
 
       {/* Main Content Area */}
       <div
-        className={`pt-16 transition-all duration-300 ${
+        className={`pt-16 transition-all duration-300 flex-1 flex flex-col ${
           isSidebarCollapsed ? 'lg:pl-16' : 'lg:pl-56'
         }`}
       >
@@ -62,7 +63,10 @@ export default function AdminLayoutClient({ children, userName }: AdminLayoutCli
         <AdminBreadcrumbs />
 
         {/* Page Content */}
-        <main className="min-h-[calc(100vh-4rem)]">{children}</main>
+        <main className="flex-1">{children}</main>
+
+        {/* Footer */}
+        <AdminFooter />
       </div>
     </div>
   )

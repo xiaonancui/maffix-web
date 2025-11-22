@@ -40,7 +40,7 @@ export default function StatusBadge({
     <span
       className={`inline-flex items-center gap-1 rounded-md px-2.5 py-0.5 text-xs font-semibold border ${
         style
-      } ${glow ? 'shadow-sm' : ''}`}
+      } ${glow ? 'dark:shadow-sm' : ''}`}
     >
       {icon && <span>{icon}</span>}
       {children}

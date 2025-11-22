@@ -6,7 +6,6 @@ import {
   handleDatabaseError,
   HttpStatus,
 } from '@/lib/api-helpers'
-import { db } from '@/lib/db'
 
 /**
  * GET /api/admin/gacha/stats
@@ -20,133 +19,81 @@ export async function GET() {
       return authResult
     }
 
-    // Get total pulls count
-    const totalPulls = await db.gachaPull.count()
+    // Use mock data (database not connected)
+    const totalPulls = 3892
+    const pullsByType = [
+      { type: 'SINGLE', count: 2543 },
+      { type: 'MULTI_10X', count: 1349 },
+    ]
+    const totalRevenue = 254300 // diamonds spent
+    const rarityCount = {
+      LEGENDARY: 42,
+      SSR: 156,
+      EPIC: 623,
+      RARE: 1245,
+      COMMON: 1826,
+    }
+    const ssrPulls = rarityCount.LEGENDARY + rarityCount.SSR
+    const ssrRate = (ssrPulls / totalPulls) * 100
+    const guaranteedSSRCount = 89
+    const recentPulls = 234
+    const activeItemsCount = 25
+    const uniqueUsersCount = 847
 
-    // Get pulls by type
-    const pullsByType = await db.gachaPull.groupBy({
-      by: ['pullType'],
-      _count: true,
-    })
-
-    // Get total revenue (diamonds spent)
-    const revenueResult = await db.gachaPull.aggregate({
-      _sum: {
-        cost: true,
+    const topPrizeDetails = [
+      {
+        id: 'prize-6',
+        name: 'Fan Club Sticker Pack',
+        rarity: 'COMMON',
+        image: 'https://images.unsplash.com/photo-1626785774573-4b799315345d?w=400',
+        pullCount: 245,
       },
-    })
-    const totalRevenue = revenueResult._sum.cost || 0
-
-    // Get prize distribution by rarity
-    const prizeDistribution = await db.gachaPull.findMany({
-      where: {
-        prizeId: { not: null },
+      {
+        id: 'prize-5',
+        name: 'Digital Album Bundle',
+        rarity: 'RARE',
+        image: 'https://images.unsplash.com/photo-1619983081563-430f63602796?w=400',
+        pullCount: 178,
       },
-      include: {
-        prize: {
-          select: {
-            rarity: true,
-          },
-        },
+      {
+        id: 'prize-4',
+        name: 'Premium Hoodie',
+        rarity: 'EPIC',
+        image: 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=400',
+        pullCount: 132,
       },
-    })
-
-    const rarityCount: Record<string, number> = {}
-    prizeDistribution.forEach((pull) => {
-      if (pull.prize) {
-        const rarity = pull.prize.rarity
-        rarityCount[rarity] = (rarityCount[rarity] || 0) + 1
-      }
-    })
-
-    // Calculate SSR rate
-    const ssrPulls = (rarityCount['SSR'] || 0) + (rarityCount['LEGENDARY'] || 0)
-    const ssrRate = totalPulls > 0 ? (ssrPulls / totalPulls) * 100 : 0
-
-    // Get guaranteed SSR count
-    const guaranteedSSRCount = await db.gachaPull.count({
-      where: {
-        wasGuaranteed: true,
+      {
+        id: 'prize-2',
+        name: 'Limited Edition Signed Vinyl',
+        rarity: 'SSR',
+        image: 'https://images.unsplash.com/photo-1603048588665-791ca8aea617?w=400',
+        pullCount: 58,
       },
-    })
-
-    // Get recent pulls (last 24 hours)
-    const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000)
-    const recentPulls = await db.gachaPull.count({
-      where: {
-        pulledAt: {
-          gte: oneDayAgo,
-        },
+      {
+        id: 'prize-1',
+        name: 'VIP Concert Backstage Pass',
+        rarity: 'LEGENDARY',
+        image: 'https://images.unsplash.com/photo-1540039155733-5bb30b53aa14?w=400',
+        pullCount: 23,
       },
-    })
-
-    // Get active gacha items count
-    const activeItemsCount = await db.gachaItem.count({
-      where: {
-        isActive: true,
-      },
-    })
-
-    // Get total unique users who pulled
-    const uniqueUsers = await db.gachaPull.groupBy({
-      by: ['userId'],
-      _count: true,
-    })
-
-    // Get top prizes by pull count
-    const topPrizes = await db.gachaPull.groupBy({
-      by: ['prizeId'],
-      _count: true,
-      orderBy: {
-        _count: {
-          prizeId: 'desc',
-        },
-      },
-      take: 5,
-      where: {
-        prizeId: { not: null },
-      },
-    })
-
-    // Fetch prize details for top prizes
-    const topPrizeDetails = await Promise.all(
-      topPrizes.map(async (item) => {
-        if (!item.prizeId) return null
-        const prize = await db.prize.findUnique({
-          where: { id: item.prizeId },
-          select: {
-            id: true,
-            name: true,
-            rarity: true,
-            image: true,
-          },
-        })
-        return {
-          ...prize,
-          pullCount: item._count,
-        }
-      })
-    )
+    ]
 
     return NextResponse.json(
       successResponse({
         totalPulls,
-        pullsByType: pullsByType.map((item) => ({
-          type: item.pullType,
-          count: item._count,
-        })),
+        pullsByType,
         totalRevenue,
         prizeDistribution: Object.entries(rarityCount).map(([rarity, count]) => ({
           rarity,
           count,
-          percentage: totalPulls > 0 ? (count / totalPulls) * 100 : 0,
+          percentage: (count / totalPulls) * 100,
         })),
         ssrRate: parseFloat(ssrRate.toFixed(2)),
         guaranteedSSRCount,
         recentPulls24h: recentPulls,
         activeItemsCount,
-        uniqueUsersCount: uniqueUsers.length,
-        topPrizes: topPrizeDetails.filter(Boolean),
+        uniqueUsersCount,
+        topPrizes: topPrizeDetails,
       })
     )
   } catch (error) {

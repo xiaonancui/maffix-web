@@ -131,7 +131,7 @@ export default async function MissionDetailPage({
       case 'HARD':
         return 'bg-red-900/20 text-red-300 border-red-700'
       default:
-        return 'bg-gray-800 text-gray-300 border-gray-700'
+        return 'bg-secondary text-muted-foreground border-border'
     }
   }
 
@@ -170,7 +170,7 @@ export default async function MissionDetailPage({
       <div className="mb-6">
         <Link
           href="/missions"
-          className="inline-flex items-center text-sm font-medium text-gray-400 hover:text-gray-200"
+          className="inline-flex items-center text-sm font-medium text-muted-foreground hover:text-foreground"
         >
           <svg
             className="mr-2 h-4 w-4"
@@ -190,13 +190,13 @@ export default async function MissionDetailPage({
       </div>
 
       {/* Mission Header */}
-      <div className="mb-8 rounded-lg bg-gray-900 p-8 shadow-lg border border-gray-800">
+      <div className="mb-8 rounded-lg bg-card p-8 shadow-lg border border-border">
         <div className="mb-6 flex items-start justify-between">
           <div className="flex items-center gap-4">
             <span className="text-5xl">{getMissionTypeIcon(mission.missionType)}</span>
             <div>
-              <h1 className="text-3xl font-bold text-white">{mission.title}</h1>
-              <p className="mt-1 text-sm text-gray-400">
+              <h1 className="text-3xl font-bold text-foreground">{mission.title}</h1>
+              <p className="mt-1 text-sm text-muted-foreground">
                 {getMissionTypeDescription(mission.missionType)}
               </p>
             </div>
@@ -210,24 +210,24 @@ export default async function MissionDetailPage({
           </span>
         </div>
 
-        <p className="mb-6 text-gray-300">{mission.description}</p>
+        <p className="mb-6 text-muted-foreground">{mission.description}</p>
 
         {/* Rewards */}
         <div className="grid gap-4 sm:grid-cols-3">
           <div className="rounded-lg bg-blue-900/20 p-4 border border-blue-800/30">
-            <div className="text-sm text-gray-400">Reward</div>
+            <div className="text-sm text-muted-foreground">Reward</div>
             <div className="mt-1 text-2xl font-bold text-[#FF5656]">
               💎 {mission.diamonds}
             </div>
           </div>
           <div className="rounded-lg bg-purple-900/20 p-4 border border-purple-800/30">
-            <div className="text-sm text-gray-400">Points</div>
+            <div className="text-sm text-muted-foreground">Points</div>
             <div className="mt-1 text-2xl font-bold text-[#FF5656]">
               ⭐ {mission.points}
             </div>
           </div>
           <div className="rounded-lg bg-green-900/20 p-4 border border-green-800/30">
-            <div className="text-sm text-gray-400">Est. Time</div>
+            <div className="text-sm text-muted-foreground">Est. Time</div>
             <div className="mt-1 text-2xl font-bold text-green-400">
               {mission.estimatedTime || '5 min'}
             </div>
@@ -264,7 +264,7 @@ export default async function MissionDetailPage({
               <div className="mt-4">
                 <Link
                   href="/profile/link-tiktok"
-                  className="inline-flex items-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white hover:bg-red-700"
+                  className="inline-flex items-center rounded-md border-2 border-red-600 bg-white px-3 py-2 text-sm font-semibold text-red-600 hover:bg-red-50 dark:bg-red-600 dark:text-primary-foreground dark:border-transparent dark:hover:bg-red-700"
                 >
                   Link TikTok Account
                 </Link>
@@ -342,7 +342,7 @@ export default async function MissionDetailPage({
                 )}
               </div>
               {submission.submittedAt && (
-                <p className="mt-2 text-xs text-gray-400">
+                <p className="mt-2 text-xs text-muted-foreground">
                   Submitted: {new Date(submission.submittedAt).toLocaleString()}
                 </p>
               )}
@@ -352,8 +352,8 @@ export default async function MissionDetailPage({
       )}
 
       {/* Mission Instructions */}
-      <div className="mb-8 rounded-lg bg-gray-900 p-6 shadow border border-gray-800">
-        <h2 className="mb-4 text-xl font-bold text-white">How to Complete</h2>
+      <div className="mb-8 rounded-lg bg-card p-6 shadow border border-border">
+        <h2 className="mb-4 text-xl font-bold text-foreground">How to Complete</h2>
         <ol className="space-y-3">
           {(mission.instructions || [
             'Open TikTok using the button below',
@@ -361,10 +361,10 @@ export default async function MissionDetailPage({
             'Return here and submit for verification',
           ]).map((instruction: string, index: number) => (
             <li key={index} className="flex items-start">
-              <span className="mr-3 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-[#FF5656] text-xs font-semibold text-white">
+              <span className="mr-3 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-[#FF5656] text-xs font-semibold text-foreground">
                 {index + 1}
               </span>
-              <span className="text-gray-300">{instruction}</span>
+              <span className="text-muted-foreground">{instruction}</span>
             </li>
           ))}
         </ol>
@@ -372,8 +372,8 @@ export default async function MissionDetailPage({
 
       {/* Requirements */}
       {mission.requirements && mission.requirements.length > 0 && (
-        <div className="mb-8 rounded-lg bg-gray-900 p-6 shadow border border-gray-800">
-          <h2 className="mb-4 text-xl font-bold text-white">Requirements</h2>
+        <div className="mb-8 rounded-lg bg-card p-6 shadow border border-border">
+          <h2 className="mb-4 text-xl font-bold text-foreground">Requirements</h2>
           <ul className="space-y-2">
             {mission.requirements.map((req: string, index: number) => (
               <li key={index} className="flex items-start">
@@ -390,7 +390,7 @@ export default async function MissionDetailPage({
                     d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                   />
                 </svg>
-                <span className="text-gray-300">{req}</span>
+                <span className="text-muted-foreground">{req}</span>
               </li>
             ))}
           </ul>
@@ -405,7 +405,7 @@ export default async function MissionDetailPage({
               href={getTargetUrl()}
               target="_blank"
               rel="noopener noreferrer"
-              className="block w-full rounded-md bg-black px-4 py-3 text-center text-sm font-semibold text-white hover:bg-gray-800"
+              className="block w-full rounded-md bg-background px-4 py-3 text-center text-sm font-semibold text-foreground hover:bg-secondary"
             >
               Open TikTok →
             </a>
@@ -416,7 +416,7 @@ export default async function MissionDetailPage({
         {isPending && (
           <button
             disabled
-            className="w-full cursor-not-allowed rounded-md bg-gray-700 px-4 py-3 text-sm font-semibold text-gray-400"
+            className="w-full cursor-not-allowed rounded-md border-2 border-yellow-600 bg-white px-4 py-3 text-sm font-semibold text-yellow-600 dark:bg-yellow-700 dark:text-primary-foreground dark:border-transparent"
           >
             Verification in Progress...
           </button>
@@ -425,7 +425,7 @@ export default async function MissionDetailPage({
         {isCompleted && (
           <Link
             href="/missions"
-            className="block w-full rounded-md bg-primary px-4 py-3 text-center text-sm font-semibold text-primary-foreground hover:opacity-90"
+            className="block w-full rounded-md border-2 border-primary bg-white px-4 py-3 text-center text-sm font-semibold text-primary hover:bg-primary/10 dark:bg-primary dark:text-primary-foreground dark:border-transparent dark:hover:bg-primary/90"
           >
             Browse More Missions
           </Link>

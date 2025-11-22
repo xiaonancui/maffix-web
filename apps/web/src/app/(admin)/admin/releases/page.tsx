@@ -11,6 +11,7 @@ import StatusBadge from '@/components/admin/StatusBadge'
 import ActionMenu from '@/components/admin/ActionMenu'
 import BulkActions from '@/components/admin/BulkActions'
 import ConfirmDialog from '@/components/admin/ConfirmDialog'
+import { Plus, Edit, ExternalLink, Trash2 } from 'lucide-react'
 
 interface Release {
   id: string
@@ -148,8 +149,8 @@ export default function ReleasesPage() {
             />
           )}
           <div>
-            <div className="font-semibold text-white">{release.title}</div>
-            <div className="text-sm text-gray-400">{release.artist}</div>
+            <div className="font-semibold text-foreground">{release.title}</div>
+            <div className="text-sm text-muted-foreground">{release.artist}</div>
           </div>
         </div>
       ),
@@ -158,21 +159,21 @@ export default function ReleasesPage() {
       key: 'genre',
       label: 'Genre',
       render: (release: Release) => (
-        <span className="text-gray-300">{release.genre || '-'}</span>
+        <span className="text-muted-foreground">{release.genre || '-'}</span>
       ),
     },
     {
       key: 'views',
       label: 'Views',
       render: (release: Release) => (
-        <span className="text-gray-300">{release.views || '-'}</span>
+        <span className="text-muted-foreground">{release.views || '-'}</span>
       ),
     },
     {
       key: 'releaseDate',
       label: 'Release Date',
       render: (release: Release) => (
-        <span className="text-gray-300">
+        <span className="text-muted-foreground">
           {new Date(release.releaseDate).toLocaleDateString()}
         </span>
       ),
@@ -199,16 +200,19 @@ export default function ReleasesPage() {
           items={[
             {
               label: 'Edit',
+              icon: <Edit className="h-4 w-4" />,
               onClick: () => router.push(`/admin/releases/${release.id}/edit`),
               variant: 'default',
             },
             {
               label: 'View Video',
+              icon: <ExternalLink className="h-4 w-4" />,
               onClick: () => window.open(release.videoUrl, '_blank'),
               variant: 'default',
             },
             {
               label: 'Delete',
+              icon: <Trash2 className="h-4 w-4" />,
               onClick: () => setDeleteConfirm({ show: true, id: release.id }),
               variant: 'danger',
             },
@@ -227,11 +231,9 @@ export default function ReleasesPage() {
           actions={
             <button
               onClick={() => router.push('/admin/releases/new')}
-              className="flex items-center gap-2 rounded-lg bg-gradient-to-r from-red-600 to-red-500 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-red-500/20 transition-all hover:shadow-red-500/40 hover:scale-105"
+              className="flex items-center gap-2 rounded-lg border-2 border-primary bg-transparent px-4 py-2 text-sm font-semibold text-primary dark:shadow-lg dark:shadow-red-500/20 transition-all hover:dark:shadow-red-500/40 hover:scale-105 hover:bg-primary/10 dark:bg-gradient-to-r dark:from-red-600 dark:to-red-500 dark:text-primary-foreground dark:border-transparent"
             >
-              <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-              </svg>
+              <Plus className="h-5 w-5" />
               Create Release
             </button>
           }

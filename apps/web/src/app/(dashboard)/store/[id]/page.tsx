@@ -231,17 +231,17 @@ export default async function MerchandiseDetailPage({
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-8">
+    <div className="min-h-screen bg-background py-8">
       <div className="container mx-auto px-4">
         {/* Breadcrumb */}
         <nav className="mb-6 text-sm">
           <ol className="flex items-center space-x-2">
             <li>
-              <a href="/store" className="text-gray-600 hover:text-gray-900">
+              <a href="/store" className="text-muted-foreground hover:text-foreground">
                 Store
               </a>
             </li>
-            <li className="text-gray-400">/</li>
+            <li className="text-muted-foreground">/</li>
             <li className="text-gray-900 font-medium">{merchandise.name}</li>
           </ol>
         </nav>

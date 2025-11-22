@@ -1,6 +1,7 @@
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { redirect } from 'next/navigation'
+import { Gem, Target, Gift, Calendar, Users, TrendingUp, TrendingDown, Info } from 'lucide-react'
 
 export default async function TransactionsPage() {
   // Dynamic import to avoid build-time database connection
@@ -109,17 +110,17 @@ export default async function TransactionsPage() {
   const getTransactionIcon = (type: string) => {
     switch (type) {
       case 'MISSION_REWARD':
-        return '🎯'
+        return <Target className="h-6 w-6 text-primary" />
       case 'GACHA_PULL':
-        return '🎰'
+        return <Gem className="h-6 w-6 text-primary" />
       case 'PREMIUM_PACK':
-        return '🎁'
+        return <Gift className="h-6 w-6 text-primary" />
       case 'DAILY_REWARD':
-        return '📅'
+        return <Calendar className="h-6 w-6 text-primary" />
       case 'REFERRAL_BONUS':
-        return '👥'
+        return <Users className="h-6 w-6 text-primary" />
       default:
-        return '💎'
+        return <Gem className="h-6 w-6 text-primary" />
     }
   }
 
@@ -164,56 +165,62 @@ export default async function TransactionsPage() {
     <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6 lg:px-8">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-4xl font-bold text-white">Transaction History</h1>
-        <p className="mt-2 text-gray-400">
+        <h1 className="text-4xl font-bold text-foreground">Transaction History</h1>
+        <p className="mt-2 text-muted-foreground">
           Track all your diamond earnings and spending
         </p>
       </div>
 
       {/* Summary Cards */}
       <div className="mb-8 grid gap-6 sm:grid-cols-3">
-        <div className="rounded-lg bg-gradient-to-br from-blue-900/30 to-blue-800/30 p-6 shadow border border-blue-800/30">
-          <div className="mb-2 text-sm font-medium text-[#FF5656]">
+        <div className="rounded-lg bg-card p-6 shadow border border-border hover:border-primary transition-colors">
+          <div className="mb-2 text-sm font-medium text-muted-foreground flex items-center gap-2">
+            <Gem className="h-4 w-4" />
             Current Balance
           </div>
-          <div className="text-3xl font-bold text-blue-300">
-            💎 {user?.diamondBalance || 0}
+          <div className="text-3xl font-bold text-primary flex items-center gap-2">
+            <Gem className="h-8 w-8" />
+            {user?.diamondBalance || 0}
           </div>
         </div>
 
-        <div className="rounded-lg bg-gradient-to-br from-green-900/30 to-green-800/30 p-6 shadow border border-green-800/30">
-          <div className="mb-2 text-sm font-medium text-green-400">
+        <div className="rounded-lg bg-card p-6 shadow border border-border hover:border-green-600 transition-colors">
+          <div className="mb-2 text-sm font-medium text-muted-foreground flex items-center gap-2">
+            <TrendingUp className="h-4 w-4" />
             Total Earned
           </div>
-          <div className="text-3xl font-bold text-green-300">
-            💎 {totalEarned}
+          <div className="text-3xl font-bold text-green-600 flex items-center gap-2">
+            <Gem className="h-8 w-8" />
+            {totalEarned}
           </div>
-          <div className="mt-1 text-xs text-green-400">
+          <div className="mt-1 text-xs text-muted-foreground">
             {missionRewards} missions completed
           </div>
         </div>
 
-        <div className="rounded-lg bg-gradient-to-br from-purple-900/30 to-purple-800/30 p-6 shadow border border-purple-800/30">
-          <div className="mb-2 text-sm font-medium text-[#FF5656]">
+        <div className="rounded-lg bg-card p-6 shadow border border-border hover:border-purple-600 transition-colors">
+          <div className="mb-2 text-sm font-medium text-muted-foreground flex items-center gap-2">
+            <TrendingDown className="h-4 w-4" />
             Total Spent
           </div>
-          <div className="text-3xl font-bold text-purple-300">
-            💎 {totalSpent}
+          <div className="text-3xl font-bold text-purple-600 flex items-center gap-2">
+            <Gem className="h-8 w-8" />
+            {totalSpent}
           </div>
         </div>
       </div>
 
       {/* Transactions List */}
-      <div className="rounded-lg bg-gray-900 shadow border border-gray-800">
-        <div className="border-b border-gray-800 px-6 py-4">
-          <h2 className="text-xl font-bold text-white">Recent Transactions</h2>
+      <div className="rounded-lg bg-card shadow border border-border">
+        <div className="border-b border-border px-6 py-4">
+          <h2 className="text-xl font-bold text-foreground">Recent Transactions</h2>
         </div>
 
         {transactions.length === 0 ? (
           <div className="p-12 text-center">
             <div className="mb-4 text-6xl">📊</div>
-            <p className="text-gray-400">No transactions yet</p>
-            <p className="mt-2 text-sm text-gray-500">
+            <p className="text-muted-foreground">No transactions yet</p>
+            <p className="mt-2 text-sm text-muted-foreground">
               Complete missions to start earning diamonds!
             </p>
           </div>
@@ -222,17 +229,17 @@ export default async function TransactionsPage() {
             {transactions.map((transaction) => (
               <div
                 key={transaction.id}
-                className="flex items-center justify-between px-6 py-4 transition-colors hover:bg-gray-800"
+                className="flex items-center justify-between px-6 py-4 transition-colors hover:bg-secondary"
               >
                 <div className="flex items-center gap-4">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gray-800 text-2xl">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-secondary">
                     {getTransactionIcon(transaction.type)}
                   </div>
                   <div>
-                    <div className="font-medium text-white">
+                    <div className="font-medium text-foreground">
                       {transaction.description}
                     </div>
-                    <div className="text-sm text-gray-400">
+                    <div className="text-sm text-muted-foreground">
                       {formatDate(transaction.createdAt)}
                     </div>
                   </div>
@@ -240,14 +247,15 @@ export default async function TransactionsPage() {
 
                 <div className="text-right">
                   <div
-                    className={`text-xl font-bold ${getTransactionColor(
+                    className={`text-xl font-bold flex items-center justify-end gap-2 ${getTransactionColor(
                       transaction.amount
                     )}`}
                   >
                     {transaction.amount > 0 ? '+' : ''}
-                    {transaction.amount} 💎
+                    {transaction.amount}
+                    <Gem className="h-5 w-5" />
                   </div>
-                  <div className="text-xs text-gray-400">
+                  <div className="text-xs text-muted-foreground">
                     {transaction.currency}
                   </div>
                 </div>
@@ -257,8 +265,8 @@ export default async function TransactionsPage() {
         )}
 
         {transactions.length > 0 && (
-          <div className="border-t border-gray-800 px-6 py-4 text-center">
-            <p className="text-sm text-gray-400">
+          <div className="border-t border-border px-6 py-4 text-center">
+            <p className="text-sm text-muted-foreground">
               Showing last {transactions.length} transactions
             </p>
           </div>
@@ -266,28 +274,16 @@ export default async function TransactionsPage() {
       </div>
 
       {/* Info Section */}
-      <div className="mt-8 rounded-lg bg-blue-900/20 p-6 border border-blue-800/30">
+      <div className="mt-8 rounded-lg border-2 border-blue-600 bg-transparent p-6 dark:bg-blue-900/20">
         <div className="flex items-start">
           <div className="flex-shrink-0">
-            <svg
-              className="h-6 w-6 text-[#FF5656]"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth="1.5"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"
-              />
-            </svg>
+            <Info className="h-6 w-6 text-blue-600" />
           </div>
           <div className="ml-3 flex-1">
-            <h3 className="text-sm font-medium text-blue-300">
+            <h3 className="text-sm font-medium text-blue-600">
               About Transactions
             </h3>
-            <div className="mt-2 text-sm text-blue-400">
+            <div className="mt-2 text-sm text-muted-foreground">
               <p>
                 All diamond transactions are recorded here. You can earn diamonds by
                 completing missions, and spend them on gacha draws. Premium pack

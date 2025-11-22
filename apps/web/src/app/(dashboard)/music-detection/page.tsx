@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { Music, CheckCircle, AlertCircle, Copy, Loader2, Download } from 'lucide-react'
 
 export default function MusicDetectionPage() {
   // --- 1. 状态管理 (State Management) ---
@@ -150,7 +151,7 @@ export default function MusicDetectionPage() {
       return (
         <div className="text-center py-6">
           <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-[#FF5656] border-r-transparent"></div>
-          <p className="mt-3 text-gray-300">Getting audio download link...</p>
+          <p className="mt-3 text-muted-foreground">Getting audio download link...</p>
         </div>
       )
     }
@@ -164,42 +165,41 @@ export default function MusicDetectionPage() {
             </svg>
             <h4 className="text-lg font-semibold text-red-500">Error</h4>
           </div>
-          <p className="text-gray-300">{step1Error}</p>
+          <p className="text-muted-foreground">{step1Error}</p>
         </div>
       )
     }
 
     if (step1Result && step1Result.audioUrl) {
       return (
-        <div className="rounded-lg bg-[#FF5656]/10 border border-[#FF5656]/50 p-4">
+        <div className="rounded-lg border-2 border-green-600 bg-transparent p-4 dark:bg-green-900/10">
           <div className="flex items-center mb-3">
-            <svg className="w-5 h-5 text-[#FF5656] mr-2" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-            </svg>
-            <h4 className="text-lg font-semibold text-[#FF5656]">Audio Link Retrieved!</h4>
+            <CheckCircle className="w-5 h-5 text-green-600 mr-2" />
+            <h4 className="text-lg font-semibold text-green-600">Audio Link Retrieved!</h4>
           </div>
 
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-300 mb-2">Download Link:</label>
+            <label className="block text-sm font-medium text-muted-foreground mb-2">Download Link:</label>
             <div className="flex gap-2">
               <input
-                className="flex-1 px-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-gray-300 text-sm"
+                className="flex-1 px-3 py-2 bg-secondary border border-border rounded-lg text-muted-foreground text-sm"
                 type="text"
                 value={step1Result.audioUrl}
                 readOnly
               />
               <button
-                className="px-4 py-2 bg-[#FF5656] hover:bg-[#ff3333] text-white rounded-lg transition-colors text-sm font-medium"
+                className="px-4 py-2 border-2 border-primary bg-transparent text-primary hover:bg-primary/10 rounded-lg transition-colors text-sm font-medium flex items-center gap-2 dark:bg-primary dark:text-primary-foreground dark:hover:bg-primary/90"
                 onClick={() => copyToClipboard(step1Result.audioUrl)}
               >
+                <Copy className="h-4 w-4" />
                 Copy
               </button>
             </div>
           </div>
 
-          <div className="text-sm text-gray-300">
+          <div className="text-sm text-muted-foreground">
             <p className="font-semibold mb-2">Next steps:</p>
-            <ol className="list-decimal list-inside space-y-1 text-gray-400">
+            <ol className="list-decimal list-inside space-y-1 text-muted-foreground">
               <li>Click the &quot;Copy&quot; button above to copy the download link</li>
               <li>Download the MP3 file using this link</li>
               <li>Upload the MP3 file to a file hosting service (like Google Drive, Dropbox, etc.)</li>
@@ -220,7 +220,7 @@ export default function MusicDetectionPage() {
       return (
         <div className="text-center py-6">
           <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-[#FF5656] border-r-transparent"></div>
-          <p className="mt-3 text-gray-300">Analyzing audio and detecting music...</p>
+          <p className="mt-3 text-muted-foreground">Analyzing audio and detecting music...</p>
         </div>
       )
     }
@@ -234,7 +234,7 @@ export default function MusicDetectionPage() {
             </svg>
             <h4 className="text-lg font-semibold text-red-500">Detection Error</h4>
           </div>
-          <p className="text-gray-300">{step2Error}</p>
+          <p className="text-muted-foreground">{step2Error}</p>
         </div>
       )
     }
@@ -249,8 +249,8 @@ export default function MusicDetectionPage() {
               </svg>
               <h4 className="text-lg font-semibold text-yellow-500">Music Not Identified</h4>
             </div>
-            <p className="text-gray-300 mb-2">The audio could not be identified. This might be because:</p>
-            <ul className="list-disc list-inside space-y-1 text-gray-400 text-sm">
+            <p className="text-muted-foreground mb-2">The audio could not be identified. This might be because:</p>
+            <ul className="list-disc list-inside space-y-1 text-muted-foreground text-sm">
               <li>The audio doesn&apos;t contain recognizable music</li>
               <li>The music is not in our database</li>
               <li>The audio quality is too low</li>
@@ -260,40 +260,38 @@ export default function MusicDetectionPage() {
       }
 
       return (
-        <div className="rounded-lg bg-gray-800 border border-[#FF5656]/30 p-6">
+        <div className="rounded-lg bg-secondary border-2 border-green-600 p-6">
           <div className="flex items-center mb-4">
-            <svg className="w-6 h-6 text-[#FF5656] mr-2" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-            </svg>
-            <h3 className="text-xl font-bold text-[#FF5656]">
+            <CheckCircle className="w-6 h-6 text-green-600 mr-2" />
+            <h3 className="text-xl font-bold text-green-600">
               Music Identified!
             </h3>
           </div>
 
-          <div className="bg-gray-900/50 rounded-lg p-4 space-y-3">
-            <div className="flex border-b border-gray-700 pb-2">
-              <span className="text-gray-400 w-32">Song Title:</span>
-              <span className="text-white font-medium">{step2Result.title}</span>
+          <div className="bg-card/50 rounded-lg p-4 space-y-3">
+            <div className="flex border-b border-border pb-2">
+              <span className="text-muted-foreground w-32">Song Title:</span>
+              <span className="text-foreground font-medium">{step2Result.title}</span>
             </div>
-            <div className="flex border-b border-gray-700 pb-2">
-              <span className="text-gray-400 w-32">Artist:</span>
-              <span className="text-white font-medium">{step2Result.artist}</span>
+            <div className="flex border-b border-border pb-2">
+              <span className="text-muted-foreground w-32">Artist:</span>
+              <span className="text-foreground font-medium">{step2Result.artist}</span>
             </div>
-            <div className="flex border-b border-gray-700 pb-2">
-              <span className="text-gray-400 w-32">Album:</span>
-              <span className="text-white">{step2Result.album || 'Unknown Album'}</span>
+            <div className="flex border-b border-border pb-2">
+              <span className="text-muted-foreground w-32">Album:</span>
+              <span className="text-foreground">{step2Result.album || 'Unknown Album'}</span>
             </div>
-            <div className="flex border-b border-gray-700 pb-2">
-              <span className="text-gray-400 w-32">Release Date:</span>
-              <span className="text-white">{step2Result.releaseDate || 'Unknown'}</span>
+            <div className="flex border-b border-border pb-2">
+              <span className="text-muted-foreground w-32">Release Date:</span>
+              <span className="text-foreground">{step2Result.releaseDate || 'Unknown'}</span>
             </div>
-            <div className="flex border-b border-gray-700 pb-2">
-              <span className="text-gray-400 w-32">Genre:</span>
-              <span className="text-white">{step2Result.genre || 'Unknown'}</span>
+            <div className="flex border-b border-border pb-2">
+              <span className="text-muted-foreground w-32">Genre:</span>
+              <span className="text-foreground">{step2Result.genre || 'Unknown'}</span>
             </div>
             <div className="flex">
-              <span className="text-gray-400 w-32">Confidence:</span>
-              <span className="text-white">{step2Result.confidence || 'Unknown'}</span>
+              <span className="text-muted-foreground w-32">Confidence:</span>
+              <span className="text-foreground">{step2Result.confidence || 'Unknown'}</span>
             </div>
           </div>
         </div>
@@ -304,33 +302,31 @@ export default function MusicDetectionPage() {
   }
 
   return (
-    <div className="min-h-screen bg-black py-8 px-4">
+    <div className="min-h-screen bg-background py-8 px-4">
       <div className="max-w-4xl mx-auto">
 
         {/* Header */}
-        <div className="bg-gray-900 rounded-lg border border-[#FF5656]/30 p-6 mb-6 text-center">
+        <div className="bg-card rounded-lg border border-border p-6 mb-6 text-center">
           <div className="flex items-center justify-center mb-3">
-            <svg className="w-10 h-10 text-[#FF5656] mr-3" fill="currentColor" viewBox="0 0 20 20">
-              <path d="M18 3a1 1 0 00-1.196-.98l-10 2A1 1 0 006 5v9.114A4.369 4.369 0 005 14c-1.657 0-3 .895-3 2s1.343 2 3 2 3-.895 3-2V7.82l8-1.6v5.894A4.37 4.37 0 0015 12c-1.657 0-3 .895-3 2s1.343 2 3 2 3-.895 3-2V3z" />
-            </svg>
-            <h1 className="text-3xl font-bold text-white">Music Detector</h1>
+            <Music className="w-10 h-10 text-primary mr-3" />
+            <h1 className="text-3xl font-bold text-foreground">Music Detector</h1>
           </div>
-          <p className="text-gray-400">Identify music from YouTube videos in two simple steps</p>
+          <p className="text-muted-foreground">Identify music from YouTube videos in two simple steps</p>
         </div>
 
         {/* Step 1: Get Audio Link */}
-        <div className="bg-gray-900 rounded-lg border border-gray-800 p-6 mb-6">
-          <h2 className="text-2xl font-bold text-white mb-2 flex items-center">
-            <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-[#FF5656] text-white text-sm font-bold mr-3">1</span>
+        <div className="bg-card rounded-lg border border-border p-6 mb-6">
+          <h2 className="text-2xl font-bold text-foreground mb-2 flex items-center">
+            <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-primary text-primary-foreground text-sm font-bold mr-3">1</span>
             Get Audio Download Link
           </h2>
-          <p className="text-gray-400 mb-4 text-sm">Enter a TikTok URL to get the audio download link</p>
+          <p className="text-muted-foreground mb-4 text-sm">Enter a TikTok URL to get the audio download link</p>
 
           <form onSubmit={handleGetLink}>
             <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-300 mb-2">TikTok URL</label>
+              <label className="block text-sm font-medium text-muted-foreground mb-2">TikTok URL</label>
               <input
-                className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-[#FF5656] transition-colors"
+                className="w-full px-4 py-3 bg-secondary border border-border rounded-lg text-foreground placeholder-gray-500 focus:outline-none focus:border-[#FF5656] transition-colors"
                 type="url"
                 placeholder="https://www.tiktok.com/@username/video/..."
                 value={step1Url}
@@ -342,10 +338,20 @@ export default function MusicDetectionPage() {
 
             <button
               type="submit"
-              className={`px-6 py-3 bg-[#FF5656] hover:bg-[#ff3333] text-white rounded-lg font-medium transition-colors ${step1Loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+              className={`px-6 py-3 border-2 border-primary bg-transparent text-primary hover:bg-primary/10 rounded-lg font-medium transition-colors flex items-center gap-2 dark:bg-primary dark:text-primary-foreground dark:hover:bg-primary/90 ${step1Loading ? 'opacity-50 cursor-not-allowed' : ''}`}
               disabled={step1Loading}
             >
-              {step1Loading ? 'Getting Link...' : 'Get Audio Link'}
+              {step1Loading ? (
+                <>
+                  <Loader2 className="h-5 w-5 animate-spin" />
+                  Getting Link...
+                </>
+              ) : (
+                <>
+                  <Download className="h-5 w-5" />
+                  Get Audio Link
+                </>
+              )}
             </button>
           </form>
 
@@ -355,18 +361,18 @@ export default function MusicDetectionPage() {
         </div>
 
         {/* Step 2: Detect Music */}
-        <div className="bg-gray-900 rounded-lg border border-gray-800 p-6">
-          <h2 className="text-2xl font-bold text-white mb-2 flex items-center">
-            <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-[#FF5656] text-white text-sm font-bold mr-3">2</span>
+        <div className="bg-card rounded-lg border border-border p-6">
+          <h2 className="text-2xl font-bold text-foreground mb-2 flex items-center">
+            <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-primary text-primary-foreground text-sm font-bold mr-3">2</span>
             Detect Music
           </h2>
-          <p className="text-gray-400 mb-4 text-sm">After uploading the MP3 to a hosting service, paste the direct download link here</p>
+          <p className="text-muted-foreground mb-4 text-sm">After uploading the MP3 to a hosting service, paste the direct download link here</p>
 
           <form onSubmit={handleDetectMusic}>
             <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-300 mb-2">Audio File URL</label>
+              <label className="block text-sm font-medium text-muted-foreground mb-2">Audio File URL</label>
               <input
-                className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-[#FF5656] transition-colors"
+                className="w-full px-4 py-3 bg-secondary border border-border rounded-lg text-foreground placeholder-gray-500 focus:outline-none focus:border-primary transition-colors"
                 type="url"
                 placeholder="https://your-hosting-service.com/audio.mp3"
                 value={step2Url}
@@ -374,15 +380,25 @@ export default function MusicDetectionPage() {
                 required
                 disabled={step2Loading}
               />
-              <p className="text-gray-500 text-xs mt-1">Make sure this is a direct download link to the MP3 file</p>
+              <p className="text-muted-foreground text-xs mt-1">Make sure this is a direct download link to the MP3 file</p>
             </div>
 
             <button
               type="submit"
-              className={`px-6 py-3 bg-[#FF5656] hover:bg-[#ff3333] text-white rounded-lg font-medium transition-colors ${step2Loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+              className={`px-6 py-3 border-2 border-primary bg-transparent text-primary hover:bg-primary/10 rounded-lg font-medium transition-colors flex items-center gap-2 dark:bg-primary dark:text-primary-foreground dark:hover:bg-primary/90 ${step2Loading ? 'opacity-50 cursor-not-allowed' : ''}`}
               disabled={step2Loading}
             >
-              {step2Loading ? 'Detecting...' : 'Detect Music'}
+              {step2Loading ? (
+                <>
+                  <Loader2 className="h-5 w-5 animate-spin" />
+                  Detecting...
+                </>
+              ) : (
+                <>
+                  <Music className="h-5 w-5" />
+                  Detect Music
+                </>
+              )}
             </button>
           </form>
 

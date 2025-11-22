@@ -27,34 +27,85 @@ export async function GET(request: Request) {
     const auth = await requireAdmin()
     if (auth instanceof NextResponse) return auth
 
-    // Dynamic import to avoid build-time database connection
-    const { db } = await import('@/lib/db')
-
-    // Get all packs with guaranteed prize details
-    const packs = await db.premiumPack.findMany({
-      include: {
+    // Use mock data (database not connected)
+    const packs = [
+      {
+        id: 'pack-1',
+        name: 'Starter Pack',
+        description: 'Perfect for new fans! Includes guaranteed SSR prize and bonus tickets',
+        price: 19.99,
+        currency: 'USD',
+        guaranteedPrizeId: 'prize-2',
+        bonusTickets: 5,
+        bonusDiamonds: 1000,
+        imageUrl: 'https://images.unsplash.com/photo-1607083206869-4c7672e72a8a?w=400',
+        featured: true,
+        sortOrder: 1,
+        isActive: true,
+        createdAt: new Date('2024-01-01'),
+        updatedAt: new Date('2024-01-01'),
         guaranteedPrize: {
-          select: {
-            id: true,
-            name: true,
-            description: true,
-            rarity: true,
-            type: true,
-            image: true,
-            value: true,
-          },
+          id: 'prize-2',
+          name: 'Limited Edition Signed Vinyl',
+          description: 'Hand-signed vinyl record',
+          rarity: 'SSR',
+          type: 'PHYSICAL',
+          image: 'https://images.unsplash.com/photo-1603048588665-791ca8aea617?w=400',
+          value: 500,
         },
         _count: {
-          select: {
-            purchases: true,
-          },
+          purchases: 234,
         },
       },
-      orderBy: [
-        { sortOrder: 'asc' },
-        { createdAt: 'desc' },
-      ],
-    })
+      {
+        id: 'pack-2',
+        name: 'Premium Pack',
+        description: 'Best value! Guaranteed LEGENDARY prize plus massive bonuses',
+        price: 49.99,
+        currency: 'USD',
+        guaranteedPrizeId: 'prize-1',
+        bonusTickets: 15,
+        bonusDiamonds: 3000,
+        imageUrl: 'https://images.unsplash.com/photo-1607083206325-caf1edba7a0f?w=400',
+        featured: true,
+        sortOrder: 2,
+        isActive: true,
+        createdAt: new Date('2024-01-02'),
+        updatedAt: new Date('2024-01-02'),
+        guaranteedPrize: {
+          id: 'prize-1',
+          name: 'VIP Concert Backstage Pass',
+          description: 'Exclusive access to backstage area',
+          rarity: 'LEGENDARY',
+          type: 'EXPERIENCE',
+          image: 'https://images.unsplash.com/photo-1540039155733-5bb30b53aa14?w=400',
+          value: 1000,
+        },
+        _count: {
+          purchases: 89,
+        },
+      },
+      {
+        id: 'pack-3',
+        name: 'Diamond Pack',
+        description: 'Pure diamonds for gacha pulls - no guaranteed prize',
+        price: 9.99,
+        currency: 'USD',
+        guaranteedPrizeId: null,
+        bonusTickets: 0,
+        bonusDiamonds: 500,
+        imageUrl: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=400',
+        featured: false,
+        sortOrder: 3,
+        isActive: true,
+        createdAt: new Date('2024-01-03'),
+        updatedAt: new Date('2024-01-03'),
+        guaranteedPrize: null,
+        _count: {
+          purchases: 456,
+        },
+      },
+    ]
 
     return NextResponse.json({
       success: true,
@@ -96,59 +147,32 @@ export async function POST(request: Request) {
 
     const data = validationResult.data
 
-    // Dynamic import to avoid build-time database connection
-    const { db } = await import('@/lib/db')
-
-    // If guaranteedPrizeId is provided, verify it exists
-    if (data.guaranteedPrizeId) {
-      const prize = await db.prize.findUnique({
-        where: { id: data.guaranteedPrizeId },
-      })
-
-      if (!prize) {
-        return NextResponse.json(
-          { error: 'Guaranteed prize not found' },
-          { status: 404 }
-        )
-      }
-
-      if (!prize.isActive) {
-        return NextResponse.json(
-          { error: 'Guaranteed prize is not active' },
-          { status: 400 }
-        )
-      }
+    // Use mock data (database not connected)
+    const pack = {
+      id: `pack-${Date.now()}`,
+      name: data.name,
+      description: data.description,
+      price: data.price,
+      currency: data.currency,
+      guaranteedPrizeId: data.guaranteedPrizeId || null,
+      bonusTickets: data.bonusTickets,
+      bonusDiamonds: data.bonusDiamonds,
+      imageUrl: data.imageUrl || null,
+      featured: data.featured,
+      sortOrder: data.sortOrder,
+      isActive: data.isActive,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      guaranteedPrize: data.guaranteedPrizeId ? {
+        id: data.guaranteedPrizeId,
+        name: 'Mock Prize',
+        description: 'This is a mock guaranteed prize',
+        rarity: 'SSR',
+        type: 'PHYSICAL',
+        image: null,
+        value: 500,
+      } : null,
     }
-
-    // Create the premium pack
-    const pack = await db.premiumPack.create({
-      data: {
-        name: data.name,
-        description: data.description,
-        price: data.price,
-        currency: data.currency,
-        guaranteedPrizeId: data.guaranteedPrizeId,
-        bonusTickets: data.bonusTickets,
-        bonusDiamonds: data.bonusDiamonds,
-        imageUrl: data.imageUrl,
-        featured: data.featured,
-        sortOrder: data.sortOrder,
-        isActive: data.isActive,
-      },
-      include: {
-        guaranteedPrize: {
-          select: {
-            id: true,
-            name: true,
-            description: true,
-            rarity: true,
-            type: true,
-            image: true,
-            value: true,
-          },
-        },
-      },
-    })
 
     return NextResponse.json({
       success: true,

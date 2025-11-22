@@ -170,23 +170,23 @@ export default async function OrdersPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-8">
+    <div className="min-h-screen bg-background py-8">
       <div className="container mx-auto px-4">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Order History</h1>
-          <p className="mt-2 text-gray-600">View and track your orders</p>
+          <h1 className="text-3xl font-bold text-foreground">Order History</h1>
+          <p className="mt-2 text-muted-foreground">View and track your orders</p>
         </div>
 
         {/* Orders List */}
         {orders.length === 0 ? (
-          <div className="rounded-lg bg-white p-12 text-center shadow">
+          <div className="rounded-lg bg-card border border-border p-12 text-center shadow">
             <div className="mb-4 text-6xl">📦</div>
-            <h2 className="mb-2 text-xl font-semibold text-gray-900">No orders yet</h2>
-            <p className="mb-6 text-gray-600">Start shopping to see your orders here</p>
+            <h2 className="mb-2 text-xl font-semibold text-foreground">No orders yet</h2>
+            <p className="mb-6 text-muted-foreground">Start shopping to see your orders here</p>
             <Link
               href="/store"
-              className="inline-block rounded-lg bg-gradient-to-r from-blue-500 to-purple-500 px-6 py-3 font-semibold text-white transition-all hover:scale-105"
+              className="inline-block rounded-lg border-2 border-blue-600 bg-transparent px-6 py-3 font-semibold text-blue-600 transition-all hover:scale-105 hover:bg-blue-600/10 dark:bg-gradient-to-r dark:from-blue-500 dark:to-purple-500 dark:text-primary-foreground dark:border-transparent"
             >
               Browse Store
             </Link>
@@ -201,7 +201,7 @@ export default async function OrdersPage() {
                     <h3 className="text-lg font-semibold text-gray-900">
                       Order #{order.orderNumber}
                     </h3>
-                    <p className="text-sm text-gray-600">
+                    <p className="text-sm text-muted-foreground">
                       Placed on {new Date(order.createdAt).toLocaleDateString()}
                     </p>
                   </div>
@@ -237,7 +237,7 @@ export default async function OrdersPage() {
                       />
                       <div className="flex-1">
                         <h4 className="font-semibold text-gray-900">{item.name}</h4>
-                        <p className="text-sm text-gray-600">
+                        <p className="text-sm text-muted-foreground">
                           {item.size && `Size: ${item.size}`}
                           {item.size && item.color && ' • '}
                           {item.color && `Color: ${item.color}`}
@@ -267,7 +267,7 @@ export default async function OrdersPage() {
                 <div className="flex flex-wrap gap-3">
                   <Link
                     href={`/orders/${order.id}`}
-                    className="rounded-lg border-2 border-gray-300 bg-white px-4 py-2 font-semibold text-gray-700 transition-all hover:border-gray-400"
+                    className="rounded-lg border-2 border-border bg-white px-4 py-2 font-semibold text-gray-700 transition-all hover:border-gray-400"
                   >
                     View Details
                   </Link>

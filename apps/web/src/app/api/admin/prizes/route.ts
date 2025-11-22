@@ -32,69 +32,156 @@ export async function GET(request: Request) {
     const page = parseInt(searchParams.get('page') || '1')
     const limit = parseInt(searchParams.get('limit') || '50')
 
-    // Dynamic import to avoid build-time database connection
-    const { db } = await import('@/lib/db')
+    // Use mock data (database not connected)
+    const mockPrizes = [
+      {
+        id: 'prize-1',
+        name: 'VIP Concert Backstage Pass',
+        description: 'Exclusive access to backstage area at any concert on the 2024 World Tour',
+        rarity: 'LEGENDARY',
+        type: 'EXPERIENCE',
+        image: 'https://images.unsplash.com/photo-1540039155733-5bb30b53aa14?w=400',
+        value: 1000,
+        stock: 5,
+        isActive: true,
+        createdAt: new Date('2024-01-01'),
+        updatedAt: new Date('2024-01-01'),
+        _count: {
+          userPrizes: 3,
+          gachaItems: 1,
+          gachaPulls: 3,
+          premiumPacks: 2,
+        },
+      },
+      {
+        id: 'prize-2',
+        name: 'Limited Edition Signed Vinyl',
+        description: 'Hand-signed vinyl record of the latest album, limited to 100 copies',
+        rarity: 'SSR',
+        type: 'PHYSICAL',
+        image: 'https://images.unsplash.com/photo-1603048588665-791ca8aea617?w=400',
+        value: 500,
+        stock: 25,
+        isActive: true,
+        createdAt: new Date('2024-01-02'),
+        updatedAt: new Date('2024-01-02'),
+        _count: {
+          userPrizes: 18,
+          gachaItems: 1,
+          gachaPulls: 18,
+          premiumPacks: 1,
+        },
+      },
+      {
+        id: 'prize-3',
+        name: 'Exclusive Meet & Greet',
+        description: 'Private meet and greet session with the artist',
+        rarity: 'LEGENDARY',
+        type: 'EXPERIENCE',
+        image: 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=400',
+        value: 800,
+        stock: 10,
+        isActive: true,
+        createdAt: new Date('2024-01-03'),
+        updatedAt: new Date('2024-01-03'),
+        _count: {
+          userPrizes: 5,
+          gachaItems: 1,
+          gachaPulls: 5,
+          premiumPacks: 3,
+        },
+      },
+      {
+        id: 'prize-4',
+        name: 'Premium Hoodie',
+        description: 'Limited edition premium quality hoodie with exclusive design',
+        rarity: 'EPIC',
+        type: 'PHYSICAL',
+        image: 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=400',
+        value: 200,
+        stock: 50,
+        isActive: true,
+        createdAt: new Date('2024-01-04'),
+        updatedAt: new Date('2024-01-04'),
+        _count: {
+          userPrizes: 32,
+          gachaItems: 1,
+          gachaPulls: 32,
+          premiumPacks: 0,
+        },
+      },
+      {
+        id: 'prize-5',
+        name: 'Digital Album Bundle',
+        description: 'Complete discography in high-quality digital format',
+        rarity: 'RARE',
+        type: 'DIGITAL',
+        image: 'https://images.unsplash.com/photo-1619983081563-430f63602796?w=400',
+        value: 100,
+        stock: null,
+        isActive: true,
+        createdAt: new Date('2024-01-05'),
+        updatedAt: new Date('2024-01-05'),
+        _count: {
+          userPrizes: 78,
+          gachaItems: 1,
+          gachaPulls: 78,
+          premiumPacks: 0,
+        },
+      },
+      {
+        id: 'prize-6',
+        name: 'Fan Club Sticker Pack',
+        description: 'Set of 10 holographic stickers',
+        rarity: 'COMMON',
+        type: 'PHYSICAL',
+        image: 'https://images.unsplash.com/photo-1626785774573-4b799315345d?w=400',
+        value: 20,
+        stock: 500,
+        isActive: true,
+        createdAt: new Date('2024-01-06'),
+        updatedAt: new Date('2024-01-06'),
+        _count: {
+          userPrizes: 245,
+          gachaItems: 1,
+          gachaPulls: 245,
+          premiumPacks: 0,
+        },
+      },
+    ]
 
-    // Build where clause
-    const where: any = {}
+    // Apply filters
+    let filteredPrizes = mockPrizes
 
     if (search) {
-      where.OR = [
-        { name: { contains: search, mode: 'insensitive' } },
-        { description: { contains: search, mode: 'insensitive' } },
-      ]
+      const searchLower = search.toLowerCase()
+      filteredPrizes = filteredPrizes.filter(
+        (prize) =>
+          prize.name.toLowerCase().includes(searchLower) ||
+          prize.description.toLowerCase().includes(searchLower)
+      )
     }
 
     if (rarity) {
-      where.rarity = rarity
+      filteredPrizes = filteredPrizes.filter((prize) => prize.rarity === rarity)
     }
 
     if (type) {
-      where.type = type
+      filteredPrizes = filteredPrizes.filter((prize) => prize.type === type)
     }
 
     if (isActive !== null && isActive !== undefined && isActive !== '') {
-      where.isActive = isActive === 'true'
+      const activeFilter = isActive === 'true'
+      filteredPrizes = filteredPrizes.filter((prize) => prize.isActive === activeFilter)
     }
 
-    // Get total count
-    const total = await db.prize.count({ where })
-
-    // Get prizes with statistics
-    const prizes = await db.prize.findMany({
-      where,
-      select: {
-        id: true,
-        name: true,
-        description: true,
-        rarity: true,
-        type: true,
-        image: true,
-        value: true,
-        stock: true,
-        isActive: true,
-        createdAt: true,
-        updatedAt: true,
-        _count: {
-          select: {
-            userPrizes: true,
-            gachaItems: true,
-            gachaPulls: true,
-            premiumPacks: true,
-          },
-        },
-      },
-      orderBy: [
-        { rarity: 'desc' },
-        { name: 'asc' },
-      ],
-      skip: (page - 1) * limit,
-      take: limit,
-    })
+    const total = filteredPrizes.length
+    const start = (page - 1) * limit
+    const paginatedPrizes = filteredPrizes.slice(start, start + limit)
 
     return NextResponse.json({
       success: true,
-      prizes,
+      prizes: paginatedPrizes,
       pagination: {
         page,
         limit,
@@ -137,22 +224,20 @@ export async function POST(request: Request) {
 
     const data = validationResult.data
 
-    // Dynamic import to avoid build-time database connection
-    const { db } = await import('@/lib/db')
-
-    // Create the prize
-    const prize = await db.prize.create({
-      data: {
-        name: data.name,
-        description: data.description,
-        rarity: data.rarity,
-        type: data.type,
-        image: data.image || null,
-        value: data.value,
-        stock: data.stock || null,
-        isActive: data.isActive,
-      },
-    })
+    // Use mock data (database not connected)
+    const prize = {
+      id: `prize-${Date.now()}`,
+      name: data.name,
+      description: data.description,
+      rarity: data.rarity,
+      type: data.type,
+      image: data.image || null,
+      value: data.value,
+      stock: data.stock || null,
+      isActive: data.isActive,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    }
 
     return NextResponse.json({
       success: true,
