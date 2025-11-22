@@ -19,8 +19,10 @@ export default withAuth(
 
     // Redirect authenticated users away from auth pages
     if (isAuthPage && isAuth) {
-      console.log('✅ Authenticated user accessing auth page, redirecting to dashboard')
-      return NextResponse.redirect(new URL('/dashboard', req.url))
+      // Redirect admin users to admin panel, regular users to dashboard
+      const redirectUrl = token?.role === 'ADMIN' ? '/admin' : '/dashboard'
+      console.log(`✅ Authenticated user accessing auth page, redirecting to ${redirectUrl}`)
+      return NextResponse.redirect(new URL(redirectUrl, req.url))
     }
 
     // Check admin access

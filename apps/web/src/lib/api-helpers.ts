@@ -108,8 +108,8 @@ export async function validateRequest<T>(
 /**
  * Handle database errors with appropriate responses
  */
-export function handleDatabaseError(error: any): NextResponse<ApiError> {
-  console.error('Database error:', error)
+export function handleDatabaseError(error: any, context?: string): NextResponse<ApiError> {
+  console.error(`Database error${context ? ` (${context})` : ''}:`, error)
 
   // Prisma unique constraint violation
   if (error.code === 'P2002') {
@@ -173,4 +173,3 @@ export function checkBuildTime(): NextResponse<ApiError> | null {
   }
   return null
 }
-

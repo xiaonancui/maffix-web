@@ -92,7 +92,7 @@ export async function POST(request: Request) {
       'Gacha item created successfully'
     )
   } catch (error) {
-    return handleDatabaseError(error)
+    return handleDatabaseError(error, 'create gacha item')
   }
 }
 
@@ -161,6 +161,6 @@ export async function GET(request: Request) {
       },
     })
   } catch (error) {
-    return handleDatabaseError(error)
+    return handleDatabaseError(error, 'list gacha items')
   }
 }

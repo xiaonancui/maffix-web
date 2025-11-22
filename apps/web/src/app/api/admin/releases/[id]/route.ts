@@ -62,7 +62,7 @@ export async function GET(
     return successResponse({ release })
   } catch (error: any) {
     console.error('Error getting release:', error)
-    return handleDatabaseError(error)
+    return handleDatabaseError(error, 'fetch release')
   }
 }
 
@@ -136,7 +136,7 @@ export async function PATCH(
     return successResponse({ release })
   } catch (error: any) {
     console.error('Error updating release:', error)
-    return handleDatabaseError(error)
+    return handleDatabaseError(error, 'update release')
   }
 }
 
@@ -183,6 +183,6 @@ export async function DELETE(
     return successResponse({ message: 'Release deleted successfully' }, HttpStatus.OK)
   } catch (error: any) {
     console.error('Error deleting release:', error)
-    return handleDatabaseError(error)
+    return handleDatabaseError(error, 'delete release')
   }
 }

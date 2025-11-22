@@ -42,7 +42,7 @@ export default function AdminHeader({ userName, onMobileMenuToggle }: AdminHeade
             href="/admin"
             className="flex items-center text-xl font-bold tracking-tight text-white hover:opacity-90 transition-opacity"
           >
-            <span>🛡️</span>
+            <span>Maffix Admin</span>
           </Link>
         </div>
 
@@ -124,9 +124,13 @@ export default function AdminHeader({ userName, onMobileMenuToggle }: AdminHeade
           {/* User Profile / Back to User View */}
           <Link
             href="/dashboard"
-            className="flex items-center gap-2 rounded-lg bg-white/10 px-3 py-2 text-sm font-semibold text-white hover:bg-white/20 transition-colors backdrop-blur-sm border border-white/20"
+            className="group relative flex items-center gap-2 rounded-lg bg-gradient-to-r from-blue-600/20 to-blue-500/20 px-4 py-2 text-sm font-bold text-white hover:from-blue-600/30 hover:to-blue-500/30 transition-all backdrop-blur-sm border-2 border-blue-500/40 hover:border-blue-500/60 shadow-lg shadow-blue-500/20 hover:shadow-blue-500/30 animate-pulse hover:animate-none"
+            title="Switch to user dashboard view"
           >
-            <span className="hidden sm:inline">← Back to User View</span>
+            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            <span className="hidden sm:inline">Back to User View</span>
             <span className="sm:hidden">👤</span>
           </Link>
         </div>

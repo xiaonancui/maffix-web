@@ -4,6 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useUserRole } from '@/lib/rbac'
+import { signOut } from 'next-auth/react'
 
 export default function MobileMenu({
   diamondBalance,
@@ -142,17 +143,6 @@ export default function MobileMenu({
               Premium Packs
             </Link> */}
             <Link
-              href="/prizes"
-              className={`block rounded-md px-3 py-2 text-base font-medium transition-colors ${
-                isActive('/prizes')
-                  ? 'bg-[#FF5656]/20 text-[#FF5656] font-semibold'
-                  : 'text-gray-300 hover:bg-gray-800 hover:text-white'
-              }`}
-              onClick={() => setIsOpen(false)}
-            >
-              Prizes
-            </Link>
-            <Link
               href="/music-detection"
               className={`block rounded-md px-3 py-2 text-base font-medium transition-colors ${
                 isActive('/music-detection')
@@ -170,6 +160,17 @@ export default function MobileMenu({
             >
               Profile
             </Link>
+
+            {/* Sign Out Button */}
+            <div className="mt-4 border-t border-gray-800 pt-4">
+              <button
+                onClick={() => signOut({ callbackUrl: '/' })}
+                className="w-full flex items-center gap-2 rounded-md px-3 py-2 text-base font-medium text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-colors border border-red-500/20 hover:border-red-500/40"
+              >
+                <span>🚪</span>
+                <span>Sign Out</span>
+              </button>
+            </div>
           </div>
         </div>
       )}

@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useState, useEffect } from 'react'
+import { signOut } from 'next-auth/react'
 
 interface NavItem {
   name: string
@@ -56,11 +57,6 @@ const navigationItems: NavItem[] = [
       { name: 'Premium Packs', href: '/admin/packs', icon: '📦' },
       { name: 'Store Settings', href: '/admin/store/settings', icon: '⚙️' },
     ],
-  },
-  {
-    name: 'Prizes',
-    href: '/admin/prizes',
-    icon: '🎁',
   },
   {
     name: 'Settings',
@@ -169,25 +165,6 @@ export default function AdminSidebar({
 
   const sidebarContent = (
     <div className="flex h-full flex-col">
-      {/* Sidebar Header */}
-      <div className="flex h-16 items-center justify-between border-b border-red-500/20 px-4">
-        {!isCollapsed ? (
-          <div className="flex items-center gap-2">
-            <span className="text-xl">🛡️</span>
-            <span className="text-lg font-bold text-white">Maffix</span>
-          </div>
-        ) : (
-          <span className="text-xl">🛡️</span>
-        )}
-        <button
-          onClick={onToggle}
-          className="hidden lg:block rounded-md p-2 text-gray-400 hover:bg-red-500/10 hover:text-white transition-colors"
-          aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-        >
-          {isCollapsed ? '▶' : '◀'}
-        </button>
-      </div>
-
       {/* Navigation Items */}
       <nav className="flex-1 overflow-y-auto py-4">
         {navigationItems.map((item) => (
@@ -195,15 +172,44 @@ export default function AdminSidebar({
         ))}
       </nav>
 
+      {/* Sign Out Button */}
+      <div className="border-t border-red-500/20 px-4 py-3">
+        <button
+          onClick={() => signOut({ callbackUrl: '/' })}
+          className="flex items-center gap-3 w-full px-4 py-3 text-sm font-semibold text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-all rounded-lg border border-red-500/20 hover:border-red-500/40"
+          title={isCollapsed ? 'Sign Out' : undefined}
+        >
+          <span className="text-xl flex-shrink-0">🚪</span>
+          {!isCollapsed && <span className="flex-1 text-left">Sign Out</span>}
+        </button>
+      </div>
+
       {/* Sidebar Footer */}
-      {!isCollapsed && (
-        <div className="border-t border-red-500/20 p-4">
-          <div className="text-xs text-gray-500">
-            <p className="font-semibold text-gray-400">Maffix Admin v1.0</p>
-            <p className="mt-1">© 2025 Maffix</p>
+      <div className="border-t border-red-500/20 p-4">
+        {!isCollapsed ? (
+          <div className="flex items-center justify-between">
+            <div className="text-xs text-gray-500">
+              <p className="font-semibold text-gray-400">Maffix Admin v1.0</p>
+              <p className="mt-1">© 2025 Maffix</p>
+            </div>
+            <button
+              onClick={onToggle}
+              className="hidden lg:block rounded-md p-2 text-gray-400 hover:bg-red-500/10 hover:text-white transition-colors"
+              aria-label="Collapse sidebar"
+            >
+              ◀
+            </button>
           </div>
-        </div>
-      )}
+        ) : (
+          <button
+            onClick={onToggle}
+            className="hidden lg:block w-full rounded-md p-2 text-gray-400 hover:bg-red-500/10 hover:text-white transition-colors"
+            aria-label="Expand sidebar"
+          >
+            ▶
+          </button>
+        )}
+      </div>
     </div>
   )
 
@@ -220,8 +226,8 @@ export default function AdminSidebar({
 
       {/* Desktop Sidebar */}
       <aside
-        className={`hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:flex-col lg:border-r lg:border-red-500/20 lg:bg-[#0a0a0a] lg:pt-16 transition-all duration-300 ${
-          isCollapsed ? 'lg:w-16' : 'lg:w-64'
+        className={`hidden lg:fixed lg:top-16 lg:bottom-0 lg:z-50 lg:flex lg:flex-col lg:border-r lg:border-red-500/20 lg:bg-[#0a0a0a] transition-all duration-300 ${
+          isCollapsed ? 'lg:w-16' : 'lg:w-56'
         }`}
       >
         {sidebarContent}
@@ -229,7 +235,7 @@ export default function AdminSidebar({
 
       {/* Mobile Drawer */}
       <aside
-        className={`fixed inset-y-0 left-0 z-50 flex w-64 flex-col border-r border-red-500/20 bg-[#0a0a0a] pt-16 transition-transform duration-300 lg:hidden ${
+        className={`fixed top-16 bottom-0 left-0 z-50 flex w-56 flex-col border-r border-red-500/20 bg-[#0a0a0a] transition-transform duration-300 lg:hidden ${
           isMobileOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >

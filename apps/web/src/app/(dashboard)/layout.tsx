@@ -5,6 +5,7 @@ import Link from 'next/link'
 import MobileMenu from '@/components/dashboard/MobileMenu'
 import NavLink from '@/components/dashboard/NavLink'
 import AdminNavLink from '@/components/dashboard/AdminNavLink'
+import SignOutButton from '@/components/dashboard/SignOutButton'
 
 export default async function DashboardLayout({
   children,
@@ -72,7 +73,6 @@ export default async function DashboardLayout({
                 {hasCompletedTenDraw && <NavLink href="/store">Store</NavLink>}
                 {/* Hidden: Premium Packs - Route still accessible via direct URL */}
                 {/* <NavLink href="/store/packs">Premium Packs</NavLink> */}
-                <NavLink href="/prizes">Prizes</NavLink>
                 <NavLink href="/music-detection">Music Detection</NavLink>
               </div>
             </div>
@@ -88,6 +88,9 @@ export default async function DashboardLayout({
 
               {/* Admin Panel Link (only for admins) */}
               {session.user.role === 'ADMIN' && <AdminNavLink />}
+
+              {/* Sign Out Button (Desktop) */}
+              <SignOutButton />
 
               {/* Profile Icon */}
               <Link

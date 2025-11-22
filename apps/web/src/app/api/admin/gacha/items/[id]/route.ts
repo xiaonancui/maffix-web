@@ -50,7 +50,7 @@ export async function GET(
 
     return successResponse({ gachaItem })
   } catch (error) {
-    return handleDatabaseError(error)
+    return handleDatabaseError(error, 'fetch gacha item')
   }
 }
 
@@ -112,7 +112,7 @@ export async function PATCH(
       'Gacha item updated successfully'
     )
   } catch (error) {
-    return handleDatabaseError(error)
+    return handleDatabaseError(error, 'update gacha item')
   }
 }
 
@@ -187,8 +187,11 @@ export async function DELETE(
       }
     )
 
-    return successResponse(null, HttpStatus.NO_CONTENT, 'Gacha item deleted successfully')
+    return successResponse(
+      { message: 'Gacha item deleted successfully' },
+      HttpStatus.OK
+    )
   } catch (error) {
-    return handleDatabaseError(error)
+    return handleDatabaseError(error, 'delete gacha item')
   }
 }

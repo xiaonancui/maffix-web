@@ -1,4 +1,4 @@
-import { ReactNode } from 'react'
+import { ReactNode, useId } from 'react'
 
 interface FormFieldProps {
   label: string
@@ -39,7 +39,13 @@ export default function FormField({
   step,
   icon,
 }: FormFieldProps) {
-  const fieldId = name || label.toLowerCase().replace(/\s+/g, '-')
+  const reactId = useId()
+  const sanitizedLabel = label
+    .toLowerCase()
+    .replace(/[^\w\s-]/g, '')
+    .trim()
+    .replace(/\s+/g, '-')
+  const fieldId = name || `${sanitizedLabel}-${reactId}`
   const helpMessage = help ?? helpText
 
   const baseInputClasses = `w-full rounded-lg bg-[#1a1a1a] border ${
@@ -64,11 +70,13 @@ export default function FormField({
     }
 
     if (type === 'select' && options) {
+      const normalizedValue = value === undefined || value === null ? '' : String(value)
+
       return (
         <select
           id={fieldId}
           name={fieldId}
-          value={value}
+          value={normalizedValue}
           onChange={(e) => onChange(e.target.value)}
           required={required}
           disabled={disabled}
@@ -76,7 +84,7 @@ export default function FormField({
         >
           <option value="">Select {label}</option>
           {options.map((option) => (
-            <option key={option.value} value={option.value}>
+            <option key={option.value} value={String(option.value)}>
               {option.label}
             </option>
           ))}
@@ -96,9 +104,15 @@ export default function FormField({
           name={fieldId}
           type={type}
           value={value}
-          onChange={(e) =>
-            onChange(type === 'number' ? Number(e.target.value) : e.target.value)
-          }
+          onChange={(e) => {
+            const rawValue = e.target.value
+            if (type === 'number') {
+              // Preserve empty input instead of forcing 0
+              onChange(rawValue === '' ? '' : Number(rawValue))
+            } else {
+              onChange(rawValue)
+            }
+          }}
           placeholder={placeholder}
           required={required}
           disabled={disabled}

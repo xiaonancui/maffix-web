@@ -85,7 +85,7 @@ export async function POST(request: Request) {
     return successResponse({ release }, HttpStatus.CREATED)
   } catch (error: any) {
     console.error('Error creating release:', error)
-    return handleDatabaseError(error)
+    return handleDatabaseError(error, 'create release')
   }
 }
 
@@ -152,6 +152,6 @@ export async function GET(request: Request) {
     })
   } catch (error: any) {
     console.error('Error listing releases:', error)
-    return handleDatabaseError(error)
+    return handleDatabaseError(error, 'list releases')
   }
 }

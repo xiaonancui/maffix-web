@@ -55,7 +55,7 @@ export default function AdminLayoutClient({ children, userName }: AdminLayoutCli
       {/* Main Content Area */}
       <div
         className={`pt-16 transition-all duration-300 ${
-          isSidebarCollapsed ? 'lg:pl-16' : 'lg:pl-64'
+          isSidebarCollapsed ? 'lg:pl-16' : 'lg:pl-56'
         }`}
       >
         {/* Breadcrumbs */}
