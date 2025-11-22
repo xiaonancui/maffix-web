@@ -196,17 +196,17 @@ export default async function PrizesPage() {
   const getRarityColor = (rarity: string) => {
     switch (rarity) {
       case 'LEGENDARY':
-        return 'border-yellow-400 bg-gradient-to-br from-yellow-50 to-orange-50'
+        return 'border-yellow-400 bg-gradient-to-br from-yellow-900/20 to-orange-900/20'
       case 'SSR':
-        return 'border-amber-400 bg-gradient-to-br from-amber-50 to-yellow-50'
+        return 'border-amber-400 bg-gradient-to-br from-amber-900/20 to-yellow-900/20'
       case 'EPIC':
-        return 'border-purple-400 bg-gradient-to-br from-purple-50 to-pink-50'
+        return 'border-purple-400 bg-gradient-to-br from-purple-900/20 to-pink-900/20'
       case 'RARE':
-        return 'border-blue-400 bg-gradient-to-br from-blue-50 to-cyan-50'
+        return 'border-blue-400 bg-gradient-to-br from-blue-900/20 to-cyan-900/20'
       case 'COMMON':
-        return 'border-gray-400 bg-gray-50'
+        return 'border-gray-400 bg-gray-800'
       default:
-        return 'border-gray-300 bg-white'
+        return 'border-gray-600 bg-gray-900'
     }
   }
 
@@ -228,31 +228,31 @@ export default async function PrizesPage() {
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">My Prizes</h1>
-        <p className="mt-2 text-sm text-gray-600">
+        <h1 className="text-3xl font-bold text-white">My Prizes</h1>
+        <p className="mt-2 text-sm text-gray-400">
           View and manage your collected prizes
         </p>
       </div>
 
       {userPrizes.length === 0 ? (
-        <div className="rounded-lg bg-white p-12 text-center shadow">
+        <div className="rounded-lg bg-gray-900 border border-gray-800 p-12 text-center shadow">
           <div className="mb-4 text-6xl">🎁</div>
-          <h3 className="mb-2 text-lg font-semibold text-gray-900">
+          <h3 className="mb-2 text-lg font-semibold text-white">
             No prizes yet
           </h3>
-          <p className="mb-6 text-gray-500">
+          <p className="mb-6 text-gray-400">
             Complete tasks and try the gacha to win prizes!
           </p>
           <div className="flex justify-center gap-4">
             <a
               href="/tasks"
-              className="rounded-md bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:opacity-90"
+              className="rounded-md bg-[#FF5656] px-4 py-2 text-sm font-semibold text-white hover:bg-[#ff3333] transition-all"
             >
               View Tasks
             </a>
             <a
               href="/gacha"
-              className="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-50"
+              className="rounded-md border border-gray-700 bg-gray-900 px-4 py-2 text-sm font-semibold text-white hover:border-[#FF5656] hover:bg-gray-800 transition-all"
             >
               Try Gacha
             </a>
@@ -273,43 +273,43 @@ export default async function PrizesPage() {
                 </span>
                 <div className="text-right">
                   {userPrize.redeemed ? (
-                    <span className="rounded-full bg-green-100 px-2 py-1 text-xs font-medium text-green-800">
+                    <span className="rounded-full bg-[#FF5656]/20 px-2 py-1 text-xs font-medium text-[#FF5656]">
                       ✓ Redeemed
                     </span>
                   ) : (
-                    <span className="rounded-full bg-blue-100 px-2 py-1 text-xs font-medium text-blue-800">
+                    <span className="rounded-full bg-gray-700 px-2 py-1 text-xs font-medium text-gray-300">
                       Available
                     </span>
                   )}
                 </div>
               </div>
 
-              <h3 className="mb-2 text-lg font-semibold text-gray-900">
+              <h3 className="mb-2 text-lg font-semibold text-white">
                 {userPrize.prize.name}
               </h3>
-              <p className="mb-4 text-sm text-gray-600">
+              <p className="mb-4 text-sm text-gray-400">
                 {userPrize.prize.description}
               </p>
 
               <div className="mb-4 space-y-2 text-sm">
                 <div className="flex justify-between">
                   <span className="text-gray-500">Rarity:</span>
-                  <span className="font-medium">{userPrize.prize.rarity}</span>
+                  <span className="font-medium text-gray-300">{userPrize.prize.rarity}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-500">Type:</span>
-                  <span className="font-medium">{userPrize.prize.type}</span>
+                  <span className="font-medium text-gray-300">{userPrize.prize.type}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-500">Acquired:</span>
-                  <span className="font-medium">
+                  <span className="font-medium text-gray-300">
                     {new Date(userPrize.acquiredAt).toLocaleDateString()}
                   </span>
                 </div>
                 {userPrize.redeemed && userPrize.redeemedAt && (
                   <div className="flex justify-between">
                     <span className="text-gray-500">Redeemed:</span>
-                    <span className="font-medium">
+                    <span className="font-medium text-gray-300">
                       {new Date(userPrize.redeemedAt).toLocaleDateString()}
                     </span>
                   </div>

@@ -7,11 +7,11 @@ export default function MerchandiseFilters({ categories }: { categories: string[
   const [sortBy, setSortBy] = useState('featured')
 
   return (
-    <div className="mb-8 rounded-lg bg-white p-6 shadow">
+    <div className="mb-8 rounded-lg bg-gray-900 border border-gray-800 p-6 shadow hover:border-[#FF5656] transition-colors">
       <div className="grid gap-6 md:grid-cols-2">
         {/* Category Filter */}
         <div>
-          <label className="mb-3 block text-sm font-semibold text-gray-700">
+          <label className="mb-3 block text-sm font-semibold text-white">
             Category
           </label>
           <div className="flex flex-wrap gap-2">
@@ -22,7 +22,7 @@ export default function MerchandiseFilters({ categories }: { categories: string[
                 className={`rounded-full border px-4 py-2 text-sm font-medium transition-colors ${
                   selectedCategory === category
                     ? 'border-[#FF5656] bg-[#FF5656] text-white'
-                    : 'border-gray-300 bg-white text-gray-700 hover:border-gray-400 hover:bg-gray-50'
+                    : 'border-gray-600 bg-gray-800 text-gray-300 hover:border-gray-500 hover:bg-gray-700'
                 }`}
               >
                 {category}
@@ -33,14 +33,14 @@ export default function MerchandiseFilters({ categories }: { categories: string[
 
         {/* Sort Filter */}
         <div>
-          <label htmlFor="sort" className="mb-3 block text-sm font-semibold text-gray-700">
+          <label htmlFor="sort" className="mb-3 block text-sm font-semibold text-white">
             Sort By
           </label>
           <select
             id="sort"
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value)}
-            className="w-full rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full rounded-md border border-gray-600 bg-gray-800 px-4 py-2 text-sm font-medium text-white focus:border-[#FF5656] focus:outline-none focus:ring-2 focus:ring-[#FF5656]/50"
           >
             <option value="featured">Featured</option>
             <option value="newest">Newest</option>
@@ -53,26 +53,26 @@ export default function MerchandiseFilters({ categories }: { categories: string[
 
       {/* Active Filters Display */}
       {(selectedCategory !== 'All' || sortBy !== 'featured') && (
-        <div className="mt-4 flex items-center gap-2 border-t pt-4">
-          <span className="text-sm font-medium text-gray-600">Active Filters:</span>
+        <div className="mt-4 flex items-center gap-2 border-t border-gray-700 pt-4">
+          <span className="text-sm font-medium text-gray-400">Active Filters:</span>
           <div className="flex flex-wrap gap-2">
             {selectedCategory !== 'All' && (
-              <span className="flex items-center gap-1 rounded-full bg-blue-100 px-3 py-1 text-xs font-medium text-blue-800">
+              <span className="flex items-center gap-1 rounded-full bg-blue-900/20 border border-blue-600 px-3 py-1 text-xs font-medium text-blue-400">
                 {selectedCategory}
                 <button
                   onClick={() => setSelectedCategory('All')}
-                  className="ml-1 hover:text-blue-900"
+                  className="ml-1 hover:text-blue-300"
                 >
                   ×
                 </button>
               </span>
             )}
             {sortBy !== 'featured' && (
-              <span className="flex items-center gap-1 rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-800">
+              <span className="flex items-center gap-1 rounded-full bg-gray-800 border border-gray-600 px-3 py-1 text-xs font-medium text-gray-300">
                 Sort: {sortBy === 'newest' ? 'Newest' : sortBy === 'price-low' ? 'Price ↑' : sortBy === 'price-high' ? 'Price ↓' : 'Name A-Z'}
                 <button
                   onClick={() => setSortBy('featured')}
-                  className="ml-1 hover:text-gray-900"
+                  className="ml-1 hover:text-gray-200"
                 >
                   ×
                 </button>
@@ -84,7 +84,7 @@ export default function MerchandiseFilters({ categories }: { categories: string[
               setSelectedCategory('All')
               setSortBy('featured')
             }}
-            className="ml-auto text-xs font-medium text-gray-500 hover:text-gray-700"
+            className="ml-auto text-xs font-medium text-gray-400 hover:text-gray-300"
           >
             Clear All
           </button>

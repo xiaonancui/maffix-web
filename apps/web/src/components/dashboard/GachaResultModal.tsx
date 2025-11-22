@@ -48,10 +48,10 @@ export default function GachaResultModal({
   const [isRevealing, setIsRevealing] = useState(true)
 
   useEffect(() => {
-    // Reveal animation
+    // Reveal animation - extended to 8 seconds for better gundam.gif viewing
     const timer = setTimeout(() => {
       setIsRevealing(false)
-    }, pullType === '10x' ? 3000 : 2000)
+    }, pullType === '10x' ? 8000 : 8000)
 
     return () => clearTimeout(timer)
   }, [pullType])
@@ -100,15 +100,26 @@ export default function GachaResultModal({
   if (is10x) {
     const result10x = result as Gacha10xResult
     return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75 p-4">
-        <div className="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto">
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-90 p-4">
+        <div className="relative w-full max-w-6xl max-h-[95vh] overflow-y-auto">
           {isRevealing ? (
-            // Revealing animation for 10x
-            <div className="animate-pulse rounded-lg bg-gradient-to-r from-purple-600 to-pink-600 p-8 text-center shadow-2xl">
-              <div className="mb-4 text-6xl animate-bounce">🎁✨🎁</div>
-              <p className="text-3xl font-bold text-white">Opening 10 Prizes...</p>
+            // Revealing animation for 10x with Gundam GIF
+            <div className="rounded-lg bg-black p-8 text-center shadow-2xl min-h-[70vh] flex flex-col justify-center">
+              <div className="mb-6 flex justify-center">
+                <div className="relative w-[80.5vw] h-[57.5vh] max-w-5xl">
+                  <Image
+                    src="/gundam.gif"
+                    alt="Gundam Animation"
+                    fill
+                    className="object-contain drop-shadow-2xl"
+                    unoptimized={true}
+                    priority
+                  />
+                </div>
+              </div>
+              <p className="text-4xl font-bold text-white animate-bounce mb-2">Opening 10 Prizes...</p>
               {result10x.guaranteedSSR && (
-                <p className="mt-2 text-lg text-yellow-300">SSR Guaranteed!</p>
+                <p className="text-xl text-yellow-300 animate-pulse">✨ SSR Guaranteed! ✨</p>
               )}
             </div>
           ) : (
@@ -214,13 +225,24 @@ export default function GachaResultModal({
   // Single pull result
   const singleResult = result as GachaResult
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75 p-4">
-      <div className="relative w-full max-w-md">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-90 p-4">
+      <div className="relative w-full max-w-5xl">
         {isRevealing ? (
-          // Revealing animation
-          <div className="animate-pulse rounded-lg bg-gradient-to-r from-purple-600 to-pink-600 p-8 text-center shadow-2xl">
-            <div className="mb-4 text-6xl animate-bounce">🎁</div>
-            <p className="text-2xl font-bold text-white">Opening...</p>
+          // Revealing animation with Gundam GIF
+          <div className="rounded-lg bg-black p-8 text-center shadow-2xl min-h-[70vh] flex flex-col justify-center">
+            <div className="mb-6 flex justify-center">
+              <div className="relative w-[80.5vw] h-[57.5vh] max-w-4xl">
+                <Image
+                  src="/gundam.gif"
+                  alt="Gundam Animation"
+                  fill
+                  className="object-contain drop-shadow-2xl"
+                  unoptimized={true}
+                  priority
+                />
+              </div>
+            </div>
+            <p className="text-3xl font-bold text-white animate-bounce">Opening...</p>
           </div>
         ) : (
           // Result display

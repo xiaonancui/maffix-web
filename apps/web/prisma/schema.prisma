@@ -33,6 +33,7 @@ model User {
 
   // Gacha pity system
   gachaPityCounter Int    @default(0)  // Tracks pulls since last SSR+ for guarantee
+  hasCompletedTenDraw Boolean @default(false)  // Track if user has completed at least one 10x draw
 
   // OAuth
   provider       String?  // google, tiktok, discord, etc.
@@ -780,6 +781,8 @@ model Order {
   // Payment information
   paymentMethod   PaymentMethod?
   paymentId       String?  // Klarna/Stripe payment ID
+  stripeSessionId String?  // Stripe Checkout Session ID
+  stripePaymentIntentId String?  // Stripe Payment Intent ID
   paidAt          DateTime?
 
   // Tracking
@@ -841,5 +844,49 @@ enum OrderStatus {
   DELIVERED     // Order delivered
   CANCELLED     // Order cancelled
   REFUNDED      // Order refunded
+}
+
+// =============================================================================
+// Release/Video Management
+// =============================================================================
+
+model Release {
+  id          String   @id @default(uuid())
+  title       String
+  artist      String
+  description String?  @db.Text
+
+  // Video details
+  videoUrl      String   // YouTube, TikTok, or other video URL
+  videoId       String?  // Platform-specific video ID (e.g., YouTube video ID)
+  thumbnailUrl  String?  // Video thumbnail image URL
+  duration      String?  // Video duration (e.g., "3:45")
+
+  // Metadata
+  views         String?  // View count (stored as string for flexibility: "1.2M", "500K")
+  releaseDate   DateTime // Official release date
+  genre         String?  // Music genre
+  tags          String[] // Array of tags for search/filtering
+
+  // Streaming links
+  spotifyUrl    String?  // Spotify link
+  appleMusicUrl String?  // Apple Music link
+  tidalUrl      String?  // Tidal link
+  soundcloudUrl String?  // SoundCloud link
+
+  // Display settings
+  featured      Boolean  @default(false)
+  sortOrder     Int      @default(0)
+  isActive      Boolean  @default(true)
+
+  // Timestamps
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([artist])
+  @@index([releaseDate])
+  @@index([featured])
+  @@index([isActive])
+  @@map("releases")
 }
 

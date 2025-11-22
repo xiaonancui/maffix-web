@@ -1,7 +1,7 @@
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { redirect } from 'next/navigation'
-import Link from 'next/link'
+import AdminLayoutClient from '@/components/admin/AdminLayoutClient'
 
 export default async function AdminLayout({
   children,
@@ -15,59 +15,9 @@ export default async function AdminLayout({
   }
 
   return (
-    <div className="min-h-screen bg-black">
-      {/* Admin Navigation */}
-      <nav className="bg-[#FF5656] shadow-lg">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex h-16 justify-between">
-            <div className="flex">
-              <div className="flex flex-shrink-0 items-center">
-                <Link href="/admin" className="text-xl font-bold text-white">
-                  🛡️ Maffix Admin
-                </Link>
-              </div>
-              <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
-                <Link
-                  href="/admin"
-                  className="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-white hover:border-white transition-colors"
-                >
-                  Dashboard
-                </Link>
-                <Link
-                  href="/admin/tasks"
-                  className="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-white hover:border-white transition-colors"
-                >
-                  Task Verification
-                </Link>
-                <Link
-                  href="/admin/users"
-                  className="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-white hover:border-white transition-colors"
-                >
-                  Users
-                </Link>
-                <Link
-                  href="/admin/prizes"
-                  className="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-white hover:border-white transition-colors"
-                >
-                  Prizes
-                </Link>
-              </div>
-            </div>
-            <div className="flex items-center gap-4">
-              <Link
-                href="/dashboard"
-                className="text-sm font-medium text-white hover:underline transition-colors"
-              >
-                ← Back to User Dashboard
-              </Link>
-            </div>
-          </div>
-        </div>
-      </nav>
-
-      {/* Main Content */}
-      <main>{children}</main>
-    </div>
+    <AdminLayoutClient userName={session.user.name || 'Admin'}>
+      {children}
+    </AdminLayoutClient>
   )
 }
 

@@ -215,7 +215,7 @@ export async function POST(request: Request) {
 
     // Perform transaction: deduct diamonds, create pull records, award prizes
     const result = await db.$transaction(async (tx) => {
-      // Deduct diamonds and update pity counter
+      // Deduct diamonds, update pity counter, and mark 10x draw as completed
       const updatedUser = await tx.user.update({
         where: { id: user.id },
         data: {
@@ -223,6 +223,7 @@ export async function POST(request: Request) {
             decrement: GACHA_COST_10X,
           },
           gachaPityCounter: newPityCounter,
+          hasCompletedTenDraw: true, // Mark that user has completed at least one 10x draw
         },
       })
 

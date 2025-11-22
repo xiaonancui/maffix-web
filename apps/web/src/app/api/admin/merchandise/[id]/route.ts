@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
+import { requireAdmin } from '@/lib/auth-helpers'
 import { z } from 'zod'
 
 // Validation schema for updating merchandise
@@ -27,14 +26,9 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   try {
-    const session = await getServerSession(authOptions)
-
-    if (!session || session.user.role !== 'ADMIN') {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      )
-    }
+    // Require admin authentication
+    const auth = await requireAdmin()
+    if (auth instanceof NextResponse) return auth
 
     const { id } = params
 
@@ -91,14 +85,9 @@ export async function PATCH(
   { params }: { params: { id: string } }
 ) {
   try {
-    const session = await getServerSession(authOptions)
-
-    if (!session || session.user.role !== 'ADMIN') {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      )
-    }
+    // Require admin authentication
+    const auth = await requireAdmin()
+    if (auth instanceof NextResponse) return auth
 
     const { id } = params
     const body = await request.json()
@@ -178,14 +167,9 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   try {
-    const session = await getServerSession(authOptions)
-
-    if (!session || session.user.role !== 'ADMIN') {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      )
-    }
+    // Require admin authentication
+    const auth = await requireAdmin()
+    if (auth instanceof NextResponse) return auth
 
     const { id } = params
 

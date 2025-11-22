@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
+import { requireAdmin } from '@/lib/auth-helpers'
 import { z } from 'zod'
 
 // Validation schema for creating merchandise
@@ -38,14 +37,9 @@ const createMerchandiseSchema = z.object({
  */
 export async function POST(request: Request) {
   try {
-    const session = await getServerSession(authOptions)
-
-    if (!session || session.user.role !== 'ADMIN') {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      )
-    }
+    // Require admin authentication
+    const auth = await requireAdmin()
+    if (auth instanceof NextResponse) return auth
 
     const body = await request.json()
     const validationResult = createMerchandiseSchema.safeParse(body)
@@ -126,14 +120,9 @@ export async function POST(request: Request) {
  */
 export async function GET(request: Request) {
   try {
-    const session = await getServerSession(authOptions)
-
-    if (!session || session.user.role !== 'ADMIN') {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      )
-    }
+    // Require admin authentication
+    const auth = await requireAdmin()
+    if (auth instanceof NextResponse) return auth
 
     const { searchParams } = new URL(request.url)
     const category = searchParams.get('category')

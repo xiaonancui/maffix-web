@@ -213,15 +213,15 @@ export default async function DashboardPage() {
   const diamondTrend = recentIncome - recentExpense
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+    <div className="min-h-screen bg-black">
       <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-8 flex items-center justify-between">
           <div>
-            <h1 className="text-4xl font-bold text-gray-900">
+            <h1 className="text-4xl font-bold text-white">
               Welcome back, {user.name}! 👋
             </h1>
-            <p className="mt-2 text-sm text-gray-600">
+            <p className="mt-2 text-sm text-gray-400">
               Level {user.level} • {user.role} • Member since {new Date(user.createdAt).toLocaleDateString()}
             </p>
           </div>
@@ -231,15 +231,15 @@ export default async function DashboardPage() {
         {/* Enhanced Stats Grid */}
         <div className="mb-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {/* Diamond Balance with Trend */}
-          <div className="group relative overflow-hidden rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 p-6 shadow-lg transition-all hover:shadow-2xl">
-            <div className="absolute right-0 top-0 h-32 w-32 translate-x-8 -translate-y-8 transform rounded-full bg-white opacity-10"></div>
+          <div className="group relative overflow-hidden rounded-xl bg-gray-900 border border-gray-800 p-6 shadow-lg transition-all hover:border-[#FF5656] hover:shadow-2xl">
+            <div className="absolute right-0 top-0 h-32 w-32 translate-x-8 -translate-y-8 transform rounded-full bg-[#FF5656] opacity-10"></div>
             <div className="relative">
               <div className="mb-2 flex items-center justify-between">
-                <span className="text-sm font-medium text-blue-100">Diamond Balance</span>
+                <span className="text-sm font-medium text-gray-400">Diamond Balance</span>
                 {diamondTrend !== 0 && (
                   <span
                     className={`flex items-center text-xs font-semibold ${
-                      diamondTrend > 0 ? 'text-green-300' : 'text-red-300'
+                      diamondTrend > 0 ? 'text-[#FF5656]' : 'text-red-400'
                     }`}
                   >
                     {diamondTrend > 0 ? '↑' : '↓'} {Math.abs(diamondTrend)}
@@ -248,82 +248,82 @@ export default async function DashboardPage() {
               </div>
               <div className="flex items-baseline">
                 <span className="text-4xl font-bold text-white">{user.diamondBalance.toLocaleString()}</span>
-                <span className="ml-2 text-2xl text-blue-100">💎</span>
+                <span className="ml-2 text-2xl text-gray-400">💎</span>
               </div>
-              <p className="mt-2 text-xs text-blue-100">
+              <p className="mt-2 text-xs text-gray-500">
                 {diamondTrend > 0 ? 'Earning well!' : diamondTrend < 0 ? 'Spending active' : 'Stable balance'}
               </p>
             </div>
           </div>
 
           {/* Mission Completion */}
-          <div className="group relative overflow-hidden rounded-xl bg-gradient-to-br from-green-500 to-green-600 p-6 shadow-lg transition-all hover:shadow-2xl">
-            <div className="absolute right-0 top-0 h-32 w-32 translate-x-8 -translate-y-8 transform rounded-full bg-white opacity-10"></div>
+          <div className="group relative overflow-hidden rounded-xl bg-gray-900 border border-gray-800 p-6 shadow-lg transition-all hover:border-[#FF5656] hover:shadow-2xl">
+            <div className="absolute right-0 top-0 h-32 w-32 translate-x-8 -translate-y-8 transform rounded-full bg-[#FF5656] opacity-10"></div>
             <div className="relative">
               <div className="mb-2 flex items-center justify-between">
-                <span className="text-sm font-medium text-green-100">Mission Stats</span>
-                <span className="text-xs font-semibold text-green-200">{completionRate}%</span>
+                <span className="text-sm font-medium text-gray-400">Mission Stats</span>
+                <span className="text-xs font-semibold text-[#FF5656]">{completionRate}%</span>
               </div>
               <div className="flex items-baseline">
                 <span className="text-4xl font-bold text-white">{completedMissions}</span>
-                <span className="ml-2 text-xl text-green-100">/ {totalMissions}</span>
+                <span className="ml-2 text-xl text-gray-400">/ {totalMissions}</span>
               </div>
-              <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-green-400 bg-opacity-30">
+              <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-gray-700">
                 <div
-                  className="h-full rounded-full bg-white transition-all duration-500"
+                  className="h-full rounded-full bg-[#FF5656] transition-all duration-500"
                   style={{ width: `${completionRate}%` }}
                 ></div>
               </div>
-              <p className="mt-2 text-xs text-green-100">
+              <p className="mt-2 text-xs text-gray-500">
                 {pendingMissions > 0 ? `${pendingMissions} pending verification` : 'All caught up! 🎉'}
               </p>
             </div>
           </div>
 
           {/* Gacha Stats */}
-          <div className="group relative overflow-hidden rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 p-6 shadow-lg transition-all hover:shadow-2xl">
-            <div className="absolute right-0 top-0 h-32 w-32 translate-x-8 -translate-y-8 transform rounded-full bg-white opacity-10"></div>
+          <div className="group relative overflow-hidden rounded-xl bg-gray-900 border border-gray-800 p-6 shadow-lg transition-all hover:border-[#FF5656] hover:shadow-2xl">
+            <div className="absolute right-0 top-0 h-32 w-32 translate-x-8 -translate-y-8 transform rounded-full bg-[#FF5656] opacity-10"></div>
             <div className="relative">
               <div className="mb-2 flex items-center justify-between">
-                <span className="text-sm font-medium text-purple-100">Gacha Pulls</span>
+                <span className="text-sm font-medium text-gray-400">Gacha Pulls</span>
                 <span className="text-2xl">🎰</span>
               </div>
               <div className="flex items-baseline">
                 <span className="text-4xl font-bold text-white">{totalGachaPulls}</span>
-                <span className="ml-2 text-xl text-purple-100">total</span>
+                <span className="ml-2 text-xl text-gray-400">total</span>
               </div>
-              <div className="mt-3 flex gap-1 text-xs text-purple-100">
+              <div className="mt-3 flex gap-1 text-xs text-gray-400">
                 <span title="SSR">⭐⭐⭐: {rarityStats.SSR}</span>
                 <span className="mx-1">•</span>
                 <span title="Legendary">🌟: {rarityStats.LEGENDARY}</span>
                 <span className="mx-1">•</span>
                 <span title="Epic">✨: {rarityStats.EPIC}</span>
               </div>
-              <p className="mt-2 text-xs text-purple-100">
+              <p className="mt-2 text-xs text-gray-500">
                 {rarityStats.SSR + rarityStats.LEGENDARY > 0 ? 'Lucky streak! 🍀' : 'Keep pulling!'}
               </p>
             </div>
           </div>
 
           {/* Level & XP */}
-          <div className="group relative overflow-hidden rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 p-6 shadow-lg transition-all hover:shadow-2xl">
-            <div className="absolute right-0 top-0 h-32 w-32 translate-x-8 -translate-y-8 transform rounded-full bg-white opacity-10"></div>
+          <div className="group relative overflow-hidden rounded-xl bg-gray-900 border border-gray-800 p-6 shadow-lg transition-all hover:border-[#FF5656] hover:shadow-2xl">
+            <div className="absolute right-0 top-0 h-32 w-32 translate-x-8 -translate-y-8 transform rounded-full bg-[#FF5656] opacity-10"></div>
             <div className="relative">
               <div className="mb-2 flex items-center justify-between">
-                <span className="text-sm font-medium text-orange-100">Level & XP</span>
+                <span className="text-sm font-medium text-gray-400">Level & XP</span>
                 <span className="text-2xl">🏆</span>
               </div>
               <div className="flex items-baseline">
                 <span className="text-4xl font-bold text-white">Lv.{user.level}</span>
-                <span className="ml-2 text-xl text-orange-100">{user.points.toLocaleString()} pts</span>
+                <span className="ml-2 text-xl text-gray-400">{user.points.toLocaleString()} pts</span>
               </div>
-              <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-orange-400 bg-opacity-30">
+              <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-gray-700">
                 <div
-                  className="h-full rounded-full bg-white transition-all duration-500"
+                  className="h-full rounded-full bg-[#FF5656] transition-all duration-500"
                   style={{ width: `${xpProgress}%` }}
                 ></div>
               </div>
-              <p className="mt-2 text-xs text-orange-100">
+              <p className="mt-2 text-xs text-gray-500">
                 {Math.round(100 - xpProgress)}% to Level {user.level + 1}
               </p>
             </div>
@@ -334,12 +334,12 @@ export default async function DashboardPage() {
         <div className="grid gap-8 lg:grid-cols-3">
           {/* Left Column - Recent Activity */}
           <div className="lg:col-span-2">
-            <div className="rounded-xl bg-white p-6 shadow-lg">
+            <div className="rounded-xl bg-gray-900 border border-gray-800 p-6 shadow-lg">
               <div className="mb-6 flex items-center justify-between">
-                <h2 className="text-xl font-bold text-gray-900">Recent Activity 📊</h2>
+                <h2 className="text-xl font-bold text-white">Recent Activity 📊</h2>
                 <Link
                   href="/transactions"
-                  className="text-sm font-medium text-[#FF5656] hover:text-blue-700"
+                  className="text-sm font-medium text-[#FF5656] hover:text-[#ff3333] transition-colors"
                 >
                   View All →
                 </Link>
@@ -347,10 +347,10 @@ export default async function DashboardPage() {
 
               {recentTransactions.length === 0 && gachaPulls.length === 0 ? (
                 <div className="py-12 text-center">
-                  <p className="text-gray-500">No recent activity yet. Start completing missions!</p>
+                  <p className="text-gray-400">No recent activity yet. Start completing missions!</p>
                   <Link
                     href="/missions"
-                    className="mt-4 inline-block rounded-lg bg-[#FF5656] px-6 py-2 text-sm font-semibold text-white hover:bg-[#FF5656]/90"
+                    className="mt-4 inline-block rounded-lg bg-[#FF5656] px-6 py-2 text-sm font-semibold text-white hover:bg-[#ff3333] transition-all"
                   >
                     Browse Missions
                   </Link>
@@ -379,11 +379,11 @@ export default async function DashboardPage() {
                         return (
                           <div
                             key={`tx-${tx.id}`}
-                            className="flex items-start gap-4 rounded-lg border border-gray-200 p-4 transition-all hover:border-gray-300 hover:shadow-md"
+                            className="flex items-start gap-4 rounded-lg border border-gray-700 bg-gray-800 p-4 transition-all hover:border-[#FF5656] hover:shadow-md"
                           >
                             <div
                               className={`flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full ${
-                                isIncome ? 'bg-green-100' : 'bg-red-100'
+                                isIncome ? 'bg-[#FF5656]/20' : 'bg-red-900/20'
                               }`}
                             >
                               <span className="text-lg">
@@ -399,14 +399,14 @@ export default async function DashboardPage() {
                             <div className="flex-1">
                               <div className="flex items-start justify-between">
                                 <div>
-                                  <p className="font-medium text-gray-900">{tx.description}</p>
+                                  <p className="font-medium text-white">{tx.description}</p>
                                   <p className="mt-1 text-xs text-gray-500">
                                     {new Date(tx.createdAt).toLocaleString()}
                                   </p>
                                 </div>
                                 <span
                                   className={`ml-4 text-lg font-bold ${
-                                    isIncome ? 'text-green-600' : 'text-red-600'
+                                    isIncome ? 'text-[#FF5656]' : 'text-red-400'
                                   }`}
                                 >
                                   {isIncome ? '+' : ''}
@@ -419,20 +419,20 @@ export default async function DashboardPage() {
                       } else {
                         const pull = activity.data
                         const rarityColors = {
-                          SSR: 'from-yellow-400 to-orange-500',
-                          LEGENDARY: 'from-purple-400 to-pink-500',
-                          EPIC: 'from-blue-400 to-purple-500',
-                          RARE: 'from-blue-300 to-blue-400',
-                          COMMON: 'from-gray-300 to-gray-400',
+                          SSR: 'from-[#FF5656] to-[#ff3333]',
+                          LEGENDARY: 'from-[#FF5656] to-[#ff3333]',
+                          EPIC: 'from-gray-600 to-gray-700',
+                          RARE: 'from-gray-700 to-gray-800',
+                          COMMON: 'from-gray-800 to-gray-900',
                         }
                         const rarityColor =
                           rarityColors[pull.prize.rarity as keyof typeof rarityColors] ||
-                          'from-gray-300 to-gray-400'
+                          'from-gray-800 to-gray-900'
 
                         return (
                           <div
                             key={`pull-${pull.id}`}
-                            className="flex items-start gap-4 rounded-lg border border-gray-200 p-4 transition-all hover:border-gray-300 hover:shadow-md"
+                            className="flex items-start gap-4 rounded-lg border border-gray-700 bg-gray-800 p-4 transition-all hover:border-[#FF5656] hover:shadow-md"
                           >
                             <div
                               className={`flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-gradient-to-br ${rarityColor}`}
@@ -442,7 +442,7 @@ export default async function DashboardPage() {
                             <div className="flex-1">
                               <div className="flex items-start justify-between">
                                 <div>
-                                  <p className="font-medium text-gray-900">
+                                  <p className="font-medium text-white">
                                     Won: {pull.prize.name}
                                   </p>
                                   <div className="mt-1 flex items-center gap-2">
@@ -475,61 +475,61 @@ export default async function DashboardPage() {
           {/* Right Column - Quick Actions & Stats */}
           <div className="space-y-6">
             {/* Quick Actions */}
-            <div className="rounded-xl bg-white p-6 shadow-lg">
-              <h2 className="mb-4 text-xl font-bold text-gray-900">Quick Actions ⚡</h2>
+            <div className="rounded-xl bg-gray-900 border border-gray-800 p-6 shadow-lg">
+              <h2 className="mb-4 text-xl font-bold text-white">Quick Actions ⚡</h2>
               <div className="space-y-3">
                 <Link
                   href="/missions"
-                  className="group flex items-center gap-3 rounded-lg border-2 border-gray-200 bg-gradient-to-r from-blue-50 to-blue-100 p-4 transition-all hover:border-blue-400 hover:shadow-md"
+                  className="group flex items-center gap-3 rounded-lg border-2 border-gray-700 bg-gray-800 p-4 transition-all hover:border-[#FF5656] hover:shadow-md"
                 >
                   <span className="text-2xl">🎯</span>
                   <div className="flex-1">
-                    <p className="font-semibold text-gray-900">Browse Missions</p>
-                    <p className="text-xs text-gray-600">Earn diamonds & rewards</p>
+                    <p className="font-semibold text-white">Browse Missions</p>
+                    <p className="text-xs text-gray-400">Earn diamonds & rewards</p>
                   </div>
-                  <span className="text-gray-400 transition-transform group-hover:translate-x-1">
+                  <span className="text-gray-500 transition-transform group-hover:translate-x-1">
                     →
                   </span>
                 </Link>
 
                 <Link
                   href="/gacha"
-                  className="group flex items-center gap-3 rounded-lg border-2 border-gray-200 bg-gradient-to-r from-purple-50 to-purple-100 p-4 transition-all hover:border-purple-400 hover:shadow-md"
+                  className="group flex items-center gap-3 rounded-lg border-2 border-gray-700 bg-gray-800 p-4 transition-all hover:border-[#FF5656] hover:shadow-md"
                 >
                   <span className="text-2xl">🎰</span>
                   <div className="flex-1">
-                    <p className="font-semibold text-gray-900">Try Your Luck</p>
-                    <p className="text-xs text-gray-600">Win exclusive prizes</p>
+                    <p className="font-semibold text-white">Try Your Luck</p>
+                    <p className="text-xs text-gray-400">Win exclusive prizes</p>
                   </div>
-                  <span className="text-gray-400 transition-transform group-hover:translate-x-1">
+                  <span className="text-gray-500 transition-transform group-hover:translate-x-1">
                     →
                   </span>
                 </Link>
 
                 <Link
                   href="/store"
-                  className="group flex items-center gap-3 rounded-lg border-2 border-gray-200 bg-gradient-to-r from-green-50 to-green-100 p-4 transition-all hover:border-green-400 hover:shadow-md"
+                  className="group flex items-center gap-3 rounded-lg border-2 border-gray-700 bg-gray-800 p-4 transition-all hover:border-[#FF5656] hover:shadow-md"
                 >
                   <span className="text-2xl">🛍️</span>
                   <div className="flex-1">
-                    <p className="font-semibold text-gray-900">Shop Merch</p>
-                    <p className="text-xs text-gray-600">Official merchandise</p>
+                    <p className="font-semibold text-white">Shop Merch</p>
+                    <p className="text-xs text-gray-400">Official merchandise</p>
                   </div>
-                  <span className="text-gray-400 transition-transform group-hover:translate-x-1">
+                  <span className="text-gray-500 transition-transform group-hover:translate-x-1">
                     →
                   </span>
                 </Link>
 
                 <Link
                   href="/prizes"
-                  className="group flex items-center gap-3 rounded-lg border-2 border-gray-200 bg-gradient-to-r from-orange-50 to-orange-100 p-4 transition-all hover:border-orange-400 hover:shadow-md"
+                  className="group flex items-center gap-3 rounded-lg border-2 border-gray-700 bg-gray-800 p-4 transition-all hover:border-[#FF5656] hover:shadow-md"
                 >
                   <span className="text-2xl">🏆</span>
                   <div className="flex-1">
-                    <p className="font-semibold text-gray-900">My Prizes</p>
-                    <p className="text-xs text-gray-600">View your collection</p>
+                    <p className="font-semibold text-white">My Prizes</p>
+                    <p className="text-xs text-gray-400">View your collection</p>
                   </div>
-                  <span className="text-gray-400 transition-transform group-hover:translate-x-1">
+                  <span className="text-gray-500 transition-transform group-hover:translate-x-1">
                     →
                   </span>
                 </Link>
@@ -537,28 +537,28 @@ export default async function DashboardPage() {
             </div>
 
             {/* Account Summary */}
-            <div className="rounded-xl bg-white p-6 shadow-lg">
-              <h2 className="mb-4 text-xl font-bold text-gray-900">Account Info 👤</h2>
+            <div className="rounded-xl bg-gray-900 border border-gray-800 p-6 shadow-lg">
+              <h2 className="mb-4 text-xl font-bold text-white">Account Info 👤</h2>
               <div className="space-y-3">
-                <div className="flex items-center justify-between rounded-lg bg-gray-50 p-3">
-                  <span className="text-sm font-medium text-gray-600">Email</span>
-                  <span className="text-sm text-gray-900">{user.email}</span>
+                <div className="flex items-center justify-between rounded-lg bg-gray-800 border border-gray-700 p-3">
+                  <span className="text-sm font-medium text-gray-400">Email</span>
+                  <span className="text-sm text-white">{user.email}</span>
                 </div>
-                <div className="flex items-center justify-between rounded-lg bg-gray-50 p-3">
-                  <span className="text-sm font-medium text-gray-600">Role</span>
-                  <span className="rounded-full bg-blue-100 px-3 py-1 text-xs font-semibold text-blue-800">
+                <div className="flex items-center justify-between rounded-lg bg-gray-800 border border-gray-700 p-3">
+                  <span className="text-sm font-medium text-gray-400">Role</span>
+                  <span className="rounded-full bg-[#FF5656] px-3 py-1 text-xs font-semibold text-white">
                     {user.role}
                   </span>
                 </div>
-                <div className="flex items-center justify-between rounded-lg bg-gray-50 p-3">
-                  <span className="text-sm font-medium text-gray-600">Member Since</span>
-                  <span className="text-sm text-gray-900">
+                <div className="flex items-center justify-between rounded-lg bg-gray-800 border border-gray-700 p-3">
+                  <span className="text-sm font-medium text-gray-400">Member Since</span>
+                  <span className="text-sm text-white">
                     {new Date(user.createdAt).toLocaleDateString()}
                   </span>
                 </div>
-                <div className="flex items-center justify-between rounded-lg bg-gray-50 p-3">
-                  <span className="text-sm font-medium text-gray-600">Last Login</span>
-                  <span className="text-sm text-gray-900">
+                <div className="flex items-center justify-between rounded-lg bg-gray-800 border border-gray-700 p-3">
+                  <span className="text-sm font-medium text-gray-400">Last Login</span>
+                  <span className="text-sm text-white">
                     {user.lastLoginAt
                       ? new Date(user.lastLoginAt).toLocaleDateString()
                       : 'First time!'}

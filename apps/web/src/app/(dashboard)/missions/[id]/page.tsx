@@ -125,13 +125,13 @@ export default async function MissionDetailPage({
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
       case 'EASY':
-        return 'bg-green-100 text-green-800 border-green-300'
+        return 'bg-green-900/20 text-green-300 border-green-700'
       case 'MEDIUM':
-        return 'bg-yellow-100 text-yellow-800 border-yellow-300'
+        return 'bg-yellow-900/20 text-yellow-300 border-yellow-700'
       case 'HARD':
-        return 'bg-red-100 text-red-800 border-red-300'
+        return 'bg-red-900/20 text-red-300 border-red-700'
       default:
-        return 'bg-gray-100 text-gray-800 border-gray-300'
+        return 'bg-gray-800 text-gray-300 border-gray-700'
     }
   }
 
@@ -170,7 +170,7 @@ export default async function MissionDetailPage({
       <div className="mb-6">
         <Link
           href="/missions"
-          className="inline-flex items-center text-sm font-medium text-gray-500 hover:text-gray-700"
+          className="inline-flex items-center text-sm font-medium text-gray-400 hover:text-gray-200"
         >
           <svg
             className="mr-2 h-4 w-4"
@@ -190,13 +190,13 @@ export default async function MissionDetailPage({
       </div>
 
       {/* Mission Header */}
-      <div className="mb-8 rounded-lg bg-white p-8 shadow-lg">
+      <div className="mb-8 rounded-lg bg-gray-900 p-8 shadow-lg border border-gray-800">
         <div className="mb-6 flex items-start justify-between">
           <div className="flex items-center gap-4">
             <span className="text-5xl">{getMissionTypeIcon(mission.missionType)}</span>
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">{mission.title}</h1>
-              <p className="mt-1 text-sm text-gray-500">
+              <h1 className="text-3xl font-bold text-white">{mission.title}</h1>
+              <p className="mt-1 text-sm text-gray-400">
                 {getMissionTypeDescription(mission.missionType)}
               </p>
             </div>
@@ -210,25 +210,25 @@ export default async function MissionDetailPage({
           </span>
         </div>
 
-        <p className="mb-6 text-gray-700">{mission.description}</p>
+        <p className="mb-6 text-gray-300">{mission.description}</p>
 
         {/* Rewards */}
         <div className="grid gap-4 sm:grid-cols-3">
-          <div className="rounded-lg bg-blue-50 p-4">
-            <div className="text-sm text-gray-600">Reward</div>
+          <div className="rounded-lg bg-blue-900/20 p-4 border border-blue-800/30">
+            <div className="text-sm text-gray-400">Reward</div>
             <div className="mt-1 text-2xl font-bold text-[#FF5656]">
               💎 {mission.diamonds}
             </div>
           </div>
-          <div className="rounded-lg bg-purple-50 p-4">
-            <div className="text-sm text-gray-600">Points</div>
+          <div className="rounded-lg bg-purple-900/20 p-4 border border-purple-800/30">
+            <div className="text-sm text-gray-400">Points</div>
             <div className="mt-1 text-2xl font-bold text-[#FF5656]">
               ⭐ {mission.points}
             </div>
           </div>
-          <div className="rounded-lg bg-green-50 p-4">
-            <div className="text-sm text-gray-600">Est. Time</div>
-            <div className="mt-1 text-2xl font-bold text-green-600">
+          <div className="rounded-lg bg-green-900/20 p-4 border border-green-800/30">
+            <div className="text-sm text-gray-400">Est. Time</div>
+            <div className="mt-1 text-2xl font-bold text-green-400">
               {mission.estimatedTime || '5 min'}
             </div>
           </div>
@@ -279,17 +279,17 @@ export default async function MissionDetailPage({
         <div
           className={`mb-8 rounded-lg border-2 p-6 ${
             isCompleted
-              ? 'border-green-300 bg-green-50'
+              ? 'border-green-700 bg-green-900/20'
               : isPending
-              ? 'border-yellow-300 bg-yellow-50'
-              : 'border-red-300 bg-red-50'
+              ? 'border-yellow-700 bg-yellow-900/20'
+              : 'border-red-700 bg-red-900/20'
           }`}
         >
           <div className="flex items-start">
             <div className="flex-shrink-0">
               {isCompleted ? (
                 <svg
-                  className="h-6 w-6 text-green-600"
+                  className="h-6 w-6 text-green-400"
                   fill="none"
                   viewBox="0 0 24 24"
                   strokeWidth="1.5"
@@ -303,7 +303,7 @@ export default async function MissionDetailPage({
                 </svg>
               ) : (
                 <svg
-                  className="h-6 w-6 text-yellow-600"
+                  className="h-6 w-6 text-yellow-400"
                   fill="none"
                   viewBox="0 0 24 24"
                   strokeWidth="1.5"
@@ -320,14 +320,14 @@ export default async function MissionDetailPage({
             <div className="ml-3 flex-1">
               <h3
                 className={`text-sm font-medium ${
-                  isCompleted ? 'text-green-800' : 'text-yellow-800'
+                  isCompleted ? 'text-green-300' : 'text-yellow-300'
                 }`}
               >
                 {isCompleted ? 'Mission Completed!' : 'Verification in Progress'}
               </h3>
               <div
                 className={`mt-2 text-sm ${
-                  isCompleted ? 'text-green-700' : 'text-yellow-700'
+                  isCompleted ? 'text-green-400' : 'text-yellow-400'
                 }`}
               >
                 {isCompleted ? (
@@ -342,7 +342,7 @@ export default async function MissionDetailPage({
                 )}
               </div>
               {submission.submittedAt && (
-                <p className="mt-2 text-xs text-gray-600">
+                <p className="mt-2 text-xs text-gray-400">
                   Submitted: {new Date(submission.submittedAt).toLocaleString()}
                 </p>
               )}
@@ -352,8 +352,8 @@ export default async function MissionDetailPage({
       )}
 
       {/* Mission Instructions */}
-      <div className="mb-8 rounded-lg bg-white p-6 shadow">
-        <h2 className="mb-4 text-xl font-bold text-gray-900">How to Complete</h2>
+      <div className="mb-8 rounded-lg bg-gray-900 p-6 shadow border border-gray-800">
+        <h2 className="mb-4 text-xl font-bold text-white">How to Complete</h2>
         <ol className="space-y-3">
           {(mission.instructions || [
             'Open TikTok using the button below',
@@ -361,10 +361,10 @@ export default async function MissionDetailPage({
             'Return here and submit for verification',
           ]).map((instruction: string, index: number) => (
             <li key={index} className="flex items-start">
-              <span className="mr-3 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-primary text-xs font-semibold text-primary-foreground">
+              <span className="mr-3 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-[#FF5656] text-xs font-semibold text-white">
                 {index + 1}
               </span>
-              <span className="text-gray-700">{instruction}</span>
+              <span className="text-gray-300">{instruction}</span>
             </li>
           ))}
         </ol>
@@ -372,13 +372,13 @@ export default async function MissionDetailPage({
 
       {/* Requirements */}
       {mission.requirements && mission.requirements.length > 0 && (
-        <div className="mb-8 rounded-lg bg-white p-6 shadow">
-          <h2 className="mb-4 text-xl font-bold text-gray-900">Requirements</h2>
+        <div className="mb-8 rounded-lg bg-gray-900 p-6 shadow border border-gray-800">
+          <h2 className="mb-4 text-xl font-bold text-white">Requirements</h2>
           <ul className="space-y-2">
             {mission.requirements.map((req: string, index: number) => (
               <li key={index} className="flex items-start">
                 <svg
-                  className="mr-2 mt-0.5 h-5 w-5 flex-shrink-0 text-green-500"
+                  className="mr-2 mt-0.5 h-5 w-5 flex-shrink-0 text-green-400"
                   fill="none"
                   viewBox="0 0 24 24"
                   strokeWidth="1.5"
@@ -390,7 +390,7 @@ export default async function MissionDetailPage({
                     d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                   />
                 </svg>
-                <span className="text-gray-700">{req}</span>
+                <span className="text-gray-300">{req}</span>
               </li>
             ))}
           </ul>
@@ -416,7 +416,7 @@ export default async function MissionDetailPage({
         {isPending && (
           <button
             disabled
-            className="w-full cursor-not-allowed rounded-md bg-gray-300 px-4 py-3 text-sm font-semibold text-gray-500"
+            className="w-full cursor-not-allowed rounded-md bg-gray-700 px-4 py-3 text-sm font-semibold text-gray-400"
           >
             Verification in Progress...
           </button>

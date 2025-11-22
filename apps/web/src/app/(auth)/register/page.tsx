@@ -29,7 +29,7 @@ export default function RegisterPage() {
     if (/[^a-zA-Z\d]/.test(password)) score++
 
     const labels = ['', 'Weak', 'Fair', 'Good', 'Strong', 'Very Strong']
-    const colors = ['', 'bg-red-500', 'bg-orange-500', 'bg-yellow-500', 'bg-green-500', 'bg-green-600']
+    const colors = ['', 'bg-red-500', 'bg-[#FF5656]/60', 'bg-[#FF5656]/80', 'bg-[#FF5656]', 'bg-[#FF5656]']
 
     return {
       score,
@@ -99,15 +99,15 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4 py-12 sm:px-6 lg:px-8">
+    <div className="flex min-h-screen items-center justify-center bg-black px-4 py-12 sm:px-6 lg:px-8">
       <div className="w-full max-w-md space-y-8">
         <div>
-          <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
+          <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-white">
             Create your account
           </h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
+          <p className="mt-2 text-center text-sm text-gray-400">
             Already have an account?{' '}
-            <Link href="/login" className="font-medium text-primary hover:opacity-80">
+            <Link href="/login" className="font-medium text-[#FF5656] hover:text-[#ff3333] transition-colors">
               Sign in
             </Link>
           </p>
@@ -115,12 +115,12 @@ export default function RegisterPage() {
 
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           {error && (
-            <div className="rounded-md bg-red-50 p-4">
-              <p className="text-sm text-red-800">{error}</p>
+            <div className="rounded-md bg-red-900/20 border border-red-500/50 p-4">
+              <p className="text-sm text-red-400">{error}</p>
             </div>
           )}
 
-          <div className="space-y-4 rounded-md shadow-sm">
+          <div className="space-y-4">
             <div>
               <label htmlFor="name" className="sr-only">
                 Full name
@@ -132,7 +132,7 @@ export default function RegisterPage() {
                 required
                 value={formData.name}
                 onChange={handleChange}
-                className="relative block w-full rounded-md border-0 px-3 py-2 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
+                className="relative block w-full rounded-md bg-gray-800 border border-gray-700 px-3 py-2 text-white placeholder:text-gray-500 focus:border-[#FF5656] focus:outline-none focus:ring-1 focus:ring-[#FF5656] sm:text-sm sm:leading-6"
                 placeholder="Full name"
               />
             </div>
@@ -148,7 +148,7 @@ export default function RegisterPage() {
                 required
                 value={formData.email}
                 onChange={handleChange}
-                className="relative block w-full rounded-md border-0 px-3 py-2 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
+                className="relative block w-full rounded-md bg-gray-800 border border-gray-700 px-3 py-2 text-white placeholder:text-gray-500 focus:border-[#FF5656] focus:outline-none focus:ring-1 focus:ring-[#FF5656] sm:text-sm sm:leading-6"
                 placeholder="Email address"
               />
             </div>
@@ -164,23 +164,23 @@ export default function RegisterPage() {
                 required
                 value={formData.password}
                 onChange={handleChange}
-                className="relative block w-full rounded-md border-0 px-3 py-2 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
+                className="relative block w-full rounded-md bg-gray-800 border border-gray-700 px-3 py-2 text-white placeholder:text-gray-500 focus:border-[#FF5656] focus:outline-none focus:ring-1 focus:ring-[#FF5656] sm:text-sm sm:leading-6"
                 placeholder="Password (min. 8 characters)"
               />
               {formData.password && (
                 <div className="mt-2">
                   <div className="flex items-center justify-between text-xs">
-                    <span className="text-gray-600">Password strength:</span>
+                    <span className="text-gray-400">Password strength:</span>
                     <span className={`font-semibold ${
-                      passwordStrength.score <= 1 ? 'text-red-600' :
-                      passwordStrength.score === 2 ? 'text-orange-600' :
-                      passwordStrength.score === 3 ? 'text-yellow-600' :
-                      'text-green-600'
+                      passwordStrength.score <= 1 ? 'text-red-400' :
+                      passwordStrength.score === 2 ? 'text-[#FF5656]/60' :
+                      passwordStrength.score === 3 ? 'text-[#FF5656]/80' :
+                      'text-[#FF5656]'
                     }`}>
                       {passwordStrength.label}
                     </span>
                   </div>
-                  <div className="mt-1 h-2 w-full overflow-hidden rounded-full bg-gray-200">
+                  <div className="mt-1 h-2 w-full overflow-hidden rounded-full bg-gray-700">
                     <div
                       className={`h-full transition-all duration-300 ${passwordStrength.color}`}
                       style={{ width: `${(passwordStrength.score / 5) * 100}%` }}
@@ -204,7 +204,7 @@ export default function RegisterPage() {
                 required
                 value={formData.confirmPassword}
                 onChange={handleChange}
-                className="relative block w-full rounded-md border-0 px-3 py-2 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:z-10 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
+                className="relative block w-full rounded-md bg-gray-800 border border-gray-700 px-3 py-2 text-white placeholder:text-gray-500 focus:border-[#FF5656] focus:outline-none focus:ring-1 focus:ring-[#FF5656] sm:text-sm sm:leading-6"
                 placeholder="Confirm password"
               />
             </div>
@@ -214,7 +214,7 @@ export default function RegisterPage() {
             <button
               type="submit"
               disabled={isLoading}
-              className="group relative flex w-full justify-center rounded-md bg-primary px-3 py-2 text-sm font-semibold text-primary-foreground hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:opacity-50"
+              className="group relative flex w-full justify-center rounded-md bg-[#FF5656] px-3 py-2 text-sm font-semibold text-white hover:bg-[#ff3333] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#FF5656] disabled:opacity-50 transition-all"
             >
               {isLoading ? 'Creating account...' : 'Create account'}
             </button>

@@ -164,75 +164,75 @@ export default async function TransactionsPage() {
     <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6 lg:px-8">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-4xl font-bold text-gray-900">Transaction History</h1>
-        <p className="mt-2 text-gray-600">
+        <h1 className="text-4xl font-bold text-white">Transaction History</h1>
+        <p className="mt-2 text-gray-400">
           Track all your diamond earnings and spending
         </p>
       </div>
 
       {/* Summary Cards */}
       <div className="mb-8 grid gap-6 sm:grid-cols-3">
-        <div className="rounded-lg bg-gradient-to-br from-blue-50 to-blue-100 p-6 shadow">
+        <div className="rounded-lg bg-gradient-to-br from-blue-900/30 to-blue-800/30 p-6 shadow border border-blue-800/30">
           <div className="mb-2 text-sm font-medium text-[#FF5656]">
             Current Balance
           </div>
-          <div className="text-3xl font-bold text-blue-900">
+          <div className="text-3xl font-bold text-blue-300">
             💎 {user?.diamondBalance || 0}
           </div>
         </div>
 
-        <div className="rounded-lg bg-gradient-to-br from-green-50 to-green-100 p-6 shadow">
-          <div className="mb-2 text-sm font-medium text-green-600">
+        <div className="rounded-lg bg-gradient-to-br from-green-900/30 to-green-800/30 p-6 shadow border border-green-800/30">
+          <div className="mb-2 text-sm font-medium text-green-400">
             Total Earned
           </div>
-          <div className="text-3xl font-bold text-green-900">
+          <div className="text-3xl font-bold text-green-300">
             💎 {totalEarned}
           </div>
-          <div className="mt-1 text-xs text-green-700">
+          <div className="mt-1 text-xs text-green-400">
             {missionRewards} missions completed
           </div>
         </div>
 
-        <div className="rounded-lg bg-gradient-to-br from-purple-50 to-purple-100 p-6 shadow">
+        <div className="rounded-lg bg-gradient-to-br from-purple-900/30 to-purple-800/30 p-6 shadow border border-purple-800/30">
           <div className="mb-2 text-sm font-medium text-[#FF5656]">
             Total Spent
           </div>
-          <div className="text-3xl font-bold text-purple-900">
+          <div className="text-3xl font-bold text-purple-300">
             💎 {totalSpent}
           </div>
         </div>
       </div>
 
       {/* Transactions List */}
-      <div className="rounded-lg bg-white shadow">
-        <div className="border-b border-gray-200 px-6 py-4">
-          <h2 className="text-xl font-bold text-gray-900">Recent Transactions</h2>
+      <div className="rounded-lg bg-gray-900 shadow border border-gray-800">
+        <div className="border-b border-gray-800 px-6 py-4">
+          <h2 className="text-xl font-bold text-white">Recent Transactions</h2>
         </div>
 
         {transactions.length === 0 ? (
           <div className="p-12 text-center">
             <div className="mb-4 text-6xl">📊</div>
-            <p className="text-gray-500">No transactions yet</p>
-            <p className="mt-2 text-sm text-gray-400">
+            <p className="text-gray-400">No transactions yet</p>
+            <p className="mt-2 text-sm text-gray-500">
               Complete missions to start earning diamonds!
             </p>
           </div>
         ) : (
-          <div className="divide-y divide-gray-200">
+          <div className="divide-y divide-gray-800">
             {transactions.map((transaction) => (
               <div
                 key={transaction.id}
-                className="flex items-center justify-between px-6 py-4 transition-colors hover:bg-gray-50"
+                className="flex items-center justify-between px-6 py-4 transition-colors hover:bg-gray-800"
               >
                 <div className="flex items-center gap-4">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gray-100 text-2xl">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gray-800 text-2xl">
                     {getTransactionIcon(transaction.type)}
                   </div>
                   <div>
-                    <div className="font-medium text-gray-900">
+                    <div className="font-medium text-white">
                       {transaction.description}
                     </div>
-                    <div className="text-sm text-gray-500">
+                    <div className="text-sm text-gray-400">
                       {formatDate(transaction.createdAt)}
                     </div>
                   </div>
@@ -247,7 +247,7 @@ export default async function TransactionsPage() {
                     {transaction.amount > 0 ? '+' : ''}
                     {transaction.amount} 💎
                   </div>
-                  <div className="text-xs text-gray-500">
+                  <div className="text-xs text-gray-400">
                     {transaction.currency}
                   </div>
                 </div>
@@ -257,8 +257,8 @@ export default async function TransactionsPage() {
         )}
 
         {transactions.length > 0 && (
-          <div className="border-t border-gray-200 px-6 py-4 text-center">
-            <p className="text-sm text-gray-500">
+          <div className="border-t border-gray-800 px-6 py-4 text-center">
+            <p className="text-sm text-gray-400">
               Showing last {transactions.length} transactions
             </p>
           </div>
@@ -266,7 +266,7 @@ export default async function TransactionsPage() {
       </div>
 
       {/* Info Section */}
-      <div className="mt-8 rounded-lg bg-blue-50 p-6">
+      <div className="mt-8 rounded-lg bg-blue-900/20 p-6 border border-blue-800/30">
         <div className="flex items-start">
           <div className="flex-shrink-0">
             <svg
@@ -284,10 +284,10 @@ export default async function TransactionsPage() {
             </svg>
           </div>
           <div className="ml-3 flex-1">
-            <h3 className="text-sm font-medium text-blue-800">
+            <h3 className="text-sm font-medium text-blue-300">
               About Transactions
             </h3>
-            <div className="mt-2 text-sm text-blue-700">
+            <div className="mt-2 text-sm text-blue-400">
               <p>
                 All diamond transactions are recorded here. You can earn diamonds by
                 completing missions, and spend them on gacha draws. Premium pack

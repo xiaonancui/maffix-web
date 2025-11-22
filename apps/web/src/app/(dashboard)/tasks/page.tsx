@@ -134,15 +134,15 @@ export default async function TasksPage() {
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">Available Tasks</h1>
-        <p className="mt-2 text-sm text-gray-600">
+        <h1 className="text-3xl font-bold text-white">Available Tasks</h1>
+        <p className="mt-2 text-sm text-gray-400">
           Complete tasks to earn diamonds and points
         </p>
       </div>
 
       {tasks.length === 0 ? (
-        <div className="rounded-lg bg-white p-12 text-center shadow">
-          <p className="text-gray-500">No tasks available at the moment.</p>
+        <div className="rounded-lg bg-gray-900 border border-gray-800 p-12 text-center shadow">
+          <p className="text-gray-400">No tasks available at the moment.</p>
         </div>
       ) : (
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -152,7 +152,7 @@ export default async function TasksPage() {
             return (
               <div
                 key={task.id}
-                className={`rounded-lg bg-white p-6 shadow transition-all hover:shadow-lg ${
+                className={`rounded-lg bg-gray-900 border border-gray-800 p-6 shadow transition-all hover:border-[#FF5656] hover:shadow-lg ${
                   isCompleted ? 'opacity-60' : ''
                 }`}
               >
@@ -168,18 +168,18 @@ export default async function TasksPage() {
                     </span>
                   </div>
                   {isCompleted && (
-                    <span className="rounded-full bg-green-100 px-2 py-1 text-xs font-medium text-green-800">
+                    <span className="rounded-full bg-[#FF5656]/20 px-2 py-1 text-xs font-medium text-[#FF5656]">
                       ✓ Completed
                     </span>
                   )}
                 </div>
 
-                <h3 className="mb-2 text-lg font-semibold text-gray-900">
+                <h3 className="mb-2 text-lg font-semibold text-white">
                   {task.title}
                 </h3>
-                <p className="mb-4 text-sm text-gray-600">{task.description}</p>
+                <p className="mb-4 text-sm text-gray-400">{task.description}</p>
 
-                <div className="mb-4 flex items-center justify-between text-sm">
+                <div className="mb-4 flex items-center justify-between text-sm text-gray-300">
                   <div className="flex items-center">
                     <span className="mr-3">💎 {task.diamonds}</span>
                     <span>⭐ {task.points}</span>

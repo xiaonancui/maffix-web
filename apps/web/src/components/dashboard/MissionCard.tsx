@@ -33,27 +33,27 @@ const missionTypeLabels: Record<string, string> = {
 }
 
 const difficultyClasses: Record<string, string> = {
-  EASY: 'border-green-200 bg-green-50 text-green-700',
-  MEDIUM: 'border-yellow-200 bg-yellow-50 text-yellow-700',
-  HARD: 'border-red-200 bg-red-50 text-red-700',
+  EASY: 'border-green-600 bg-green-900/20 text-green-400',
+  MEDIUM: 'border-yellow-600 bg-yellow-900/20 text-yellow-400',
+  HARD: 'border-red-600 bg-red-900/20 text-red-400',
 }
 
 const statusStyles: Record<string, { label: string; className: string }> = {
   NOT_STARTED: {
     label: 'Available',
-    className: 'border-blue-200 bg-blue-50 text-blue-700',
+    className: 'border-blue-600 bg-blue-900/20 text-blue-400',
   },
   PENDING: {
     label: 'Verification Pending',
-    className: 'border-yellow-300 bg-yellow-100 text-yellow-800',
+    className: 'border-yellow-600 bg-yellow-900/20 text-yellow-400',
   },
   FAILED: {
     label: 'Verification Failed',
-    className: 'border-red-300 bg-red-100 text-red-800',
+    className: 'border-red-600 bg-red-900/20 text-red-400',
   },
   APPROVED: {
     label: 'Completed',
-    className: 'border-green-300 bg-green-100 text-green-800',
+    className: 'border-green-600 bg-green-900/20 text-green-400',
   },
 }
 
@@ -64,9 +64,9 @@ const getMissionTypeLabel = (type?: string | null) => {
 
 const getDifficultyBadgeClasses = (difficulty?: string | null) => {
   if (!difficulty) {
-    return 'border-gray-200 bg-gray-50 text-gray-600'
+    return 'border-gray-600 bg-gray-800 text-gray-400'
   }
-  return difficultyClasses[difficulty] || 'border-gray-200 bg-gray-50 text-gray-600'
+  return difficultyClasses[difficulty] || 'border-gray-600 bg-gray-800 text-gray-400'
 }
 
 const sanitizeTikTokAccount = (account?: string | null) => {
@@ -84,14 +84,14 @@ export default function MissionCard({ mission, hasTikTokLinked }: MissionCardPro
   const hasRewards = (mission.diamonds || 0) > 0 || (mission.points || 0) > 0
 
   return (
-    <div className="flex h-full flex-col justify-between rounded-lg border border-gray-200 bg-white p-6 shadow-sm transition-shadow hover:shadow-md">
+    <div className="flex h-full flex-col justify-between rounded-lg border border-gray-800 bg-gray-900 p-6 shadow-sm transition-all hover:shadow-md hover:border-[#FF5656]">
       <div className="space-y-4">
         <div className="flex items-start justify-between gap-3">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">
+            <p className="text-xs font-semibold uppercase tracking-wide text-gray-400">
               {getMissionTypeLabel(mission.missionType)}
             </p>
-            <h3 className="mt-1 text-lg font-bold text-gray-900">{mission.title}</h3>
+            <h3 className="mt-1 text-lg font-bold text-white">{mission.title}</h3>
           </div>
           <span
             className={`rounded-full border px-3 py-1 text-xs font-semibold ${getDifficultyBadgeClasses(
@@ -102,32 +102,32 @@ export default function MissionCard({ mission, hasTikTokLinked }: MissionCardPro
           </span>
         </div>
 
-        <p className="text-sm text-gray-600">{mission.description}</p>
+        <p className="text-sm text-gray-300">{mission.description}</p>
 
         {hasRewards && (
-          <div className="grid grid-cols-2 gap-3 rounded-md border border-gray-100 bg-gray-50 p-3 text-sm">
+          <div className="grid grid-cols-2 gap-3 rounded-md border border-gray-700 bg-gray-800 p-3 text-sm">
             <div>
-              <p className="text-xs uppercase text-gray-500">Diamonds</p>
-              <p className="text-base font-semibold text-gray-900">{mission.diamonds ?? 0}</p>
+              <p className="text-xs uppercase text-gray-400">Diamonds</p>
+              <p className="text-base font-semibold text-white">{mission.diamonds ?? 0}</p>
             </div>
             <div>
-              <p className="text-xs uppercase text-gray-500">Points</p>
-              <p className="text-base font-semibold text-gray-900">{mission.points ?? 0}</p>
+              <p className="text-xs uppercase text-gray-400">Points</p>
+              <p className="text-base font-semibold text-white">{mission.points ?? 0}</p>
             </div>
           </div>
         )}
 
-        <div className="space-y-2 text-sm text-gray-600">
+        <div className="space-y-2 text-sm text-gray-300">
           {mission.estimatedTime && (
             <div className="flex items-center justify-between">
-              <span className="text-gray-500">Estimated time</span>
-              <span className="font-medium text-gray-900">~{mission.estimatedTime}</span>
+              <span className="text-gray-400">Estimated time</span>
+              <span className="font-medium text-white">~{mission.estimatedTime}</span>
             </div>
           )}
 
           {mission.targetTikTokAccount && (
             <div className="flex items-center justify-between gap-2">
-              <span className="text-gray-500">Target account</span>
+              <span className="text-gray-400">Target account</span>
               {accountUrl ? (
                 <Link
                   href={accountUrl}
@@ -138,14 +138,14 @@ export default function MissionCard({ mission, hasTikTokLinked }: MissionCardPro
                   @{accountSlug}
                 </Link>
               ) : (
-                <span className="truncate font-medium text-gray-900">{mission.targetTikTokAccount}</span>
+                <span className="truncate font-medium text-white">{mission.targetTikTokAccount}</span>
               )}
             </div>
           )}
 
           {mission.targetVideoUrl && (
             <div className="flex items-center justify-between gap-2">
-              <span className="text-gray-500">Target video</span>
+              <span className="text-gray-400">Target video</span>
               <Link
                 href={mission.targetVideoUrl}
                 target="_blank"
@@ -159,8 +159,8 @@ export default function MissionCard({ mission, hasTikTokLinked }: MissionCardPro
 
           {mission.targetAudioId && (
             <div className="flex items-center justify-between gap-2">
-              <span className="text-gray-500">Audio ID</span>
-              <span className="truncate font-medium text-gray-900">{mission.targetAudioId}</span>
+              <span className="text-gray-400">Audio ID</span>
+              <span className="truncate font-medium text-white">{mission.targetAudioId}</span>
             </div>
           )}
         </div>
@@ -172,14 +172,14 @@ export default function MissionCard({ mission, hasTikTokLinked }: MissionCardPro
             {completionLabel}
           </span>
           {mission.estimatedTime && (
-            <span className="text-xs text-gray-500">Typical completion: ~{mission.estimatedTime}</span>
+            <span className="text-xs text-gray-400">Typical completion: ~{mission.estimatedTime}</span>
           )}
         </div>
 
         <div className="flex gap-2">
           <Link
             href={`/missions/${mission.id}`}
-            className="flex-1 rounded-md border border-gray-300 bg-white px-4 py-2 text-center text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-50"
+            className="flex-1 rounded-md border border-gray-700 bg-gray-800 px-4 py-2 text-center text-sm font-semibold text-gray-300 transition-colors hover:bg-gray-700 hover:text-white"
           >
             View Details
           </Link>
@@ -211,7 +211,7 @@ function renderAction({
       return (
         <Link
           href="/profile/link-tiktok"
-          className="inline-flex flex-1 items-center justify-center rounded-md border border-blue-200 bg-blue-50 px-4 py-2 text-sm font-semibold text-blue-700 transition-colors hover:bg-blue-100"
+          className="inline-flex flex-1 items-center justify-center rounded-md border border-blue-600 bg-blue-900/20 px-4 py-2 text-sm font-semibold text-blue-400 transition-colors hover:bg-blue-900/30"
         >
           Link TikTok
         </Link>
@@ -227,7 +227,7 @@ function renderAction({
 
   if (statusKey === 'PENDING') {
     return (
-      <div className="flex-1 rounded-md border border-yellow-200 bg-yellow-50 px-4 py-2 text-center text-sm text-yellow-800">
+      <div className="flex-1 rounded-md border border-yellow-600 bg-yellow-900/20 px-4 py-2 text-center text-sm text-yellow-400">
         ⏳ Verifying...
       </div>
     )
@@ -235,7 +235,7 @@ function renderAction({
 
   if (statusKey === 'FAILED') {
     return (
-      <div className="flex-1 rounded-md border border-red-200 bg-red-50 px-4 py-2 text-center text-sm text-red-700">
+      <div className="flex-1 rounded-md border border-red-600 bg-red-900/20 px-4 py-2 text-center text-sm text-red-400">
         ✗ Failed
       </div>
     )
@@ -243,7 +243,7 @@ function renderAction({
 
   if (statusKey === 'APPROVED') {
     return (
-      <div className="flex-1 rounded-md border border-green-200 bg-green-50 px-4 py-2 text-center text-sm text-green-700">
+      <div className="flex-1 rounded-md border border-green-600 bg-green-900/20 px-4 py-2 text-center text-sm text-green-400">
         ✓ Completed
       </div>
     )

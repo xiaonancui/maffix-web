@@ -48,7 +48,7 @@ export default function CartItemCard({ item }: { item: CartItem }) {
   }
 
   return (
-    <div className="relative rounded-lg bg-white p-4 shadow-md">
+    <div className="relative rounded-lg bg-gray-900 border border-gray-800 p-4 shadow-md hover:border-[#FF5656] transition-colors">
       <div className="flex gap-4">
         {/* Image */}
         <Link href={`/store/${item.merchandise.id}`} className="relative h-24 w-24 flex-shrink-0">
@@ -66,12 +66,12 @@ export default function CartItemCard({ item }: { item: CartItem }) {
           <div>
             <Link
               href={`/store/${item.merchandise.id}`}
-              className="text-lg font-semibold text-gray-900 hover:text-[#FF5656]"
+              className="text-lg font-semibold text-white hover:text-[#FF5656] transition-colors"
             >
               {item.merchandise.name}
             </Link>
             {item.variant && (
-              <div className="mt-1 flex gap-3 text-sm text-gray-600">
+              <div className="mt-1 flex gap-3 text-sm text-gray-400">
                 {item.variant.size && <span>Size: {item.variant.size}</span>}
                 {item.variant.color && <span>Color: {item.variant.color}</span>}
               </div>
@@ -84,15 +84,15 @@ export default function CartItemCard({ item }: { item: CartItem }) {
               <button
                 onClick={() => handleQuantityChange(quantity - 1)}
                 disabled={quantity <= 1 || isUpdating}
-                className="rounded-md border border-gray-300 bg-white px-3 py-1 text-gray-700 hover:bg-gray-50 disabled:opacity-50"
+                className="rounded-md border border-gray-600 bg-gray-800 px-3 py-1 text-gray-300 hover:bg-gray-700 hover:text-white disabled:opacity-50 transition-colors"
               >
                 −
               </button>
-              <span className="w-12 text-center font-semibold">{quantity}</span>
+              <span className="w-12 text-center font-semibold text-white">{quantity}</span>
               <button
                 onClick={() => handleQuantityChange(quantity + 1)}
                 disabled={quantity >= 99 || isUpdating}
-                className="rounded-md border border-gray-300 bg-white px-3 py-1 text-gray-700 hover:bg-gray-50 disabled:opacity-50"
+                className="rounded-md border border-gray-600 bg-gray-800 px-3 py-1 text-gray-300 hover:bg-gray-700 hover:text-white disabled:opacity-50 transition-colors"
               >
                 +
               </button>
@@ -100,9 +100,9 @@ export default function CartItemCard({ item }: { item: CartItem }) {
 
             {/* Price */}
             <div className="text-right">
-              <p className="text-lg font-bold text-gray-900">${totalPrice.toFixed(2)}</p>
+              <p className="text-lg font-bold text-white">${totalPrice.toFixed(2)}</p>
               {quantity > 1 && (
-                <p className="text-sm text-gray-500">${itemPrice.toFixed(2)} each</p>
+                <p className="text-sm text-gray-400">${itemPrice.toFixed(2)} each</p>
               )}
             </div>
           </div>
@@ -111,7 +111,7 @@ export default function CartItemCard({ item }: { item: CartItem }) {
         {/* Remove Button */}
         <button
           onClick={handleRemove}
-          className="absolute right-2 top-2 rounded-full p-1 text-gray-400 hover:bg-red-50 hover:text-red-600"
+          className="absolute right-2 top-2 rounded-full p-1 text-gray-400 hover:bg-red-900/20 hover:text-red-400 transition-colors"
           title="Remove from cart"
         >
           <svg

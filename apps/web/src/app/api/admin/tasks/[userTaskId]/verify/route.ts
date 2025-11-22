@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
+import { requireAdmin } from '@/lib/auth-helpers'
 import { z } from 'zod'
 
 const verifySchema = z.object({
@@ -21,11 +20,10 @@ export async function POST(
       )
     }
 
-    const session = await getServerSession(authOptions)
-
-    if (!session || session.user.role !== 'ADMIN') {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 403 })
-    }
+    // Require admin authentication
+    const auth = await requireAdmin()
+    if (auth instanceof NextResponse) return auth
+    const { session } = auth
 
     const body = await request.json()
     const { approved } = verifySchema.parse(body)

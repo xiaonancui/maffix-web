@@ -1,6 +1,13 @@
 import { NextResponse } from 'next/server'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
+import { requireAdmin } from '@/lib/auth-helpers'
+import {
+  validateRequest,
+  successResponse,
+  errorResponse,
+  handleDatabaseError,
+  logAdminAction,
+  HttpStatus
+} from '@/lib/api-helpers'
 import { z } from 'zod'
 
 // Validation schema for creating a mission
@@ -28,55 +35,41 @@ const createMissionSchema = z.object({
  */
 export async function POST(request: Request) {
   try {
-    const session = await getServerSession(authOptions)
+    // Require admin authentication
+    const auth = await requireAdmin()
+    if (auth instanceof NextResponse) return auth
 
-    if (!session || session.user.role !== 'ADMIN') {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      )
-    }
+    // Validate request body
+    const validation = await validateRequest(request, createMissionSchema)
+    if (validation instanceof NextResponse) return validation
 
-    const body = await request.json()
-    const validationResult = createMissionSchema.safeParse(body)
-
-    if (!validationResult.success) {
-      return NextResponse.json(
-        {
-          error: 'Validation failed',
-          details: validationResult.error.errors,
-        },
-        { status: 400 }
-      )
-    }
-
-    const data = validationResult.data
+    const { data } = validation
 
     // Validate mission type requirements
     if (data.missionType) {
       switch (data.missionType) {
         case 'FOLLOW':
           if (!data.targetTikTokAccount) {
-            return NextResponse.json(
-              { error: 'targetTikTokAccount is required for FOLLOW missions' },
-              { status: 400 }
+            return errorResponse(
+              'targetTikTokAccount is required for FOLLOW missions',
+              HttpStatus.BAD_REQUEST
             )
           }
           break
         case 'LIKE':
         case 'REPOST':
           if (!data.targetVideoUrl) {
-            return NextResponse.json(
-              { error: 'targetVideoUrl is required for LIKE/REPOST missions' },
-              { status: 400 }
+            return errorResponse(
+              'targetVideoUrl is required for LIKE/REPOST missions',
+              HttpStatus.BAD_REQUEST
             )
           }
           break
         case 'USE_AUDIO':
           if (!data.targetAudioId) {
-            return NextResponse.json(
-              { error: 'targetAudioId is required for USE_AUDIO missions' },
-              { status: 400 }
+            return errorResponse(
+              'targetAudioId is required for USE_AUDIO missions',
+              HttpStatus.BAD_REQUEST
             )
           }
           break
@@ -106,19 +99,16 @@ export async function POST(request: Request) {
       },
     })
 
-    return NextResponse.json({
-      success: true,
-      mission,
+    // Log admin action
+    logAdminAction('CREATE_MISSION', auth.session.user.id, auth.session.user.email, {
+      missionId: mission.id,
+      title: mission.title,
+      type: mission.type,
     })
+
+    return successResponse({ mission }, HttpStatus.CREATED)
   } catch (error: any) {
-    console.error('Error creating mission:', error)
-    return NextResponse.json(
-      {
-        error: 'Failed to create mission',
-        message: error.message,
-      },
-      { status: 500 }
-    )
+    return handleDatabaseError(error)
   }
 }
 
@@ -128,14 +118,9 @@ export async function POST(request: Request) {
  */
 export async function GET(request: Request) {
   try {
-    const session = await getServerSession(authOptions)
-
-    if (!session || session.user.role !== 'ADMIN') {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      )
-    }
+    // Require admin authentication
+    const auth = await requireAdmin()
+    if (auth instanceof NextResponse) return auth
 
     const { searchParams } = new URL(request.url)
     const type = searchParams.get('type')
@@ -174,8 +159,7 @@ export async function GET(request: Request) {
       db.task.count({ where }),
     ])
 
-    return NextResponse.json({
-      success: true,
+    return successResponse({
       missions,
       pagination: {
         page,
@@ -185,14 +169,7 @@ export async function GET(request: Request) {
       },
     })
   } catch (error: any) {
-    console.error('Error listing missions:', error)
-    return NextResponse.json(
-      {
-        error: 'Failed to list missions',
-        message: error.message,
-      },
-      { status: 500 }
-    )
+    return handleDatabaseError(error)
   }
 }
 

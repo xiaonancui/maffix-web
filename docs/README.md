@@ -7,9 +7,14 @@ Welcome to the Maffix Web documentation! This index provides a comprehensive gui
 - [Getting Started](#-getting-started)
 - [Architecture](#-architecture)
 - [Development](#-development)
+- [Admin Panel](#-admin-panel)
+- [RBAC (Role-Based Access Control)](#-rbac-role-based-access-control)
+- [Design Specifications](#-design-specifications)
+- [Task Plans & Summaries](#-task-plans--summaries)
 - [Deployment](#-deployment)
 - [Testing](#-testing)
 - [Refactoring History](#-refactoring-history)
+- [Archive](#-archive)
 
 ---
 
@@ -72,6 +77,115 @@ apps/web/              # Main Next.js application
 - **Authentication**: NextAuth.js with JWT
 - **UI**: shadcn/ui + Tailwind CSS
 - **Monorepo**: Turborepo
+
+---
+
+## 🛡️ Admin Panel
+
+Documentation for the admin panel features and implementation.
+
+### Admin Features
+- **[Enhanced Visual Differentiation Implementation](admin/ENHANCED_VISUAL_DIFFERENTIATION_IMPLEMENTATION.md)**
+  Technical documentation for the admin panel visual design system, including:
+  - Red gradient header and borders
+  - Admin badges and indicators
+  - Dark theme with red accents
+  - Enhanced visual hierarchy
+  - Implementation details for all admin pages
+
+### Admin Design
+- **[Admin Visual Design Specification](design/ADMIN_VISUAL_DESIGN_SPEC.md)**
+  Comprehensive design specification for the admin panel visual system.
+
+---
+
+## 🔐 RBAC (Role-Based Access Control)
+
+Complete documentation for the Role-Based Access Control implementation.
+
+### Quick References
+- **[RBAC Quick Reference](rbac/RBAC_QUICK_REFERENCE.md)**
+  Quick reference guide for RBAC implementation, including:
+  - Protected routes and middleware
+  - API endpoint authorization
+  - Role-based UI components
+  - Common patterns and examples
+
+- **[RBAC README](rbac/RBAC_README.md)**
+  Overview of the RBAC system and how to use it.
+
+### Comprehensive Documentation
+- **[RBAC Executive Summary](rbac/RBAC_EXECUTIVE_SUMMARY.md)**
+  High-level overview of the RBAC implementation, goals, and outcomes.
+
+- **[RBAC Specification](rbac/RBAC_SPECIFICATION.md)**
+  Detailed technical specification of the RBAC system, including:
+  - Role definitions (USER, ADMIN, ARTIST)
+  - Permission model
+  - Authorization flow
+  - Security considerations
+
+- **[RBAC Presentation](rbac/RBAC_PRESENTATION.md)**
+  Presentation-style overview of the RBAC system for stakeholders.
+
+- **[RBAC Visual Guide](rbac/RBAC_VISUAL_GUIDE.md)**
+  Visual guide showing RBAC in action with screenshots and examples.
+
+### Implementation & Testing
+- **[RBAC Task List](rbac/RBAC_TASK_LIST.md)**
+  Complete task breakdown for RBAC implementation.
+
+- **[RBAC Testing](rbac/RBAC_TESTING.md)**
+  Testing strategy and test cases for RBAC functionality.
+
+- **[RBAC Test Results](rbac/RBAC_TEST_RESULTS.md)**
+  Results from RBAC testing, including coverage and issues found.
+
+---
+
+## 🎨 Design Specifications
+
+Design documentation and visual guidelines.
+
+### Admin Panel Design
+- **[Admin Visual Design Specification](design/ADMIN_VISUAL_DESIGN_SPEC.md)**
+  Comprehensive design specification for the admin panel, including:
+  - Color palette (red gradient theme)
+  - Typography and spacing
+  - Component styling
+  - Visual differentiation from user interface
+  - Responsive design guidelines
+  - Accessibility considerations
+
+---
+
+## 📋 Task Plans & Summaries
+
+Project task plans, completion summaries, and progress tracking.
+
+### Current Tasks
+- **[Admin Improvements Task Plan](tasks/ADMIN_IMPROVEMENTS_TASK_PLAN.md)**
+  Comprehensive task plan for admin panel improvements, including:
+  - Issue 1: Header Color Differentiation (DEFERRED)
+  - Issue 2: Admin Layout Design (2 tasks, 8-12 hours)
+  - Issue 3: Missing CRUD Operations (12 tasks, 15-20 hours)
+  - Issue 4: Store Visibility Logic (2 tasks, 30-60 minutes)
+  - Total: 17 tasks, 26-36 hours
+
+- **[Admin Improvements Summary](tasks/ADMIN_IMPROVEMENTS_SUMMARY.md)**
+  Executive summary of the admin improvements task plan.
+
+### Completed Tasks
+- **[Bug Fixes Task Plan](tasks/BUG_FIXES_TASK_PLAN.md)**
+  Task plan for bug fixes and UI improvements (completed).
+
+- **[Bug Fixes Completion Summary](tasks/BUG_FIXES_COMPLETION_SUMMARY.md)**
+  Summary of completed bug fixes, including:
+  - Admin panel header color fix
+  - Store links visibility verification
+  - Mission details page dark theme
+  - Transactions page dark theme
+  - Enhanced visual differentiation
 
 ---
 
@@ -195,6 +309,52 @@ The project underwent a complete architectural refactoring to simplify the stack
 
 ---
 
+## 📦 Archive
+
+Historical documentation from completed projects and older implementations.
+
+### Completed Projects
+- **[Project Completion Report](archive/PROJECT_COMPLETION_REPORT.md)**
+  Final report for the initial MVP development phase.
+
+- **[Phase 3 Complete](archive/PHASE_3_COMPLETE.md)**
+  Summary of Phase 3 completion.
+
+- **[Production Fixes Summary](archive/PRODUCTION_FIXES_SUMMARY.md)**
+  Summary of production bug fixes and improvements.
+
+### Feature-Specific Documentation
+- **[Gacha Fix Summary](archive/GACHA_FIX_SUMMARY.md)**
+  Documentation of gacha system fixes and improvements.
+
+- **[Gacha Quick Test](archive/GACHA_QUICK_TEST.md)**
+  Quick testing guide for the gacha system.
+
+- **[Marketing Pages Final Report](archive/MARKETING_PAGES_FINAL_REPORT.md)**
+  Final report on marketing pages implementation.
+
+- **[Marketing Pages Summary](archive/MARKETING_PAGES_SUMMARY.md)**
+  Summary of marketing pages features.
+
+- **[UI Enhancement Report](archive/UI_ENHANCEMENT_REPORT.md)**
+  Report on UI enhancements and improvements.
+
+- **[Visual Improvements Summary](archive/VISUAL_IMPROVEMENTS_SUMMARY.md)**
+  Summary of visual design improvements.
+
+### Testing & Troubleshooting
+- **[Quick Test Guide](archive/QUICK_TEST_GUIDE.md)**
+  Quick testing guide for various features.
+
+- **[Dev Server Troubleshooting](archive/DEV_SERVER_TROUBLESHOOTING.md)**
+  Troubleshooting guide for development server issues.
+
+### Historical Task Breakdowns
+- **[Maffix MVP Development Task Breakdown (2025-10-22)](archive/Maffix_MVP_Development_Task_Breakdown__2025-10-22T08-54-50.md)**
+  Original MVP development task breakdown from October 2025.
+
+---
+
 ## 🔍 Quick Reference
 
 ### Common Tasks
@@ -227,6 +387,9 @@ npm run test:watch   # Watch mode
 - **Main README**: [../README.md](../README.md)
 - **Architecture**: [architecture/ARCHITECTURE.md](architecture/ARCHITECTURE.md)
 - **Quick Start**: [development/QUICK_START.md](development/QUICK_START.md)
+- **RBAC Quick Reference**: [rbac/RBAC_QUICK_REFERENCE.md](rbac/RBAC_QUICK_REFERENCE.md)
+- **Admin Visual Design**: [design/ADMIN_VISUAL_DESIGN_SPEC.md](design/ADMIN_VISUAL_DESIGN_SPEC.md)
+- **Current Task Plan**: [tasks/ADMIN_IMPROVEMENTS_TASK_PLAN.md](tasks/ADMIN_IMPROVEMENTS_TASK_PLAN.md)
 - **Testing Guide**: [testing/TESTING_GUIDE.md](testing/TESTING_GUIDE.md)
 - **Deployment**: [deployment/DEPLOYMENT.md](deployment/DEPLOYMENT.md)
 
@@ -243,6 +406,7 @@ If you can't find what you're looking for:
 
 ---
 
-**Last Updated**: 2025-10-21  
-**Documentation Version**: 1.0.0
+**Last Updated**: 2025-11-21
+**Documentation Version**: 2.0.0
+**Major Update**: Added Admin Panel, RBAC, Design Specifications, Task Plans, and Archive sections
 

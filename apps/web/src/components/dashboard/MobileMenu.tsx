@@ -3,10 +3,19 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { useUserRole } from '@/lib/rbac'
 
-export default function MobileMenu({ diamondBalance }: { diamondBalance: number }) {
+export default function MobileMenu({
+  diamondBalance,
+  hasCompletedTenDraw
+}: {
+  diamondBalance: number
+  hasCompletedTenDraw: boolean
+}) {
   const [isOpen, setIsOpen] = useState(false)
   const pathname = usePathname()
+  const role = useUserRole()
+  const isAdmin = role === 'ADMIN'
 
   const isActive = (href: string) => {
     return pathname === href || (href !== '/dashboard' && pathname.startsWith(href))
@@ -17,7 +26,7 @@ export default function MobileMenu({ diamondBalance }: { diamondBalance: number 
       {/* Mobile menu button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500"
+        className="rounded-md p-2 text-white/80 hover:bg-white/20 hover:text-white transition-colors"
       >
         <span className="sr-only">Open menu</span>
         <svg
@@ -37,25 +46,37 @@ export default function MobileMenu({ diamondBalance }: { diamondBalance: number 
 
       {/* Mobile menu panel */}
       {isOpen && (
-        <div className="absolute left-0 right-0 top-16 z-50 border-b border-gray-200 bg-white shadow-lg">
+        <div className="absolute left-0 right-0 top-16 z-50 border-b border-gray-800 bg-gray-900 shadow-lg">
           <div className="space-y-1 px-4 pb-3 pt-2">
             {/* Diamond Balance */}
             <Link
               href="/transactions"
-              className="flex items-center gap-2 rounded-md px-3 py-2 text-base font-medium text-gray-900 hover:bg-gray-50"
+              className="flex items-center gap-2 rounded-md px-3 py-2 text-base font-medium text-white hover:bg-gray-800 transition-colors"
               onClick={() => setIsOpen(false)}
             >
               <span>💎</span>
-              <span>{diamondBalance} Diamonds</span>
+              <span className="text-[#FF5656]">{diamondBalance} Diamonds</span>
             </Link>
+
+            {/* Admin Panel Link (only for admins) */}
+            {isAdmin && (
+              <Link
+                href="/admin"
+                className="flex items-center gap-2 rounded-md bg-[#FF5656] px-3 py-2 text-base font-medium text-white hover:bg-[#ff3333] transition-colors"
+                onClick={() => setIsOpen(false)}
+              >
+                <span>🛡️</span>
+                <span>Admin Panel</span>
+              </Link>
+            )}
 
             {/* Navigation Links */}
             <Link
               href="/dashboard"
               className={`block rounded-md px-3 py-2 text-base font-medium transition-colors ${
                 isActive('/dashboard')
-                  ? 'bg-blue-50 text-[#FF5656] font-semibold'
-                  : 'text-gray-500 hover:bg-gray-50 hover:text-gray-700'
+                  ? 'bg-[#FF5656]/20 text-[#FF5656] font-semibold'
+                  : 'text-gray-300 hover:bg-gray-800 hover:text-white'
               }`}
               onClick={() => setIsOpen(false)}
             >
@@ -65,8 +86,8 @@ export default function MobileMenu({ diamondBalance }: { diamondBalance: number 
               href="/releases"
               className={`block rounded-md px-3 py-2 text-base font-medium transition-colors ${
                 isActive('/releases')
-                  ? 'bg-blue-50 text-[#FF5656] font-semibold'
-                  : 'text-gray-500 hover:bg-gray-50 hover:text-gray-700'
+                  ? 'bg-[#FF5656]/20 text-[#FF5656] font-semibold'
+                  : 'text-gray-300 hover:bg-gray-800 hover:text-white'
               }`}
               onClick={() => setIsOpen(false)}
             >
@@ -76,8 +97,8 @@ export default function MobileMenu({ diamondBalance }: { diamondBalance: number 
               href="/missions"
               className={`block rounded-md px-3 py-2 text-base font-medium transition-colors ${
                 isActive('/missions')
-                  ? 'bg-blue-50 text-[#FF5656] font-semibold'
-                  : 'text-gray-500 hover:bg-gray-50 hover:text-gray-700'
+                  ? 'bg-[#FF5656]/20 text-[#FF5656] font-semibold'
+                  : 'text-gray-300 hover:bg-gray-800 hover:text-white'
               }`}
               onClick={() => setIsOpen(false)}
             >
@@ -87,49 +108,64 @@ export default function MobileMenu({ diamondBalance }: { diamondBalance: number 
               href="/gacha"
               className={`block rounded-md px-3 py-2 text-base font-medium transition-colors ${
                 isActive('/gacha')
-                  ? 'bg-blue-50 text-[#FF5656] font-semibold'
-                  : 'text-gray-500 hover:bg-gray-50 hover:text-gray-700'
+                  ? 'bg-[#FF5656]/20 text-[#FF5656] font-semibold'
+                  : 'text-gray-300 hover:bg-gray-800 hover:text-white'
               }`}
               onClick={() => setIsOpen(false)}
             >
               Gacha
             </Link>
-            <Link
-              href="/store"
-              className={`block rounded-md px-3 py-2 text-base font-medium transition-colors ${
-                isActive('/store')
-                  ? 'bg-blue-50 text-[#FF5656] font-semibold'
-                  : 'text-gray-500 hover:bg-gray-50 hover:text-gray-700'
-              }`}
-              onClick={() => setIsOpen(false)}
-            >
-              Store
-            </Link>
-            <Link
+            {/* Store: Only show after completing first 10x draw */}
+            {hasCompletedTenDraw && (
+              <Link
+                href="/store"
+                className={`block rounded-md px-3 py-2 text-base font-medium transition-colors ${
+                  isActive('/store')
+                    ? 'bg-[#FF5656]/20 text-[#FF5656] font-semibold'
+                    : 'text-gray-300 hover:bg-gray-800 hover:text-white'
+                }`}
+                onClick={() => setIsOpen(false)}
+              >
+                Store
+              </Link>
+            )}
+            {/* Hidden: Premium Packs - Route still accessible via direct URL */}
+            {/* <Link
               href="/store/packs"
               className={`block rounded-md px-3 py-2 text-base font-medium transition-colors ${
                 isActive('/store/packs')
-                  ? 'bg-blue-50 text-[#FF5656] font-semibold'
-                  : 'text-gray-500 hover:bg-gray-50 hover:text-gray-700'
+                  ? 'bg-[#FF5656]/20 text-[#FF5656] font-semibold'
+                  : 'text-gray-300 hover:bg-gray-800 hover:text-white'
               }`}
               onClick={() => setIsOpen(false)}
             >
               Premium Packs
-            </Link>
+            </Link> */}
             <Link
               href="/prizes"
               className={`block rounded-md px-3 py-2 text-base font-medium transition-colors ${
                 isActive('/prizes')
-                  ? 'bg-blue-50 text-[#FF5656] font-semibold'
-                  : 'text-gray-500 hover:bg-gray-50 hover:text-gray-700'
+                  ? 'bg-[#FF5656]/20 text-[#FF5656] font-semibold'
+                  : 'text-gray-300 hover:bg-gray-800 hover:text-white'
               }`}
               onClick={() => setIsOpen(false)}
             >
               Prizes
             </Link>
             <Link
+              href="/music-detection"
+              className={`block rounded-md px-3 py-2 text-base font-medium transition-colors ${
+                isActive('/music-detection')
+                  ? 'bg-[#FF5656]/20 text-[#FF5656] font-semibold'
+                  : 'text-gray-300 hover:bg-gray-800 hover:text-white'
+              }`}
+              onClick={() => setIsOpen(false)}
+            >
+              Music Detection
+            </Link>
+            <Link
               href="/profile"
-              className="block rounded-md px-3 py-2 text-base font-medium text-gray-500 hover:bg-gray-50"
+              className="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-gray-800 hover:text-white transition-colors"
               onClick={() => setIsOpen(false)}
             >
               Profile

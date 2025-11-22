@@ -236,13 +236,13 @@ export default async function StorePage() {
   const categories = ['All', ...new Set(merchandise.map((item) => item.category))]
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-black">
       {/* Hero Section */}
-      <div className="bg-gradient-to-r from-purple-600 to-blue-600 text-white">
+      <div className="bg-black border-b border-gray-800 text-white">
         <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
           <div className="text-center">
             <h1 className="text-5xl font-bold">Official Merchandise Store</h1>
-            <p className="mt-4 text-xl text-purple-100">
+            <p className="mt-4 text-xl text-gray-400">
               Premium quality apparel and accessories for true fans
             </p>
             <div className="mt-6 flex items-center justify-center gap-6 text-sm">
@@ -305,18 +305,18 @@ export default async function StorePage() {
 
         {/* Featured Banner */}
         {merchandise.some((item) => item.featured) && (
-          <div className="mb-8 rounded-lg bg-gradient-to-r from-yellow-50 to-orange-50 p-6">
+          <div className="mb-8 rounded-lg bg-gradient-to-r from-yellow-900/20 to-orange-900/20 border border-yellow-600 p-6">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <span className="text-3xl">⭐</span>
                 <div>
-                  <h3 className="text-lg font-bold text-gray-900">Featured Items</h3>
-                  <p className="text-sm text-gray-600">
+                  <h3 className="text-lg font-bold text-white">Featured Items</h3>
+                  <p className="text-sm text-gray-400">
                     Check out our most popular merchandise
                   </p>
                 </div>
               </div>
-              <span className="rounded-full bg-orange-500 px-4 py-2 text-sm font-semibold text-white">
+              <span className="rounded-full bg-orange-600 px-4 py-2 text-sm font-semibold text-white">
                 Limited Stock
               </span>
             </div>
@@ -325,9 +325,9 @@ export default async function StorePage() {
 
         {/* Merchandise Grid */}
         {merchandise.length === 0 ? (
-          <div className="rounded-lg bg-white p-12 text-center shadow">
+          <div className="rounded-lg bg-gray-900 border border-gray-800 p-12 text-center shadow">
             <div className="mb-4 text-6xl">🛍️</div>
-            <p className="text-lg text-gray-500">No merchandise available at the moment.</p>
+            <p className="text-lg text-gray-400">No merchandise available at the moment.</p>
             <p className="mt-2 text-sm text-gray-400">Check back soon for new items!</p>
           </div>
         ) : (
@@ -340,9 +340,9 @@ export default async function StorePage() {
 
         {/* Info Section */}
         <div className="mt-16 grid gap-8 md:grid-cols-3">
-          <div className="rounded-lg bg-white p-6 text-center shadow">
+          <div className="rounded-lg bg-gray-900 border border-gray-800 p-6 text-center shadow hover:border-[#FF5656] transition-colors">
             <div className="mb-4 flex justify-center">
-              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-blue-100">
+              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-blue-900/20">
                 <svg
                   className="h-8 w-8 text-[#FF5656]"
                   fill="none"
@@ -358,17 +358,17 @@ export default async function StorePage() {
                 </svg>
               </div>
             </div>
-            <h3 className="mb-2 text-lg font-bold text-gray-900">Premium Quality</h3>
-            <p className="text-sm text-gray-600">
+            <h3 className="mb-2 text-lg font-bold text-white">Premium Quality</h3>
+            <p className="text-sm text-gray-400">
               All merchandise is made with high-quality materials and craftsmanship
             </p>
           </div>
 
-          <div className="rounded-lg bg-white p-6 text-center shadow">
+          <div className="rounded-lg bg-gray-900 border border-gray-800 p-6 text-center shadow hover:border-[#FF5656] transition-colors">
             <div className="mb-4 flex justify-center">
-              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-green-100">
+              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-green-900/20">
                 <svg
-                  className="h-8 w-8 text-green-600"
+                  className="h-8 w-8 text-green-400"
                   fill="none"
                   viewBox="0 0 24 24"
                   strokeWidth="1.5"
@@ -382,15 +382,15 @@ export default async function StorePage() {
                 </svg>
               </div>
             </div>
-            <h3 className="mb-2 text-lg font-bold text-gray-900">Fast Shipping</h3>
-            <p className="text-sm text-gray-600">
+            <h3 className="mb-2 text-lg font-bold text-white">Fast Shipping</h3>
+            <p className="text-sm text-gray-400">
               Free worldwide shipping on orders over $50. Delivered within 5-7 business days
             </p>
           </div>
 
-          <div className="rounded-lg bg-white p-6 text-center shadow">
+          <div className="rounded-lg bg-gray-900 border border-gray-800 p-6 text-center shadow hover:border-[#FF5656] transition-colors">
             <div className="mb-4 flex justify-center">
-              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-purple-100">
+              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-purple-900/20">
                 <svg
                   className="h-8 w-8 text-[#FF5656]"
                   fill="none"
@@ -406,8 +406,8 @@ export default async function StorePage() {
                 </svg>
               </div>
             </div>
-            <h3 className="mb-2 text-lg font-bold text-gray-900">Easy Returns</h3>
-            <p className="text-sm text-gray-600">
+            <h3 className="mb-2 text-lg font-bold text-white">Easy Returns</h3>
+            <p className="text-sm text-gray-400">
               Not satisfied? Return within 30 days for a full refund, no questions asked
             </p>
           </div>
@@ -415,15 +415,15 @@ export default async function StorePage() {
 
         {/* FAQ Section */}
         <div className="mt-16">
-          <h2 className="mb-8 text-center text-3xl font-bold text-gray-900">
+          <h2 className="mb-8 text-center text-3xl font-bold text-white">
             Frequently Asked Questions
           </h2>
           <div className="mx-auto max-w-3xl space-y-4">
-            <details className="group rounded-lg bg-white p-6 shadow transition-all hover:shadow-md">
-              <summary className="flex cursor-pointer items-center justify-between font-semibold text-gray-900">
+            <details className="group rounded-lg bg-gray-900 border border-gray-800 p-6 shadow transition-all hover:shadow-md hover:border-[#FF5656]">
+              <summary className="flex cursor-pointer items-center justify-between font-semibold text-white">
                 <span>What sizes are available?</span>
                 <svg
-                  className="h-5 w-5 transition-transform group-open:rotate-180"
+                  className="h-5 w-5 transition-transform group-open:rotate-180 text-gray-400"
                   fill="none"
                   viewBox="0 0 24 24"
                   strokeWidth="1.5"
@@ -436,18 +436,18 @@ export default async function StorePage() {
                   />
                 </svg>
               </summary>
-              <p className="mt-4 text-sm text-gray-600">
+              <p className="mt-4 text-sm text-gray-400">
                 Most apparel items are available in sizes XS to XXL. Hats and accessories are
                 typically one-size-fits-all. Check individual product pages for specific sizing
                 information and size charts.
               </p>
             </details>
 
-            <details className="group rounded-lg bg-white p-6 shadow transition-all hover:shadow-md">
-              <summary className="flex cursor-pointer items-center justify-between font-semibold text-gray-900">
+            <details className="group rounded-lg bg-gray-900 border border-gray-800 p-6 shadow transition-all hover:shadow-md hover:border-[#FF5656]">
+              <summary className="flex cursor-pointer items-center justify-between font-semibold text-white">
                 <span>How long does shipping take?</span>
                 <svg
-                  className="h-5 w-5 transition-transform group-open:rotate-180"
+                  className="h-5 w-5 transition-transform group-open:rotate-180 text-gray-400"
                   fill="none"
                   viewBox="0 0 24 24"
                   strokeWidth="1.5"
@@ -460,18 +460,18 @@ export default async function StorePage() {
                   />
                 </svg>
               </summary>
-              <p className="mt-4 text-sm text-gray-600">
+              <p className="mt-4 text-sm text-gray-400">
                 Standard shipping takes 5-7 business days for domestic orders and 10-14 business
                 days for international orders. Express shipping options are available at checkout
                 for faster delivery.
               </p>
             </details>
 
-            <details className="group rounded-lg bg-white p-6 shadow transition-all hover:shadow-md">
-              <summary className="flex cursor-pointer items-center justify-between font-semibold text-gray-900">
+            <details className="group rounded-lg bg-gray-900 border border-gray-800 p-6 shadow transition-all hover:shadow-md hover:border-[#FF5656]">
+              <summary className="flex cursor-pointer items-center justify-between font-semibold text-white">
                 <span>What is your return policy?</span>
                 <svg
-                  className="h-5 w-5 transition-transform group-open:rotate-180"
+                  className="h-5 w-5 transition-transform group-open:rotate-180 text-gray-400"
                   fill="none"
                   viewBox="0 0 24 24"
                   strokeWidth="1.5"
@@ -484,18 +484,18 @@ export default async function StorePage() {
                   />
                 </svg>
               </summary>
-              <p className="mt-4 text-sm text-gray-600">
+              <p className="mt-4 text-sm text-gray-400">
                 We offer a 30-day return policy for unworn, unwashed items with original tags
                 attached. Simply contact our support team to initiate a return. Refunds are
                 processed within 5-7 business days after we receive your return.
               </p>
             </details>
 
-            <details className="group rounded-lg bg-white p-6 shadow transition-all hover:shadow-md">
-              <summary className="flex cursor-pointer items-center justify-between font-semibold text-gray-900">
+            <details className="group rounded-lg bg-gray-900 border border-gray-800 p-6 shadow transition-all hover:shadow-md hover:border-[#FF5656]">
+              <summary className="flex cursor-pointer items-center justify-between font-semibold text-white">
                 <span>How do I care for my merchandise?</span>
                 <svg
-                  className="h-5 w-5 transition-transform group-open:rotate-180"
+                  className="h-5 w-5 transition-transform group-open:rotate-180 text-gray-400"
                   fill="none"
                   viewBox="0 0 24 24"
                   strokeWidth="1.5"
@@ -508,18 +508,18 @@ export default async function StorePage() {
                   />
                 </svg>
               </summary>
-              <p className="mt-4 text-sm text-gray-600">
+              <p className="mt-4 text-sm text-gray-400">
                 For best results, machine wash cold with like colors and tumble dry on low heat.
                 Avoid bleach and ironing directly on printed designs. Check the care label on each
                 item for specific instructions.
               </p>
             </details>
 
-            <details className="group rounded-lg bg-white p-6 shadow transition-all hover:shadow-md">
-              <summary className="flex cursor-pointer items-center justify-between font-semibold text-gray-900">
+            <details className="group rounded-lg bg-gray-900 border border-gray-800 p-6 shadow transition-all hover:shadow-md hover:border-[#FF5656]">
+              <summary className="flex cursor-pointer items-center justify-between font-semibold text-white">
                 <span>Do you offer international shipping?</span>
                 <svg
-                  className="h-5 w-5 transition-transform group-open:rotate-180"
+                  className="h-5 w-5 transition-transform group-open:rotate-180 text-gray-400"
                   fill="none"
                   viewBox="0 0 24 24"
                   strokeWidth="1.5"
@@ -532,7 +532,7 @@ export default async function StorePage() {
                   />
                 </svg>
               </summary>
-              <p className="mt-4 text-sm text-gray-600">
+              <p className="mt-4 text-sm text-gray-400">
                 Yes! We ship worldwide. International orders over $50 qualify for free shipping.
                 Please note that customs fees and import duties may apply depending on your
                 country&apos;s regulations.

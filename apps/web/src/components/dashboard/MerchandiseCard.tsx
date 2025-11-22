@@ -44,9 +44,9 @@ export default function MerchandiseCard({ item }: { item: MerchandiseItem }) {
   }
 
   return (
-    <div className="group overflow-hidden rounded-lg bg-white shadow-md transition-shadow hover:shadow-xl">
+    <div className="group overflow-hidden rounded-lg bg-gray-900 border border-gray-800 shadow-md transition-all hover:shadow-xl hover:border-[#FF5656]">
       {/* Image */}
-      <div className="relative aspect-square overflow-hidden bg-gray-200">
+      <div className="relative aspect-square overflow-hidden bg-gray-800">
         <Image
           src={item.imageUrl}
           alt={item.name}
@@ -55,7 +55,7 @@ export default function MerchandiseCard({ item }: { item: MerchandiseItem }) {
           className="object-cover transition-transform duration-300 group-hover:scale-105"
         />
         {item.featured && (
-          <span className="absolute left-3 top-3 rounded-full bg-yellow-500 px-3 py-1 text-xs font-semibold text-white">
+          <span className="absolute left-3 top-3 rounded-full bg-yellow-600 px-3 py-1 text-xs font-semibold text-white">
             ⭐ Featured
           </span>
         )}
@@ -72,30 +72,30 @@ export default function MerchandiseCard({ item }: { item: MerchandiseItem }) {
       <div className="p-4">
         {/* Category & Tags */}
         <div className="mb-2 flex items-center gap-2">
-          <span className="text-xs font-medium text-gray-500">{item.category}</span>
+          <span className="text-xs font-medium text-gray-400">{item.category}</span>
           {item.tags.includes('bestseller') && (
-            <span className="rounded-full bg-blue-100 px-2 py-0.5 text-xs font-semibold text-blue-800">
+            <span className="rounded-full bg-blue-900/20 border border-blue-600 px-2 py-0.5 text-xs font-semibold text-blue-400">
               Bestseller
             </span>
           )}
           {item.tags.includes('new') && (
-            <span className="rounded-full bg-green-100 px-2 py-0.5 text-xs font-semibold text-green-800">
+            <span className="rounded-full bg-green-900/20 border border-green-600 px-2 py-0.5 text-xs font-semibold text-green-400">
               New
             </span>
           )}
         </div>
 
         {/* Name & Price */}
-        <h3 className="mb-1 text-lg font-bold text-gray-900">{item.name}</h3>
-        <p className="mb-3 text-sm text-gray-600 line-clamp-2">{item.description}</p>
-        <p className="mb-4 text-2xl font-bold text-gray-900">
-          ${item.price.toFixed(2)} <span className="text-sm font-normal text-gray-500">{item.currency}</span>
+        <h3 className="mb-1 text-lg font-bold text-white">{item.name}</h3>
+        <p className="mb-3 text-sm text-gray-400 line-clamp-2">{item.description}</p>
+        <p className="mb-4 text-2xl font-bold text-white">
+          ${item.price.toFixed(2)} <span className="text-sm font-normal text-gray-400">{item.currency}</span>
         </p>
 
         {/* Color Selection */}
         {item.colors.length > 0 && (
           <div className="mb-3">
-            <p className="mb-2 text-xs font-medium text-gray-700">Color: {selectedColor}</p>
+            <p className="mb-2 text-xs font-medium text-gray-300">Color: {selectedColor}</p>
             <div className="flex gap-2">
               {item.colors.map((color) => (
                 <button
@@ -103,8 +103,8 @@ export default function MerchandiseCard({ item }: { item: MerchandiseItem }) {
                   onClick={() => setSelectedColor(color)}
                   className={`relative h-8 w-8 rounded-full border-2 transition-all ${
                     selectedColor === color
-                      ? 'border-[#FF5656] ring-2 ring-blue-200 ring-offset-2 scale-110'
-                      : 'border-gray-300 hover:border-gray-400 hover:scale-105'
+                      ? 'border-[#FF5656] ring-2 ring-[#FF5656]/30 ring-offset-2 ring-offset-gray-900 scale-110'
+                      : 'border-gray-600 hover:border-gray-500 hover:scale-105'
                   }`}
                   style={{
                     backgroundColor: color.toLowerCase() === 'white' ? '#ffffff' : color.toLowerCase() === 'black' ? '#000000' : color.toLowerCase(),
@@ -125,7 +125,7 @@ export default function MerchandiseCard({ item }: { item: MerchandiseItem }) {
         {/* Size Selection */}
         {item.sizes.length > 0 && item.sizes[0] !== 'One Size' && (
           <div className="mb-4">
-            <p className="mb-2 text-xs font-medium text-gray-700">Size: {selectedSize}</p>
+            <p className="mb-2 text-xs font-medium text-gray-300">Size: {selectedSize}</p>
             <div className="flex flex-wrap gap-2">
               {item.sizes.map((size) => (
                 <button
@@ -134,7 +134,7 @@ export default function MerchandiseCard({ item }: { item: MerchandiseItem }) {
                   className={`rounded-lg border-2 px-4 py-2 text-sm font-semibold transition-all ${
                     selectedSize === size
                       ? 'border-[#FF5656] bg-[#FF5656] text-white shadow-md scale-105'
-                      : 'border-gray-300 bg-white text-gray-700 hover:border-blue-400 hover:bg-blue-50 hover:scale-105'
+                      : 'border-gray-600 bg-gray-800 text-gray-300 hover:border-gray-500 hover:bg-gray-700 hover:scale-105'
                   }`}
                 >
                   {size}
@@ -160,7 +160,7 @@ export default function MerchandiseCard({ item }: { item: MerchandiseItem }) {
 
           <Link
             href={`/store/${item.id}`}
-            className="block w-full rounded-md border border-gray-300 bg-white px-4 py-2 text-center text-sm font-semibold text-gray-700 hover:bg-gray-50"
+            className="block w-full rounded-md border border-gray-600 bg-gray-800 px-4 py-2 text-center text-sm font-semibold text-gray-300 hover:bg-gray-700 hover:text-white transition-colors"
           >
             View Details
           </Link>

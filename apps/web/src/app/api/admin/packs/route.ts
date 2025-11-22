@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
+import { requireAdmin } from '@/lib/auth-helpers'
 import { z } from 'zod'
 
 // Validation schema for creating a premium pack
@@ -24,16 +23,9 @@ const createPackSchema = z.object({
  */
 export async function GET(request: Request) {
   try {
-    const session = await getServerSession(authOptions)
-
-    if (!session) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
-
-    // Check if user is admin
-    if (session.user.role !== 'ADMIN') {
-      return NextResponse.json({ error: 'Forbidden - Admin access required' }, { status: 403 })
-    }
+    // Require admin authentication
+    const auth = await requireAdmin()
+    if (auth instanceof NextResponse) return auth
 
     // Dynamic import to avoid build-time database connection
     const { db } = await import('@/lib/db')
@@ -84,16 +76,9 @@ export async function GET(request: Request) {
  */
 export async function POST(request: Request) {
   try {
-    const session = await getServerSession(authOptions)
-
-    if (!session) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
-
-    // Check if user is admin
-    if (session.user.role !== 'ADMIN') {
-      return NextResponse.json({ error: 'Forbidden - Admin access required' }, { status: 403 })
-    }
+    // Require admin authentication
+    const auth = await requireAdmin()
+    if (auth instanceof NextResponse) return auth
 
     const body = await request.json()
 

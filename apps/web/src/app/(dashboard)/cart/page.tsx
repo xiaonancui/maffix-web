@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import CartItemCard from '@/components/dashboard/CartItemCard'
+import CheckoutButton from '@/components/dashboard/CheckoutButton'
 
 export default function CartPage() {
   const { data: session, status } = useSession()
@@ -21,10 +22,10 @@ export default function CartPage() {
 
   if (status === 'loading' || isLoading) {
     return (
-      <div className="flex min-h-screen items-center justify-center">
+      <div className="flex min-h-screen items-center justify-center bg-black">
         <div className="text-center">
           <div className="mb-4 h-12 w-12 animate-spin rounded-full border-4 border-[#FF5656] border-t-transparent mx-auto"></div>
-          <p className="text-gray-600">Loading cart...</p>
+          <p className="text-gray-400">Loading cart...</p>
         </div>
       </div>
     )
@@ -95,11 +96,11 @@ export default function CartPage() {
   const total = subtotal + shipping + tax
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen bg-black py-8">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Shopping Cart</h1>
-          <p className="mt-2 text-gray-600">
+          <h1 className="text-3xl font-bold text-white">Shopping Cart</h1>
+          <p className="mt-2 text-gray-400">
             {cartItems.length} {cartItems.length === 1 ? 'item' : 'items'} in your cart
           </p>
         </div>
@@ -112,39 +113,61 @@ export default function CartPage() {
           </div>
 
           <div className="lg:col-span-1">
-            <div className="sticky top-4 rounded-lg bg-white p-6 shadow-lg">
-              <h2 className="mb-4 text-xl font-bold text-gray-900">Order Summary</h2>
+            <div className="sticky top-4 rounded-lg bg-gray-900 border border-gray-800 p-6 shadow-lg">
+              <h2 className="mb-4 text-xl font-bold text-white">Order Summary</h2>
 
-              <div className="space-y-3 border-b pb-4">
-                <div className="flex justify-between text-gray-600">
+              <div className="space-y-3 border-b border-gray-700 pb-4">
+                <div className="flex justify-between text-gray-400">
                   <span>Subtotal</span>
                   <span>${subtotal.toFixed(2)}</span>
                 </div>
-                <div className="flex justify-between text-gray-600">
+                <div className="flex justify-between text-gray-400">
                   <span>Shipping</span>
                   <span>{shipping === 0 ? 'FREE' : `$${shipping.toFixed(2)}`}</span>
                 </div>
-                <div className="flex justify-between text-gray-600">
+                <div className="flex justify-between text-gray-400">
                   <span>Tax</span>
                   <span>${tax.toFixed(2)}</span>
                 </div>
               </div>
 
-              <div className="mt-4 flex justify-between text-lg font-bold text-gray-900">
+              <div className="mt-4 flex justify-between text-lg font-bold text-white">
                 <span>Total</span>
                 <span>${total.toFixed(2)}</span>
               </div>
 
-              <button
-                onClick={() => alert('Checkout feature coming soon!')}
-                className="mt-6 w-full rounded-md bg-[#FF5656] px-6 py-3 font-semibold text-white hover:bg-[#FF5656]/90"
-              >
-                Proceed to Checkout
-              </button>
+              <div className="mt-6">
+                <CheckoutButton
+                  total={total}
+                  onCreateOrder={async () => {
+                    // Create order with shipping info
+                    const response = await fetch('/api/orders/create', {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify({
+                        shippingName: session?.user?.name || 'Guest',
+                        shippingEmail: session?.user?.email || 'guest@example.com',
+                        shippingAddress: '123 Main St',
+                        shippingCity: 'New York',
+                        shippingState: 'NY',
+                        shippingZip: '10001',
+                        shippingCountry: 'US',
+                      }),
+                    })
+
+                    if (!response.ok) {
+                      throw new Error('Failed to create order')
+                    }
+
+                    const data = await response.json()
+                    return data.order.id
+                  }}
+                />
+              </div>
 
               <Link
                 href="/store"
-                className="mt-3 block w-full rounded-md border border-gray-300 bg-white px-6 py-3 text-center font-semibold text-gray-700 hover:bg-gray-50"
+                className="mt-3 block w-full rounded-md border border-gray-600 bg-gray-800 px-6 py-3 text-center font-semibold text-gray-300 hover:bg-gray-700 hover:text-white transition-colors"
               >
                 Continue Shopping
               </Link>

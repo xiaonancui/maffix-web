@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import MobileMenu from '@/components/dashboard/MobileMenu'
 import NavLink from '@/components/dashboard/NavLink'
+import AdminNavLink from '@/components/dashboard/AdminNavLink'
 
 export default async function DashboardLayout({
   children,
@@ -25,34 +26,40 @@ export default async function DashboardLayout({
       session.user.id?.includes('demo-') ||
       session.user.id?.includes('admin-'))
 
-  // Fetch user's diamond balance for display
+  // Fetch user's diamond balance and 10x draw status for display
   let diamondBalance = 0
+  let hasCompletedTenDraw = false
 
   if (isTestAccount) {
     diamondBalance = 500
+    hasCompletedTenDraw = true // Test accounts have access to Store by default
   } else {
     try {
       const { db } = await import('@/lib/db')
 
       const user = await db.user.findUnique({
         where: { id: session.user.id },
-        select: { diamondBalance: true },
+        select: {
+          diamondBalance: true,
+          hasCompletedTenDraw: true,
+        },
       })
       diamondBalance = user?.diamondBalance || 0
+      hasCompletedTenDraw = user?.hasCompletedTenDraw || false
     } catch (error) {
-      console.error('Failed to fetch user balance:', error)
+      console.error('Failed to fetch user data:', error)
     }
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-black">
       {/* Navigation */}
-      <nav className="bg-white shadow">
+      <nav className="bg-black border-b border-gray-800 shadow-lg">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 justify-between">
             <div className="flex">
               <div className="flex flex-shrink-0 items-center">
-                <Link href="/dashboard" className="text-xl font-bold text-primary">
+                <Link href="/dashboard" className="text-xl font-bold text-white">
                   Maffix
                 </Link>
               </div>
@@ -61,25 +68,31 @@ export default async function DashboardLayout({
                 <NavLink href="/releases">Releases</NavLink>
                 <NavLink href="/missions">Missions</NavLink>
                 <NavLink href="/gacha">Gacha</NavLink>
-                <NavLink href="/store">Store</NavLink>
-                <NavLink href="/store/packs">Premium Packs</NavLink>
+                {/* Store: Only show after completing first 10x draw */}
+                {hasCompletedTenDraw && <NavLink href="/store">Store</NavLink>}
+                {/* Hidden: Premium Packs - Route still accessible via direct URL */}
+                {/* <NavLink href="/store/packs">Premium Packs</NavLink> */}
                 <NavLink href="/prizes">Prizes</NavLink>
+                <NavLink href="/music-detection">Music Detection</NavLink>
               </div>
             </div>
             <div className="flex items-center gap-4">
               {/* Diamond Balance */}
               <Link
                 href="/transactions"
-                className="hidden items-center gap-2 rounded-full bg-blue-50 px-4 py-2 text-sm font-semibold text-[#FF5656] hover:bg-blue-100 sm:flex"
+                className="hidden items-center gap-2 rounded-lg bg-gray-900 px-3 py-1.5 text-sm font-semibold text-white hover:bg-gray-800 sm:flex transition-colors"
               >
                 <span>💎</span>
-                <span>{diamondBalance}</span>
+                <span className="text-[#FF5656]">{diamondBalance}</span>
               </Link>
+
+              {/* Admin Panel Link (only for admins) */}
+              {session.user.role === 'ADMIN' && <AdminNavLink />}
 
               {/* Profile Icon */}
               <Link
                 href="/profile"
-                className="rounded-full bg-white p-1 text-gray-400 hover:text-gray-500"
+                className="rounded-full bg-white/20 p-1 text-white hover:bg-white/30 transition-colors"
               >
                 <span className="sr-only">View profile</span>
                 <svg
@@ -98,7 +111,7 @@ export default async function DashboardLayout({
               </Link>
 
               {/* Mobile Menu Button */}
-              <MobileMenu diamondBalance={diamondBalance} />
+              <MobileMenu diamondBalance={diamondBalance} hasCompletedTenDraw={hasCompletedTenDraw} />
             </div>
           </div>
         </div>

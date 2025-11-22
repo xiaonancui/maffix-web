@@ -3,6 +3,7 @@ import { authOptions } from '@/lib/auth'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import MissionCard from '@/components/dashboard/MissionCard'
+import MissionsHeader from '@/components/dashboard/MissionsHeader'
 
 export default async function MissionsPage() {
   // Dynamic import to avoid build-time database connection
@@ -385,20 +386,15 @@ export default async function MissionsPage() {
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
       {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">TikTok Missions</h1>
-        <p className="mt-2 text-sm text-gray-600">
-          Complete TikTok promotional missions to earn diamonds and support your favorite artists
-        </p>
-      </div>
+      <MissionsHeader />
 
       {/* TikTok Connection Status */}
       {!user?.tiktokUsername && (
-        <div className="mb-8 rounded-lg border-2 border-yellow-300 bg-yellow-50 p-6">
+        <div className="mb-8 rounded-lg border-2 border-yellow-600 bg-yellow-900/20 p-6">
           <div className="flex items-start">
             <div className="flex-shrink-0">
               <svg
-                className="h-6 w-6 text-yellow-600"
+                className="h-6 w-6 text-yellow-400"
                 fill="none"
                 viewBox="0 0 24 24"
                 strokeWidth="1.5"
@@ -412,10 +408,10 @@ export default async function MissionsPage() {
               </svg>
             </div>
             <div className="ml-3 flex-1">
-              <h3 className="text-sm font-medium text-yellow-800">
+              <h3 className="text-sm font-medium text-yellow-300">
                 TikTok Account Not Linked
               </h3>
-              <div className="mt-2 text-sm text-yellow-700">
+              <div className="mt-2 text-sm text-yellow-400">
                 <p>
                   You need to link your TikTok account to complete missions and earn rewards.
                 </p>
@@ -423,7 +419,7 @@ export default async function MissionsPage() {
               <div className="mt-4">
                 <Link
                   href="/profile/link-tiktok"
-                  className="inline-flex items-center rounded-md bg-yellow-600 px-3 py-2 text-sm font-semibold text-white hover:bg-yellow-700"
+                  className="inline-flex items-center rounded-md bg-yellow-600 px-3 py-2 text-sm font-semibold text-white hover:bg-yellow-700 transition-colors"
                 >
                   Link TikTok Account
                 </Link>
@@ -435,40 +431,40 @@ export default async function MissionsPage() {
 
       {/* User Stats */}
       <div className="mb-8 grid gap-4 sm:grid-cols-3">
-        <div className="rounded-lg bg-white p-4 shadow">
+        <div className="rounded-lg bg-gray-900 border border-gray-800 p-4 shadow hover:border-[#FF5656] transition-colors">
           <div className="flex items-center">
             <div className="flex-shrink-0">
               <span className="text-2xl">💎</span>
             </div>
             <div className="ml-3">
-              <p className="text-sm font-medium text-gray-600">Your Diamonds</p>
-              <p className="text-xl font-semibold text-gray-900">
+              <p className="text-sm font-medium text-gray-400">Your Diamonds</p>
+              <p className="text-xl font-semibold text-white">
                 {user?.diamondBalance.toLocaleString() || 0}
               </p>
             </div>
           </div>
         </div>
-        <div className="rounded-lg bg-white p-4 shadow">
+        <div className="rounded-lg bg-gray-900 border border-gray-800 p-4 shadow hover:border-[#FF5656] transition-colors">
           <div className="flex items-center">
             <div className="flex-shrink-0">
               <span className="text-2xl">✅</span>
             </div>
             <div className="ml-3">
-              <p className="text-sm font-medium text-gray-600">Completed</p>
-              <p className="text-xl font-semibold text-gray-900">
+              <p className="text-sm font-medium text-gray-400">Completed</p>
+              <p className="text-xl font-semibold text-white">
                 {userMissions.size}
               </p>
             </div>
           </div>
         </div>
-        <div className="rounded-lg bg-white p-4 shadow">
+        <div className="rounded-lg bg-gray-900 border border-gray-800 p-4 shadow hover:border-[#FF5656] transition-colors">
           <div className="flex items-center">
             <div className="flex-shrink-0">
               <span className="text-2xl">🎯</span>
             </div>
             <div className="ml-3">
-              <p className="text-sm font-medium text-gray-600">Available</p>
-              <p className="text-xl font-semibold text-gray-900">
+              <p className="text-sm font-medium text-gray-400">Available</p>
+              <p className="text-xl font-semibold text-white">
                 {missions.length}
               </p>
             </div>
@@ -478,14 +474,14 @@ export default async function MissionsPage() {
 
       {/* Missions by Type */}
       {missions.length === 0 ? (
-        <div className="rounded-lg bg-white p-12 text-center shadow">
-          <p className="text-gray-500">No missions available at the moment.</p>
+        <div className="rounded-lg bg-gray-900 border border-gray-800 p-12 text-center shadow">
+          <p className="text-gray-400">No missions available at the moment.</p>
         </div>
       ) : (
         <div className="space-y-8">
           {Object.entries(missionsByType).map(([type, typeMissions]) => (
             <div key={type}>
-              <h2 className="mb-4 text-xl font-bold text-gray-900">
+              <h2 className="mb-4 text-xl font-bold text-white">
                 {getMissionTypeIcon(type)} {missionTypeNames[type as keyof typeof missionTypeNames] || type}
               </h2>
               <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
