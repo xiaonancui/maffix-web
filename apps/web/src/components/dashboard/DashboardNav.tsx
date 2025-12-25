@@ -6,17 +6,24 @@ import AdminNavLink from '@/components/dashboard/AdminNavLink'
 import MobileMenu from '@/components/dashboard/MobileMenu'
 import { ButtonIcon } from '@/components/icons/Icon'
 import { ThemeToggle } from '@/components/theme/ThemeToggle'
+import { Gem, Ticket } from 'lucide-react'
 
 interface DashboardNavProps {
   diamondBalance: number
   hasCompletedTenDraw: boolean
   userRole: string
+  ticketBalance?: number
+  level?: number
+  xp?: number
 }
 
 export default function DashboardNav({
   diamondBalance,
   hasCompletedTenDraw,
   userRole,
+  ticketBalance = 0,
+  level = 1,
+  xp = 0,
 }: DashboardNavProps) {
   return (
     <nav className="bg-background border-b border-border shadow-lg">
@@ -30,27 +37,39 @@ export default function DashboardNav({
             </div>
             <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
               <NavLink href="/dashboard">Dashboard</NavLink>
-              <NavLink href="/releases">Releases</NavLink>
               <NavLink href="/missions">Missions</NavLink>
-              <NavLink href="/gacha">Gacha</NavLink>
-              {/* Store: Only show after completing first 10x draw */}
-              {hasCompletedTenDraw && <NavLink href="/store">Store</NavLink>}
+              <NavLink href="/aura-zone">Aura Zone</NavLink>
+              {/* Store: Always accessible (removed 10x draw gate) */}
+              <NavLink href="/store">Store</NavLink>
               {/* Hidden: Premium Packs - Route still accessible via direct URL */}
               {/* <NavLink href="/store/packs">Premium Packs</NavLink> */}
-              <NavLink href="/music-detection">Music Detection</NavLink>
             </div>
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
             {/* Theme Toggle */}
             <ThemeToggle />
+
+            {/* Level Badge */}
+            <div className="hidden sm:flex items-center gap-1 rounded-lg bg-secondary px-2 py-1 text-xs font-semibold text-foreground">
+              <span>Lv.{level}</span>
+            </div>
 
             {/* Diamond Balance */}
             <Link
               href="/transactions"
-              className="hidden items-center gap-2 rounded-lg bg-secondary px-3 py-1.5 text-sm font-semibold text-foreground hover:bg-secondary/80 sm:flex transition-colors"
+              className="hidden items-center gap-1.5 rounded-lg bg-secondary px-2 py-1.5 text-sm font-semibold text-foreground hover:bg-secondary/80 sm:flex transition-colors"
             >
-              <ButtonIcon name="gem" label="Diamonds" />
-              <span className="text-primary">{diamondBalance}</span>
+              <Gem className="h-4 w-4 text-primary" />
+              <span className="text-primary">{diamondBalance.toLocaleString()}</span>
+            </Link>
+
+            {/* Ticket Balance */}
+            <Link
+              href="/transactions"
+              className="hidden items-center gap-1.5 rounded-lg bg-secondary px-2 py-1.5 text-sm font-semibold text-foreground hover:bg-secondary/80 sm:flex transition-colors"
+            >
+              <Ticket className="h-4 w-4 text-primary" />
+              <span className="text-primary">{ticketBalance}</span>
             </Link>
 
             {/* Admin Panel Link (only for admins) */}
@@ -66,7 +85,7 @@ export default function DashboardNav({
             </Link>
 
             {/* Mobile Menu Button */}
-            <MobileMenu diamondBalance={diamondBalance} hasCompletedTenDraw={hasCompletedTenDraw} />
+            <MobileMenu diamondBalance={diamondBalance} hasCompletedTenDraw={hasCompletedTenDraw} ticketBalance={ticketBalance} />
           </div>
         </div>
       </div>

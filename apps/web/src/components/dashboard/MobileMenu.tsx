@@ -6,13 +6,16 @@ import { usePathname } from 'next/navigation'
 import { useUserRole } from '@/lib/rbac'
 import { signOut } from 'next-auth/react'
 import { NavIcon } from '@/components/icons/Icon'
+import { Gem, Ticket } from 'lucide-react'
 
 export default function MobileMenu({
   diamondBalance,
-  hasCompletedTenDraw
+  hasCompletedTenDraw,
+  ticketBalance = 0
 }: {
   diamondBalance: number
   hasCompletedTenDraw: boolean
+  ticketBalance?: number
 }) {
   const [isOpen, setIsOpen] = useState(false)
   const pathname = usePathname()
@@ -38,15 +41,17 @@ export default function MobileMenu({
       {isOpen && (
         <div className="absolute left-0 right-0 top-16 z-50 border-b border-border bg-secondary shadow-lg">
           <div className="space-y-1 px-4 pb-3 pt-2">
-            {/* Diamond Balance */}
-            <Link
-              href="/transactions"
-              className="flex items-center gap-2 rounded-md px-3 py-2 text-base font-medium text-foreground hover:bg-secondary transition-colors"
-              onClick={() => setIsOpen(false)}
-            >
-              <NavIcon name="gem" label="Diamonds" />
-              <span className="text-[#FF5656]">{diamondBalance} Diamonds</span>
-            </Link>
+            {/* Balance Display */}
+            <div className="flex items-center gap-3 px-3 py-2">
+              <div className="flex items-center gap-1.5 rounded-lg bg-background px-3 py-1.5">
+                <Gem className="h-4 w-4 text-primary" />
+                <span className="text-sm font-medium text-primary">{diamondBalance.toLocaleString()}</span>
+              </div>
+              <div className="flex items-center gap-1.5 rounded-lg bg-background px-3 py-1.5">
+                <Ticket className="h-4 w-4 text-primary" />
+                <span className="text-sm font-medium text-primary">{ticketBalance}</span>
+              </div>
+            </div>
 
             {/* Admin Panel Link (only for admins) */}
             {isAdmin && (
@@ -72,17 +77,6 @@ export default function MobileMenu({
               Dashboard
             </Link>
             <Link
-              href="/releases"
-              className={`block rounded-md px-3 py-2 text-base font-medium transition-colors ${
-                isActive('/releases')
-                  ? 'bg-[#FF5656]/20 text-[#FF5656] font-semibold'
-                  : 'text-muted-foreground hover:bg-secondary hover:text-foreground'
-              }`}
-              onClick={() => setIsOpen(false)}
-            >
-              Releases
-            </Link>
-            <Link
               href="/missions"
               className={`block rounded-md px-3 py-2 text-base font-medium transition-colors ${
                 isActive('/missions')
@@ -94,52 +88,27 @@ export default function MobileMenu({
               Missions
             </Link>
             <Link
-              href="/gacha"
+              href="/aura-zone"
               className={`block rounded-md px-3 py-2 text-base font-medium transition-colors ${
-                isActive('/gacha')
+                isActive('/aura-zone')
                   ? 'bg-[#FF5656]/20 text-[#FF5656] font-semibold'
                   : 'text-muted-foreground hover:bg-secondary hover:text-foreground'
               }`}
               onClick={() => setIsOpen(false)}
             >
-              Gacha
+              Aura Zone
             </Link>
-            {/* Store: Only show after completing first 10x draw */}
-            {hasCompletedTenDraw && (
-              <Link
-                href="/store"
-                className={`block rounded-md px-3 py-2 text-base font-medium transition-colors ${
-                  isActive('/store')
-                    ? 'bg-[#FF5656]/20 text-[#FF5656] font-semibold'
-                    : 'text-muted-foreground hover:bg-secondary hover:text-foreground'
-                }`}
-                onClick={() => setIsOpen(false)}
-              >
-                Store
-              </Link>
-            )}
-            {/* Hidden: Premium Packs - Route still accessible via direct URL */}
-            {/* <Link
-              href="/store/packs"
-              className={`block rounded-md px-3 py-2 text-base font-medium transition-colors ${
-                isActive('/store/packs')
-                  ? 'bg-[#FF5656]/20 text-[#FF5656] font-semibold'
-                  : 'text-muted-foreground hover:bg-secondary hover:text-foreground'
-              }`}
-              onClick={() => setIsOpen(false)}
-            >
-              Premium Packs
-            </Link> */}
+            {/* Store: Always accessible (removed 10x draw gate) */}
             <Link
-              href="/music-detection"
+              href="/store"
               className={`block rounded-md px-3 py-2 text-base font-medium transition-colors ${
-                isActive('/music-detection')
+                isActive('/store')
                   ? 'bg-[#FF5656]/20 text-[#FF5656] font-semibold'
                   : 'text-muted-foreground hover:bg-secondary hover:text-foreground'
               }`}
               onClick={() => setIsOpen(false)}
             >
-              Music Detection
+              Store
             </Link>
             <Link
               href="/profile"

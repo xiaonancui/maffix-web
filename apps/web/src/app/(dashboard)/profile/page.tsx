@@ -2,6 +2,9 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { redirect } from 'next/navigation'
 import LogoutButton from '@/components/auth/LogoutButton'
+import { Progress } from '@/components/ui/progress'
+import { getLevelProgress } from '@/lib/level-system'
+import { Gem, Ticket, Star } from 'lucide-react'
 
 export default async function ProfilePage() {
   // Dynamic import to avoid build-time database connection
@@ -36,6 +39,8 @@ export default async function ProfilePage() {
       diamondBalance: session.user.role === 'ADMIN' ? 10000 : 500,
       points: session.user.role === 'ADMIN' ? 5000 : 100,
       level: session.user.role === 'ADMIN' ? 10 : 1,
+      xp: session.user.role === 'ADMIN' ? 3250 : 0,
+      ticketBalance: session.user.role === 'ADMIN' ? 50 : 5,
       createdAt: new Date(),
       lastLoginAt: new Date(),
       completedTasks: [],
@@ -91,6 +96,9 @@ export default async function ProfilePage() {
     }
   }
 
+  // Calculate level progress
+  const levelProgress = getLevelProgress(user.xp || 0, user.level || 1)
+
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
       <div className="mb-8">
@@ -117,23 +125,54 @@ export default async function ProfilePage() {
               </div>
             </div>
 
-            <div className="space-y-4 border-t border-border pt-4">
-              <div className="flex items-center justify-between">
+            {/* Level Progress */}
+            <div className="mb-4 border-b border-border pb-4">
+              <div className="flex items-center justify-between mb-2">
                 <span className="text-sm text-muted-foreground">Level</span>
+                <span className="font-semibold text-primary text-lg">
+                  Lv.{user.level || 1}
+                </span>
+              </div>
+              <Progress value={levelProgress.progressPercent} className="h-2" />
+              <div className="flex items-center justify-between mt-1 text-xs text-muted-foreground">
+                <span>{levelProgress.xpInCurrentLevel} XP</span>
+                <span>{levelProgress.xpToNextLevel} XP to Lv.{levelProgress.nextLevel.level}</span>
+              </div>
+            </div>
+
+            {/* Balances */}
+            <div className="space-y-3 border-t border-border pt-4">
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-muted-foreground flex items-center gap-1.5">
+                  <Gem className="h-4 w-4" />
+                  Diamonds
+                </span>
                 <span className="font-semibold text-foreground">
-                  {user.level}
+                  {user.diamondBalance?.toLocaleString() || 0}
                 </span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm text-muted-foreground">Diamonds</span>
+                <span className="text-sm text-muted-foreground flex items-center gap-1.5">
+                  <Ticket className="h-4 w-4" />
+                  Tickets
+                </span>
                 <span className="font-semibold text-foreground">
-                  💎 {user.diamondBalance.toLocaleString()}
+                  {user.ticketBalance?.toLocaleString() || 0}
+                </span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-muted-foreground flex items-center gap-1.5">
+                  <Star className="h-4 w-4" />
+                  XP (Total)
+                </span>
+                <span className="font-semibold text-foreground">
+                  {user.xp?.toLocaleString() || 0}
                 </span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-sm text-muted-foreground">Points</span>
                 <span className="font-semibold text-foreground">
-                  ⭐ {user.points.toLocaleString()}
+                  {user.points?.toLocaleString() || 0}
                 </span>
               </div>
               <div className="flex items-center justify-between">

@@ -144,10 +144,10 @@ export function hasPermission(role: Role, permission: Permission): boolean {
 /**
  * Check if user is an admin
  * Convenience function for common check
- * 
+ *
  * @param session - The NextAuth session object
  * @returns true if user is an admin, false otherwise
- * 
+ *
  * @example
  * ```tsx
  * const session = await getServerSession(authOptions)
@@ -158,5 +158,21 @@ export function hasPermission(role: Role, permission: Permission): boolean {
  */
 export function isAdmin(session: Session | null): boolean {
   return getUserRole(session) === 'ADMIN'
+}
+
+/**
+ * Check if user has admin access
+ * Convenience function that accepts role string
+ *
+ * @param role - The user's role string
+ * @returns true if user has admin access, false otherwise
+ *
+ * @example
+ * ```tsx
+ * const hasAccess = hasAdminAccess(session.user.role || 'USER')
+ * ```
+ */
+export function hasAdminAccess(role: Role): boolean {
+  return role === 'ADMIN'
 }
 

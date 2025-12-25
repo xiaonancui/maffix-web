@@ -24,6 +24,7 @@ export interface MissionCardData {
 interface MissionCardProps {
   mission: MissionCardData
   hasTikTokLinked: boolean
+  onViewDetail?: () => void
 }
 
 const missionTypeLabels: Record<string, string> = {
@@ -75,7 +76,7 @@ const sanitizeTikTokAccount = (account?: string | null) => {
   return account.startsWith('@') ? account.slice(1) : account
 }
 
-export default function MissionCard({ mission, hasTikTokLinked }: MissionCardProps) {
+export default function MissionCard({ mission, hasTikTokLinked, onViewDetail }: MissionCardProps) {
   const statusKey = (mission.completionStatus || 'NOT_STARTED').toUpperCase()
   const statusConfig = statusStyles[statusKey] || statusStyles.NOT_STARTED
   const showSubmit = statusKey === 'NOT_STARTED'
@@ -184,12 +185,12 @@ export default function MissionCard({ mission, hasTikTokLinked }: MissionCardPro
         </div>
 
         <div className="flex gap-2">
-          <Link
-            href={`/missions/${mission.id}`}
+          <button
+            onClick={onViewDetail}
             className="flex-1 rounded-md border-2 border-border bg-background px-4 py-2 text-center text-sm font-semibold text-foreground transition-colors hover:bg-secondary hover:border-primary dark:bg-card"
           >
             View Details
-          </Link>
+          </button>
           {renderAction({
             showSubmit,
             statusKey,

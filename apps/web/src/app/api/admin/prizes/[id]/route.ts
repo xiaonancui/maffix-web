@@ -6,7 +6,7 @@ import { z } from 'zod'
 const updatePrizeSchema = z.object({
   name: z.string().min(1).optional(),
   description: z.string().min(1).optional(),
-  rarity: z.enum(['COMMON', 'RARE', 'EPIC', 'SSR', 'LEGENDARY']).optional(),
+  rarity: z.enum(['COMMON', 'RARE', 'SR', 'SSR', 'UR', 'LEGENDARY']).optional(),
   type: z.enum(['PHYSICAL', 'DIGITAL', 'EXPERIENCE', 'DISCOUNT', 'EXCLUSIVE']).optional(),
   image: z.string().url().nullable().optional(),
   value: z.number().int().min(0).optional(),

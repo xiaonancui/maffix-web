@@ -144,7 +144,7 @@ async function main() {
     data: {
       name: 'VIP Concert Ticket',
       description: 'VIP access to exclusive concert',
-      rarity: 'EPIC',
+      rarity: 'SSR',
       type: 'EXPERIENCE',
       value: 500,
       isActive: true,
@@ -180,7 +180,7 @@ async function main() {
     data: {
       name: 'Exclusive Album Access',
       description: 'Early access to unreleased album',
-      rarity: 'EPIC',
+      rarity: 'SSR',
       type: 'EXCLUSIVE',
       value: 300,
       isActive: true,

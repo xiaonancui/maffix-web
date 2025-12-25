@@ -24,12 +24,18 @@ export default async function DashboardLayout({
       session.user.id?.includes('demo-') ||
       session.user.id?.includes('admin-'))
 
-  // Fetch user's diamond balance and 10x draw status for display
+  // Fetch user's diamond balance, ticket balance, level, and XP for display
   let diamondBalance = 0
+  let ticketBalance = 0
+  let level = 1
+  let xp = 0
   let hasCompletedTenDraw = false
 
   if (isTestAccount) {
-    diamondBalance = 500
+    diamondBalance = session.user.role === 'ADMIN' ? 10000 : 500
+    ticketBalance = session.user.role === 'ADMIN' ? 50 : 5
+    level = session.user.role === 'ADMIN' ? 10 : 1
+    xp = session.user.role === 'ADMIN' ? 3250 : 0
     hasCompletedTenDraw = true // Test accounts have access to Store by default
   } else {
     try {
@@ -39,10 +45,16 @@ export default async function DashboardLayout({
         where: { id: session.user.id },
         select: {
           diamondBalance: true,
+          ticketBalance: true,
+          level: true,
+          xp: true,
           hasCompletedTenDraw: true,
         },
       })
       diamondBalance = user?.diamondBalance || 0
+      ticketBalance = user?.ticketBalance || 0
+      level = user?.level || 1
+      xp = user?.xp || 0
       hasCompletedTenDraw = user?.hasCompletedTenDraw || false
     } catch (error) {
       console.error('Failed to fetch user data:', error)
@@ -54,6 +66,9 @@ export default async function DashboardLayout({
       {/* Navigation */}
       <DashboardNav
         diamondBalance={diamondBalance}
+        ticketBalance={ticketBalance}
+        level={level}
+        xp={xp}
         hasCompletedTenDraw={hasCompletedTenDraw}
         userRole={session.user.role || 'USER'}
       />

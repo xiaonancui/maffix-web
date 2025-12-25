@@ -4,6 +4,8 @@ import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import MissionCard from '@/components/dashboard/MissionCard'
 import MissionsHeader from '@/components/dashboard/MissionsHeader'
+import MissionDetailModal from '@/components/dashboard/missions/MissionDetailModal'
+import MissionsClient from './missions-client'
 import { AlertTriangle } from 'lucide-react'
 
 export default async function MissionsPage() {
@@ -28,15 +30,16 @@ export default async function MissionsPage() {
     }
 
     missions = [
-      // FOLLOW Missions
+      // Follow Missions (simplified category)
       {
         id: 'mission-follow-1',
         title: 'Follow Official Artist Account',
-        description: 'Follow @maffix_official on TikTok to stay updated with latest releases and exclusive content',
+        description: 'Follow our main account to stay updated with latest releases and exclusive content',
         missionType: 'FOLLOW',
         targetTikTokAccount: '@maffix_official',
         diamonds: 50,
         points: 25,
+        xpReward: 10,
         difficulty: 'EASY',
         isActive: true,
         estimatedTime: '30 seconds',
@@ -44,37 +47,27 @@ export default async function MissionsPage() {
       {
         id: 'mission-follow-2',
         title: 'Follow Record Label Account',
-        description: 'Follow @maffix_records on TikTok to discover new artists and upcoming releases',
+        description: 'Discover new artists and upcoming releases from our label',
         missionType: 'FOLLOW',
         targetTikTokAccount: '@maffix_records',
         diamonds: 50,
         points: 25,
-        difficulty: 'EASY',
-        isActive: true,
-        estimatedTime: '30 seconds',
-      },
-      {
-        id: 'mission-follow-3',
-        title: 'Follow Tour Updates Account',
-        description: 'Follow @maffix_tour for exclusive behind-the-scenes content and tour announcements',
-        missionType: 'FOLLOW',
-        targetTikTokAccount: '@maffix_tour',
-        diamonds: 75,
-        points: 35,
+        xpReward: 10,
         difficulty: 'EASY',
         isActive: true,
         estimatedTime: '30 seconds',
       },
 
-      // LIKE Missions
+      // Main Missions (simplified category - LIKE, REPOST, USE_AUDIO all merged here)
       {
         id: 'mission-like-1',
         title: 'Like New Single Release',
-        description: 'Show your support by liking the official music video for "Midnight Dreams"',
+        description: 'Show your support by liking the official music video',
         missionType: 'LIKE',
         targetVideoUrl: 'https://tiktok.com/@maffix_official/video/7234567890123',
         diamonds: 60,
         points: 30,
+        xpReward: 10,
         difficulty: 'EASY',
         isActive: true,
         estimatedTime: '1 minute',
@@ -82,150 +75,67 @@ export default async function MissionsPage() {
       {
         id: 'mission-like-2',
         title: 'Like Concert Announcement',
-        description: 'Like the 2024 World Tour announcement video to show your excitement',
+        description: 'Like the World Tour announcement video to show your excitement',
         missionType: 'LIKE',
         targetVideoUrl: 'https://tiktok.com/@maffix_tour/video/7234567890456',
         diamonds: 80,
         points: 40,
+        xpReward: 10,
         difficulty: 'EASY',
         isActive: true,
         estimatedTime: '1 minute',
       },
-      {
-        id: 'mission-like-3',
-        title: 'Like Behind-the-Scenes Content',
-        description: 'Like the exclusive studio session footage from the latest album recording',
-        missionType: 'LIKE',
-        targetVideoUrl: 'https://tiktok.com/@maffix_official/video/7234567890789',
-        diamonds: 100,
-        points: 50,
-        difficulty: 'EASY',
-        isActive: true,
-        estimatedTime: '1 minute',
-      },
-      {
-        id: 'mission-like-4',
-        title: 'Like Fan Appreciation Post',
-        description: 'Like the special thank you message to fans for reaching 1M followers',
-        missionType: 'LIKE',
-        targetVideoUrl: 'https://tiktok.com/@maffix_official/video/7234567891012',
-        diamonds: 50,
-        points: 25,
-        difficulty: 'EASY',
-        isActive: true,
-        estimatedTime: '30 seconds',
-      },
-
-      // REPOST Missions
       {
         id: 'mission-repost-1',
-        title: 'Repost New Music Video',
-        description: 'Share the official music video for "Midnight Dreams" to your profile and help spread the word',
+        title: 'Share Music Video',
+        description: 'Share the official music video to your profile and help spread the word',
         missionType: 'REPOST',
         targetVideoUrl: 'https://tiktok.com/@maffix_official/video/7234567890123',
         diamonds: 150,
         points: 75,
+        xpReward: 25,
         difficulty: 'MEDIUM',
         isActive: true,
         estimatedTime: '2 minutes',
       },
       {
         id: 'mission-repost-2',
-        title: 'Repost Concert Announcement',
-        description: 'Repost the 2024 World Tour announcement to help your friends discover the tour dates',
+        title: 'Share Tour Announcement',
+        description: 'Share the tour announcement to help your friends discover the dates',
         missionType: 'REPOST',
         targetVideoUrl: 'https://tiktok.com/@maffix_tour/video/7234567890456',
         diamonds: 200,
         points: 100,
+        xpReward: 25,
         difficulty: 'MEDIUM',
         isActive: true,
         estimatedTime: '2 minutes',
       },
-      {
-        id: 'mission-repost-3',
-        title: 'Repost Album Teaser',
-        description: 'Share the exclusive album teaser to build hype for the upcoming release',
-        missionType: 'REPOST',
-        targetVideoUrl: 'https://tiktok.com/@maffix_official/video/7234567891345',
-        diamonds: 250,
-        points: 125,
-        difficulty: 'MEDIUM',
-        isActive: true,
-        estimatedTime: '2 minutes',
-      },
-      {
-        id: 'mission-repost-4',
-        title: 'Repost Fan Challenge',
-        description: 'Repost the #MaffixDanceChallenge video and encourage your followers to participate',
-        missionType: 'REPOST',
-        targetVideoUrl: 'https://tiktok.com/@maffix_official/video/7234567891678',
-        diamonds: 300,
-        points: 150,
-        difficulty: 'MEDIUM',
-        isActive: true,
-        estimatedTime: '3 minutes',
-      },
-
-      // USE_AUDIO Missions
       {
         id: 'mission-audio-1',
-        title: 'Create Video with "Midnight Dreams"',
-        description: 'Create your own TikTok video using the "Midnight Dreams" audio track. Show us your creativity!',
+        title: 'Create Video with Official Audio',
+        description: 'Create your own video using our audio track. Show us your creativity!',
         missionType: 'USE_AUDIO',
         targetAudioId: 'audio-midnight-dreams-7234567890',
         diamonds: 400,
         points: 200,
+        xpReward: 50,
         difficulty: 'HARD',
         isActive: true,
         estimatedTime: '15 minutes',
       },
       {
         id: 'mission-audio-2',
-        title: 'Dance Challenge with "Electric Nights"',
-        description: 'Join the #ElectricNightsDance challenge by creating a video with the official audio',
+        title: 'Dance Challenge Video',
+        description: 'Join the dance challenge by creating a video with the official audio',
         missionType: 'USE_AUDIO',
         targetAudioId: 'audio-electric-nights-7234567891',
         diamonds: 500,
         points: 250,
+        xpReward: 50,
         difficulty: 'HARD',
         isActive: true,
         estimatedTime: '20 minutes',
-      },
-      {
-        id: 'mission-audio-3',
-        title: 'Lip Sync to "Heartbeat"',
-        description: 'Create a lip sync video using the "Heartbeat" audio. Add your own style and effects!',
-        missionType: 'USE_AUDIO',
-        targetAudioId: 'audio-heartbeat-7234567892',
-        diamonds: 350,
-        points: 175,
-        difficulty: 'MEDIUM',
-        isActive: true,
-        estimatedTime: '10 minutes',
-      },
-      {
-        id: 'mission-audio-4',
-        title: 'Cover "Acoustic Sessions"',
-        description: 'Create your own cover or interpretation using the "Acoustic Sessions" audio track',
-        missionType: 'USE_AUDIO',
-        targetAudioId: 'audio-acoustic-sessions-7234567893',
-        diamonds: 450,
-        points: 225,
-        difficulty: 'HARD',
-        isActive: true,
-        estimatedTime: '25 minutes',
-      },
-      {
-        id: 'mission-audio-5',
-        title: 'Remix Challenge with "Summer Vibes"',
-        description: 'Create a creative video using the "Summer Vibes" remix. Show us your best summer moments!',
-        missionType: 'USE_AUDIO',
-        targetAudioId: 'audio-summer-vibes-7234567894',
-        diamonds: 400,
-        points: 200,
-        difficulty: 'HARD',
-        isActive: true,
-        estimatedTime: '15 minutes',
       },
     ]
 
@@ -256,79 +166,9 @@ export default async function MissionsPage() {
     })
   }
 
-  const getMissionTypeIcon = (type: string) => {
-    switch (type) {
-      case 'FOLLOW':
-        return '👥'
-      case 'LIKE':
-        return '❤️'
-      case 'REPOST':
-        return '🔄'
-      case 'USE_AUDIO':
-        return '🎵'
-      default:
-        return '📋'
-    }
-  }
-
-  const getDifficultyColor = (difficulty: string) => {
-    switch (difficulty) {
-      case 'EASY':
-        return 'bg-green-100 text-green-800 border-green-300'
-      case 'MEDIUM':
-        return 'bg-yellow-100 text-yellow-800 border-yellow-300'
-      case 'HARD':
-        return 'bg-red-100 text-red-800 border-red-300'
-      default:
-        return 'bg-gray-100 text-gray-800 border-border'
-    }
-  }
-
-  const getStatusBadge = (missionId: string) => {
-    const submission = userMissions.get(missionId)
-    if (!submission) return null
-
-    if (submission.verified) {
-      return (
-        <span className="rounded-full bg-green-100 px-3 py-1 text-xs font-medium text-green-800">
-          ✓ Completed
-        </span>
-      )
-    }
-
-    if (submission.verificationStatus === 'PENDING') {
-      return (
-        <span className="rounded-full bg-yellow-100 px-3 py-1 text-xs font-medium text-yellow-800">
-          ⏳ Verifying...
-        </span>
-      )
-    }
-
-    if (submission.verificationStatus === 'FAILED') {
-      return (
-        <span className="rounded-full bg-red-100 px-3 py-1 text-xs font-medium text-red-800">
-          ✗ Failed
-        </span>
-      )
-    }
-
-    return null
-  }
-
-  // Group missions by type
-  const missionsByType = missions.reduce((acc, mission) => {
-    const type = mission.missionType || 'OTHER'
-    if (!acc[type]) acc[type] = []
-    acc[type].push(mission)
-    return acc
-  }, {} as Record<string, any[]>)
-
-  const missionTypeNames = {
-    FOLLOW: 'Follow Missions',
-    LIKE: 'Like Missions',
-    REPOST: 'Repost Missions',
-    USE_AUDIO: 'Use Audio Missions',
-  }
+  // Group missions by category (Follow vs Main)
+  const followMissions = missions.filter((m) => m.missionType === 'FOLLOW')
+  const mainMissions = missions.filter((m) => m.missionType !== 'FOLLOW')
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
@@ -405,43 +245,14 @@ export default async function MissionsPage() {
         </div>
       </div>
 
-      {/* Missions by Type */}
-      {missions.length === 0 ? (
-        <div className="rounded-lg bg-card border border-border p-12 text-center shadow">
-          <p className="text-muted-foreground">No missions available at the moment.</p>
-        </div>
-      ) : (
-        <div className="space-y-8">
-          {Object.entries(missionsByType).map(([type, typeMissions]) => (
-            <div key={type}>
-              <h2 className="mb-4 text-xl font-bold text-foreground">
-                {getMissionTypeIcon(type)} {missionTypeNames[type as keyof typeof missionTypeNames] || type}
-              </h2>
-              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                {(typeMissions as any[]).map((mission: any) => {
-                  const submission = userMissions.get(mission.id)
-                  const completionStatus = submission
-                    ? submission.verified
-                      ? 'APPROVED'
-                      : submission.verificationStatus
-                    : 'NOT_STARTED'
-
-                  return (
-                    <MissionCard
-                      key={mission.id}
-                      mission={{
-                        ...mission,
-                        completionStatus,
-                      }}
-                      hasTikTokLinked={!!user?.tiktokUsername}
-                    />
-                  )
-                })}
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
+      {/* Client Component for Interactive Elements */}
+      <MissionsClient
+        followMissions={followMissions}
+        mainMissions={mainMissions}
+        userMissions={userMissions}
+        hasTikTokLinked={!!user?.tiktokUsername}
+        userId={user.id}
+      />
     </div>
   )
 }

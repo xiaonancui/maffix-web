@@ -30,6 +30,12 @@ model User {
   diamondBalance Int      @default(0)
   points         Int      @default(0)
   level          Int      @default(1)
+  xp             Int      @default(0)   // Lifetime total XP for leveling system
+  ticketBalance  Int      @default(0)   // Hard currency/store gift tickets balance
+
+  // Homepage gate verification
+  otpSecret           String?   @db.Text // For homepage OTP verification (hashed)
+  isHomepageVerified  Boolean   @default(false) // Track if user has passed homepage gate
 
   // Gacha pity system
   gachaPityCounter Int    @default(0)  // Tracks pulls since last SSR+ for guarantee
@@ -142,10 +148,12 @@ model Task {
   // Verification settings
   autoVerify          Boolean  @default(false)  // Auto-verify via API or require manual verification
   verificationStatus  String?  // Additional verification metadata
+  verificationType    VerificationType @default(MANUAL) // AUTO or MANUAL verification
 
   // Rewards
   points      Int      @default(0)
   diamonds    Int      @default(0)
+  xpReward    Int      @default(0)   // XP reward amount
 
   // Status
   isActive    Boolean  @default(true)
@@ -193,6 +201,11 @@ enum Difficulty {
   HARD
 }
 
+enum VerificationType {
+  AUTO    // Automatic verification via API
+  MANUAL  // Manual screenshot verification by admin
+}
+
 // =============================================================================
 // User Task Completion
 // =============================================================================
@@ -207,6 +220,10 @@ model UserTask {
   completedAt DateTime?  // When task was verified and completed
   pointsEarned Int
   diamondsEarned Int
+  xpEarned     Int      @default(0)  // XP earned from this task
+
+  // Screenshot verification
+  screenshotUrl String?  // URL of uploaded screenshot for manual verification
 
   // Verification
   verified    Boolean  @default(false)
@@ -267,11 +284,12 @@ model Prize {
 }
 
 enum Rarity {
-  COMMON      // 60% - Common items
-  RARE        // 25% - Rare items
-  EPIC        // 10% - Epic items
-  SSR         // 4% - Super Super Rare items
-  LEGENDARY   // 1% - Legendary items (highest rarity)
+  COMMON      // Common items
+  RARE        // Rare items
+  SR          // Super Rare
+  SSR         // Super Super Rare items
+  UR          // Ultra Rare (highest rarity for Aura Zone)
+  LEGENDARY   // Legendary items (legacy, kept for compatibility)
 }
 
 enum PrizeType {
@@ -465,6 +483,7 @@ enum TransactionType {
 enum Currency {
   DIAMONDS
   POINTS
+  TICKETS
 }
 
 enum TransactionStatus {
@@ -496,6 +515,7 @@ model PremiumPack {
   imageUrl    String?
   featured    Boolean  @default(false)
   sortOrder   Int      @default(0)
+  isHidden    Boolean  @default(true)  // Premium packs hidden by default (feature flag)
 
   // Availability
   isActive    Boolean  @default(true)
@@ -633,6 +653,11 @@ model Merchandise {
   material    String?  // e.g., "100% Cotton", "Polyester Blend"
   features    String[] // Array of feature strings
   tags        String[] // Array of tags for search/filtering
+  productCode String?  @unique // Product code (e.g., TS-01, BP-01, BA-01 for Bundle A)
+
+  // Bundle configuration
+  isBundleOnly    Boolean  @default(false)  // True if item can only be purchased in bundles
+  bundleType      String?  // Bundle identifier (e.g., "A", "B") if this is a bundle or bundle item
 
   // Inventory
   inStock     Boolean  @default(true)
@@ -770,6 +795,9 @@ model Order {
   status          OrderStatus @default(PENDING)
   totalAmount     Float
   currency        String   @default("USD")
+
+  // Ticket rewards from purchases
+  ticketsEarned   Int      @default(0)  // Tickets generated from this order
 
   // Shipping information
   shippingName    String
