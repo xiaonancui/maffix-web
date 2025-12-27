@@ -38,10 +38,6 @@ if (process.env.NODE_ENV !== 'production') {
   globalForPrisma.prisma = db
 }
 
-// Graceful shutdown
-if (typeof window === 'undefined') {
-  process.on('beforeExit', async () => {
-    await db.$disconnect()
-  })
-}
+// Note: In development, we keep the connection alive for hot reload
+// In production, connections are properly managed by the connection pool
 
