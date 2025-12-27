@@ -1,10 +1,3 @@
-// =============================================================================
-// Maffix Database Schema
-// =============================================================================
-// This schema defines the database structure for the Maffix platform
-// Independent musician fan engagement platform with gamified experiences
-// =============================================================================
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -14,65 +7,41 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// =============================================================================
-// User Management
-// =============================================================================
-
 model User {
-  id        String   @id @default(uuid())
-  email     String   @unique
-  name      String
-  password  String?  // Nullable for OAuth users
-  role      Role     @default(USER)
-  avatar    String?
-
-  // Gamification
-  diamondBalance Int      @default(0)
-  points         Int      @default(0)
-  level          Int      @default(1)
-  xp             Int      @default(0)   // Lifetime total XP for leveling system
-  ticketBalance  Int      @default(0)   // Hard currency/store gift tickets balance
-
-  // Homepage gate verification
-  otpSecret           String?   @db.Text // For homepage OTP verification (hashed)
-  isHomepageVerified  Boolean   @default(false) // Track if user has passed homepage gate
-
-  // Gacha pity system
-  gachaPityCounter Int    @default(0)  // Tracks pulls since last SSR+ for guarantee
-  hasCompletedTenDraw Boolean @default(false)  // Track if user has completed at least one 10x draw
-
-  // OAuth
-  provider       String?  // google, tiktok, discord, etc.
-  providerId     String?  // ID from OAuth provider
-
-  // TikTok integration
-  tiktokUsername      String?   // TikTok username
-  tiktokUserId        String?   // TikTok user ID
-  tiktokAccessToken   String?   @db.Text // TikTok OAuth access token (encrypted)
-  tiktokRefreshToken  String?   @db.Text // TikTok OAuth refresh token (encrypted)
-  tiktokTokenExpiry   DateTime? // When the access token expires
-  tiktokLinkedAt      DateTime? // When TikTok account was linked
-
-  // User preferences
-  themePreference     String?   @default("system") // Theme preference: light, dark, or system
-
-  // Timestamps
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  lastLoginAt DateTime?
-
-  // Relations
-  completedTasks UserTask[]
-  prizes         UserPrize[]
-  gachaPulls     GachaPull[]
-  drawTickets    DrawTicket[]
-  transactions   Transaction[]
-  purchases      Purchase[]
-  verificationJobs MissionVerificationJob[]
-  cart           Cart?
-  orders         Order[]
-  accounts       Account[]
-  sessions       Session[]
+  id                  String                   @id @default(uuid())
+  email               String                   @unique
+  name                String
+  password            String?
+  role                Role                     @default(USER)
+  avatar              String?
+  diamondBalance      Int                      @default(0)
+  points              Int                      @default(0)
+  level               Int                      @default(1)
+  gachaPityCounter    Int                      @default(0)
+  hasCompletedTenDraw Boolean                  @default(false)
+  provider            String?
+  providerId          String?
+  tiktokUsername      String?
+  tiktokUserId        String?
+  tiktokAccessToken   String?
+  tiktokRefreshToken  String?
+  tiktokTokenExpiry   DateTime?
+  tiktokLinkedAt      DateTime?
+  createdAt           DateTime                 @default(now())
+  updatedAt           DateTime                 @updatedAt
+  lastLoginAt         DateTime?
+  themePreference     String?                  @default("system")
+  accounts            Account[]
+  cart                Cart?
+  drawTickets         DrawTicket[]
+  gachaPulls          GachaPull[]
+  verificationJobs    MissionVerificationJob[]
+  orders              Order[]
+  purchases           Purchase[]
+  sessions            Session[]
+  transactions        Transaction[]
+  prizes              UserPrize[]
+  completedTasks      UserTask[]
 
   @@index([email])
   @@index([provider, providerId])
@@ -80,22 +49,20 @@ model User {
   @@map("users")
 }
 
-// NextAuth Models
 model Account {
   id                String  @id @default(cuid())
   userId            String
   type              String
   provider          String
   providerAccountId String
-  refresh_token     String? @db.Text
-  access_token      String? @db.Text
+  refresh_token     String?
+  access_token      String?
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String? @db.Text
+  id_token          String?
   session_state     String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
   @@map("accounts")
@@ -120,57 +87,29 @@ model VerificationToken {
   @@map("verification_tokens")
 }
 
-enum Role {
-  USER
-  ADMIN
-  ARTIST
-}
-
-// =============================================================================
-// Task Management
-// =============================================================================
-
 model Task {
-  id          String   @id @default(uuid())
-  title       String
-  description String
-  type        TaskType
-  difficulty  Difficulty @default(EASY)
-
-  // Mission type (for TikTok missions)
-  missionType MissionType?
-
-  // TikTok mission targets
-  targetTikTokAccount String?  // TikTok username to follow
-  targetVideoUrl      String?  // TikTok video URL to like/repost
-  targetAudioId       String?  // TikTok audio ID to use
-
-  // Verification settings
-  autoVerify          Boolean  @default(false)  // Auto-verify via API or require manual verification
-  verificationStatus  String?  // Additional verification metadata
-  verificationType    VerificationType @default(MANUAL) // AUTO or MANUAL verification
-
-  // Rewards
-  points      Int      @default(0)
-  diamonds    Int      @default(0)
-  xpReward    Int      @default(0)   // XP reward amount
-
-  // Status
-  isActive    Boolean  @default(true)
-  startDate   DateTime?
-  endDate     DateTime?
-
-  // Limits
-  maxCompletions Int?  // Max times this task can be completed globally
-  completionCount Int @default(0)
-
-  // Timestamps
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  // Relations
-  completions UserTask[]
-  verificationJobs MissionVerificationJob[]
+  id                  String                   @id @default(uuid())
+  title               String
+  description         String
+  type                TaskType
+  difficulty          Difficulty               @default(EASY)
+  missionType         MissionType?
+  targetTikTokAccount String?
+  targetVideoUrl      String?
+  targetAudioId       String?
+  autoVerify          Boolean                  @default(false)
+  verificationStatus  String?
+  points              Int                      @default(0)
+  diamonds            Int                      @default(0)
+  isActive            Boolean                  @default(true)
+  startDate           DateTime?
+  endDate             DateTime?
+  maxCompletions      Int?
+  completionCount     Int                      @default(0)
+  createdAt           DateTime                 @default(now())
+  updatedAt           DateTime                 @updatedAt
+  verificationJobs    MissionVerificationJob[]
+  completions         UserTask[]
 
   @@index([type])
   @@index([isActive])
@@ -178,63 +117,21 @@ model Task {
   @@map("tasks")
 }
 
-enum TaskType {
-  SOCIAL      // Follow, share, like
-  CONTENT     // Write review, create content
-  DAILY       // Daily check-in
-  PROFILE     // Complete profile
-  REFERRAL    // Invite friends
-  PURCHASE    // Make a purchase
-  EVENT       // Attend event
-}
-
-enum MissionType {
-  FOLLOW      // Follow a TikTok account
-  LIKE        // Like a TikTok video
-  REPOST      // Repost/share a TikTok video
-  USE_AUDIO   // Create a video using specific audio
-}
-
-enum Difficulty {
-  EASY
-  MEDIUM
-  HARD
-}
-
-enum VerificationType {
-  AUTO    // Automatic verification via API
-  MANUAL  // Manual screenshot verification by admin
-}
-
-// =============================================================================
-// User Task Completion
-// =============================================================================
-
 model UserTask {
-  id          String   @id @default(uuid())
-  userId      String
-  taskId      String
-
-  // Completion details
-  submittedAt DateTime @default(now())  // When user submitted
-  completedAt DateTime?  // When task was verified and completed
-  pointsEarned Int
-  diamondsEarned Int
-  xpEarned     Int      @default(0)  // XP earned from this task
-
-  // Screenshot verification
-  screenshotUrl String?  // URL of uploaded screenshot for manual verification
-
-  // Verification
-  verified    Boolean  @default(false)
-  verifiedAt  DateTime?
-  verifiedBy  String?  // Admin user ID
-  verificationStatus VerificationStatus @default(PENDING)
-
-  // Relations
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  task        Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
-  verificationJob MissionVerificationJob?
+  id                 String                  @id @default(uuid())
+  userId             String
+  taskId             String
+  submittedAt        DateTime                @default(now())
+  completedAt        DateTime?
+  pointsEarned       Int
+  diamondsEarned     Int
+  verified           Boolean                 @default(false)
+  verifiedAt         DateTime?
+  verifiedBy         String?
+  verificationStatus VerificationStatus      @default(PENDING)
+  verificationJob    MissionVerificationJob?
+  task               Task                    @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  user               User                    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, taskId])
   @@index([userId])
@@ -243,150 +140,74 @@ model UserTask {
   @@map("user_tasks")
 }
 
-enum VerificationStatus {
-  PENDING
-  APPROVED
-  FAILED
-}
-
-// =============================================================================
-// Prize System
-// =============================================================================
-
 model Prize {
-  id          String   @id @default(uuid())
-  name        String
-  description String
-  rarity      Rarity
-
-  // Prize details
-  image       String?
-  value       Int      @default(0)  // Diamond value
-  type        PrizeType
-
-  // Availability
-  isActive    Boolean  @default(true)
-  stock       Int?     // Null = unlimited
-
-  // Timestamps
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  // Relations
-  userPrizes   UserPrize[]
+  id           String        @id @default(uuid())
+  name         String
+  description  String
+  rarity       Rarity
+  image        String?
+  value        Int           @default(0)
+  type         PrizeType
+  isActive     Boolean       @default(true)
+  stock        Int?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
   gachaItems   GachaItem[]
   gachaPulls   GachaPull[]
   premiumPacks PremiumPack[]
+  userPrizes   UserPrize[]
 
   @@index([rarity])
   @@index([isActive])
   @@map("prizes")
 }
 
-enum Rarity {
-  COMMON      // Common items
-  RARE        // Rare items
-  SR          // Super Rare
-  SSR         // Super Super Rare items
-  UR          // Ultra Rare (highest rarity for Aura Zone)
-  LEGENDARY   // Legendary items (legacy, kept for compatibility)
-}
-
-enum PrizeType {
-  PHYSICAL    // Physical merchandise
-  DIGITAL     // Digital content
-  EXPERIENCE  // Meet & greet, concert tickets
-  DISCOUNT    // Discount codes
-  EXCLUSIVE   // Exclusive content access
-}
-
-// =============================================================================
-// User Prize Ownership
-// =============================================================================
-
 model UserPrize {
-  id          String   @id @default(uuid())
-  userId      String
-  prizeId     String
-  
-  // Acquisition details
-  acquiredAt  DateTime @default(now())
-  source      PrizeSource
-  
-  // Redemption
-  redeemed    Boolean  @default(false)
-  redeemedAt  DateTime?
-  
-  // Relations
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  prize       Prize    @relation(fields: [prizeId], references: [id], onDelete: Cascade)
-  
+  id         String      @id @default(uuid())
+  userId     String
+  prizeId    String
+  acquiredAt DateTime    @default(now())
+  source     PrizeSource
+  redeemed   Boolean     @default(false)
+  redeemedAt DateTime?
+  prize      Prize       @relation(fields: [prizeId], references: [id], onDelete: Cascade)
+  user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   @@index([userId])
   @@index([prizeId])
   @@map("user_prizes")
 }
 
-enum PrizeSource {
-  GACHA
-  PURCHASE
-  REWARD
-  GIFT
-}
-
-// =============================================================================
-// Gacha System
-// =============================================================================
-
 model GachaItem {
-  id          String   @id @default(uuid())
+  id          String      @id @default(uuid())
   prizeId     String
-  
-  // Probability (0-100)
   probability Float
-  
-  // Pity system
-  pityCounter Int      @default(0)
-  
-  // Status
-  isActive    Boolean  @default(true)
-  
-  // Timestamps
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  
-  // Relations
-  prize       Prize    @relation(fields: [prizeId], references: [id], onDelete: Cascade)
+  pityCounter Int         @default(0)
+  isActive    Boolean     @default(true)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  prize       Prize       @relation(fields: [prizeId], references: [id], onDelete: Cascade)
   pulls       GachaPull[]
-  
+
   @@index([isActive])
   @@map("gacha_items")
 }
 
 model GachaPull {
-  id          String   @id @default(uuid())
-  userId      String
-  gachaItemId String
-  prizeId     String?  // Prize won (if any)
-
-  // Pull details
-  pulledAt    DateTime @default(now())
-  cost        Int      // Diamonds spent
-
-  // Multi-pull tracking
-  pullType    PullType @default(SINGLE)  // SINGLE or MULTI_10X
-  batchId     String?  // Groups 10x pulls together
-  pullIndex   Int?     // Position in 10x pull (0-9)
-
-  // SSR guarantee tracking
-  wasGuaranteed Boolean @default(false)  // True if this was a forced SSR from guarantee
-
-  // Result
-  won         Boolean  @default(false)
-
-  // Relations
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  gachaItem   GachaItem @relation(fields: [gachaItemId], references: [id], onDelete: Cascade)
-  prize       Prize?   @relation(fields: [prizeId], references: [id], onDelete: SetNull)
+  id            String    @id @default(uuid())
+  userId        String
+  gachaItemId   String
+  prizeId       String?
+  pulledAt      DateTime  @default(now())
+  cost          Int
+  pullType      PullType  @default(SINGLE)
+  batchId       String?
+  pullIndex     Int?
+  wasGuaranteed Boolean   @default(false)
+  won           Boolean   @default(false)
+  gachaItem     GachaItem @relation(fields: [gachaItemId], references: [id], onDelete: Cascade)
+  prize         Prize?    @relation(fields: [prizeId], references: [id])
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@index([gachaItemId])
@@ -394,39 +215,18 @@ model GachaPull {
   @@map("gacha_pulls")
 }
 
-enum PullType {
-  SINGLE
-  MULTI_10X
-}
-
-// =============================================================================
-// Draw Ticket System
-// =============================================================================
-
 model DrawTicket {
-  id          String   @id @default(uuid())
-  userId      String
-
-  // Ticket details
-  ticketType  TicketType @default(SINGLE)  // SINGLE or MULTI_10X
-  quantity    Int      @default(1)
-
-  // Source
-  source      String   // "PURCHASE", "REWARD", "GIFT", "PREMIUM_PACK"
-  sourceRef   String?  // Reference to purchase/pack ID
-
-  // Expiry
-  expiresAt   DateTime?  // Null = never expires
-
-  // Status
-  used        Boolean  @default(false)
-  usedAt      DateTime?
-
-  // Timestamps
-  createdAt   DateTime @default(now())
-
-  // Relations
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id         String     @id @default(uuid())
+  userId     String
+  ticketType TicketType @default(SINGLE)
+  quantity   Int        @default(1)
+  source     String
+  sourceRef  String?
+  expiresAt  DateTime?
+  used       Boolean    @default(false)
+  usedAt     DateTime?
+  createdAt  DateTime   @default(now())
+  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@index([used])
@@ -434,99 +234,41 @@ model DrawTicket {
   @@map("draw_tickets")
 }
 
-enum TicketType {
-  SINGLE      // Single draw ticket
-  MULTI_10X   // 10x draw ticket
-}
-
-// =============================================================================
-// Transaction History
-// =============================================================================
-
 model Transaction {
-  id          String   @id @default(uuid())
+  id          String            @id @default(uuid())
   userId      String
-  
-  // Transaction details
   type        TransactionType
-  amount      Int      // Diamonds or points
+  amount      Int
   currency    Currency
-  
-  // Description
   description String
-  reference   String?  // Reference to related entity (taskId, prizeId, etc.)
-  
-  // Status
+  reference   String?
   status      TransactionStatus @default(COMPLETED)
-  
-  // Timestamps
-  createdAt   DateTime @default(now())
-  
-  // Relations
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
+  createdAt   DateTime          @default(now())
+  user        User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   @@index([userId])
   @@index([type])
   @@index([createdAt])
   @@map("transactions")
 }
 
-enum TransactionType {
-  EARN        // Earned from tasks
-  SPEND       // Spent on gacha/prizes
-  PURCHASE    // Purchased with real money
-  GIFT        // Received as gift
-  REFUND      // Refunded
-  ADJUSTMENT  // Admin adjustment
-}
-
-enum Currency {
-  DIAMONDS
-  POINTS
-  TICKETS
-}
-
-enum TransactionStatus {
-  PENDING
-  COMPLETED
-  FAILED
-  CANCELLED
-}
-
-// =============================================================================
-// Monetization System - Premium Packs
-// =============================================================================
-
 model PremiumPack {
-  id          String   @id @default(uuid())
-  name        String
-  description String   @db.Text
-
-  // Pricing
-  price       Float    // Price in USD (or local currency)
-  currency    String   @default("USD")
-
-  // Pack contents
-  guaranteedPrizeId String?  // Guaranteed merchandise/prize
-  bonusTickets      Int      @default(0)  // Number of bonus draw tickets
-  bonusDiamonds     Int      @default(0)  // Bonus diamonds included
-
-  // Display
-  imageUrl    String?
-  featured    Boolean  @default(false)
-  sortOrder   Int      @default(0)
-  isHidden    Boolean  @default(true)  // Premium packs hidden by default (feature flag)
-
-  // Availability
-  isActive    Boolean  @default(true)
-
-  // Timestamps
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  // Relations
-  guaranteedPrize Prize?     @relation(fields: [guaranteedPrizeId], references: [id], onDelete: SetNull)
-  purchases       Purchase[]
+  id                String     @id @default(uuid())
+  name              String
+  description       String
+  price             Float
+  currency          String     @default("USD")
+  guaranteedPrizeId String?
+  bonusTickets      Int        @default(0)
+  bonusDiamonds     Int        @default(0)
+  imageUrl          String?
+  featured          Boolean    @default(false)
+  sortOrder         Int        @default(0)
+  isActive          Boolean    @default(true)
+  createdAt         DateTime   @default(now())
+  updatedAt         DateTime   @updatedAt
+  guaranteedPrize   Prize?     @relation(fields: [guaranteedPrizeId], references: [id])
+  purchases         Purchase[]
 
   @@index([isActive])
   @@index([featured])
@@ -534,34 +276,22 @@ model PremiumPack {
 }
 
 model Purchase {
-  id          String   @id @default(uuid())
-  userId      String
-  packId      String
-
-  // Payment details
-  klarnaOrderId   String?  @unique  // Klarna order ID
-  stripeSessionId String?  @unique  // Stripe session ID (alternative)
-  paymentMethod   PaymentMethod @default(KLARNA)
-
-  // Amount
-  amount      Float    // Amount paid
-  currency    String   @default("USD")
-
-  // Status
-  status      PurchaseStatus @default(PENDING)
-
-  // Fulfillment
-  itemsGranted    Boolean  @default(false)  // Whether items were granted to user
-  ticketsGranted  Boolean  @default(false)  // Whether tickets were granted
-  diamondsGranted Boolean  @default(false)  // Whether diamonds were granted
-
-  // Timestamps
-  createdAt   DateTime @default(now())
-  completedAt DateTime?
-
-  // Relations
-  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
-  pack        PremiumPack  @relation(fields: [packId], references: [id], onDelete: Restrict)
+  id              String         @id @default(uuid())
+  userId          String
+  packId          String
+  klarnaOrderId   String?        @unique
+  stripeSessionId String?        @unique
+  paymentMethod   PaymentMethod  @default(KLARNA)
+  amount          Float
+  currency        String         @default("USD")
+  status          PurchaseStatus @default(PENDING)
+  itemsGranted    Boolean        @default(false)
+  ticketsGranted  Boolean        @default(false)
+  diamondsGranted Boolean        @default(false)
+  createdAt       DateTime       @default(now())
+  completedAt     DateTime?
+  pack            PremiumPack    @relation(fields: [packId], references: [id])
+  user            User           @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@index([packId])
@@ -571,57 +301,26 @@ model Purchase {
   @@map("purchases")
 }
 
-enum PaymentMethod {
-  KLARNA
-  STRIPE
-  PAYPAL
-}
-
-enum PurchaseStatus {
-  PENDING       // Payment initiated but not completed
-  PROCESSING    // Payment received, processing fulfillment
-  COMPLETED     // Payment completed and items granted
-  FAILED        // Payment failed
-  CANCELLED     // Payment cancelled by user
-  REFUNDED      // Payment refunded
-}
-
-// =============================================================================
-// Mission Verification System
-// =============================================================================
-
 model MissionVerificationJob {
-  id          String   @id @default(uuid())
-  userId      String
-  taskId      String
-  userTaskId  String   @unique  // Link to UserTask record
-
-  // Job details
-  missionType MissionType
-  status      JobStatus @default(PENDING)
-
-  // Verification data
-  tiktokUsername  String?  // User's TikTok username
-  targetData      String?  // JSON string with target info (account, video URL, audio ID)
-
-  // Results
-  verificationResult Boolean?  // True if verified, false if failed, null if pending
-  errorMessage       String?   // Error message if verification failed
-
-  // Retry logic
-  attempts    Int      @default(0)
-  maxAttempts Int      @default(3)
-  nextRetryAt DateTime?
-
-  // Timestamps
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  completedAt DateTime?
-
-  // Relations
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  task        Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
-  userTask    UserTask @relation(fields: [userTaskId], references: [id], onDelete: Cascade)
+  id                 String      @id @default(uuid())
+  userId             String
+  taskId             String
+  userTaskId         String      @unique
+  missionType        MissionType
+  status             JobStatus   @default(PENDING)
+  tiktokUsername     String?
+  targetData         String?
+  verificationResult Boolean?
+  errorMessage       String?
+  attempts           Int         @default(0)
+  maxAttempts        Int         @default(3)
+  nextRetryAt        DateTime?
+  createdAt          DateTime    @default(now())
+  updatedAt          DateTime    @updatedAt
+  completedAt        DateTime?
+  task               Task        @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  user               User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userTask           UserTask    @relation(fields: [userTaskId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@index([taskId])
@@ -630,51 +329,24 @@ model MissionVerificationJob {
   @@map("mission_verification_jobs")
 }
 
-enum JobStatus {
-  PENDING       // Job created, waiting to be processed
-  PROCESSING    // Job is being processed
-  COMPLETED     // Job completed successfully
-  FAILED        // Job failed after all retries
-  CANCELLED     // Job was cancelled
-}
-
-// =============================================================================
-// Merchandise Store System
-// =============================================================================
-
 model Merchandise {
-  id          String   @id @default(uuid())
+  id          String               @id @default(uuid())
   name        String
-  description String   @db.Text
-  price       Float    // Price in USD
-
-  // Product details
+  description String
+  price       Float
   category    MerchandiseCategory
-  material    String?  // e.g., "100% Cotton", "Polyester Blend"
-  features    String[] // Array of feature strings
-  tags        String[] // Array of tags for search/filtering
-  productCode String?  @unique // Product code (e.g., TS-01, BP-01, BA-01 for Bundle A)
-
-  // Bundle configuration
-  isBundleOnly    Boolean  @default(false)  // True if item can only be purchased in bundles
-  bundleType      String?  // Bundle identifier (e.g., "A", "B") if this is a bundle or bundle item
-
-  // Inventory
-  inStock     Boolean  @default(true)
-  featured    Boolean  @default(false)
-  sortOrder   Int      @default(0)
-
-  // Images
-  imageUrl    String   // Primary product image
-
-  // Timestamps
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  // Relations
-  variants    MerchandiseVariant[]
-  images      MerchandiseImage[]
+  material    String?
+  features    String[]
+  tags        String[]
+  inStock     Boolean              @default(true)
+  featured    Boolean              @default(false)
+  sortOrder   Int                  @default(0)
+  imageUrl    String
+  createdAt   DateTime             @default(now())
+  updatedAt   DateTime             @updatedAt
   cartItems   CartItem[]
+  images      MerchandiseImage[]
+  variants    MerchandiseVariant[]
   orderItems  OrderItem[]
 
   @@index([category])
@@ -684,27 +356,19 @@ model Merchandise {
 }
 
 model MerchandiseVariant {
-  id             String   @id @default(uuid())
-  merchandiseId  String
-
-  // Variant details
-  size           String?  // e.g., "S", "M", "L", "XL", "XXL"
-  color          String?  // e.g., "Black", "White", "Red"
-  sku            String   @unique // Stock Keeping Unit
-
-  // Pricing and inventory
-  priceModifier  Float    @default(0) // Additional price for this variant
-  stockQuantity  Int      @default(0)
-  inStock        Boolean  @default(true)
-
-  // Timestamps
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
-
-  // Relations
-  merchandise    Merchandise @relation(fields: [merchandiseId], references: [id], onDelete: Cascade)
-  cartItems      CartItem[]
-  orderItems     OrderItem[]
+  id            String      @id @default(uuid())
+  merchandiseId String
+  size          String?
+  color         String?
+  sku           String      @unique
+  priceModifier Float       @default(0)
+  stockQuantity Int         @default(0)
+  inStock       Boolean     @default(true)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  cartItems     CartItem[]
+  merchandise   Merchandise @relation(fields: [merchandiseId], references: [id], onDelete: Cascade)
+  orderItems    OrderItem[]
 
   @@index([merchandiseId])
   @@index([sku])
@@ -712,69 +376,41 @@ model MerchandiseVariant {
 }
 
 model MerchandiseImage {
-  id             String   @id @default(uuid())
-  merchandiseId  String
-
-  // Image details
-  url            String
-  altText        String?
-  sortOrder      Int      @default(0)
-  isPrimary      Boolean  @default(false)
-
-  // Timestamps
-  createdAt      DateTime @default(now())
-
-  // Relations
-  merchandise    Merchandise @relation(fields: [merchandiseId], references: [id], onDelete: Cascade)
+  id            String      @id @default(uuid())
+  merchandiseId String
+  url           String
+  altText       String?
+  sortOrder     Int         @default(0)
+  isPrimary     Boolean     @default(false)
+  createdAt     DateTime    @default(now())
+  merchandise   Merchandise @relation(fields: [merchandiseId], references: [id], onDelete: Cascade)
 
   @@index([merchandiseId])
   @@map("merchandise_images")
 }
 
-enum MerchandiseCategory {
-  CLOTHING      // T-shirts, hoodies, jackets
-  ACCESSORIES   // Hats, bags, jewelry
-  MUSIC         // Vinyl, CDs, digital downloads
-  COLLECTIBLES  // Posters, stickers, pins
-  OTHER         // Miscellaneous items
-}
-
-// =============================================================================
-// Shopping Cart System
-// =============================================================================
-
 model Cart {
-  id        String   @id @default(uuid())
-  userId    String   @unique
-
-  // Timestamps
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  // Relations
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id        String     @id @default(uuid())
+  userId    String     @unique
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
   items     CartItem[]
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("carts")
 }
 
 model CartItem {
-  id          String   @id @default(uuid())
-  cartId      String
+  id            String              @id @default(uuid())
+  cartId        String
   merchandiseId String
-  variantId   String?  // Optional: specific size/color variant
-
-  // Item details
-  quantity    Int      @default(1)
-
-  // Timestamps
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  // Relations
-  cart        Cart     @relation(fields: [cartId], references: [id], onDelete: Cascade)
-  merchandise Merchandise @relation(fields: [merchandiseId], references: [id], onDelete: Cascade)
-  variant     MerchandiseVariant? @relation(fields: [variantId], references: [id], onDelete: SetNull)
+  variantId     String?
+  quantity      Int                 @default(1)
+  createdAt     DateTime            @default(now())
+  updatedAt     DateTime            @updatedAt
+  cart          Cart                @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  merchandise   Merchandise         @relation(fields: [merchandiseId], references: [id], onDelete: Cascade)
+  variant       MerchandiseVariant? @relation(fields: [variantId], references: [id])
 
   @@unique([cartId, merchandiseId, variantId])
   @@index([cartId])
@@ -782,56 +418,35 @@ model CartItem {
   @@map("cart_items")
 }
 
-// =============================================================================
-// Order Management System
-// =============================================================================
-
 model Order {
-  id              String   @id @default(uuid())
-  userId          String
-  orderNumber     String   @unique // Human-readable order number
-
-  // Order details
-  status          OrderStatus @default(PENDING)
-  totalAmount     Float
-  currency        String   @default("USD")
-
-  // Ticket rewards from purchases
-  ticketsEarned   Int      @default(0)  // Tickets generated from this order
-
-  // Shipping information
-  shippingName    String
-  shippingEmail   String
-  shippingAddress String   @db.Text
-  shippingCity    String
-  shippingState   String?
-  shippingZip     String
-  shippingCountry String
-  shippingPhone   String?
-
-  // Payment information
-  paymentMethod   PaymentMethod?
-  paymentId       String?  // Klarna/Stripe payment ID
-  stripeSessionId String?  // Stripe Checkout Session ID
-  stripePaymentIntentId String?  // Stripe Payment Intent ID
-  paidAt          DateTime?
-
-  // Tracking
-  trackingNumber  String?
-  shippedAt       DateTime?
-  deliveredAt     DateTime?
-
-  // Notes
-  customerNotes   String?  @db.Text
-  adminNotes      String?  @db.Text
-
-  // Timestamps
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-
-  // Relations
-  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  items           OrderItem[]
+  id                    String         @id @default(uuid())
+  userId                String
+  orderNumber           String         @unique
+  status                OrderStatus    @default(PENDING)
+  totalAmount           Float
+  currency              String         @default("USD")
+  shippingName          String
+  shippingEmail         String
+  shippingAddress       String
+  shippingCity          String
+  shippingState         String?
+  shippingZip           String
+  shippingCountry       String
+  shippingPhone         String?
+  paymentMethod         PaymentMethod?
+  paymentId             String?
+  stripeSessionId       String?
+  stripePaymentIntentId String?
+  paidAt                DateTime?
+  trackingNumber        String?
+  shippedAt             DateTime?
+  deliveredAt           DateTime?
+  customerNotes         String?
+  adminNotes            String?
+  createdAt             DateTime       @default(now())
+  updatedAt             DateTime       @updatedAt
+  items                 OrderItem[]
+  user                  User           @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@index([orderNumber])
@@ -840,77 +455,47 @@ model Order {
 }
 
 model OrderItem {
-  id             String   @id @default(uuid())
-  orderId        String
-  merchandiseId  String
-  variantId      String?
-
-  // Item details at time of purchase
-  name           String
-  description    String?  @db.Text
-  price          Float    // Price at time of purchase
-  quantity       Int
-  size           String?
-  color          String?
-  imageUrl       String?
-
-  // Timestamps
-  createdAt      DateTime @default(now())
-
-  // Relations
-  order          Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  merchandise    Merchandise @relation(fields: [merchandiseId], references: [id], onDelete: Restrict)
-  variant        MerchandiseVariant? @relation(fields: [variantId], references: [id], onDelete: SetNull)
+  id            String              @id @default(uuid())
+  orderId       String
+  merchandiseId String
+  variantId     String?
+  name          String
+  description   String?
+  price         Float
+  quantity      Int
+  size          String?
+  color         String?
+  imageUrl      String?
+  createdAt     DateTime            @default(now())
+  merchandise   Merchandise         @relation(fields: [merchandiseId], references: [id])
+  order         Order               @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  variant       MerchandiseVariant? @relation(fields: [variantId], references: [id])
 
   @@index([orderId])
   @@index([merchandiseId])
   @@map("order_items")
 }
 
-enum OrderStatus {
-  PENDING       // Order created, awaiting payment
-  PAID          // Payment received
-  PROCESSING    // Order being prepared
-  SHIPPED       // Order shipped
-  DELIVERED     // Order delivered
-  CANCELLED     // Order cancelled
-  REFUNDED      // Order refunded
-}
-
-// =============================================================================
-// Release/Video Management
-// =============================================================================
-
 model Release {
-  id          String   @id @default(uuid())
-  title       String
-  artist      String
-  description String?  @db.Text
-
-  // Video details
-  videoUrl      String   // YouTube, TikTok, or other video URL
-  videoId       String?  // Platform-specific video ID (e.g., YouTube video ID)
-  thumbnailUrl  String?  // Video thumbnail image URL
-  duration      String?  // Video duration (e.g., "3:45")
-
-  // Metadata
-  views         String?  // View count (stored as string for flexibility: "1.2M", "500K")
-  releaseDate   DateTime // Official release date
-  genre         String?  // Music genre
-  tags          String[] // Array of tags for search/filtering
-
-  // Streaming links
-  spotifyUrl    String?  // Spotify link
-  appleMusicUrl String?  // Apple Music link
-  tidalUrl      String?  // Tidal link
-  soundcloudUrl String?  // SoundCloud link
-
-  // Display settings
+  id            String   @id @default(uuid())
+  title         String
+  artist        String
+  description   String?
+  videoUrl      String
+  videoId       String?
+  thumbnailUrl  String?
+  duration      String?
+  views         String?
+  releaseDate   DateTime
+  genre         String?
+  tags          String[]
+  spotifyUrl    String?
+  appleMusicUrl String?
+  tidalUrl      String?
+  soundcloudUrl String?
   featured      Boolean  @default(false)
   sortOrder     Int      @default(0)
   isActive      Boolean  @default(true)
-
-  // Timestamps
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
@@ -921,3 +506,132 @@ model Release {
   @@map("releases")
 }
 
+enum Role {
+  USER
+  ADMIN
+  ARTIST
+}
+
+enum TaskType {
+  SOCIAL
+  CONTENT
+  DAILY
+  PROFILE
+  REFERRAL
+  PURCHASE
+  EVENT
+}
+
+enum MissionType {
+  FOLLOW
+  LIKE
+  REPOST
+  USE_AUDIO
+}
+
+enum Difficulty {
+  EASY
+  MEDIUM
+  HARD
+}
+
+enum VerificationStatus {
+  PENDING
+  APPROVED
+  FAILED
+}
+
+enum Rarity {
+  COMMON
+  RARE
+  EPIC
+  SSR
+  LEGENDARY
+}
+
+enum PrizeType {
+  PHYSICAL
+  DIGITAL
+  EXPERIENCE
+  DISCOUNT
+  EXCLUSIVE
+}
+
+enum PrizeSource {
+  GACHA
+  PURCHASE
+  REWARD
+  GIFT
+}
+
+enum PullType {
+  SINGLE
+  MULTI_10X
+}
+
+enum TicketType {
+  SINGLE
+  MULTI_10X
+}
+
+enum TransactionType {
+  EARN
+  SPEND
+  PURCHASE
+  GIFT
+  REFUND
+  ADJUSTMENT
+}
+
+enum Currency {
+  DIAMONDS
+  POINTS
+}
+
+enum TransactionStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  CANCELLED
+}
+
+enum PaymentMethod {
+  KLARNA
+  STRIPE
+  PAYPAL
+}
+
+enum PurchaseStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+  CANCELLED
+  REFUNDED
+}
+
+enum JobStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+  CANCELLED
+}
+
+enum MerchandiseCategory {
+  CLOTHING
+  ACCESSORIES
+  MUSIC
+  COLLECTIBLES
+  OTHER
+}
+
+enum OrderStatus {
+  PENDING
+  PAID
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+  REFUNDED
+}

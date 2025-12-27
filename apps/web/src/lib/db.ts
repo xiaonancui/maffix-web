@@ -20,21 +20,13 @@ function createPrismaClient(): PrismaClient {
     })
   }
 
-  // Add connection pooling parameters for Supabase
-  const databaseUrl = new URL(process.env.DATABASE_URL)
-
-  // Add pgbouncer=true for Supabase connection pooling
-  if (databaseUrl.hostname.includes('supabase.co')) {
-    databaseUrl.searchParams.set('pgbouncer', 'true')
-    databaseUrl.searchParams.set('connection_limit', '1')
-    databaseUrl.searchParams.set('pool_timeout', '20')
-  }
-
+  // Use DATABASE_URL as-is (already configured with sslmode=require)
+  // Don't modify it to avoid conflicts
   return new PrismaClient({
     log: process.env.NODE_ENV === 'development' ? ['error', 'warn'] : ['error'],
     datasources: {
       db: {
-        url: databaseUrl.toString(),
+        url: process.env.DATABASE_URL,
       },
     },
   })

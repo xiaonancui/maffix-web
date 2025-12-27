@@ -1,7 +1,7 @@
 import dynamic from 'next/dynamic'
 import SectionHeading from '@/components/marketing/SectionHeading'
 import FloatingElements from '@/components/marketing/FloatingElements'
-import HomepageGate from '@/components/marketing/HomepageGate'
+// import HomepageGate from '@/components/marketing/HomepageGate' // Disabled: Removed gate to show marketing content
 import { generateMetadata as generateSEOMetadata, generateOrganizationSchema, generateWebsiteSchema } from '@/lib/seo'
 
 // Dynamic imports for components with animations
@@ -115,9 +115,7 @@ export default function HomePage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(generateWebsiteSchema()) }}
       />
 
-      {/* Homepage OTP Gate */}
-      <HomepageGate>
-        {/* Hero Section - Full Screen with Floating Elements */}
+      {/* Hero Section - Full Screen with Floating Elements */}
         <div className="relative">
           <FloatingElements />
           <HeroFullScreen
@@ -276,7 +274,6 @@ export default function HomePage() {
             </div>
           </div>
         </section>
-      </HomepageGate>
     </div>
   )
 }
