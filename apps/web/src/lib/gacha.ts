@@ -21,17 +21,16 @@ import { Rarity } from '@prisma/client'
 export const RARITY_PROBABILITIES: Record<Rarity, number> = {
   COMMON: 60.0,      // 60% - Common items
   RARE: 25.0,        // 25% - Rare items
-  SR: 10.0,          // 10% - Super Rare items
+  EPIC: 10.0,        // 10% - Epic items
   SSR: 4.0,          // 4% - Super Super Rare items
-  UR: 1.0,           // 1% - Ultra Rare items (highest rarity)
-  LEGENDARY: 0.0,    // Legacy - unused
+  LEGENDARY: 1.0,    // 1% - Legendary items (highest rarity)
 }
 
 /**
  * Check if a rarity is SSR or higher (for guarantee mechanism)
  */
 export function isSSROrHigher(rarity: Rarity): boolean {
-  return rarity === 'SSR' || rarity === 'UR'
+  return rarity === 'SSR' || rarity === 'LEGENDARY'
 }
 
 /**
@@ -41,9 +40,8 @@ export function getRarityDisplayName(rarity: Rarity): string {
   const names: Record<Rarity, string> = {
     COMMON: 'Common',
     RARE: 'Rare',
-    SR: 'SR',
+    EPIC: 'Epic',
     SSR: 'SSR',
-    UR: 'UR',
     LEGENDARY: 'Legendary',
   }
   return names[rarity]
@@ -56,9 +54,8 @@ export function getRarityColor(rarity: Rarity): string {
   const colors: Record<Rarity, string> = {
     COMMON: '#9CA3AF',    // Gray
     RARE: '#3B82F6',      // Blue
-    SR: '#A855F7',        // Purple
+    EPIC: '#A855F7',      // Purple
     SSR: '#F59E0B',       // Amber/Gold
-    UR: '#EF4444',        // Red
     LEGENDARY: '#DC2626', // Dark Red
   }
   return colors[rarity]
@@ -227,10 +224,9 @@ function getRarityValue(rarity: Rarity): number {
   const values: Record<Rarity, number> = {
     COMMON: 1,
     RARE: 2,
-    SR: 3,
+    EPIC: 3,
     SSR: 4,
-    UR: 5,
-    LEGENDARY: 6,
+    LEGENDARY: 5,
   }
   return values[rarity]
 }

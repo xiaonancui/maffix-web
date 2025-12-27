@@ -12,18 +12,16 @@ interface DashboardNavProps {
   diamondBalance: number
   hasCompletedTenDraw: boolean
   userRole: string
-  ticketBalance?: number
+  points?: number
   level?: number
-  xp?: number
 }
 
 export default function DashboardNav({
   diamondBalance,
   hasCompletedTenDraw,
   userRole,
-  ticketBalance = 0,
+  points = 0,
   level = 1,
-  xp = 0,
 }: DashboardNavProps) {
   return (
     <nav className="bg-background border-b border-border shadow-lg">
@@ -63,13 +61,13 @@ export default function DashboardNav({
               <span className="text-primary">{diamondBalance.toLocaleString()}</span>
             </Link>
 
-            {/* Ticket Balance */}
+            {/* Points Balance */}
             <Link
               href="/transactions"
               className="hidden items-center gap-1.5 rounded-lg bg-secondary px-2 py-1.5 text-sm font-semibold text-foreground hover:bg-secondary/80 sm:flex transition-colors"
             >
               <Ticket className="h-4 w-4 text-primary" />
-              <span className="text-primary">{ticketBalance}</span>
+              <span className="text-primary">{points.toLocaleString()}</span>
             </Link>
 
             {/* Admin Panel Link (only for admins) */}
@@ -85,7 +83,7 @@ export default function DashboardNav({
             </Link>
 
             {/* Mobile Menu Button */}
-            <MobileMenu diamondBalance={diamondBalance} hasCompletedTenDraw={hasCompletedTenDraw} ticketBalance={ticketBalance} />
+            <MobileMenu diamondBalance={diamondBalance} hasCompletedTenDraw={hasCompletedTenDraw} points={points} />
           </div>
         </div>
       </div>

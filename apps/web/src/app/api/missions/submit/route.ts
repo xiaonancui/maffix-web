@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
-import { getXpForDifficulty } from '@/lib/level-system'
 
 export async function POST(request: NextRequest) {
   try {
@@ -43,9 +42,6 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Task already submitted' }, { status: 400 })
     }
 
-    // Calculate XP reward based on difficulty
-    const xpReward = mission.xpReward || getXpForDifficulty(mission.difficulty)
-
     // Create user task record with PENDING status
     const userTask = await db.userTask.create({
       data: {
@@ -54,12 +50,13 @@ export async function POST(request: NextRequest) {
         submittedAt: new Date(),
         pointsEarned: mission.points,
         diamondsEarned: mission.diamonds,
-        xpEarned: xpReward,
-        screenshotUrl,
         verificationStatus: 'PENDING',
         verified: false,
       },
     })
+
+    // Note: screenshotUrl removed as it doesn't exist in UserTask schema
+    // Screenshot handling needs to be implemented separately if needed
 
     // Note: Rewards will be granted after admin approval
     // This is a manual verification system

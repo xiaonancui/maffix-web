@@ -18,7 +18,7 @@ export default async function AuraZonePage() {
 
   // Fetch user data for balances
   let diamondBalance = 0
-  let ticketBalance = 0
+  let points = 0
 
   const allowTestAccounts =
     process.env.NODE_ENV === 'development' || process.env.ENABLE_TEST_ACCOUNTS === 'true'
@@ -32,7 +32,7 @@ export default async function AuraZonePage() {
   if (isTestAccount) {
     // Mock data for test accounts
     diamondBalance = session.user.role === 'ADMIN' ? 10000 : 3000
-    ticketBalance = session.user.role === 'ADMIN' ? 50 : 10
+    points = session.user.role === 'ADMIN' ? 50 : 10
   } else {
     try {
       const { db } = await import('@/lib/db')
@@ -41,12 +41,12 @@ export default async function AuraZonePage() {
         where: { id: session.user.id },
         select: {
           diamondBalance: true,
-          ticketBalance: true,
+          points: true,
         },
       })
 
       diamondBalance = user?.diamondBalance || 0
-      ticketBalance = user?.ticketBalance || 0
+      points = user?.points || 0
     } catch (error) {
       console.error('Failed to fetch user data:', error)
     }
@@ -79,18 +79,18 @@ export default async function AuraZonePage() {
           </p>
         </div>
 
-        {/* Ticket Balance */}
+        {/* Points Balance */}
         <div className="rounded-lg bg-card border border-border p-6 text-foreground shadow-lg hover:border-primary transition-colors">
           <p className="text-sm text-muted-foreground flex items-center gap-2">
             <Ticket className="h-4 w-4" />
-            Ticket Balance
+            Points Balance
           </p>
           <p className="text-4xl font-bold flex items-center gap-2 mt-2">
             <Ticket className="h-8 w-8 text-primary" />
-            {ticketBalance.toLocaleString()}
+            {points.toLocaleString()}
           </p>
           <p className="mt-2 text-xs text-muted-foreground">
-            {Math.floor(ticketBalance / 10)} 10x draws available
+            {Math.floor(points / 10)} 10x draws available
           </p>
         </div>
       </div>
@@ -98,7 +98,7 @@ export default async function AuraZonePage() {
       {/* Client Component for Interactive Elements */}
       <AuraZoneClient
         diamondBalance={diamondBalance}
-        ticketBalance={ticketBalance}
+        points={points}
         userId={session.user.id}
         userRole={session.user.role || 'USER'}
       />

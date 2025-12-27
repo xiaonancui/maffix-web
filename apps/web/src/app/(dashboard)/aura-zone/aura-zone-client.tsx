@@ -19,27 +19,27 @@ import { BANNER_TYPES, getRarityDistribution, type BannerType } from '@/lib/aura
 
 interface AuraZoneClientProps {
   diamondBalance: number
-  ticketBalance: number
+  points: number
   userId: string
   userRole: string
 }
 
 const TENX_DIAMOND_COST = 3000
-const TENX_TICKET_COST = 10
+const TENX_POINTS_COST = 10
 
 export default function AuraZoneClient({
   diamondBalance,
-  ticketBalance,
+  points,
 }: AuraZoneClientProps) {
   const [selectedBanner, setSelectedBanner] = useState<BannerType>('beat-like-dat')
   const [showConfirm, setShowConfirm] = useState(false)
-  const [paymentMethod, setPaymentMethod] = useState<'diamonds' | 'tickets'>('diamonds')
+  const [paymentMethod, setPaymentMethod] = useState<'diamonds' | 'points'>('diamonds')
   const [isPulling, setIsPulling] = useState(false)
   const [pullResults, setPullResults] = useState<any[]>([])
 
   const currentBanner = BANNER_TYPES[selectedBanner]
   const canAffordWithDiamonds = diamondBalance >= TENX_DIAMOND_COST
-  const canAffordWithTickets = ticketBalance >= TENX_TICKET_COST
+  const canAffordWithTickets = points >= TENX_POINTS_COST
   const canAffordEither = canAffordWithDiamonds || canAffordWithTickets
 
   const rarityDistribution = getRarityDistribution()
@@ -144,7 +144,7 @@ export default function AuraZoneClient({
           {/* Ticket Draw */}
           <button
             onClick={() => {
-              setPaymentMethod('tickets')
+              setPaymentMethod('points')
               setShowConfirm(true)
             }}
             disabled={!canAffordWithTickets || isPulling}
@@ -156,12 +156,12 @@ export default function AuraZoneClient({
           >
             <div className="mb-4 flex items-center justify-center gap-2">
               <Ticket className="h-6 w-6 text-primary" />
-              <span className="text-2xl font-bold text-primary">{TENX_TICKET_COST}</span>
+              <span className="text-2xl font-bold text-primary">{TENX_POINTS_COST}</span>
             </div>
             <p className="font-semibold text-foreground">10x Ticket Draw</p>
             <p className="mt-2 text-sm text-muted-foreground">
               {canAffordWithTickets
-                ? `You can do ${Math.floor(ticketBalance / TENX_TICKET_COST)} draws`
+                ? `You can do ${Math.floor(points / TENX_POINTS_COST)} draws`
                 : 'Not enough tickets'}
             </p>
           </button>
@@ -193,7 +193,7 @@ export default function AuraZoneClient({
             <AlertDialogDescription>
               This will cost{' '}
               <span className="font-bold text-primary">
-                {paymentMethod === 'diamonds' ? `${TENX_DIAMOND_COST} diamonds` : `${TENX_TICKET_COST} tickets`}
+                {paymentMethod === 'diamonds' ? `${TENX_DIAMOND_COST} diamonds` : `${TENX_POINTS_COST} tickets`}
               </span>
               . This action is <span className="text-red-500 font-semibold">non-refundable</span>.
             </AlertDialogDescription>

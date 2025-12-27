@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { hasAdminAccess } from '@/lib/rbac'
-import { calculateLevelUp } from '@/lib/level-system'
 
 export async function POST(request: NextRequest) {
   try {
@@ -44,13 +43,6 @@ export async function POST(request: NextRequest) {
     }
 
     if (action === 'approve') {
-      // Calculate level up rewards
-      const levelResult = calculateLevelUp(
-        userTask.user.xp || 0,
-        userTask.user.level || 1,
-        userTask.xpEarned || 0
-      )
-
       // Update user task as verified
       await db.userTask.update({
         where: { id: userTaskId },
@@ -62,14 +54,12 @@ export async function POST(request: NextRequest) {
         },
       })
 
-      // Update user balance and XP
+      // Update user balance
       await db.user.update({
         where: { id: userTask.user.id },
         data: {
           diamondBalance: { increment: userTask.diamondsEarned },
           points: { increment: userTask.pointsEarned },
-          xp: { increment: userTask.xpEarned },
-          level: levelResult.newLevel,
         },
       })
 
@@ -88,16 +78,17 @@ export async function POST(request: NextRequest) {
         })
       }
 
-      // Create transaction record for level up bonus diamonds
-      if (levelResult.totalDiamondReward > 0) {
+      // Create transaction record for points
+      if (userTask.pointsEarned > 0) {
         await db.transaction.create({
           data: {
             userId: userTask.user.id,
             type: 'EARN',
-            amount: levelResult.totalDiamondReward,
-            currency: 'DIAMONDS',
-            description: `Level Up Bonus: Lv.${levelResult.newLevel}`,
+            amount: userTask.pointsEarned,
+            currency: 'POINTS',
+            description: `Mission: ${userTask.task.title}`,
             status: 'COMPLETED',
+            reference: userTask.taskId,
           },
         })
       }
@@ -105,10 +96,6 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({
         success: true,
         message: 'Task approved and rewards granted',
-        levelUp: levelResult.levelsGained > 0 ? {
-          newLevel: levelResult.newLevel,
-          bonusDiamonds: levelResult.totalDiamondReward,
-        } : null,
       })
     } else if (action === 'reject') {
       // Update user task as rejected

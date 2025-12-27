@@ -11,11 +11,11 @@ import { Gem, Ticket } from 'lucide-react'
 export default function MobileMenu({
   diamondBalance,
   hasCompletedTenDraw,
-  ticketBalance = 0
+  points = 0
 }: {
   diamondBalance: number
   hasCompletedTenDraw: boolean
-  ticketBalance?: number
+  points?: number
 }) {
   const [isOpen, setIsOpen] = useState(false)
   const pathname = usePathname()
@@ -49,7 +49,7 @@ export default function MobileMenu({
               </div>
               <div className="flex items-center gap-1.5 rounded-lg bg-background px-3 py-1.5">
                 <Ticket className="h-4 w-4 text-primary" />
-                <span className="text-sm font-medium text-primary">{ticketBalance}</span>
+                <span className="text-sm font-medium text-primary">{points.toLocaleString()}</span>
               </div>
             </div>
 

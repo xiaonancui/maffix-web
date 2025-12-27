@@ -49,7 +49,6 @@ export default async function MissionVerificationPage() {
             difficulty: true,
             diamonds: true,
             points: true,
-            xpReward: true,
           },
         },
       },

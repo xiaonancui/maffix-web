@@ -10,7 +10,7 @@
 
 import type { Rarity } from '@prisma/client'
 
-export type AuraZoneRarity = 'UR' | 'SSR' | 'SR' | 'R' | 'N'
+export type AuraZoneRarity = 'LEGENDARY' | 'SSR' | 'EPIC' | 'RARE' | 'COMMON'
 
 export interface AuraZoneItem {
   id: string
@@ -40,25 +40,25 @@ export interface TenPullResult {
   pulls: PullResult[]
   batchId: string
   cost: number
-  costType: 'diamonds' | 'tickets'
+  costType: 'diamonds' | 'points'
   timestamp: Date
 }
 
 /**
  * New Aura Zone rarity probabilities (10-draw combined)
  * Based on typical gacha distribution:
- * - UR (Ultra Rare): 3%
+ * - LEGENDARY: 3%
  * - SSR (Super Super Rare): 15.65%
- * - SR (Super Rare): 25%
- * - R (Rare): 35%
- * - N (Normal): 21.35%
+ * - EPIC: 25%
+ * - RARE: 35%
+ * - COMMON: 21.35%
  */
 export const AURA_ZONE_PROBABILITIES = {
-  UR: 3.0,      // Ultra Rare - highest tier
+  LEGENDARY: 3.0,      // Legendary - highest tier
   SSR: 15.65,   // Super Super Rare
-  SR: 25.0,     // Super Rare
-  R: 35.0,      // Rare
-  N: 21.35,     // Normal
+  EPIC: 25.0,     // Epic
+  RARE: 35.0,      // Rare
+  COMMON: 21.35,     // Common
 } as const
 
 /**
@@ -66,16 +66,16 @@ export const AURA_ZONE_PROBABILITIES = {
  */
 export const AURA_ZONE_COSTS = {
   TENX_DIAMONDS: 3000,  // 10x draw cost in diamonds
-  TENX_TICKETS: 10,     // 10x draw cost in tickets
+  TENX_POINTS: 10,      // 10x draw cost in points
 } as const
 
 /**
  * Rarity display configuration
  */
 export const RARITY_CONFIG = {
-  UR: {
-    name: 'Ultra Rare',
-    shortName: 'UR',
+  LEGENDARY: {
+    name: 'Legendary',
+    shortName: 'LEG',
     color: 'bg-gradient-to-r from-red-600 to-orange-500',
     borderColor: 'border-red-500',
     textColor: 'text-red-500',
@@ -93,9 +93,9 @@ export const RARITY_CONFIG = {
     emoji: '⭐',
     animate: true,
   },
-  SR: {
-    name: 'Super Rare',
-    shortName: 'SR',
+  EPIC: {
+    name: 'Epic',
+    shortName: 'EP',
     color: 'bg-gradient-to-r from-purple-500 to-purple-700',
     borderColor: 'border-purple-500',
     textColor: 'text-purple-500',
@@ -103,7 +103,7 @@ export const RARITY_CONFIG = {
     emoji: '💜',
     animate: false,
   },
-  R: {
+  RARE: {
     name: 'Rare',
     shortName: 'R',
     color: 'bg-gradient-to-r from-blue-500 to-blue-700',
@@ -113,43 +113,13 @@ export const RARITY_CONFIG = {
     emoji: '💙',
     animate: false,
   },
-  N: {
-    name: 'Normal',
-    shortName: 'N',
+  COMMON: {
+    name: 'Common',
+    shortName: 'COM',
     color: 'bg-gradient-to-r from-gray-400 to-gray-600',
     borderColor: 'border-gray-400',
     textColor: 'text-gray-400',
     glow: 'shadow-gray-400/50',
-    emoji: '⚪',
-    animate: false,
-  },
-  LEGENDARY: {
-    name: 'Legendary',
-    shortName: 'LEG',
-    color: 'bg-gradient-to-r from-primary to-primary/80',
-    borderColor: 'border-primary',
-    textColor: 'text-primary',
-    glow: 'shadow-primary/50',
-    emoji: '🏆',
-    animate: true,
-  },
-  EPIC: {
-    name: 'Epic',
-    shortName: 'EP',
-    color: 'bg-gradient-to-r from-purple-600 to-purple-700',
-    borderColor: 'border-purple-600',
-    textColor: 'text-purple-600',
-    glow: 'shadow-purple-600/50',
-    emoji: '💜',
-    animate: false,
-  },
-  COMMON: {
-    name: 'Common',
-    shortName: 'COM',
-    color: 'bg-gradient-to-r from-secondary to-secondary',
-    borderColor: 'border-secondary',
-    textColor: 'text-secondary',
-    glow: 'shadow-secondary/50',
     emoji: '⚪',
     animate: false,
   },
@@ -159,7 +129,7 @@ export const RARITY_CONFIG = {
  * Get rarity configuration for a given rarity
  */
 export function getRarityConfig(rarity: string) {
-  return RARITY_CONFIG[rarity as keyof typeof RARITY_CONFIG] || RARITY_CONFIG.N
+  return RARITY_CONFIG[rarity as keyof typeof RARITY_CONFIG] || RARITY_CONFIG.COMMON
 }
 
 /**
@@ -170,24 +140,24 @@ export function generateRandomRarity(): AuraZoneRarity {
   const random = Math.random() * 100
   let cumulativeProbability = 0
 
-  // Check UR (0-3%)
-  cumulativeProbability += AURA_ZONE_PROBABILITIES.UR
-  if (random < cumulativeProbability) return 'UR' as const
+  // Check LEGENDARY (0-3%)
+  cumulativeProbability += AURA_ZONE_PROBABILITIES.LEGENDARY
+  if (random < cumulativeProbability) return 'LEGENDARY' as const
 
   // Check SSR (3-18.65%)
   cumulativeProbability += AURA_ZONE_PROBABILITIES.SSR
   if (random < cumulativeProbability) return 'SSR' as const
 
-  // Check SR (18.65-43.65%)
-  cumulativeProbability += AURA_ZONE_PROBABILITIES.SR
-  if (random < cumulativeProbability) return 'SR' as const
+  // Check EPIC (18.65-43.65%)
+  cumulativeProbability += AURA_ZONE_PROBABILITIES.EPIC
+  if (random < cumulativeProbability) return 'EPIC' as const
 
-  // Check R (43.65-78.65%)
-  cumulativeProbability += AURA_ZONE_PROBABILITIES.R
-  if (random < cumulativeProbability) return 'R' as const
+  // Check RARE (43.65-78.65%)
+  cumulativeProbability += AURA_ZONE_PROBABILITIES.RARE
+  if (random < cumulativeProbability) return 'RARE' as const
 
-  // Default to N (78.65-100%)
-  return 'N' as const
+  // Default to COMMON (78.65-100%)
+  return 'COMMON' as const
 }
 
 /**
@@ -195,11 +165,11 @@ export function generateRandomRarity(): AuraZoneRarity {
  */
 function mapAuraZoneRarityToPrisma(rarity: AuraZoneRarity): Rarity {
   const mapping: Record<AuraZoneRarity, Rarity> = {
-    'UR': 'UR',
+    'LEGENDARY': 'LEGENDARY',
     'SSR': 'SSR',
-    'SR': 'SR',
-    'R': 'RARE',
-    'N': 'COMMON',
+    'EPIC': 'EPIC',
+    'RARE': 'RARE',
+    'COMMON': 'COMMON',
   }
   return mapping[rarity]
 }
@@ -207,12 +177,12 @@ function mapAuraZoneRarityToPrisma(rarity: AuraZoneRarity): Rarity {
 /**
  * Perform a 10x pull and return results
  * @param items - Available gacha items
- * @param costType - 'diamonds' or 'tickets'
+ * @param costType - 'diamonds' or 'points'
  * @returns TenPullResult with array of 10 prizes
  */
 export function performTenPull(
   items: AuraZoneItem[],
-  costType: 'diamonds' | 'tickets' = 'diamonds'
+  costType: 'diamonds' | 'points' = 'diamonds'
 ): TenPullResult {
   const pulls: PullResult[] = []
   const batchId = `batch-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`
@@ -252,7 +222,7 @@ export function performTenPull(
   return {
     pulls,
     batchId,
-    cost: costType === 'diamonds' ? AURA_ZONE_COSTS.TENX_DIAMONDS : AURA_ZONE_COSTS.TENX_TICKETS,
+    cost: costType === 'diamonds' ? AURA_ZONE_COSTS.TENX_DIAMONDS : AURA_ZONE_COSTS.TENX_POINTS,
     costType,
     timestamp: new Date(),
   }
@@ -295,18 +265,18 @@ function createPlaceholderPull(prismaRarity: Rarity, auraRarity: AuraZoneRarity)
 /**
  * Check if user can afford a 10x pull
  */
-export function canAffordTenPull(diamondBalance: number, ticketBalance: number): {
+export function canAffordTenPull(diamondBalance: number, points: number): {
   canAffordWithDiamonds: boolean
-  canAffordWithTickets: boolean
+  canAffordWithPoints: boolean
   canAffordEither: boolean
 } {
   const canAffordWithDiamonds = diamondBalance >= AURA_ZONE_COSTS.TENX_DIAMONDS
-  const canAffordWithTickets = ticketBalance >= AURA_ZONE_COSTS.TENX_TICKETS
+  const canAffordWithPoints = points >= AURA_ZONE_COSTS.TENX_POINTS
 
   return {
     canAffordWithDiamonds,
-    canAffordWithTickets,
-    canAffordEither: canAffordWithDiamonds || canAffordWithTickets,
+    canAffordWithPoints,
+    canAffordEither: canAffordWithDiamonds || canAffordWithPoints,
   }
 }
 
@@ -319,11 +289,11 @@ export function getRarityDistribution(): Array<{
   config: typeof RARITY_CONFIG[keyof typeof RARITY_CONFIG]
 }> {
   return [
-    { rarity: 'UR', probability: AURA_ZONE_PROBABILITIES.UR, config: RARITY_CONFIG.UR },
+    { rarity: 'LEGENDARY', probability: AURA_ZONE_PROBABILITIES.LEGENDARY, config: RARITY_CONFIG.LEGENDARY },
     { rarity: 'SSR', probability: AURA_ZONE_PROBABILITIES.SSR, config: RARITY_CONFIG.SSR },
-    { rarity: 'SR', probability: AURA_ZONE_PROBABILITIES.SR, config: RARITY_CONFIG.SR },
-    { rarity: 'R', probability: AURA_ZONE_PROBABILITIES.R, config: RARITY_CONFIG.R },
-    { rarity: 'N', probability: AURA_ZONE_PROBABILITIES.N, config: RARITY_CONFIG.N },
+    { rarity: 'EPIC', probability: AURA_ZONE_PROBABILITIES.EPIC, config: RARITY_CONFIG.EPIC },
+    { rarity: 'RARE', probability: AURA_ZONE_PROBABILITIES.RARE, config: RARITY_CONFIG.RARE },
+    { rarity: 'COMMON', probability: AURA_ZONE_PROBABILITIES.COMMON, config: RARITY_CONFIG.COMMON },
   ]
 }
 
@@ -335,11 +305,11 @@ export function getExpectedValue() {
   const pulls = 10
 
   return {
-    UR: (pulls * AURA_ZONE_PROBABILITIES.UR) / 100,
+    LEGENDARY: (pulls * AURA_ZONE_PROBABILITIES.LEGENDARY) / 100,
     SSR: (pulls * AURA_ZONE_PROBABILITIES.SSR) / 100,
-    SR: (pulls * AURA_ZONE_PROBABILITIES.SR) / 100,
-    R: (pulls * AURA_ZONE_PROBABILITIES.R) / 100,
-    N: (pulls * AURA_ZONE_PROBABILITIES.N) / 100,
+    EPIC: (pulls * AURA_ZONE_PROBABILITIES.EPIC) / 100,
+    RARE: (pulls * AURA_ZONE_PROBABILITIES.RARE) / 100,
+    COMMON: (pulls * AURA_ZONE_PROBABILITIES.COMMON) / 100,
   }
 }
 

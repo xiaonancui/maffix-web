@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
       select: {
         id: true,
         diamondBalance: true,
-        ticketBalance: true,
+        points: true,
       },
     })
 
@@ -31,15 +31,15 @@ export async function POST(request: NextRequest) {
     }
 
     const TENX_DIAMOND_COST = 3000
-    const TENX_TICKET_COST = 10
+    const TENX_POINTS_COST = 10
 
     // Check if user can afford the pull
     if (paymentMethod === 'diamonds' && user.diamondBalance < TENX_DIAMOND_COST) {
       return NextResponse.json({ error: 'Insufficient diamonds' }, { status: 400 })
     }
 
-    if (paymentMethod === 'tickets' && user.ticketBalance < TENX_TICKET_COST) {
-      return NextResponse.json({ error: 'Insufficient tickets' }, { status: 400 })
+    if (paymentMethod === 'points' && user.points < TENX_POINTS_COST) {
+      return NextResponse.json({ error: 'Insufficient points' }, { status: 400 })
     }
 
     // Fetch active gacha items
@@ -73,8 +73,8 @@ export async function POST(request: NextRequest) {
     const result = performTenPull(auraZoneItems, paymentMethod)
 
     // Calculate cost and update user balance
-    const cost = paymentMethod === 'diamonds' ? -TENX_DIAMOND_COST : -TENX_TICKET_COST
-    const balanceField = paymentMethod === 'diamonds' ? 'diamondBalance' : 'ticketBalance'
+    const cost = paymentMethod === 'diamonds' ? -TENX_DIAMOND_COST : -TENX_POINTS_COST
+    const balanceField = paymentMethod === 'diamonds' ? 'diamondBalance' : 'points'
 
     // Create transaction record
     await db.transaction.create({
@@ -82,7 +82,7 @@ export async function POST(request: NextRequest) {
         userId: user.id,
         type: 'SPEND',
         amount: Math.abs(cost),
-        currency: paymentMethod === 'diamonds' ? 'DIAMONDS' : 'TICKETS',
+        currency: paymentMethod === 'diamonds' ? 'DIAMONDS' : 'POINTS',
         description: `Aura Zone 10x Draw (${bannerId})`,
         status: 'COMPLETED',
       },
@@ -161,7 +161,7 @@ export async function POST(request: NextRequest) {
       batchId: result.batchId,
       newBalance: paymentMethod === 'diamonds'
         ? user.diamondBalance + cost
-        : user.ticketBalance + cost,
+        : user.points + cost,
     })
   } catch (error) {
     console.error('Aura Zone pull error:', error)

@@ -52,23 +52,9 @@ export async function POST(request: NextRequest) {
     }
 
     // Code is valid - mark as verified
-    // If user is logged in, update their record
+    // Note: Database verification tracking removed as isHomepageVerified field doesn't exist
+    // The verification token is returned for client-side use
     const session = await getServerSession(authOptions)
-
-    if (session) {
-      try {
-        const { db } = await import('@/lib/db')
-        await db.user.update({
-          where: { id: session.user.id },
-          data: {
-            isHomepageVerified: true,
-            otpSecret: hashedEmail, // Store the hash as proof of verification
-          },
-        })
-      } catch (error) {
-        console.error('Failed to update user verification:', error)
-      }
-    }
 
     // Clear the used OTP
     otpStore.delete(hashedEmail)
@@ -91,6 +77,7 @@ export async function POST(request: NextRequest) {
 
 /**
  * GET endpoint to check if user is verified
+ * Note: Always returns false as isHomepageVerified field doesn't exist in schema
  */
 export async function GET(request: NextRequest) {
   try {
@@ -100,14 +87,10 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ verified: false })
     }
 
-    const { db } = await import('@/lib/db')
-    const user = await db.user.findUnique({
-      where: { id: session.user.id },
-      select: { isHomepageVerified: true },
-    })
-
+    // Since isHomepageVerified doesn't exist in schema, always return false
+    // Client should use verification token for session-based verification
     return NextResponse.json({
-      verified: user?.isHomepageVerified || false,
+      verified: false,
     })
   } catch (error) {
     console.error('OTP check error:', error)

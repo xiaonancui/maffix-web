@@ -97,7 +97,13 @@ export default async function ProfilePage() {
   }
 
   // Calculate level progress
-  const levelProgress = getLevelProgress(user.xp || 0, user.level || 1)
+  // Note: XP-based leveling removed, using simple level counter
+  const levelProgress = {
+    currentLevel: user.level || 1,
+    currentXP: 0,
+    xpNeeded: 100,
+    progressPercentage: 0,
+  }
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
@@ -133,10 +139,9 @@ export default async function ProfilePage() {
                   Lv.{user.level || 1}
                 </span>
               </div>
-              <Progress value={levelProgress.progressPercent} className="h-2" />
-              <div className="flex items-center justify-between mt-1 text-xs text-muted-foreground">
-                <span>{levelProgress.xpInCurrentLevel} XP</span>
-                <span>{levelProgress.xpToNextLevel} XP to Lv.{levelProgress.nextLevel.level}</span>
+              {/* Note: XP-based leveling removed, showing level only */}
+              <div className="text-xs text-muted-foreground text-center">
+                Current Level
               </div>
             </div>
 
@@ -154,23 +159,8 @@ export default async function ProfilePage() {
               <div className="flex items-center justify-between">
                 <span className="text-sm text-muted-foreground flex items-center gap-1.5">
                   <Ticket className="h-4 w-4" />
-                  Tickets
+                  Points
                 </span>
-                <span className="font-semibold text-foreground">
-                  {user.ticketBalance?.toLocaleString() || 0}
-                </span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-muted-foreground flex items-center gap-1.5">
-                  <Star className="h-4 w-4" />
-                  XP (Total)
-                </span>
-                <span className="font-semibold text-foreground">
-                  {user.xp?.toLocaleString() || 0}
-                </span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-muted-foreground">Points</span>
                 <span className="font-semibold text-foreground">
                   {user.points?.toLocaleString() || 0}
                 </span>
