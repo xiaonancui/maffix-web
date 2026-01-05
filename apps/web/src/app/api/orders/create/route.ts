@@ -69,26 +69,7 @@ export async function POST(request: Request) {
       )
     }
 
-    // Validate stock availability
-    for (const item of cart.items) {
-      if (!item.merchandise.inStock) {
-        return NextResponse.json(
-          { error: `${item.merchandise.name} is out of stock` },
-          { status: 400 }
-        )
-      }
-
-      if (item.variant) {
-        if (!item.variant.inStock || item.variant.stockQuantity < item.quantity) {
-          return NextResponse.json(
-            { error: `Insufficient stock for ${item.merchandise.name}` },
-            { status: 400 }
-          )
-        }
-      }
-    }
-
-    // Calculate total
+    // Calculate total (preliminary - will be recalculated in transaction)
     const totalAmount = cart.items.reduce((sum, item) => {
       const basePrice = item.merchandise.price
       const variantPrice = item.variant?.priceModifier || 0
@@ -98,8 +79,31 @@ export async function POST(request: Request) {
     // Generate order number
     const orderNumber = `ORD-${Date.now()}-${Math.random().toString(36).substring(2, 8).toUpperCase()}`
 
-    // Create order in transaction
+    // Create order in transaction with stock validation inside to prevent race conditions
     const order = await db.$transaction(async (tx) => {
+      // Re-validate stock inside transaction to prevent race conditions
+      for (const item of cart.items) {
+        // Check merchandise stock
+        const merchandise = await tx.merchandise.findUnique({
+          where: { id: item.merchandiseId },
+        })
+
+        if (!merchandise || !merchandise.inStock) {
+          throw new Error(`${item.merchandise.name} is out of stock`)
+        }
+
+        // Check variant stock with row-level locking
+        if (item.variantId) {
+          const variant = await tx.merchandiseVariant.findUnique({
+            where: { id: item.variantId },
+          })
+
+          if (!variant || !variant.inStock || variant.stockQuantity < item.quantity) {
+            throw new Error(`Insufficient stock for ${item.merchandise.name}`)
+          }
+        }
+      }
+
       // Create order
       const newOrder = await tx.order.create({
         data: {
@@ -165,10 +169,18 @@ export async function POST(request: Request) {
     })
   } catch (error: any) {
     console.error('Error creating order:', error)
+
+    // Handle stock validation errors specifically
+    if (error.message?.includes('out of stock') || error.message?.includes('Insufficient stock')) {
+      return NextResponse.json(
+        { error: error.message },
+        { status: 400 }
+      )
+    }
+
     return NextResponse.json(
       {
         error: 'Failed to create order',
-        message: error.message,
       },
       { status: 500 }
     )

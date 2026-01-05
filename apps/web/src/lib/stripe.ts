@@ -1,13 +1,20 @@
 import Stripe from 'stripe'
 
 // Initialize Stripe with secret key (server-side only)
-// Use a placeholder key during build if not provided
-const stripeSecretKey = process.env.STRIPE_SECRET_KEY || 'sk_test_placeholder_key_for_build'
+// Throw error if key is not provided in production
+const stripeSecretKey = process.env.STRIPE_SECRET_KEY
 
-export const stripe = new Stripe(stripeSecretKey, {
-  apiVersion: '2025-10-29.clover',
-  typescript: true,
-})
+if (!stripeSecretKey && process.env.NODE_ENV === 'production') {
+  throw new Error('STRIPE_SECRET_KEY environment variable is required in production')
+}
+
+// Use empty string for build time only - will fail at runtime if not configured
+export const stripe = stripeSecretKey
+  ? new Stripe(stripeSecretKey, {
+      apiVersion: '2025-10-29.clover',
+      typescript: true,
+    })
+  : null as unknown as Stripe // Type assertion for build time
 
 // Stripe publishable key for client-side (safe to expose)
 export const STRIPE_PUBLISHABLE_KEY = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || ''

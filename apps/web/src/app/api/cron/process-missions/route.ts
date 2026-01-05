@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { headers } from 'next/headers'
 import { processPendingJobs, getJobStatistics } from '@/lib/mission-worker'
+import { requireAdmin } from '@/lib/auth-helpers'
 
 /**
  * POST /api/cron/process-missions
@@ -82,13 +83,17 @@ export async function POST(request: Request) {
 
 /**
  * GET /api/cron/process-missions
- * 
- * Get job statistics (for monitoring)
+ *
+ * Get job statistics (admin only - for monitoring dashboard)
  */
 export async function GET(request: Request) {
   try {
+    // Require admin authentication for viewing statistics
+    const auth = await requireAdmin()
+    if (auth instanceof NextResponse) return auth
+
     const stats = await getJobStatistics()
-    
+
     return NextResponse.json({
       success: true,
       statistics: stats,
