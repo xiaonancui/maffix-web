@@ -23,7 +23,7 @@ async function main() {
       name: 'Test User',
       password: hashedPassword,
       role: 'USER',
-      diamondBalance: 500,
+      diamonds: 500,
       points: 100,
       level: 1,
     },
@@ -37,7 +37,7 @@ async function main() {
       name: 'Admin User',
       password: hashedPassword,
       role: 'ADMIN',
-      diamondBalance: 10000,
+      diamonds: 10000,
       points: 5000,
       level: 10,
     },
@@ -190,11 +190,30 @@ async function main() {
 
   console.log(`✅ Created ${6} prizes`)
 
+  // Create default gacha banner
+  console.log('🎪 Creating default gacha banner...')
+  const defaultBanner = await prisma.gachaBanner.create({
+    data: {
+      name: 'Default Diamond Banner',
+      slug: 'default-diamond',
+      description: 'The classic diamond gacha with exclusive prizes',
+      backgroundVideoUrl: 'https://example.com/default-video.mp4', // TODO: Replace with real video URL
+      currencyType: 'DIAMONDS',
+      costPerPull: 100, // 100 diamonds per single pull
+      startDate: new Date('2024-01-01'),
+      endDate: new Date('2030-12-31'), // Far future end date
+      isActive: true,
+      sortOrder: 0,
+    },
+  })
+  console.log(`✅ Created default banner: ${defaultBanner.name}`)
+
   // Create gacha items
   console.log('🎰 Creating gacha items...')
 
   await prisma.gachaItem.create({
     data: {
+      bannerId: defaultBanner.id,
       prizeId: prize1.id,
       probability: 40.0, // 40% chance
       isActive: true,
@@ -203,6 +222,7 @@ async function main() {
 
   await prisma.gachaItem.create({
     data: {
+      bannerId: defaultBanner.id,
       prizeId: prize2.id,
       probability: 25.0, // 25% chance
       isActive: true,
@@ -211,6 +231,7 @@ async function main() {
 
   await prisma.gachaItem.create({
     data: {
+      bannerId: defaultBanner.id,
       prizeId: prize3.id,
       probability: 15.0, // 15% chance
       isActive: true,
@@ -219,6 +240,7 @@ async function main() {
 
   await prisma.gachaItem.create({
     data: {
+      bannerId: defaultBanner.id,
       prizeId: prize4.id,
       probability: 5.0, // 5% chance
       isActive: true,
@@ -227,6 +249,7 @@ async function main() {
 
   await prisma.gachaItem.create({
     data: {
+      bannerId: defaultBanner.id,
       prizeId: prize5.id,
       probability: 10.0, // 10% chance
       isActive: true,
@@ -235,6 +258,7 @@ async function main() {
 
   await prisma.gachaItem.create({
     data: {
+      bannerId: defaultBanner.id,
       prizeId: prize6.id,
       probability: 5.0, // 5% chance
       isActive: true,

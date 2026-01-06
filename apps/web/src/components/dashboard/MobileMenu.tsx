@@ -9,11 +9,11 @@ import { NavIcon } from '@/components/icons/Icon'
 import { Gem, Ticket } from 'lucide-react'
 
 export default function MobileMenu({
-  diamondBalance,
+  diamonds,
   hasCompletedTenDraw,
   points = 0
 }: {
-  diamondBalance: number
+  diamonds: number
   hasCompletedTenDraw: boolean
   points?: number
 }) {
@@ -45,7 +45,7 @@ export default function MobileMenu({
             <div className="flex items-center gap-3 px-3 py-2">
               <div className="flex items-center gap-1.5 rounded-lg bg-background px-3 py-1.5">
                 <Gem className="h-4 w-4 text-primary" />
-                <span className="text-sm font-medium text-primary">{diamondBalance.toLocaleString()}</span>
+                <span className="text-sm font-medium text-primary">{diamonds.toLocaleString()}</span>
               </div>
               <div className="flex items-center gap-1.5 rounded-lg bg-background px-3 py-1.5">
                 <Ticket className="h-4 w-4 text-primary" />

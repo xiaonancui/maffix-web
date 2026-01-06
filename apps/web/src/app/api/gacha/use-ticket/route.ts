@@ -98,6 +98,7 @@ export async function POST(request: Request) {
       where: { isActive: true },
       include: {
         prize: true,
+        banner: true,
       },
     })
 
@@ -144,8 +145,10 @@ export async function POST(request: Request) {
         const gachaPull = await tx.gachaPull.create({
           data: {
             userId: user.id,
+            bannerId: selectedItem.bannerId,
             gachaItemId: selectedItem.id,
             prizeId: selectedItem.prizeId,
+            currencyUsed: 'TICKETS',
             cost: 0, // Free with ticket
             pullType: 'SINGLE',
             won: true,
@@ -258,8 +261,10 @@ export async function POST(request: Request) {
           const gachaPull = await tx.gachaPull.create({
             data: {
               userId: user.id,
+              bannerId: selectedItem.bannerId,
               gachaItemId: selectedItem.id,
               prizeId: selectedItem.prizeId,
+              currencyUsed: 'TICKETS',
               cost: 0, // Free with ticket
               pullType: 'MULTI_10X',
               batchId: batchId,

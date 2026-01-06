@@ -23,7 +23,7 @@ export default async function GachaPage() {
   // Always use mock data
   if (true) {
     user = {
-      diamondBalance: session.user.role === 'ADMIN' ? 10000 : 500,
+      diamonds: session.user.role === 'ADMIN' ? 10000 : 500,
       gachaPityCounter: 5,
     }
     tickets = { single: 2, multi10x: 1 }
@@ -130,10 +130,10 @@ export default async function GachaPage() {
           </p>
           <p className="text-4xl font-bold flex items-center gap-2">
             <Gem className="h-8 w-8 text-primary" />
-            {user?.diamondBalance.toLocaleString() || 0}
+            {user?.diamonds.toLocaleString() || 0}
           </p>
           <p className="mt-2 text-xs text-muted-foreground">
-            {Math.floor((user?.diamondBalance || 0) / GACHA_COST)} single pulls available
+            {Math.floor((user?.diamonds || 0) / GACHA_COST)} single pulls available
           </p>
         </div>
 
@@ -195,14 +195,14 @@ export default async function GachaPage() {
               <div className="text-2xl font-bold text-primary">{GACHA_COST}</div>
             </div>
             <GachaPullButton
-              currentBalance={user?.diamondBalance || 0}
+              currentBalance={user?.diamonds || 0}
               cost={GACHA_COST}
               pullType="single"
             />
             <p className="mt-2 text-xs text-muted-foreground">
-              {(user?.diamondBalance || 0) < GACHA_COST
+              {(user?.diamonds || 0) < GACHA_COST
                 ? 'Not enough diamonds'
-                : `You can pull ${Math.floor((user?.diamondBalance || 0) / GACHA_COST)} times`}
+                : `You can pull ${Math.floor((user?.diamonds || 0) / GACHA_COST)} times`}
             </p>
           </div>
 
@@ -229,14 +229,14 @@ export default async function GachaPage() {
               </div>
             </div>
             <GachaPullButton
-              currentBalance={user?.diamondBalance || 0}
+              currentBalance={user?.diamonds || 0}
               cost={GACHA_COST_10X}
               pullType="10x"
             />
             <p className="mt-2 text-xs text-muted-foreground">
-              {(user?.diamondBalance || 0) < GACHA_COST_10X
+              {(user?.diamonds || 0) < GACHA_COST_10X
                 ? 'Not enough diamonds'
-                : `You can do ${Math.floor((user?.diamondBalance || 0) / GACHA_COST_10X)} 10x draws`}
+                : `You can do ${Math.floor((user?.diamonds || 0) / GACHA_COST_10X)} 10x draws`}
             </p>
           </div>
         </div>

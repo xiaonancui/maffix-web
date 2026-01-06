@@ -133,7 +133,7 @@ export async function processPendingJobs(limit = 10): Promise<ProcessResult> {
           await tx.user.update({
             where: { id: userTask.userId },
             data: {
-              diamondBalance: {
+              diamonds: {
                 increment: userTask.diamondsEarned,
               },
               points: {

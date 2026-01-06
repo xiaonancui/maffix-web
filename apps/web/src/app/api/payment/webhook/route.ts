@@ -251,7 +251,7 @@ async function handleOrderCaptured(payload: any) {
         await tx.user.update({
           where: { id: purchase.userId },
           data: {
-            diamondBalance: {
+            diamonds: {
               increment: purchase.pack.bonusDiamonds,
             },
           },

@@ -9,7 +9,7 @@ import { ThemeToggle } from '@/components/theme/ThemeToggle'
 import { Gem, Ticket } from 'lucide-react'
 
 interface DashboardNavProps {
-  diamondBalance: number
+  diamonds: number
   hasCompletedTenDraw: boolean
   userRole: string
   points?: number
@@ -17,7 +17,7 @@ interface DashboardNavProps {
 }
 
 export default function DashboardNav({
-  diamondBalance,
+  diamonds,
   hasCompletedTenDraw,
   userRole,
   points = 0,
@@ -58,7 +58,7 @@ export default function DashboardNav({
               className="hidden items-center gap-1.5 rounded-lg bg-secondary px-2 py-1.5 text-sm font-semibold text-foreground hover:bg-secondary/80 sm:flex transition-colors"
             >
               <Gem className="h-4 w-4 text-primary" />
-              <span className="text-primary">{diamondBalance.toLocaleString()}</span>
+              <span className="text-primary">{diamonds.toLocaleString()}</span>
             </Link>
 
             {/* Points Balance */}
@@ -83,7 +83,7 @@ export default function DashboardNav({
             </Link>
 
             {/* Mobile Menu Button */}
-            <MobileMenu diamondBalance={diamondBalance} hasCompletedTenDraw={hasCompletedTenDraw} points={points} />
+            <MobileMenu diamonds={diamonds} hasCompletedTenDraw={hasCompletedTenDraw} points={points} />
           </div>
         </div>
       </div>

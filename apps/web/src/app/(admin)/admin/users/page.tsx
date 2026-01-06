@@ -15,7 +15,7 @@ interface User {
   name: string
   role: string
   avatar: string | null
-  diamondBalance: number
+  diamonds: number
   points: number
   level: number
   gachaPityCounter: number
@@ -157,7 +157,7 @@ export default function UsersPage() {
         <div className="space-y-1 text-sm">
           <div className="flex items-center gap-2 text-muted-foreground">
             <Gem className="h-4 w-4 text-yellow-400" />
-            {user.diamondBalance.toLocaleString()}
+            {user.diamonds.toLocaleString()}
             <Star className="h-4 w-4 text-blue-400 ml-2" />
             {user.points.toLocaleString()}
           </div>

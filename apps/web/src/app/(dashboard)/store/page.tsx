@@ -22,7 +22,7 @@ export default async function StorePage() {
     // Mock data for test accounts
     user = {
       id: session.user.id,
-      diamondBalance: 500,
+      diamonds: 500,
     }
 
     merchandise = [

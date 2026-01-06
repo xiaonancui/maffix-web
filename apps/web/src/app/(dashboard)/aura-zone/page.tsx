@@ -17,7 +17,7 @@ export default async function AuraZonePage() {
   }
 
   // Fetch user data for balances
-  let diamondBalance = 0
+  let diamonds = 0
   let points = 0
 
   const allowTestAccounts =
@@ -31,7 +31,7 @@ export default async function AuraZonePage() {
 
   if (isTestAccount) {
     // Mock data for test accounts
-    diamondBalance = session.user.role === 'ADMIN' ? 10000 : 3000
+    diamonds = session.user.role === 'ADMIN' ? 10000 : 3000
     points = session.user.role === 'ADMIN' ? 50 : 10
   } else {
     try {
@@ -40,12 +40,12 @@ export default async function AuraZonePage() {
       const user = await db.user.findUnique({
         where: { id: session.user.id },
         select: {
-          diamondBalance: true,
+          diamonds: true,
           points: true,
         },
       })
 
-      diamondBalance = user?.diamondBalance || 0
+      diamonds = user?.diamonds || 0
       points = user?.points || 0
     } catch (error) {
       console.error('Failed to fetch user data:', error)
@@ -72,10 +72,10 @@ export default async function AuraZonePage() {
           </p>
           <p className="text-4xl font-bold flex items-center gap-2 mt-2">
             <Gem className="h-8 w-8 text-primary" />
-            {diamondBalance.toLocaleString()}
+            {diamonds.toLocaleString()}
           </p>
           <p className="mt-2 text-xs text-muted-foreground">
-            {Math.floor(diamondBalance / 3000)} 10x draws available
+            {Math.floor(diamonds / 3000)} 10x draws available
           </p>
         </div>
 
@@ -97,7 +97,7 @@ export default async function AuraZonePage() {
 
       {/* Client Component for Interactive Elements */}
       <AuraZoneClient
-        diamondBalance={diamondBalance}
+        diamonds={diamonds}
         points={points}
         userId={session.user.id}
         userRole={session.user.role || 'USER'}

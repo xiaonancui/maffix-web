@@ -48,7 +48,7 @@ export async function GET(request: Request) {
         name: true,
         role: true,
         avatar: true,
-        diamondBalance: true,
+        diamonds: true,
         points: true,
         level: true,
         gachaPityCounter: true,

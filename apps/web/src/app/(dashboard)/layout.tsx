@@ -25,13 +25,13 @@ export default async function DashboardLayout({
       session.user.id?.includes('admin-'))
 
   // Fetch user's diamond balance, points, and level for display
-  let diamondBalance = 0
+  let diamonds = 0
   let points = 0
   let level = 1
   let hasCompletedTenDraw = false
 
   if (isTestAccount) {
-    diamondBalance = session.user.role === 'ADMIN' ? 10000 : 500
+    diamonds = session.user.role === 'ADMIN' ? 10000 : 500
     points = session.user.role === 'ADMIN' ? 50 : 5
     level = session.user.role === 'ADMIN' ? 10 : 1
     hasCompletedTenDraw = true // Test accounts have access to Store by default
@@ -42,13 +42,13 @@ export default async function DashboardLayout({
       const user = await db.user.findUnique({
         where: { id: session.user.id },
         select: {
-          diamondBalance: true,
+          diamonds: true,
           points: true,
           level: true,
           hasCompletedTenDraw: true,
         },
       })
-      diamondBalance = user?.diamondBalance || 0
+      diamonds = user?.diamonds || 0
       points = user?.points || 0
       level = user?.level || 1
       hasCompletedTenDraw = user?.hasCompletedTenDraw || false
@@ -61,7 +61,7 @@ export default async function DashboardLayout({
     <div className="min-h-screen bg-background flex flex-col">
       {/* Navigation */}
       <DashboardNav
-        diamondBalance={diamondBalance}
+        diamonds={diamonds}
         points={points}
         level={level}
         hasCompletedTenDraw={hasCompletedTenDraw}

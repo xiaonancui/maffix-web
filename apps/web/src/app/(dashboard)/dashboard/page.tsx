@@ -17,7 +17,7 @@ export default async function DashboardPage() {
     email: string
     avatar: string | null
     role: string
-    diamondBalance: number
+    diamonds: number
     points: number
     level: number
     createdAt: Date
@@ -30,7 +30,7 @@ export default async function DashboardPage() {
     email: session.user.email ?? 'unknown@maffix.com',
     avatar: null,
     role: (session.user.role as string) ?? 'USER',
-    diamondBalance: session.user.role === 'ADMIN' ? 10000 : 500,
+    diamonds: session.user.role === 'ADMIN' ? 10000 : 500,
     points: session.user.role === 'ADMIN' ? 5000 : 250,
     level: session.user.role === 'ADMIN' ? 10 : 3,
     createdAt: new Date(),
@@ -51,7 +51,7 @@ export default async function DashboardPage() {
     console.log('📊 Using mock data for user:', session.user.email)
     user = {
       ...fallbackUser,
-      diamondBalance: session.user.role === 'ADMIN' ? 10000 : 1250,
+      diamonds: session.user.role === 'ADMIN' ? 10000 : 1250,
       points: session.user.role === 'ADMIN' ? 5000 : 850,
       level: session.user.role === 'ADMIN' ? 10 : 5,
     }
@@ -175,7 +175,7 @@ export default async function DashboardPage() {
                 )}
               </div>
               <div className="flex items-baseline gap-2">
-                <span className="text-4xl font-bold text-foreground">{user.diamondBalance.toLocaleString()}</span>
+                <span className="text-4xl font-bold text-foreground">{user.diamonds.toLocaleString()}</span>
                 <Gem className="h-6 w-6 text-primary" />
               </div>
               <p className="mt-2 text-xs text-muted-foreground">

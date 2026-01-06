@@ -25,7 +25,7 @@ export default async function MissionsPage() {
     user = {
       id: session.user.id,
       tiktokUsername: null, // Not linked yet
-      diamondBalance: session.user.role === 'ADMIN' ? 10000 : 500,
+      diamonds: session.user.role === 'ADMIN' ? 10000 : 500,
     }
 
     missions = [
@@ -184,7 +184,7 @@ export default async function MissionsPage() {
             <div className="ml-3">
               <p className="text-sm font-medium text-muted-foreground">Your Diamonds</p>
               <p className="text-xl font-semibold text-foreground">
-                {user?.diamondBalance.toLocaleString() || 0}
+                {user?.diamonds.toLocaleString() || 0}
               </p>
             </div>
           </div>

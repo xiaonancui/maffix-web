@@ -11,7 +11,7 @@ INSERT INTO "User" (
   name, 
   password, 
   role, 
-  "diamondBalance", 
+  "diamonds", 
   points, 
   level, 
   "createdAt", 
@@ -38,7 +38,7 @@ INSERT INTO "User" (
   name, 
   password, 
   role, 
-  "diamondBalance", 
+  "diamonds", 
   points, 
   level, 
   "createdAt", 
@@ -65,7 +65,7 @@ INSERT INTO "User" (
   name, 
   password, 
   role, 
-  "diamondBalance", 
+  "diamonds", 
   points, 
   level, 
   "createdAt", 
@@ -86,7 +86,7 @@ VALUES (
 ON CONFLICT (email) DO NOTHING;
 
 -- Verify users were created
-SELECT id, email, name, role, "diamondBalance", points, level 
+SELECT id, email, name, role, "diamonds", points, level 
 FROM "User" 
 WHERE email IN ('user@maffix.com', 'admin@maffix.com', 'artist@maffix.com');
 

@@ -25,7 +25,7 @@ export default async function AdminDashboard() {
       email: 'john@example.com',
       role: 'USER',
       createdAt: new Date('2024-01-15'),
-      diamondBalance: 500,
+      diamonds: 500,
       points: 250,
     },
     {
@@ -34,7 +34,7 @@ export default async function AdminDashboard() {
       email: 'jane@example.com',
       role: 'USER',
       createdAt: new Date('2024-01-14'),
-      diamondBalance: 750,
+      diamonds: 750,
       points: 380,
     },
     {
@@ -43,7 +43,7 @@ export default async function AdminDashboard() {
       email: 'mike@example.com',
       role: 'ARTIST',
       createdAt: new Date('2024-01-13'),
-      diamondBalance: 1200,
+      diamonds: 1200,
       points: 600,
     },
     {
@@ -52,7 +52,7 @@ export default async function AdminDashboard() {
       email: 'sarah@example.com',
       role: 'USER',
       createdAt: new Date('2024-01-12'),
-      diamondBalance: 300,
+      diamonds: 300,
       points: 150,
     },
     {
@@ -61,7 +61,7 @@ export default async function AdminDashboard() {
       email: 'tom@example.com',
       role: 'USER',
       createdAt: new Date('2024-01-11'),
-      diamondBalance: 450,
+      diamonds: 450,
       points: 220,
     },
   ]
@@ -239,7 +239,7 @@ export default async function AdminDashboard() {
                     </span>
                   </td>
                   <td className="whitespace-nowrap px-6 py-4 text-sm text-muted-foreground">
-                    💎 {user.diamondBalance}
+                    💎 {user.diamonds}
                   </td>
                   <td className="whitespace-nowrap px-6 py-4 text-sm text-muted-foreground">
                     ⭐ {user.points}

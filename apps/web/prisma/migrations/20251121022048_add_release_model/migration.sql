@@ -60,7 +60,7 @@ CREATE TABLE "users" (
     "password" TEXT,
     "role" "Role" NOT NULL DEFAULT 'USER',
     "avatar" TEXT,
-    "diamondBalance" INTEGER NOT NULL DEFAULT 0,
+    "diamonds" INTEGER NOT NULL DEFAULT 0,
     "points" INTEGER NOT NULL DEFAULT 0,
     "level" INTEGER NOT NULL DEFAULT 1,
     "gachaPityCounter" INTEGER NOT NULL DEFAULT 0,

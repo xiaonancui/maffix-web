@@ -6,7 +6,7 @@ import { z } from 'zod'
 const updateUserSchema = z.object({
   name: z.string().min(1).optional(),
   role: z.enum(['USER', 'ADMIN', 'ARTIST']).optional(),
-  diamondBalance: z.number().int().min(0).optional(),
+  diamonds: z.number().int().min(0).optional(),
   points: z.number().int().min(0).optional(),
   level: z.number().int().min(1).optional(),
 })
@@ -187,7 +187,7 @@ export async function PATCH(
       data: {
         ...(data.name && { name: data.name }),
         ...(data.role && { role: data.role }),
-        ...(data.diamondBalance !== undefined && { diamondBalance: data.diamondBalance }),
+        ...(data.diamonds !== undefined && { diamonds: data.diamonds }),
         ...(data.points !== undefined && { points: data.points }),
         ...(data.level !== undefined && { level: data.level }),
       },
@@ -196,7 +196,7 @@ export async function PATCH(
         email: true,
         name: true,
         role: true,
-        diamondBalance: true,
+        diamonds: true,
         points: true,
         level: true,
       },

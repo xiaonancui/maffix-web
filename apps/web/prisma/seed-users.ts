@@ -23,7 +23,7 @@ async function main() {
       name: 'Test User',
       password: hashedPassword,
       role: 'USER',
-      diamondBalance: 500, // Give some diamonds for testing
+      diamonds: 500, // Give some diamonds for testing
       points: 100,
       level: 1,
     },
@@ -33,7 +33,7 @@ async function main() {
     email: testUser.email,
     name: testUser.name,
     role: testUser.role,
-    diamonds: testUser.diamondBalance,
+    diamonds: testUser.diamonds,
     points: testUser.points,
   })
 
@@ -46,7 +46,7 @@ async function main() {
       name: 'Admin User',
       password: hashedPassword,
       role: 'ADMIN',
-      diamondBalance: 10000,
+      diamonds: 10000,
       points: 5000,
       level: 10,
     },
@@ -56,7 +56,7 @@ async function main() {
     email: adminUser.email,
     name: adminUser.name,
     role: adminUser.role,
-    diamonds: adminUser.diamondBalance,
+    diamonds: adminUser.diamonds,
     points: adminUser.points,
   })
 
@@ -69,7 +69,7 @@ async function main() {
       name: 'Artist User',
       password: hashedPassword,
       role: 'ARTIST',
-      diamondBalance: 1000,
+      diamonds: 1000,
       points: 500,
       level: 5,
     },
@@ -79,7 +79,7 @@ async function main() {
     email: artistUser.email,
     name: artistUser.name,
     role: artistUser.role,
-    diamonds: artistUser.diamondBalance,
+    diamonds: artistUser.diamonds,
     points: artistUser.points,
   })
 

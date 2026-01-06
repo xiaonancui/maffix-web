@@ -265,12 +265,12 @@ function createPlaceholderPull(prismaRarity: Rarity, auraRarity: AuraZoneRarity)
 /**
  * Check if user can afford a 10x pull
  */
-export function canAffordTenPull(diamondBalance: number, points: number): {
+export function canAffordTenPull(diamonds: number, points: number): {
   canAffordWithDiamonds: boolean
   canAffordWithPoints: boolean
   canAffordEither: boolean
 } {
-  const canAffordWithDiamonds = diamondBalance >= AURA_ZONE_COSTS.TENX_DIAMONDS
+  const canAffordWithDiamonds = diamonds >= AURA_ZONE_COSTS.TENX_DIAMONDS
   const canAffordWithPoints = points >= AURA_ZONE_COSTS.TENX_POINTS
 
   return {

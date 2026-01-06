@@ -18,7 +18,7 @@ import { Gem, Ticket, Sparkles } from 'lucide-react'
 import { BANNER_TYPES, getRarityDistribution, type BannerType } from '@/lib/aura-zone'
 
 interface AuraZoneClientProps {
-  diamondBalance: number
+  diamonds: number
   points: number
   userId: string
   userRole: string
@@ -28,7 +28,7 @@ const TENX_DIAMOND_COST = 3000
 const TENX_POINTS_COST = 10
 
 export default function AuraZoneClient({
-  diamondBalance,
+  diamonds,
   points,
 }: AuraZoneClientProps) {
   const [selectedBanner, setSelectedBanner] = useState<BannerType>('beat-like-dat')
@@ -38,7 +38,7 @@ export default function AuraZoneClient({
   const [pullResults, setPullResults] = useState<any[]>([])
 
   const currentBanner = BANNER_TYPES[selectedBanner]
-  const canAffordWithDiamonds = diamondBalance >= TENX_DIAMOND_COST
+  const canAffordWithDiamonds = diamonds >= TENX_DIAMOND_COST
   const canAffordWithTickets = points >= TENX_POINTS_COST
   const canAffordEither = canAffordWithDiamonds || canAffordWithTickets
 
@@ -136,7 +136,7 @@ export default function AuraZoneClient({
             <p className="font-semibold text-foreground">10x Diamond Draw</p>
             <p className="mt-2 text-sm text-muted-foreground">
               {canAffordWithDiamonds
-                ? `You can do ${Math.floor(diamondBalance / TENX_DIAMOND_COST)} draws`
+                ? `You can do ${Math.floor(diamonds / TENX_DIAMOND_COST)} draws`
                 : 'Not enough diamonds'}
             </p>
           </button>

@@ -27,7 +27,7 @@ export default async function TransactionsPage() {
     // Mock data for test accounts
     user = {
       id: session.user.id,
-      diamondBalance: 500,
+      diamonds: 500,
     }
 
     transactions = [
@@ -86,7 +86,7 @@ export default async function TransactionsPage() {
         where: { id: session.user.id },
         select: {
           id: true,
-          diamondBalance: true,
+          diamonds: true,
         },
       })
 
@@ -102,7 +102,7 @@ export default async function TransactionsPage() {
       })
     } catch (error) {
       console.error('Database fetch failed:', error)
-      user = { id: session.user.id, diamondBalance: 0 }
+      user = { id: session.user.id, diamonds: 0 }
       transactions = []
     }
   }
@@ -180,7 +180,7 @@ export default async function TransactionsPage() {
           </div>
           <div className="text-3xl font-bold text-primary flex items-center gap-2">
             <Gem className="h-8 w-8" />
-            {user?.diamondBalance || 0}
+            {user?.diamonds || 0}
           </div>
         </div>
 

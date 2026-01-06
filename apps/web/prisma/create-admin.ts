@@ -27,7 +27,7 @@ async function createAdminUser() {
         name: 'Admin User',
         password: hashedPassword,
         role: 'ADMIN',
-        diamondBalance: 10000,
+        diamonds: 10000,
         points: 5000,
         level: 10,
       },

@@ -27,7 +27,7 @@ export default async function PremiumPacksPage() {
     // Mock data for test accounts
     user = {
       id: session.user.id,
-      diamondBalance: 10000,
+      diamonds: 10000,
     }
 
     packs = [
@@ -113,7 +113,7 @@ export default async function PremiumPacksPage() {
         where: { id: session.user.id },
         select: {
           id: true,
-          diamondBalance: true,
+          diamonds: true,
         },
       })
 
@@ -141,7 +141,7 @@ export default async function PremiumPacksPage() {
     } catch (error) {
       console.error('Error fetching premium packs:', error)
       // Use empty arrays if database fails
-      user = { id: session.user.id, diamondBalance: 0 }
+      user = { id: session.user.id, diamonds: 0 }
       packs = []
     }
   }
@@ -162,7 +162,7 @@ export default async function PremiumPacksPage() {
           <div>
             <p className="text-sm text-muted-foreground dark:text-primary-foreground dark:opacity-90">Your Diamond Balance</p>
             <p className="text-4xl font-bold text-foreground dark:text-primary-foreground">
-              💎 {user?.diamondBalance?.toLocaleString() || 0}
+              💎 {user?.diamonds?.toLocaleString() || 0}
             </p>
           </div>
           <div className="text-right">

@@ -89,7 +89,7 @@ export async function POST(request: NextRequest) {
           email: normalizedEmail,
           name: username,
           role: 'USER',
-          diamondBalance: 0,
+          diamonds: 0,
           points: 0,
           level: 1,
           provider: 'email',

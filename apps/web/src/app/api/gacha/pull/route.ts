@@ -111,7 +111,7 @@ export async function POST(request: Request) {
       where: { id: session.user.id },
       select: {
         id: true,
-        diamondBalance: true,
+        diamonds: true,
         _count: {
           select: {
             gachaPulls: true,
@@ -125,9 +125,9 @@ export async function POST(request: Request) {
     }
 
     // Check if user has enough diamonds
-    if (user.diamondBalance < GACHA_COST) {
+    if (user.diamonds < GACHA_COST) {
       return NextResponse.json(
-        { error: 'Insufficient diamonds', required: GACHA_COST, current: user.diamondBalance },
+        { error: 'Insufficient diamonds', required: GACHA_COST, current: user.diamonds },
         { status: 400 }
       )
     }
@@ -137,6 +137,7 @@ export async function POST(request: Request) {
       where: { isActive: true },
       include: {
         prize: true,
+        banner: true,
       },
     })
 
@@ -173,7 +174,7 @@ export async function POST(request: Request) {
       const updatedUser = await tx.user.update({
         where: { id: user.id },
         data: {
-          diamondBalance: {
+          diamonds: {
             decrement: GACHA_COST,
           },
         },
@@ -183,8 +184,10 @@ export async function POST(request: Request) {
       const gachaPull = await tx.gachaPull.create({
         data: {
           userId: user.id,
+          bannerId: selectedItem.bannerId,
           gachaItemId: selectedItem.id,
           prizeId: selectedItem.prizeId,
+          currencyUsed: 'DIAMONDS',
           cost: GACHA_COST,
           pullType: 'SINGLE',
           won: true,
@@ -223,7 +226,7 @@ export async function POST(request: Request) {
       return {
         gachaPull,
         userPrize,
-        newBalance: updatedUser.diamondBalance,
+        newBalance: updatedUser.diamonds,
       }
     })
 

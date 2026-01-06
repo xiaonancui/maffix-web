@@ -38,7 +38,7 @@ export default async function ProfilePage() {
       avatar: null,
       role: session.user.role || 'USER',
       tiktokUsername: null, // Not linked yet
-      diamondBalance: session.user.role === 'ADMIN' ? 10000 : 500,
+      diamonds: session.user.role === 'ADMIN' ? 10000 : 500,
       points: session.user.role === 'ADMIN' ? 5000 : 100,
       level: session.user.role === 'ADMIN' ? 10 : 1,
       xp: session.user.role === 'ADMIN' ? 3250 : 0,
@@ -182,7 +182,7 @@ export default async function ProfilePage() {
                   Diamonds
                 </span>
                 <span className="font-semibold text-foreground">
-                  {user.diamondBalance?.toLocaleString() || 0}
+                  {user.diamonds?.toLocaleString() || 0}
                 </span>
               </div>
               <div className="flex items-center justify-between">

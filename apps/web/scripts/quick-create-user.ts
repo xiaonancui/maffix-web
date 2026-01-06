@@ -22,7 +22,7 @@ async function main() {
         name: 'Test User',
         password: hashedPassword,
         role: 'USER',
-        diamondBalance: 500,
+        diamonds: 500,
         points: 100,
         level: 1,
       },
@@ -43,7 +43,7 @@ async function main() {
       email: true,
       name: true,
       role: true,
-      diamondBalance: true,
+      diamonds: true,
     },
   })
   

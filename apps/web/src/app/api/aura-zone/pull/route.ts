@@ -21,7 +21,7 @@ export async function POST(request: NextRequest) {
       where: { id: session.user.id },
       select: {
         id: true,
-        diamondBalance: true,
+        diamonds: true,
         points: true,
       },
     })
@@ -34,7 +34,7 @@ export async function POST(request: NextRequest) {
     const TENX_POINTS_COST = 10
 
     // Check if user can afford the pull
-    if (paymentMethod === 'diamonds' && user.diamondBalance < TENX_DIAMOND_COST) {
+    if (paymentMethod === 'diamonds' && user.diamonds < TENX_DIAMOND_COST) {
       return NextResponse.json({ error: 'Insufficient diamonds' }, { status: 400 })
     }
 
@@ -47,6 +47,7 @@ export async function POST(request: NextRequest) {
       where: { isActive: true },
       include: {
         prize: true,
+        banner: true,
       },
     })
 
@@ -74,7 +75,7 @@ export async function POST(request: NextRequest) {
 
     // Calculate cost and update user balance
     const cost = paymentMethod === 'diamonds' ? -TENX_DIAMOND_COST : -TENX_POINTS_COST
-    const balanceField = paymentMethod === 'diamonds' ? 'diamondBalance' : 'points'
+    const balanceField = paymentMethod === 'diamonds' ? 'diamonds' : 'points'
 
     // Create transaction record
     await db.transaction.create({
@@ -108,8 +109,10 @@ export async function POST(request: NextRequest) {
       await db.gachaPull.create({
         data: {
           userId: user.id,
+          bannerId: gachaItems[0].bannerId, // Using first item's banner as placeholder
           gachaItemId: auraZoneItems[0].id, // Placeholder
           prizeId: pull.prizeId,
+          currencyUsed: paymentMethod === 'diamonds' ? 'DIAMONDS' : 'POINTS',
           pulledAt: new Date(),
           cost: paymentMethod === 'diamonds' ? TENX_DIAMOND_COST / 10 : 0,
           pullType: 'MULTI_10X',
@@ -160,7 +163,7 @@ export async function POST(request: NextRequest) {
       pulls: formattedPulls,
       batchId: result.batchId,
       newBalance: paymentMethod === 'diamonds'
-        ? user.diamondBalance + cost
+        ? user.diamonds + cost
         : user.points + cost,
     })
   } catch (error) {

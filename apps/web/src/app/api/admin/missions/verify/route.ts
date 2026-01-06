@@ -58,7 +58,7 @@ export async function POST(request: NextRequest) {
       await db.user.update({
         where: { id: userTask.user.id },
         data: {
-          diamondBalance: { increment: userTask.diamondsEarned },
+          diamonds: { increment: userTask.diamondsEarned },
           points: { increment: userTask.pointsEarned },
         },
       })

@@ -9,7 +9,7 @@ interface User {
   email: string
   name: string
   role: string
-  diamondBalance: number
+  diamonds: number
   points: number
   level: number
 }
@@ -22,7 +22,7 @@ export default function EditUserPage({ params }: { params: { id: string } }) {
   const [formData, setFormData] = useState({
     name: '',
     role: 'USER',
-    diamondBalance: 0,
+    diamonds: 0,
     points: 0,
     level: 1,
   })
@@ -43,7 +43,7 @@ export default function EditUserPage({ params }: { params: { id: string } }) {
         setFormData({
           name: data.user.name,
           role: data.user.role,
-          diamondBalance: data.user.diamondBalance,
+          diamonds: data.user.diamonds,
           points: data.user.points,
           level: data.user.level,
         })
@@ -70,8 +70,8 @@ export default function EditUserPage({ params }: { params: { id: string } }) {
       newErrors.name = 'Name is required'
     }
 
-    if (formData.diamondBalance < 0) {
-      newErrors.diamondBalance = 'Diamond balance cannot be negative'
+    if (formData.diamonds < 0) {
+      newErrors.diamonds = 'Diamond balance cannot be negative'
     }
 
     if (formData.points < 0) {
@@ -181,12 +181,12 @@ export default function EditUserPage({ params }: { params: { id: string } }) {
           <FormField
             label="Diamond Balance"
             type="number"
-            value={formData.diamondBalance}
+            value={formData.diamonds}
             onChange={(value) => {
-              setFormData({ ...formData, diamondBalance: parseInt(value) || 0 })
-              setErrors({ ...errors, diamondBalance: '' })
+              setFormData({ ...formData, diamonds: parseInt(value) || 0 })
+              setErrors({ ...errors, diamonds: '' })
             }}
-            error={errors.diamondBalance}
+            error={errors.diamonds}
             required
             min={0}
             placeholder="0"

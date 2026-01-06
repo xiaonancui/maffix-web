@@ -39,7 +39,7 @@ export default async function MissionDetailPage({
     user = {
       id: session.user.id,
       tiktokUsername: '@testuser',
-      diamondBalance: 500,
+      diamonds: 500,
     }
 
     mission = {
@@ -78,7 +78,7 @@ export default async function MissionDetailPage({
           id: true,
           tiktokUsername: true,
           tiktokUserId: true,
-          diamondBalance: true,
+          diamonds: true,
         },
       })
 

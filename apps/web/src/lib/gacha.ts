@@ -67,6 +67,7 @@ export function getRarityColor(rarity: Rarity): string {
 
 export interface GachaItemWithPrize {
   id: string
+  bannerId: string
   prizeId: string
   probability: number
   prize: {

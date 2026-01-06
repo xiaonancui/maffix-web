@@ -14,9 +14,11 @@ model User {
   password            String?
   role                Role                     @default(USER)
   avatar              String?
-  diamondBalance      Int                      @default(0)
+  diamonds            Int                      @default(0) // Renamed from diamondBalance. Source: Missions. Sink: Aura Zone.
+  tickets             Int                      @default(0) // Source: Store (GBP merch). Sink: Aura Zone.
+  xp                  Int                      @default(0) // Lifetime XP accumulation
   points              Int                      @default(0)
-  level               Int                      @default(1)
+  level               Int                      @default(1) // Cached level (1-50), derived from XP
   gachaPityCounter    Int                      @default(0)
   hasCompletedTenDraw Boolean                  @default(false)
   provider            String?
@@ -178,38 +180,68 @@ model UserPrize {
   @@map("user_prizes")
 }
 
+model GachaBanner {
+  id                 String      @id @default(uuid())
+  name               String // "Beat like Dat", "SYBAU", "Special Event", etc.
+  slug               String      @unique // URL-friendly identifier
+  description        String?
+  backgroundVideoUrl String // MV video URL for banner UI
+  currencyType       Currency // DIAMONDS or TICKETS
+  costPerPull        Int // Cost for single pull (e.g., 100 diamonds or 1 ticket)
+  startDate          DateTime
+  endDate            DateTime
+  isActive           Boolean     @default(true)
+  sortOrder          Int         @default(0)
+  createdAt          DateTime    @default(now())
+  updatedAt          DateTime    @updatedAt
+  gachaItems         GachaItem[]
+  gachaPulls         GachaPull[]
+
+  @@index([isActive])
+  @@index([startDate, endDate])
+  @@index([slug])
+  @@map("gacha_banners")
+}
+
 model GachaItem {
   id          String      @id @default(uuid())
+  bannerId    String // Link to GachaBanner
   prizeId     String
   probability Float
   pityCounter Int         @default(0)
   isActive    Boolean     @default(true)
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
+  banner      GachaBanner @relation(fields: [bannerId], references: [id], onDelete: Cascade)
   prize       Prize       @relation(fields: [prizeId], references: [id], onDelete: Cascade)
   pulls       GachaPull[]
 
+  @@index([bannerId])
   @@index([isActive])
   @@map("gacha_items")
 }
 
 model GachaPull {
-  id            String    @id @default(uuid())
+  id            String      @id @default(uuid())
   userId        String
+  bannerId      String // Track which banner was used
   gachaItemId   String
   prizeId       String?
-  pulledAt      DateTime  @default(now())
+  currencyUsed  Currency // Track if DIAMONDS or TICKETS were spent
   cost          Int
-  pullType      PullType  @default(SINGLE)
+  pullType      PullType    @default(SINGLE)
   batchId       String?
   pullIndex     Int?
-  wasGuaranteed Boolean   @default(false)
-  won           Boolean   @default(false)
-  gachaItem     GachaItem @relation(fields: [gachaItemId], references: [id], onDelete: Cascade)
-  prize         Prize?    @relation(fields: [prizeId], references: [id])
-  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  wasGuaranteed Boolean     @default(false)
+  won           Boolean     @default(false)
+  pulledAt      DateTime    @default(now())
+  banner        GachaBanner @relation(fields: [bannerId], references: [id])
+  gachaItem     GachaItem   @relation(fields: [gachaItemId], references: [id], onDelete: Cascade)
+  prize         Prize?      @relation(fields: [prizeId], references: [id])
+  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
+  @@index([bannerId])
   @@index([gachaItemId])
   @@index([batchId])
   @@map("gacha_pulls")
@@ -591,17 +623,22 @@ enum TicketType {
 }
 
 enum TransactionType {
-  EARN
-  SPEND
-  PURCHASE
-  GIFT
-  REFUND
-  ADJUSTMENT
+  MISSION_REWARD // Completing Easy/Medium/Hard missions
+  GACHA_SPEND // Spending diamonds/tickets in Aura Zone
+  STORE_BONUS // Tickets awarded from merchandise purchases
+  LEVEL_UP // Bonus rewards for leveling up
+  EARN // Generic earning (backwards compatible)
+  SPEND // Generic spending (backwards compatible)
+  PURCHASE // Generic purchase (backwards compatible)
+  GIFT // Admin grants or promotional gifts
+  REFUND // Refunding spent currency
+  ADJUSTMENT // Manual admin adjustment
 }
 
 enum Currency {
-  DIAMONDS
-  POINTS
+  DIAMONDS // From missions → spend in Aura Zone
+  TICKETS // From store purchases (GBP merch) → spend in Aura Zone
+  POINTS // Legacy/general purpose points
 }
 
 enum TransactionStatus {
