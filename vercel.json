@@ -1,6 +1,16 @@
 {
   "buildCommand": "npm run build:vercel",
   "outputDirectory": ".next",
-  "installCommand": "npm install"
+  "installCommand": "npm install",
+  "crons": [
+    {
+      "path": "/api/cron/daily-reset",
+      "schedule": "0 0 * * *"
+    },
+    {
+      "path": "/api/cron/process-missions",
+      "schedule": "*/5 * * * *"
+    }
+  ]
 }
 

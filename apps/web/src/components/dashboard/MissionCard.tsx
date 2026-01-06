@@ -19,6 +19,7 @@ export interface MissionCardData {
   targetTikTokAccount?: string | null
   targetVideoUrl?: string | null
   targetAudioId?: string | null
+  recurrence?: string | null // "DAILY", "WEEKLY", "ONCE"
 }
 
 interface MissionCardProps {
@@ -84,6 +85,7 @@ export default function MissionCard({ mission, hasTikTokLinked, onViewDetail }: 
   const accountSlug = sanitizeTikTokAccount(mission.targetTikTokAccount)
   const accountUrl = accountSlug ? `https://www.tiktok.com/@${accountSlug}` : null
   const hasRewards = (mission.diamonds || 0) > 0 || (mission.points || 0) > 0
+  const isDaily = mission.recurrence === 'DAILY'
 
   return (
     <div className="flex h-full flex-col justify-between rounded-lg border border-border bg-secondary p-6 shadow-sm transition-all hover:shadow-md hover:border-primary">
@@ -95,13 +97,20 @@ export default function MissionCard({ mission, hasTikTokLinked, onViewDetail }: 
             </p>
             <h3 className="mt-1 text-lg font-bold text-foreground">{mission.title}</h3>
           </div>
-          <span
-            className={`rounded-full border px-3 py-1 text-xs font-semibold ${getDifficultyBadgeClasses(
-              mission.difficulty
-            )}`}
-          >
-            {mission.difficulty || 'UNKNOWN'}
-          </span>
+          <div className="flex flex-col gap-2">
+            <span
+              className={`rounded-full border px-3 py-1 text-xs font-semibold ${getDifficultyBadgeClasses(
+                mission.difficulty
+              )}`}
+            >
+              {mission.difficulty || 'UNKNOWN'}
+            </span>
+            {isDaily && (
+              <span className="rounded-full border border-orange-600 bg-background px-3 py-1 text-xs font-semibold text-orange-600 dark:bg-orange-900/20 dark:text-orange-400 flex items-center gap-1">
+                ⚡ Daily
+              </span>
+            )}
+          </div>
         </div>
 
         <p className="text-sm text-muted-foreground">{mission.description}</p>
@@ -122,6 +131,14 @@ export default function MissionCard({ mission, hasTikTokLinked, onViewDetail }: 
                 <p className="text-base font-semibold text-foreground">{mission.points ?? 0}</p>
               </div>
             </div>
+          </div>
+        )}
+
+        {isDaily && (
+          <div className="rounded-md bg-orange-500/10 p-2 text-center">
+            <p className="text-xs text-orange-600 dark:text-orange-400">
+              ⏰ Resets daily at 00:00 UTC
+            </p>
           </div>
         )}
       </div>

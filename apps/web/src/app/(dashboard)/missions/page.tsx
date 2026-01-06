@@ -26,6 +26,7 @@ export default async function MissionsPage() {
       id: session.user.id,
       tiktokUsername: null, // Not linked yet
       diamonds: session.user.role === 'ADMIN' ? 10000 : 500,
+      streakCount: 3, // Mock streak for testing
     }
 
     missions = [
@@ -42,6 +43,7 @@ export default async function MissionsPage() {
         difficulty: 'EASY',
         isActive: true,
         estimatedTime: '30 seconds',
+        recurrence: 'DAILY', // Daily mission
       },
       {
         id: 'mission-follow-2',
@@ -55,6 +57,7 @@ export default async function MissionsPage() {
         difficulty: 'EASY',
         isActive: true,
         estimatedTime: '30 seconds',
+        recurrence: 'DAILY', // Daily mission
       },
 
       // Main Missions (simplified category - LIKE, REPOST, USE_AUDIO all merged here)
@@ -70,6 +73,7 @@ export default async function MissionsPage() {
         difficulty: 'EASY',
         isActive: true,
         estimatedTime: '1 minute',
+        recurrence: 'ONCE', // One-time mission
       },
       {
         id: 'mission-like-2',
@@ -83,6 +87,7 @@ export default async function MissionsPage() {
         difficulty: 'EASY',
         isActive: true,
         estimatedTime: '1 minute',
+        recurrence: 'DAILY', // Daily mission
       },
       {
         id: 'mission-repost-1',
@@ -96,6 +101,7 @@ export default async function MissionsPage() {
         difficulty: 'MEDIUM',
         isActive: true,
         estimatedTime: '2 minutes',
+        recurrence: 'ONCE', // One-time mission
       },
       {
         id: 'mission-repost-2',
@@ -109,6 +115,7 @@ export default async function MissionsPage() {
         difficulty: 'MEDIUM',
         isActive: true,
         estimatedTime: '2 minutes',
+        recurrence: 'ONCE', // One-time mission
       },
       {
         id: 'mission-audio-1',
@@ -122,6 +129,7 @@ export default async function MissionsPage() {
         difficulty: 'HARD',
         isActive: true,
         estimatedTime: '15 minutes',
+        recurrence: 'ONCE', // One-time mission
       },
       {
         id: 'mission-audio-2',
@@ -135,6 +143,7 @@ export default async function MissionsPage() {
         difficulty: 'HARD',
         isActive: true,
         estimatedTime: '20 minutes',
+        recurrence: 'ONCE', // One-time mission
       },
     ]
 
@@ -172,7 +181,7 @@ export default async function MissionsPage() {
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
       {/* Header */}
-      <MissionsHeader />
+      <MissionsHeader streakCount={user?.streakCount || 0} />
 
       {/* User Stats */}
       <div className="mb-8 grid gap-4 sm:grid-cols-3">
@@ -224,6 +233,7 @@ export default async function MissionsPage() {
         userMissions={userMissions}
         hasTikTokLinked={!!user?.tiktokUsername}
         userId={user.id}
+        streakCount={user?.streakCount || 0}
       />
     </div>
   )

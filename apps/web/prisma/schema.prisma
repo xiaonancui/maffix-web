@@ -32,6 +32,8 @@ model User {
   createdAt           DateTime                 @default(now())
   updatedAt           DateTime                 @updatedAt
   lastLoginAt         DateTime?
+  streakCount         Int                      @default(0) // 7-day login streak counter
+  lastStreakDate      DateTime? // Last date streak was updated
   themePreference     String?                  @default("system")
   accounts            Account[]
   cart                Cart?
@@ -96,6 +98,7 @@ model Task {
   type                TaskType
   difficulty          Difficulty               @default(EASY)
   missionType         MissionType?
+  recurrence          String?              @default("ONCE") // "DAILY", "WEEKLY", "ONCE"
   targetTikTokAccount String?
   targetVideoUrl      String?
   targetAudioId       String?

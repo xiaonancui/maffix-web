@@ -2,6 +2,14 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 
+/**
+ * POST /api/missions/submit
+ *
+ * Legacy endpoint for backward compatibility.
+ * Redirects to the new /api/mission/verify endpoint.
+ *
+ * @deprecated Use /api/mission/verify instead
+ */
 export async function POST(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions)
@@ -13,59 +21,30 @@ export async function POST(request: NextRequest) {
     const body = await request.json()
     const { missionId, screenshotUrl } = body
 
-    if (!missionId || !screenshotUrl) {
-      return NextResponse.json({ error: 'Mission ID and screenshot URL are required' }, { status: 400 })
+    if (!missionId) {
+      return NextResponse.json({ error: 'Mission ID is required' }, { status: 400 })
     }
 
-    const { db } = await import('@/lib/db')
-
-    // Fetch mission details
-    const mission = await db.task.findUnique({
-      where: { id: missionId },
-    })
-
-    if (!mission || !mission.isActive) {
-      return NextResponse.json({ error: 'Mission not found or inactive' }, { status: 404 })
-    }
-
-    // Check if user already submitted this task
-    const existingSubmission = await db.userTask.findUnique({
-      where: {
-        userId_taskId: {
-          userId: session.user.id,
-          taskId: missionId,
-        },
+    // Forward to the new mission verify endpoint
+    const verifyUrl = new URL('/api/mission/verify', request.url)
+    const verifyRequest = new Request(verifyUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        cookie: request.headers.get('cookie') || '',
       },
+      body: JSON.stringify({
+        missionId,
+        evidence: screenshotUrl, // Map screenshotUrl to evidence
+      }),
     })
 
-    if (existingSubmission) {
-      return NextResponse.json({ error: 'Task already submitted' }, { status: 400 })
-    }
+    // Make internal API call
+    const verifyResponse = await fetch(verifyRequest)
+    const verifyData = await verifyResponse.json()
 
-    // Create user task record with PENDING status
-    const userTask = await db.userTask.create({
-      data: {
-        userId: session.user.id,
-        taskId: missionId,
-        submittedAt: new Date(),
-        pointsEarned: mission.points,
-        diamondsEarned: mission.diamonds,
-        verificationStatus: 'PENDING',
-        verified: false,
-      },
-    })
-
-    // Note: screenshotUrl removed as it doesn't exist in UserTask schema
-    // Screenshot handling needs to be implemented separately if needed
-
-    // Note: Rewards will be granted after admin approval
-    // This is a manual verification system
-
-    return NextResponse.json({
-      success: true,
-      userTask,
-      message: 'Task submitted for review. You will receive rewards once verified.',
-    })
+    // Return the response from the verify endpoint
+    return NextResponse.json(verifyData, { status: verifyResponse.status })
   } catch (error) {
     console.error('Mission submit error:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
