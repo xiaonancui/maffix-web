@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { performTenPull, getRarityConfig } from '@/lib/aura-zone'
+import { deductCurrency, InsufficientFundsError } from '@/lib/transaction'
+import { Currency, TransactionType } from '@prisma/client'
 
 export async function POST(request: NextRequest) {
   try {
@@ -16,13 +18,30 @@ export async function POST(request: NextRequest) {
 
     const { db } = await import('@/lib/db')
 
+    // Step 1: Validate Banner is Active
+    const banner = await db.gachaBanner.findUnique({
+      where: { slug: bannerId },
+    })
+
+    if (!banner) {
+      return NextResponse.json({ error: 'Banner not found' }, { status: 404 })
+    }
+
+    const now = new Date()
+    if (!banner.isActive || now < banner.startDate || now > banner.endDate) {
+      return NextResponse.json(
+        { error: 'This banner is not currently active' },
+        { status: 400 }
+      )
+    }
+
     // Fetch user data
     const user = await db.user.findUnique({
       where: { id: session.user.id },
       select: {
         id: true,
         diamonds: true,
-        points: true,
+        tickets: true, // Changed from points to tickets
       },
     })
 
@@ -31,15 +50,26 @@ export async function POST(request: NextRequest) {
     }
 
     const TENX_DIAMOND_COST = 3000
-    const TENX_POINTS_COST = 10
+    const TENX_TICKET_COST = 10 // Changed from POINTS to TICKETS
 
-    // Check if user can afford the pull
-    if (paymentMethod === 'diamonds' && user.diamonds < TENX_DIAMOND_COST) {
-      return NextResponse.json({ error: 'Insufficient diamonds' }, { status: 400 })
-    }
+    // Step 2: Validate Balance & Deduct Cost (Atomic Transaction)
+    const costAmount = paymentMethod === 'diamonds' ? TENX_DIAMOND_COST : TENX_TICKET_COST
+    const currency = paymentMethod === 'diamonds' ? Currency.DIAMONDS : Currency.TICKETS
 
-    if (paymentMethod === 'points' && user.points < TENX_POINTS_COST) {
-      return NextResponse.json({ error: 'Insufficient points' }, { status: 400 })
+    // Deduct currency using Phase 2 transaction system
+    try {
+      await deductCurrency(
+        user.id,
+        costAmount,
+        currency,
+        TransactionType.GACHA_SPEND,
+        bannerId
+      )
+    } catch (error) {
+      if (error instanceof InsufficientFundsError) {
+        return NextResponse.json({ error: error.message }, { status: 400 })
+      }
+      throw error
     }
 
     // Fetch active gacha items
@@ -70,79 +100,66 @@ export async function POST(request: NextRequest) {
       },
     }))
 
-    // Perform the 10x pull
+    // Step 3: RNG Logic (Weighted Random) - Perform the 10x pull
     const result = performTenPull(auraZoneItems, paymentMethod)
 
-    // Calculate cost and update user balance
-    const cost = paymentMethod === 'diamonds' ? -TENX_DIAMOND_COST : -TENX_POINTS_COST
-    const balanceField = paymentMethod === 'diamonds' ? 'diamonds' : 'points'
-
-    // Create transaction record
-    await db.transaction.create({
-      data: {
-        userId: user.id,
-        type: 'SPEND',
-        amount: Math.abs(cost),
-        currency: paymentMethod === 'diamonds' ? 'DIAMONDS' : 'POINTS',
-        description: `Aura Zone 10x Draw (${bannerId})`,
-        status: 'COMPLETED',
-      },
-    })
-
-    // Update user balance
-    await db.user.update({
-      where: { id: user.id },
-      data: {
-        [balanceField]: {
-          increment: cost,
-        },
-      },
-    })
-
-    // Create gacha pull records
+    // Step 4: Save Results to UserItem (wrap in transaction for atomicity)
     const batchId = result.batchId
 
-    for (let i = 0; i < result.pulls.length; i++) {
-      const pull = result.pulls[i]
+    await db.$transaction(async (tx) => {
+      for (let i = 0; i < result.pulls.length; i++) {
+        const pull = result.pulls[i]
 
-      // Create gacha pull record
-      await db.gachaPull.create({
-        data: {
-          userId: user.id,
-          bannerId: gachaItems[0].bannerId, // Using first item's banner as placeholder
-          gachaItemId: auraZoneItems[0].id, // Placeholder
-          prizeId: pull.prizeId,
-          currencyUsed: paymentMethod === 'diamonds' ? 'DIAMONDS' : 'POINTS',
-          pulledAt: new Date(),
-          cost: paymentMethod === 'diamonds' ? TENX_DIAMOND_COST / 10 : 0,
-          pullType: 'MULTI_10X',
-          batchId,
-          pullIndex: i,
-          won: true,
-        },
-      })
-
-      // If user won a prize, create user prize record
-      if (pull.prizeId) {
-        const existingPrize = await db.userPrize.findFirst({
-          where: {
+        // Create gacha pull record
+        await tx.gachaPull.create({
+          data: {
             userId: user.id,
+            bannerId: banner.id,
+            gachaItemId: auraZoneItems[0].id, // Placeholder - ideally match actual item
             prizeId: pull.prizeId,
+            currencyUsed: currency,
+            pulledAt: new Date(),
+            cost: costAmount / 10, // Per-pull cost
+            pullType: 'MULTI_10X',
+            batchId,
+            pullIndex: i,
+            won: true,
           },
         })
 
-        if (!existingPrize) {
-          await db.userPrize.create({
-            data: {
+        // Award prize to user (create UserPrize record)
+        if (pull.prizeId) {
+          // Check if user already has this prize (don't duplicate)
+          const existingPrize = await tx.userPrize.findFirst({
+            where: {
               userId: user.id,
               prizeId: pull.prizeId,
-              source: 'GACHA',
-              acquiredAt: new Date(),
             },
           })
+
+          if (!existingPrize) {
+            await tx.userPrize.create({
+              data: {
+                userId: user.id,
+                prizeId: pull.prizeId,
+                source: 'GACHA',
+                acquiredAt: new Date(),
+              },
+            })
+          }
         }
       }
-    }
+    })
+
+    // Step 5: Return list to frontend for animation
+    // Fetch updated user balance
+    const updatedUser = await db.user.findUnique({
+      where: { id: user.id },
+      select: {
+        diamonds: true,
+        tickets: true,
+      },
+    })
 
     // Format pull results for response
     const formattedPulls = result.pulls.map((pull) => {
@@ -155,6 +172,7 @@ export async function POST(request: NextRequest) {
         rarityDisplay: rarityConfig.shortName,
         rarityColor: rarityConfig.color,
         rarityBorder: rarityConfig.borderColor,
+        imageUrl: pull.imageUrl,
       }
     })
 
@@ -162,9 +180,12 @@ export async function POST(request: NextRequest) {
       success: true,
       pulls: formattedPulls,
       batchId: result.batchId,
-      newBalance: paymentMethod === 'diamonds'
-        ? user.diamonds + cost
-        : user.points + cost,
+      newBalance:
+        paymentMethod === 'diamonds'
+          ? updatedUser?.diamonds || 0
+          : updatedUser?.tickets || 0,
+      costAmount,
+      currency: paymentMethod,
     })
   } catch (error) {
     console.error('Aura Zone pull error:', error)

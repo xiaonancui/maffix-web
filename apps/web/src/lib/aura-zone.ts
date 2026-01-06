@@ -40,7 +40,7 @@ export interface TenPullResult {
   pulls: PullResult[]
   batchId: string
   cost: number
-  costType: 'diamonds' | 'points'
+  costType: 'diamonds' | 'tickets' // Changed from 'points' to 'tickets'
   timestamp: Date
 }
 
@@ -65,8 +65,8 @@ export const AURA_ZONE_PROBABILITIES = {
  * Cost constants for Aura Zone draws
  */
 export const AURA_ZONE_COSTS = {
-  TENX_DIAMONDS: 3000,  // 10x draw cost in diamonds
-  TENX_POINTS: 10,      // 10x draw cost in points
+  TENX_DIAMONDS: 3000, // 10x draw cost in diamonds
+  TENX_TICKETS: 10, // 10x draw cost in tickets (changed from POINTS)
 } as const
 
 /**
@@ -177,12 +177,12 @@ function mapAuraZoneRarityToPrisma(rarity: AuraZoneRarity): Rarity {
 /**
  * Perform a 10x pull and return results
  * @param items - Available gacha items
- * @param costType - 'diamonds' or 'points'
+ * @param costType - 'diamonds' or 'tickets' (changed from 'points')
  * @returns TenPullResult with array of 10 prizes
  */
 export function performTenPull(
   items: AuraZoneItem[],
-  costType: 'diamonds' | 'points' = 'diamonds'
+  costType: 'diamonds' | 'tickets' = 'diamonds'
 ): TenPullResult {
   const pulls: PullResult[] = []
   const batchId = `batch-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`
@@ -222,7 +222,10 @@ export function performTenPull(
   return {
     pulls,
     batchId,
-    cost: costType === 'diamonds' ? AURA_ZONE_COSTS.TENX_DIAMONDS : AURA_ZONE_COSTS.TENX_POINTS,
+    cost:
+      costType === 'diamonds'
+        ? AURA_ZONE_COSTS.TENX_DIAMONDS
+        : AURA_ZONE_COSTS.TENX_TICKETS,
     costType,
     timestamp: new Date(),
   }
@@ -264,19 +267,24 @@ function createPlaceholderPull(prismaRarity: Rarity, auraRarity: AuraZoneRarity)
 
 /**
  * Check if user can afford a 10x pull
+ * @param diamonds - User's diamond balance
+ * @param tickets - User's ticket balance (changed from points)
  */
-export function canAffordTenPull(diamonds: number, points: number): {
+export function canAffordTenPull(
+  diamonds: number,
+  tickets: number
+): {
   canAffordWithDiamonds: boolean
-  canAffordWithPoints: boolean
+  canAffordWithTickets: boolean
   canAffordEither: boolean
 } {
   const canAffordWithDiamonds = diamonds >= AURA_ZONE_COSTS.TENX_DIAMONDS
-  const canAffordWithPoints = points >= AURA_ZONE_COSTS.TENX_POINTS
+  const canAffordWithTickets = tickets >= AURA_ZONE_COSTS.TENX_TICKETS
 
   return {
     canAffordWithDiamonds,
-    canAffordWithPoints,
-    canAffordEither: canAffordWithDiamonds || canAffordWithPoints,
+    canAffordWithTickets,
+    canAffordEither: canAffordWithDiamonds || canAffordWithTickets,
   }
 }
 

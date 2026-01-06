@@ -18,7 +18,7 @@ export default async function AuraZonePage() {
 
   // Fetch user data for balances
   let diamonds = 0
-  let points = 0
+  let tickets = 0 // Changed from points to tickets
 
   const allowTestAccounts =
     process.env.NODE_ENV === 'development' || process.env.ENABLE_TEST_ACCOUNTS === 'true'
@@ -32,7 +32,7 @@ export default async function AuraZonePage() {
   if (isTestAccount) {
     // Mock data for test accounts
     diamonds = session.user.role === 'ADMIN' ? 10000 : 3000
-    points = session.user.role === 'ADMIN' ? 50 : 10
+    tickets = session.user.role === 'ADMIN' ? 50 : 10 // Changed from points to tickets
   } else {
     try {
       const { db } = await import('@/lib/db')
@@ -41,12 +41,12 @@ export default async function AuraZonePage() {
         where: { id: session.user.id },
         select: {
           diamonds: true,
-          points: true,
+          tickets: true, // Changed from points to tickets
         },
       })
 
       diamonds = user?.diamonds || 0
-      points = user?.points || 0
+      tickets = user?.tickets || 0 // Changed from points to tickets
     } catch (error) {
       console.error('Failed to fetch user data:', error)
     }
@@ -54,51 +54,12 @@ export default async function AuraZonePage() {
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-      {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-foreground">Aura Zone</h1>
-        <p className="mt-2 text-sm text-muted-foreground">
-          Draw exclusive prizes and collect rare items
-        </p>
-      </div>
-
-      {/* Balance Cards */}
-      <div className="mb-8 grid gap-4 sm:grid-cols-2">
-        {/* Diamond Balance */}
-        <div className="rounded-lg bg-card border border-border p-6 text-foreground shadow-lg hover:border-primary transition-colors">
-          <p className="text-sm text-muted-foreground flex items-center gap-2">
-            <Gem className="h-4 w-4" />
-            Diamond Balance
-          </p>
-          <p className="text-4xl font-bold flex items-center gap-2 mt-2">
-            <Gem className="h-8 w-8 text-primary" />
-            {diamonds.toLocaleString()}
-          </p>
-          <p className="mt-2 text-xs text-muted-foreground">
-            {Math.floor(diamonds / 3000)} 10x draws available
-          </p>
-        </div>
-
-        {/* Points Balance */}
-        <div className="rounded-lg bg-card border border-border p-6 text-foreground shadow-lg hover:border-primary transition-colors">
-          <p className="text-sm text-muted-foreground flex items-center gap-2">
-            <Ticket className="h-4 w-4" />
-            Points Balance
-          </p>
-          <p className="text-4xl font-bold flex items-center gap-2 mt-2">
-            <Ticket className="h-8 w-8 text-primary" />
-            {points.toLocaleString()}
-          </p>
-          <p className="mt-2 text-xs text-muted-foreground">
-            {Math.floor(points / 10)} 10x draws available
-          </p>
-        </div>
-      </div>
+      {/* Header - removed since client component has video background */}
 
       {/* Client Component for Interactive Elements */}
       <AuraZoneClient
         diamonds={diamonds}
-        points={points}
+        tickets={tickets} // Changed from points to tickets
         userId={session.user.id}
         userRole={session.user.role || 'USER'}
       />
