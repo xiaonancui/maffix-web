@@ -6,6 +6,8 @@ import {
   VerificationStatus,
 } from '@prisma/client'
 import { db } from '@/lib/db'
+import { addCurrency } from '@/lib/transaction'
+import { grantMissionXp } from '@/lib/leveling'
 
 const DEFAULT_RETRY_MINUTES = 5
 const MAX_BACKOFF_MINUTES = 30
@@ -102,7 +104,7 @@ export async function processPendingJobs(limit = 10): Promise<ProcessResult> {
               completedAt: new Date(),
             },
           })
-          return 'ALREADY_VERIFIED' as const
+          return { status: 'ALREADY_VERIFIED' as const }
         }
 
         const completionTime = new Date()
@@ -128,48 +130,9 @@ export async function processPendingJobs(limit = 10): Promise<ProcessResult> {
           },
         })
 
-        // Award rewards if applicable
-        if (userTask.diamondsEarned > 0 || userTask.pointsEarned > 0) {
-          await tx.user.update({
-            where: { id: userTask.userId },
-            data: {
-              diamonds: {
-                increment: userTask.diamondsEarned,
-              },
-              points: {
-                increment: userTask.pointsEarned,
-              },
-            },
-          })
-
-          if (userTask.diamondsEarned > 0) {
-            await tx.transaction.create({
-              data: {
-                userId: userTask.userId,
-                type: TransactionType.EARN,
-                amount: userTask.diamondsEarned,
-                currency: Currency.DIAMONDS,
-                description: `Auto-verified mission: ${userTask.task.title}`,
-                reference: userTask.taskId,
-                status: TransactionStatus.COMPLETED,
-              },
-            })
-          }
-
-          if (userTask.pointsEarned > 0) {
-            await tx.transaction.create({
-              data: {
-                userId: userTask.userId,
-                type: TransactionType.EARN,
-                amount: userTask.pointsEarned,
-                currency: Currency.POINTS,
-                description: `Auto-verified mission: ${userTask.task.title}`,
-                reference: userTask.taskId,
-                status: TransactionStatus.COMPLETED,
-              },
-            })
-          }
-        }
+        // Note: Rewards are now granted AFTER the transaction commits
+        // to use the addCurrency() and grantMissionXp() functions
+        // This ensures proper audit trail and anti-cheat validation
 
         await tx.missionVerificationJob.update({
           where: { id: job.id },
@@ -181,13 +144,64 @@ export async function processPendingJobs(limit = 10): Promise<ProcessResult> {
           },
         })
 
-        return 'PROCESSED' as const
+        return { status: 'PROCESSED' as const, userTask }
       })
 
-      if (outcome === 'ALREADY_VERIFIED') {
+      if (outcome.status === 'ALREADY_VERIFIED') {
         alreadyCompleted += 1
       } else {
-        processed += 1
+        // Grant rewards using proper transaction system
+        const userTask = outcome.userTask
+
+        try {
+          // Grant diamonds if applicable
+          if (userTask.diamondsEarned > 0) {
+            await addCurrency(
+              userTask.userId,
+              userTask.diamondsEarned,
+              Currency.DIAMONDS,
+              TransactionType.MISSION_REWARD,
+              userTask.taskId
+            )
+          }
+
+          // Grant points if applicable
+          if (userTask.pointsEarned > 0) {
+            await addCurrency(
+              userTask.userId,
+              userTask.pointsEarned,
+              Currency.POINTS,
+              TransactionType.MISSION_REWARD,
+              userTask.taskId
+            )
+          }
+
+          // Grant XP and trigger level-ups
+          if (userTask.task.difficulty) {
+            const xpResult = await grantMissionXp(
+              userTask.userId,
+              userTask.task.difficulty,
+              userTask.taskId
+            )
+
+            // Log level-ups for monitoring
+            if (xpResult.leveledUp && xpResult.levelUpResult) {
+              console.log(
+                `[MissionWorker] User ${userTask.userId} leveled up: ${xpResult.levelUpResult.previousLevel} → ${xpResult.levelUpResult.newLevel} (+${xpResult.levelUpResult.totalDiamondsAwarded} diamonds)`
+              )
+            }
+          }
+
+          processed += 1
+        } catch (rewardError) {
+          // Log reward granting errors but don't fail the job
+          // The mission is already marked as verified
+          console.error(
+            `[MissionWorker] Error granting rewards for user task ${userTask.id}:`,
+            rewardError
+          )
+          processed += 1 // Still count as processed since verification succeeded
+        }
       }
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Unknown mission processing error'

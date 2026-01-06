@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { hasAdminAccess } from '@/lib/rbac'
+import { Currency, TransactionType } from '@prisma/client'
 
 export async function POST(request: NextRequest) {
   try {
@@ -43,6 +44,10 @@ export async function POST(request: NextRequest) {
     }
 
     if (action === 'approve') {
+      // Dynamic imports to avoid build-time database connection
+      const { addCurrency } = await import('@/lib/transaction')
+      const { grantMissionXp } = await import('@/lib/leveling')
+
       // Update user task as verified
       await db.userTask.update({
         where: { id: userTaskId },
@@ -51,51 +56,65 @@ export async function POST(request: NextRequest) {
           verifiedAt: new Date(),
           verifiedBy: session.user.id,
           verificationStatus: 'APPROVED',
+          completedAt: new Date(),
         },
       })
 
-      // Update user balance
-      await db.user.update({
-        where: { id: userTask.user.id },
+      // Increment task completion count
+      await db.task.update({
+        where: { id: userTask.taskId },
         data: {
-          diamonds: { increment: userTask.diamondsEarned },
-          points: { increment: userTask.pointsEarned },
+          completionCount: { increment: 1 },
         },
       })
 
-      // Create transaction record for diamonds
+      // Grant rewards using proper transaction system
+      let levelUpInfo = null
+
+      // Grant diamonds if applicable
       if (userTask.diamondsEarned > 0) {
-        await db.transaction.create({
-          data: {
-            userId: userTask.user.id,
-            type: 'EARN',
-            amount: userTask.diamondsEarned,
-            currency: 'DIAMONDS',
-            description: `Mission: ${userTask.task.title}`,
-            status: 'COMPLETED',
-            reference: userTask.taskId,
-          },
-        })
+        await addCurrency(
+          userTask.user.id,
+          userTask.diamondsEarned,
+          Currency.DIAMONDS,
+          TransactionType.MISSION_REWARD,
+          userTask.taskId
+        )
       }
 
-      // Create transaction record for points
+      // Grant points if applicable
       if (userTask.pointsEarned > 0) {
-        await db.transaction.create({
-          data: {
-            userId: userTask.user.id,
-            type: 'EARN',
-            amount: userTask.pointsEarned,
-            currency: 'POINTS',
-            description: `Mission: ${userTask.task.title}`,
-            status: 'COMPLETED',
-            reference: userTask.taskId,
-          },
-        })
+        await addCurrency(
+          userTask.user.id,
+          userTask.pointsEarned,
+          Currency.POINTS,
+          TransactionType.MISSION_REWARD,
+          userTask.taskId
+        )
+      }
+
+      // Grant XP and trigger level-ups
+      if (userTask.task.difficulty) {
+        const xpResult = await grantMissionXp(
+          userTask.user.id,
+          userTask.task.difficulty,
+          userTask.taskId
+        )
+
+        if (xpResult.leveledUp && xpResult.levelUpResult) {
+          levelUpInfo = {
+            previousLevel: xpResult.levelUpResult.previousLevel,
+            newLevel: xpResult.levelUpResult.newLevel,
+            levelsGained: xpResult.levelUpResult.levelsGained,
+            diamondsAwarded: xpResult.levelUpResult.totalDiamondsAwarded,
+          }
+        }
       }
 
       return NextResponse.json({
         success: true,
         message: 'Task approved and rewards granted',
+        levelUp: levelUpInfo,
       })
     } else if (action === 'reject') {
       // Update user task as rejected
