@@ -6,9 +6,8 @@ export default withAuth(
     const token = req.nextauth.token
     const isAuth = !!token
     const pathname = req.nextUrl.pathname
-    const isAuthPage = pathname.startsWith('/login') || pathname.startsWith('/register')
 
-    // Log for debugging redirect loops
+    // Log for debugging
     if (process.env.NODE_ENV === 'development') {
       console.log('🔒 Middleware:', {
         pathname,
@@ -17,24 +16,21 @@ export default withAuth(
       })
     }
 
-    // Redirect authenticated users away from auth pages
-    if (isAuthPage && isAuth) {
-      // Redirect admin users to admin panel, regular users to dashboard
-      const redirectUrl = token?.role === 'ADMIN' ? '/admin' : '/dashboard'
-      console.log(`✅ Authenticated user accessing auth page, redirecting to ${redirectUrl}`)
-      return NextResponse.redirect(new URL(redirectUrl, req.url))
-    }
-
     // Check admin access
     if (pathname.startsWith('/admin')) {
       if (!isAuth) {
-        console.log('⚠️ Unauthenticated user accessing admin, redirecting to login')
-        return NextResponse.redirect(new URL('/login', req.url))
+        // Redirect to homepage (gate) for authentication
+        return NextResponse.redirect(new URL('/', req.url))
       }
       if (token?.role !== 'ADMIN') {
-        console.log('⚠️ Non-admin user accessing admin, redirecting to dashboard')
+        // Non-admin users go to dashboard
         return NextResponse.redirect(new URL('/dashboard', req.url))
       }
+    }
+
+    // Protected routes - redirect unauthenticated users to homepage (gate)
+    if (!isAuth) {
+      return NextResponse.redirect(new URL('/', req.url))
     }
 
     return NextResponse.next()
@@ -43,11 +39,6 @@ export default withAuth(
     callbacks: {
       authorized: ({ token, req }) => {
         const pathname = req.nextUrl.pathname
-
-        // Allow access to auth pages without token
-        if (pathname.startsWith('/login') || pathname.startsWith('/register')) {
-          return true
-        }
 
         // Allow access to API routes (they handle their own auth)
         if (pathname.startsWith('/api/')) {
@@ -69,8 +60,11 @@ export const config = {
     '/gacha/:path*',
     '/prizes/:path*',
     '/profile/:path*',
-    '/login',
-    '/register',
+    '/aura-zone/:path*',
+    '/missions/:path*',
+    '/store/:path*',
+    '/orders/:path*',
+    '/purchases/:path*',
+    '/transactions/:path*',
   ],
 }
-

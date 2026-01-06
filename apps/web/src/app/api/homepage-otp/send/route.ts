@@ -1,18 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import crypto from 'crypto'
-
-// Simple in-memory OTP store (in production, use Redis or database)
-const otpStore = new Map<string, { code: string; expiresAt: number; email: string }>()
-
-// Clean up expired OTPs every 5 minutes
-setInterval(() => {
-  const now = Date.now()
-  for (const [key, value] of otpStore.entries()) {
-    if (value.expiresAt < now) {
-      otpStore.delete(key)
-    }
-  }
-}, 5 * 60 * 1000)
+import { sendOTPEmail } from '@/lib/email'
 
 /**
  * Generate a 6-digit OTP code
@@ -22,61 +9,45 @@ function generateOTP(): string {
 }
 
 /**
- * Hash email for storage (privacy)
+ * POST /api/homepage-otp/send
+ * Send OTP verification code to email
  */
-function hashEmail(email: string): string {
-  return crypto.createHash('sha256').update(email.toLowerCase()).digest('hex')
-}
-
-/**
- * Send OTP email
- * In production, integrate with SendGrid, Resend, or similar service
- */
-async function sendOTPEmail(email: string, code: string): Promise<{ success: boolean; error?: string }> {
-  // For development/testing, log the OTP to console
-  if (process.env.NODE_ENV === 'development') {
-    console.log(`[OTP] Email: ${email}, Code: ${code}`)
-    return { success: true }
-  }
-
-  // In production, integrate with your email service
-  // Example with Resend:
-  // try {
-  //   const resend = new Resend(process.env.RESEND_API_KEY)
-  //   await resend.emails.send({
-  //     from: 'Maffix <noreply@maffix.io>',
-  //     to: email,
-  //     subject: 'Your Maffix Verification Code',
-  //     html: `<p>Your verification code is: <strong>${code}</strong></p><p>This code will expire in 10 minutes.</p>`,
-  //   })
-  //   return { success: true }
-  // } catch (error) {
-  //   console.error('Email send error:', error)
-  //   return { success: false, error: 'Failed to send email' }
-  // }
-
-  return { success: true } // Placeholder
-}
-
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
     const { email } = body
 
+    // Validate email format
     if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       return NextResponse.json({ error: 'Invalid email address' }, { status: 400 })
     }
 
+    const normalizedEmail = email.toLowerCase().trim()
+
     // Generate OTP
     const code = generateOTP()
-    const hashedEmail = hashEmail(email)
-    const expiresAt = Date.now() + 10 * 60 * 1000 // 10 minutes
+    const otpExpiry = new Date(Date.now() + 10 * 60 * 1000) // 10 minutes
 
-    // Store OTP
-    otpStore.set(hashedEmail, { code, expiresAt, email })
+    // Dynamic import to avoid build-time database connection
+    const { db } = await import('@/lib/db')
+
+    // Save or update email subscription with OTP
+    await db.emailSubscription.upsert({
+      where: { email: normalizedEmail },
+      create: {
+        email: normalizedEmail,
+        source: 'homepage_gate',
+        otpCode: code,
+        otpExpiry,
+      },
+      update: {
+        otpCode: code,
+        otpExpiry,
+      },
+    })
 
     // Send email
-    const emailResult = await sendOTPEmail(email, code)
+    const emailResult = await sendOTPEmail(normalizedEmail, code)
 
     if (!emailResult.success) {
       return NextResponse.json(
@@ -91,15 +62,8 @@ export async function POST(request: NextRequest) {
       // In development, return the code for testing
       ...(process.env.NODE_ENV === 'development' && { devCode: code }),
     })
-  } catch (error) {
+  } catch (error: any) {
     console.error('OTP send error:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
-}
-
-/**
- * Get OTP store (for testing/verification endpoint)
- */
-export function getOTPStore() {
-  return otpStore
 }

@@ -1,31 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
-import crypto from 'crypto'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
+import { encode } from 'next-auth/jwt'
 
 /**
- * Hash email for storage (privacy)
+ * POST /api/homepage-otp/verify
+ * Verify OTP and auto-login/register user
  */
-function hashEmail(email: string): string {
-  return crypto.createHash('sha256').update(email.toLowerCase()).digest('hex')
-}
-
-/**
- * Get OTP store (imported from send route)
- * Note: In production, use Redis or database instead
- */
-// We'll use a shared store via a separate module
-const otpStore = new Map<string, { code: string; expiresAt: number; email: string }>()
-
-// Export a function to set the store (called by send route)
-export function setOTPStore(store: Map<string, { code: string; expiresAt: number; email: string }>) {
-  // Clear existing entries and copy from the provided store
-  otpStore.clear()
-  for (const [key, value] of store.entries()) {
-    otpStore.set(key, value)
-  }
-}
-
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
@@ -35,64 +14,167 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Email and code are required' }, { status: 400 })
     }
 
-    const hashedEmail = hashEmail(email)
-    const otpData = otpStore.get(hashedEmail)
+    const normalizedEmail = email.toLowerCase().trim()
 
-    if (!otpData) {
-      return NextResponse.json({ error: 'Invalid or expired verification code' }, { status: 400 })
+    // Dynamic import to avoid build-time database connection
+    const { db } = await import('@/lib/db')
+
+    // Find email subscription with OTP
+    const subscription = await db.emailSubscription.findUnique({
+      where: { email: normalizedEmail },
+    })
+
+    if (!subscription) {
+      return NextResponse.json(
+        { error: 'Invalid or expired verification code' },
+        { status: 400 }
+      )
     }
 
-    if (Date.now() > otpData.expiresAt) {
-      otpStore.delete(hashedEmail)
-      return NextResponse.json({ error: 'Verification code has expired' }, { status: 400 })
+    // Check if OTP is expired
+    if (!subscription.otpExpiry || new Date() > subscription.otpExpiry) {
+      return NextResponse.json(
+        { error: 'Verification code has expired' },
+        { status: 400 }
+      )
     }
 
-    if (otpData.code !== code) {
-      return NextResponse.json({ error: 'Invalid verification code' }, { status: 400 })
+    // Check if OTP matches
+    if (subscription.otpCode !== code) {
+      return NextResponse.json(
+        { error: 'Invalid verification code' },
+        { status: 400 }
+      )
     }
 
-    // Code is valid - mark as verified
-    // Note: Database verification tracking removed as isHomepageVerified field doesn't exist
-    // The verification token is returned for client-side use
-    const session = await getServerSession(authOptions)
+    // Mark subscription as verified and clear OTP
+    await db.emailSubscription.update({
+      where: { email: normalizedEmail },
+      data: {
+        verified: true,
+        verifiedAt: new Date(),
+        otpCode: null,
+        otpExpiry: null,
+      },
+    })
 
-    // Clear the used OTP
-    otpStore.delete(hashedEmail)
+    // Check if user already exists
+    let user = await db.user.findUnique({
+      where: { email: normalizedEmail },
+    })
 
-    // Return success with a session token that can be stored
-    const verificationToken = Buffer.from(
-      JSON.stringify({ email: hashedEmail, verifiedAt: Date.now() })
-    ).toString('base64')
+    // If user doesn't exist, create one
+    if (!user) {
+      // Extract username from email (part before @)
+      const emailPrefix = normalizedEmail.split('@')[0]
+      // Clean up username (remove special characters, keep alphanumeric)
+      let username = emailPrefix.replace(/[^a-zA-Z0-9]/g, '')
 
-    return NextResponse.json({
+      // Ensure username is not empty
+      if (!username) {
+        username = 'user'
+      }
+
+      // Check if username already exists, if so add random suffix
+      const existingUser = await db.user.findFirst({
+        where: { name: username },
+      })
+
+      if (existingUser) {
+        username = `${username}${Math.floor(Math.random() * 10000)}`
+      }
+
+      user = await db.user.create({
+        data: {
+          email: normalizedEmail,
+          name: username,
+          role: 'USER',
+          diamondBalance: 0,
+          points: 0,
+          level: 1,
+          provider: 'email',
+        },
+      })
+
+      console.log(`[AUTH] New user created: ${user.email}`)
+    }
+
+    // Update last login
+    await db.user.update({
+      where: { id: user.id },
+      data: { lastLoginAt: new Date() },
+    })
+
+    // Create JWT token for NextAuth session
+    const secret = process.env.NEXTAUTH_SECRET
+    if (!secret) {
+      throw new Error('NEXTAUTH_SECRET is not configured')
+    }
+
+    const token = await encode({
+      token: {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        role: user.role,
+      },
+      secret,
+    })
+
+    // Create response with session cookie
+    const response = NextResponse.json({
       success: true,
       message: 'Email verified successfully',
-      verificationToken,
+      user: {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        role: user.role,
+      },
+      redirectTo: '/dashboard',
     })
-  } catch (error) {
+
+    // Set the NextAuth session cookie
+    const isProduction = process.env.NODE_ENV === 'production'
+    const cookieName = isProduction
+      ? '__Secure-next-auth.session-token'
+      : 'next-auth.session-token'
+
+    response.cookies.set(cookieName, token, {
+      httpOnly: true,
+      secure: isProduction,
+      sameSite: 'lax',
+      path: '/',
+      maxAge: 30 * 24 * 60 * 60, // 30 days
+    })
+
+    return response
+  } catch (error: any) {
     console.error('OTP verify error:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }
 
 /**
- * GET endpoint to check if user is verified
- * Note: Always returns false as isHomepageVerified field doesn't exist in schema
+ * GET /api/homepage-otp/verify
+ * Check if user is already authenticated
  */
 export async function GET(request: NextRequest) {
   try {
-    const session = await getServerSession(authOptions)
+    // Check for session cookie
+    const isProduction = process.env.NODE_ENV === 'production'
+    const cookieName = isProduction
+      ? '__Secure-next-auth.session-token'
+      : 'next-auth.session-token'
 
-    if (!session) {
-      return NextResponse.json({ verified: false })
+    const sessionToken = request.cookies.get(cookieName)
+
+    if (sessionToken) {
+      return NextResponse.json({ verified: true })
     }
 
-    // Since isHomepageVerified doesn't exist in schema, always return false
-    // Client should use verification token for session-based verification
-    return NextResponse.json({
-      verified: false,
-    })
-  } catch (error) {
+    return NextResponse.json({ verified: false })
+  } catch (error: any) {
     console.error('OTP check error:', error)
     return NextResponse.json({ verified: false }, { status: 500 })
   }
