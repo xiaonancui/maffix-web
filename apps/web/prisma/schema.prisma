@@ -473,6 +473,7 @@ model Order {
   stripeSessionId       String?
   stripePaymentIntentId String?
   paidAt                DateTime?
+  ticketsEarned         Int?           @default(0) // Tickets awarded from this purchase (GBP / 10)
   trackingNumber        String?
   shippedAt             DateTime?
   deliveredAt           DateTime?

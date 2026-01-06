@@ -75,8 +75,30 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) 
   }
 
   const { db } = await import('@/lib/db')
+  const { addCurrency } = await import('@/lib/transaction')
+  const { calculateTicketsFromPurchase, getTicketCalculationBreakdown } = await import(
+    '@/lib/commerce'
+  )
 
   try {
+    // Check if order already processed (idempotency check)
+    const existingOrder = await db.order.findUnique({
+      where: { id: orderId },
+      select: { ticketsEarned: true, status: true },
+    })
+
+    if (
+      existingOrder &&
+      existingOrder.status === 'PAID' &&
+      existingOrder.ticketsEarned !== null &&
+      existingOrder.ticketsEarned !== undefined
+    ) {
+      console.log(
+        `[Webhook] Order ${orderId} already processed (tickets: ${existingOrder.ticketsEarned}), skipping duplicate webhook`
+      )
+      return
+    }
+
     // Update order status to PAID
     const order = await db.order.update({
       where: { id: orderId },
@@ -94,9 +116,47 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) 
       },
     })
 
-    // Create transaction record (using DIAMONDS as currency type since USD is not in enum)
-    // Note: This is a merchandise purchase, not a diamond transaction
-    // Consider adding a separate payment history table for real money transactions
+    console.log(`[Webhook] Order ${orderId} marked as PAID - Total: $${order.totalAmount.toFixed(2)} USD`)
+
+    // Calculate tickets from purchase
+    const ticketsEarned = calculateTicketsFromPurchase(order.totalAmount)
+    const breakdown = getTicketCalculationBreakdown(order.totalAmount)
+
+    console.log('[Webhook] Ticket calculation:', {
+      orderTotal: `$${breakdown.totalUSD} USD`,
+      convertedAmount: `£${breakdown.totalGBP} GBP`,
+      exchangeRate: breakdown.exchangeRate,
+      ticketsEarned: breakdown.tickets,
+    })
+
+    // Update order with tickets earned
+    await db.order.update({
+      where: { id: orderId },
+      data: {
+        ticketsEarned,
+      },
+    })
+
+    // Grant tickets if any were earned
+    if (ticketsEarned > 0) {
+      await addCurrency(
+        userId,
+        ticketsEarned,
+        'TICKETS',
+        'STORE_BONUS',
+        `order_${orderId}`
+      )
+
+      console.log(
+        `[Webhook] Granted ${ticketsEarned} ticket${ticketsEarned !== 1 ? 's' : ''} to user ${userId} for order ${orderId}`
+      )
+    } else {
+      console.log(
+        `[Webhook] No tickets earned for order ${orderId} (purchase below £10 GBP threshold)`
+      )
+    }
+
+    // Create transaction record for the purchase itself
     await db.transaction.create({
       data: {
         userId: userId,
@@ -109,13 +169,13 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) 
       },
     })
 
+    console.log(`[Webhook] Order ${orderId} processing completed successfully`)
+
     // TODO: Send confirmation email
     // TODO: Update inventory
-
-    console.log(`Order ${orderId} marked as PAID`)
-
   } catch (error) {
-    console.error('Error handling checkout session completed:', error)
+    console.error('[Webhook] Error handling checkout session completed:', error)
+    throw error // Re-throw to ensure webhook returns error status
   }
 }
 
