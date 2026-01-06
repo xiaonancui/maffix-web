@@ -6,7 +6,6 @@ import MissionCard from '@/components/dashboard/MissionCard'
 import MissionsHeader from '@/components/dashboard/MissionsHeader'
 import MissionDetailModal from '@/components/dashboard/missions/MissionDetailModal'
 import MissionsClient from './missions-client'
-import { AlertTriangle } from 'lucide-react'
 
 export default async function MissionsPage() {
   const session = await getServerSession(authOptions)
@@ -174,33 +173,6 @@ export default async function MissionsPage() {
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
       {/* Header */}
       <MissionsHeader />
-
-      {/* TikTok Connection Status */}
-      {!user?.tiktokUsername && (
-        <div className="mb-8 rounded-lg border-2 border-yellow-600 bg-transparent p-6 dark:bg-yellow-900/20">
-          <div className="flex items-start gap-3">
-            <AlertTriangle className="h-6 w-6 text-yellow-600 flex-shrink-0" />
-            <div className="flex-1">
-              <h3 className="text-sm font-medium text-yellow-600 dark:text-yellow-300">
-                TikTok Account Not Linked
-              </h3>
-              <div className="mt-2 text-sm text-yellow-700 dark:text-yellow-400">
-                <p>
-                  You need to link your TikTok account to complete missions and earn rewards.
-                </p>
-              </div>
-              <div className="mt-4">
-                <Link
-                  href="/profile/link-tiktok"
-                  className="inline-flex items-center rounded-md border-2 border-yellow-600 bg-transparent px-3 py-2 text-sm font-semibold text-yellow-600 hover:bg-yellow-600/10 transition-colors dark:bg-yellow-600 dark:text-primary-foreground dark:hover:bg-yellow-700"
-                >
-                  Link TikTok Account
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* User Stats */}
       <div className="mb-8 grid gap-4 sm:grid-cols-3">

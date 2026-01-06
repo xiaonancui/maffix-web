@@ -1,10 +1,11 @@
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { redirect } from 'next/navigation'
+import Link from 'next/link'
 import LogoutButton from '@/components/auth/LogoutButton'
 import { Progress } from '@/components/ui/progress'
 import { getLevelProgress } from '@/lib/level-system'
-import { Gem, Ticket, Star } from 'lucide-react'
+import { Gem, Ticket, Star, AlertTriangle } from 'lucide-react'
 
 export default async function ProfilePage() {
   // Dynamic import to avoid build-time database connection
@@ -36,6 +37,7 @@ export default async function ProfilePage() {
       email: session.user.email || 'test@maffix.com',
       avatar: null,
       role: session.user.role || 'USER',
+      tiktokUsername: null, // Not linked yet
       diamondBalance: session.user.role === 'ADMIN' ? 10000 : 500,
       points: session.user.role === 'ADMIN' ? 5000 : 100,
       level: session.user.role === 'ADMIN' ? 10 : 1,
@@ -113,6 +115,33 @@ export default async function ProfilePage() {
           Manage your account and view your statistics
         </p>
       </div>
+
+      {/* TikTok Connection Status */}
+      {!user.tiktokUsername && (
+        <div className="mb-8 rounded-lg border-2 border-yellow-600 bg-transparent p-6 dark:bg-yellow-900/20">
+          <div className="flex items-start gap-3">
+            <AlertTriangle className="h-6 w-6 text-yellow-600 flex-shrink-0" />
+            <div className="flex-1">
+              <h3 className="text-sm font-medium text-yellow-600 dark:text-yellow-300">
+                TikTok Account Not Linked
+              </h3>
+              <div className="mt-2 text-sm text-yellow-700 dark:text-yellow-400">
+                <p>
+                  Link your TikTok account to complete missions and earn rewards.
+                </p>
+              </div>
+              <div className="mt-4">
+                <Link
+                  href="/profile/link-tiktok"
+                  className="inline-flex items-center rounded-md border-2 border-yellow-600 bg-transparent px-3 py-2 text-sm font-semibold text-yellow-600 hover:bg-yellow-600/10 transition-colors dark:bg-yellow-600 dark:text-primary-foreground dark:hover:bg-yellow-700"
+                >
+                  Link TikTok Account
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       <div className="grid gap-6 lg:grid-cols-3">
         {/* Profile Card */}

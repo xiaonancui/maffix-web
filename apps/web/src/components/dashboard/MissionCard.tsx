@@ -124,65 +124,12 @@ export default function MissionCard({ mission, hasTikTokLinked, onViewDetail }: 
             </div>
           </div>
         )}
-
-        <div className="space-y-2 text-sm text-muted-foreground">
-          {mission.estimatedTime && (
-            <div className="flex items-center justify-between">
-              <span className="text-muted-foreground">Estimated time</span>
-              <span className="font-medium text-foreground">~{mission.estimatedTime}</span>
-            </div>
-          )}
-
-          {mission.targetTikTokAccount && (
-            <div className="flex items-center justify-between gap-2">
-              <span className="text-muted-foreground">Target account</span>
-              {accountUrl ? (
-                <Link
-                  href={accountUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="truncate font-medium text-primary hover:underline"
-                >
-                  @{accountSlug}
-                </Link>
-              ) : (
-                <span className="truncate font-medium text-foreground">{mission.targetTikTokAccount}</span>
-              )}
-            </div>
-          )}
-
-          {mission.targetVideoUrl && (
-            <div className="flex items-center justify-between gap-2">
-              <span className="text-muted-foreground">Target video</span>
-              <Link
-                href={mission.targetVideoUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="truncate font-medium text-primary hover:underline"
-              >
-                View on TikTok
-              </Link>
-            </div>
-          )}
-
-          {mission.targetAudioId && (
-            <div className="flex items-center justify-between gap-2">
-              <span className="text-muted-foreground">Audio ID</span>
-              <span className="truncate font-medium text-foreground">{mission.targetAudioId}</span>
-            </div>
-          )}
-        </div>
       </div>
 
       <div className="mt-6 space-y-3">
-        <div className="flex flex-wrap items-center gap-2">
-          <span className={`rounded-full border px-3 py-1 text-xs font-semibold ${statusConfig.className}`}>
-            {completionLabel}
-          </span>
-          {mission.estimatedTime && (
-            <span className="text-xs text-muted-foreground">Typical completion: ~{mission.estimatedTime}</span>
-          )}
-        </div>
+        <span className={`rounded-full border px-3 py-1 text-xs font-semibold ${statusConfig.className}`}>
+          {completionLabel}
+        </span>
 
         <div className="flex gap-2">
           <button
