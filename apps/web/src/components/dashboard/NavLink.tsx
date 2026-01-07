@@ -16,14 +16,16 @@ export default function NavLink({ href, children, className = '' }: NavLinkProps
   return (
     <Link
       href={href}
-      className={`inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium transition-colors ${
+      className={`group relative inline-flex items-center rounded-xl px-4 py-2.5 text-sm font-bold tracking-tight transition-all duration-300 ${
         isActive
-          ? 'border-[#FF5656] text-foreground'
-          : 'border-transparent text-foreground/80 hover:border-[#FF5656]/50 hover:text-foreground'
+          ? 'bg-gradient-to-br from-[#FF1F7D]/20 to-[#8B5CF6]/10 text-white shadow-lg shadow-[#FF1F7D]/20'
+          : 'text-white/70 hover:bg-white/5 hover:text-white'
       } ${className}`}
     >
       {children}
+      {isActive && (
+        <span className="absolute inset-0 rounded-xl border border-[#FF1F7D]/30" />
+      )}
     </Link>
   )
 }
-

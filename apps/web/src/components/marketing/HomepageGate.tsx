@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Mail, Lock, CheckCircle, Loader2 } from 'lucide-react'
+import { Mail, Lock, CheckCircle, Loader2, Sparkles, Zap } from 'lucide-react'
 
 export default function HomepageGate() {
   const router = useRouter()
@@ -100,171 +100,269 @@ export default function HomepageGate() {
   // Show loading state while checking auth
   if (isChecking) {
     return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black">
-        <div className="text-center">
-          <Loader2 className="h-8 w-8 animate-spin text-[#FF5656] mx-auto mb-4" />
-          <p className="text-gray-400">Loading...</p>
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-surface-base">
+        {/* Video Background */}
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute inset-0 h-full w-full object-cover opacity-20"
+        >
+          <source src="/banners/login-bg.mp4" type="video/mp4" />
+        </video>
+
+        {/* Ambient glows */}
+        <div className="pointer-events-none absolute inset-0 overflow-hidden">
+          <div className="absolute -left-1/4 top-0 h-96 w-96 animate-pulse rounded-full bg-[#FF1F7D]/20 blur-3xl" />
+          <div className="absolute -right-1/4 bottom-0 h-96 w-96 animate-pulse rounded-full bg-[#8B5CF6]/20 blur-3xl" style={{ animationDelay: '2s' }} />
+        </div>
+
+        <div className="relative text-center">
+          <div className="relative mb-6 inline-flex h-20 w-20 items-center justify-center">
+            <div className="absolute inset-0 animate-ping rounded-full bg-[#FF1F7D]/40"></div>
+            <div className="relative flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-[#FF1F7D] to-[#8B5CF6] shadow-lg shadow-[#FF1F7D]/50">
+              <Loader2 className="h-8 w-8 animate-spin text-white" strokeWidth={2.5} />
+            </div>
+          </div>
+          <p className="font-display text-lg font-bold text-white">Loading...</p>
+          <p className="mt-2 text-sm text-white/60">Preparing your experience</p>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black">
-      {/* Background gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black" />
+    <div className="fixed inset-0 z-50 flex items-center justify-center overflow-hidden bg-surface-base">
+      {/* Video Background */}
+      <video
+        autoPlay
+        loop
+        muted
+        playsInline
+        className="absolute inset-0 h-full w-full object-cover opacity-20"
+      >
+        <source src="/files/beat-like-dat.mp4" type="video/mp4" />
+      </video>
 
-      {/* Animated background elements */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-[#FF5656]/10 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-purple-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
+      {/* Gradient overlay for better contrast */}
+      <div className="absolute inset-0 bg-gradient-to-br from-black/80 via-black/60 to-black/80" />
+
+      {/* Animated ambient glows */}
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div className="absolute -left-1/4 top-1/4 h-96 w-96 animate-pulse rounded-full bg-[#FF1F7D]/20 blur-3xl" />
+        <div className="absolute -right-1/4 top-0 h-96 w-96 animate-pulse rounded-full bg-[#8B5CF6]/20 blur-3xl" style={{ animationDelay: '2s' }} />
+        <div className="absolute bottom-0 left-1/3 h-96 w-96 animate-pulse rounded-full bg-[#00F5FF]/10 blur-3xl" style={{ animationDelay: '4s' }} />
       </div>
 
-      <div className="relative w-full max-w-md p-8">
-        {/* Logo */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-white mb-2">Maffix</h1>
-          <p className="text-gray-400">Independent Musician Fan Engagement Platform</p>
+      {/* Top gradient line */}
+      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#FF1F7D]/50 via-[#8B5CF6]/50 to-transparent" />
+
+      <div className="relative w-full max-w-md animate-fade-in-up px-4">
+        {/* Logo & Branding */}
+        <div className="mb-8 text-center">
+          <div className="relative mb-4 inline-flex items-center justify-center">
+            <div className="absolute inset-0 animate-pulse rounded-full bg-[#FF1F7D]/30 blur-xl" />
+            <div className="relative flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-[#FF1F7D] to-[#8B5CF6] shadow-xl shadow-[#FF1F7D]/50">
+              <Zap className="h-8 w-8 text-white" strokeWidth={2.5} />
+            </div>
+          </div>
+          <h1 className="font-display text-5xl font-black tracking-tight text-white">
+            Maffix
+          </h1>
+          <p className="mt-2 font-display text-sm font-bold uppercase tracking-[0.3em] text-[#00F5FF]">
+            Universe
+          </p>
+          <p className="mt-3 text-base text-white/70">
+            Support the music. Stack rewards. Unlock legendary.
+          </p>
         </div>
 
-        {/* Gate Card */}
-        <div className="bg-gray-900/80 backdrop-blur-xl border border-gray-800 rounded-2xl p-8 shadow-2xl">
-          {step === 'email' && (
-            <>
-              <div className="flex items-center justify-center w-14 h-14 rounded-full bg-[#FF5656]/10 mx-auto mb-6">
-                <Mail className="h-7 w-7 text-[#FF5656]" />
-              </div>
-              <h2 className="text-2xl font-bold text-white text-center mb-2">
-                Welcome to Maffix
-              </h2>
-              <p className="text-gray-400 text-center mb-8">
-                Enter your email to get started
-              </p>
+        {/* Gate Card with Glassmorphism */}
+        <div className="group relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-surface-card/90 to-surface-raised/80 p-8 shadow-2xl backdrop-blur-xl">
+          {/* Card ambient glow */}
+          <div className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-gradient-to-br from-[#FF1F7D]/20 via-[#8B5CF6]/10 to-transparent blur-3xl" />
 
-              <form onSubmit={handleSendOTP} className="space-y-5">
-                <div>
-                  <Label htmlFor="email" className="text-gray-300">Email Address</Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    placeholder="you@example.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                    className="mt-2 bg-gray-800 border-gray-700 text-white placeholder:text-gray-500 focus:border-[#FF5656] focus:ring-[#FF5656]"
-                  />
-                </div>
+          {/* Top gradient line */}
+          <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#FF1F7D]/50 to-transparent" />
 
-                {error && (
-                  <p className="text-sm text-red-400 bg-red-400/10 px-3 py-2 rounded-lg">{error}</p>
-                )}
-
-                <Button
-                  type="submit"
-                  className="w-full bg-[#FF5656] hover:bg-[#FF5656]/90 text-white font-semibold py-3"
-                  disabled={isLoading}
-                >
-                  {isLoading ? (
-                    <>
-                      <Loader2 className="h-4 w-4 animate-spin mr-2" />
-                      Sending...
-                    </>
-                  ) : (
-                    'Continue'
-                  )}
-                </Button>
-              </form>
-            </>
-          )}
-
-          {step === 'otp' && (
-            <>
-              <div className="flex items-center justify-center w-14 h-14 rounded-full bg-[#FF5656]/10 mx-auto mb-6">
-                <Lock className="h-7 w-7 text-[#FF5656]" />
-              </div>
-              <h2 className="text-2xl font-bold text-white text-center mb-2">
-                Check Your Email
-              </h2>
-              <p className="text-gray-400 text-center mb-2">
-                We sent a verification code to
-              </p>
-              <p className="text-white font-medium text-center mb-8">{email}</p>
-
-              <form onSubmit={handleVerifyOTP} className="space-y-5">
-                <div>
-                  <Label htmlFor="otp" className="text-gray-300">Verification Code</Label>
-                  <Input
-                    id="otp"
-                    type="text"
-                    placeholder="123456"
-                    value={otp}
-                    onChange={(e) => setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))}
-                    required
-                    maxLength={6}
-                    className="mt-2 bg-gray-800 border-gray-700 text-white text-center text-2xl tracking-[0.5em] font-mono placeholder:text-gray-500 focus:border-[#FF5656] focus:ring-[#FF5656]"
-                  />
-                </div>
-
-                {devCode && (
-                  <div className="p-4 bg-yellow-500/10 border border-yellow-500/20 rounded-lg">
-                    <p className="text-sm text-yellow-400 text-center">
-                      <strong>Dev Mode:</strong> Your code is <code className="bg-yellow-500/20 px-2 py-1 rounded">{devCode}</code>
-                    </p>
+          <div className="relative">
+            {step === 'email' && (
+              <>
+                {/* Icon */}
+                <div className="relative mb-6 flex justify-center">
+                  <div className="absolute inset-0 animate-pulse rounded-full bg-[#FF1F7D]/30 blur-lg" />
+                  <div className="relative flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-[#FF1F7D] to-[#B200FF] shadow-lg shadow-[#FF1F7D]/50">
+                    <Mail className="h-7 w-7 text-white" strokeWidth={2.5} />
                   </div>
-                )}
+                </div>
 
-                {error && (
-                  <p className="text-sm text-red-400 bg-red-400/10 px-3 py-2 rounded-lg">{error}</p>
-                )}
+                {/* Heading */}
+                <h2 className="mb-2 text-center font-display text-2xl font-black text-white">
+                  Welcome Back
+                </h2>
+                <p className="mb-8 text-center text-sm text-white/60">
+                  Enter your email to continue your journey
+                </p>
 
-                <Button
-                  type="submit"
-                  className="w-full bg-[#FF5656] hover:bg-[#FF5656]/90 text-white font-semibold py-3"
-                  disabled={isLoading || otp.length !== 6}
-                >
-                  {isLoading ? (
-                    <>
-                      <Loader2 className="h-4 w-4 animate-spin mr-2" />
-                      Verifying...
-                    </>
-                  ) : (
-                    'Verify & Continue'
+                <form onSubmit={handleSendOTP} className="space-y-5">
+                  <div className="space-y-2">
+                    <Label htmlFor="email" className="font-display text-xs font-bold uppercase tracking-wider text-white/70">
+                      Email Address
+                    </Label>
+                    <Input
+                      id="email"
+                      type="email"
+                      placeholder="you@example.com"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
+                      className="rounded-xl border border-white/10 bg-white/5 px-4 py-3 font-sans text-white backdrop-blur-sm transition-all duration-300 placeholder:text-white/40 focus:border-[#FF1F7D]/60 focus:outline-none focus:ring-2 focus:ring-[#FF1F7D]/20"
+                    />
+                  </div>
+
+                  {error && (
+                    <div className="rounded-xl border border-[#FF1F7D]/30 bg-[#FF1F7D]/10 px-4 py-3 backdrop-blur-sm">
+                      <p className="text-sm font-semibold text-[#FF1F7D]">{error}</p>
+                    </div>
                   )}
-                </Button>
 
-                <button
-                  type="button"
-                  onClick={() => {
-                    setStep('email')
-                    setOtp('')
-                    setError('')
-                    setDevCode(null)
-                  }}
-                  className="w-full text-sm text-gray-400 hover:text-white transition-colors py-2"
-                >
-                  Use a different email
-                </button>
-              </form>
-            </>
-          )}
+                  <Button
+                    type="submit"
+                    className="group w-full rounded-full bg-gradient-to-r from-[#FF1F7D] to-[#B200FF] py-6 font-display text-base font-bold text-white shadow-lg shadow-[#FF1F7D]/50 transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-[#FF1F7D]/60"
+                    disabled={isLoading}
+                  >
+                    {isLoading ? (
+                      <div className="flex items-center gap-2">
+                        <Loader2 className="h-5 w-5 animate-spin" />
+                        <span>Sending magic link...</span>
+                      </div>
+                    ) : (
+                      <div className="flex items-center justify-center gap-2">
+                        <span>Continue</span>
+                        <Sparkles className="h-5 w-5 transition-transform group-hover:rotate-12" />
+                      </div>
+                    )}
+                  </Button>
+                </form>
+              </>
+            )}
+
+            {step === 'otp' && (
+              <>
+                {/* Icon */}
+                <div className="relative mb-6 flex justify-center">
+                  <div className="absolute inset-0 animate-pulse rounded-full bg-[#8B5CF6]/30 blur-lg" />
+                  <div className="relative flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-[#8B5CF6] to-[#00F5FF] shadow-lg shadow-[#8B5CF6]/50">
+                    <Lock className="h-7 w-7 text-white" strokeWidth={2.5} />
+                  </div>
+                </div>
+
+                {/* Heading */}
+                <h2 className="mb-2 text-center font-display text-2xl font-black text-white">
+                  Check Your Email
+                </h2>
+                <p className="mb-2 text-center text-sm text-white/60">
+                  We sent a verification code to
+                </p>
+                <p className="mb-8 text-center font-display text-base font-bold text-white">{email}</p>
+
+                <form onSubmit={handleVerifyOTP} className="space-y-5">
+                  <div className="space-y-2">
+                    <Label htmlFor="otp" className="font-display text-xs font-bold uppercase tracking-wider text-white/70">
+                      Verification Code
+                    </Label>
+                    <Input
+                      id="otp"
+                      type="text"
+                      placeholder="000000"
+                      value={otp}
+                      onChange={(e) => setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                      required
+                      maxLength={6}
+                      className="rounded-xl border border-white/10 bg-white/5 px-4 py-4 text-center font-mono text-2xl tracking-[0.5em] text-white backdrop-blur-sm transition-all duration-300 placeholder:text-white/30 focus:border-[#8B5CF6]/60 focus:outline-none focus:ring-2 focus:ring-[#8B5CF6]/20"
+                    />
+                  </div>
+
+                  {devCode && (
+                    <div className="relative overflow-hidden rounded-xl border border-[#FFC700]/30 bg-[#FFC700]/10 p-4 backdrop-blur-sm">
+                      <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-[#FFC700]/10 to-transparent" />
+                      <p className="relative text-center text-sm text-[#FFC700]">
+                        <span className="font-bold">Dev Mode:</span> Your code is{' '}
+                        <code className="rounded-lg bg-[#FFC700]/20 px-3 py-1.5 font-mono text-base font-black text-white ring-1 ring-[#FFC700]/40">
+                          {devCode}
+                        </code>
+                      </p>
+                    </div>
+                  )}
+
+                  {error && (
+                    <div className="rounded-xl border border-[#FF1F7D]/30 bg-[#FF1F7D]/10 px-4 py-3 backdrop-blur-sm">
+                      <p className="text-sm font-semibold text-[#FF1F7D]">{error}</p>
+                    </div>
+                  )}
+
+                  <Button
+                    type="submit"
+                    className="group w-full rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#00F5FF] py-6 font-display text-base font-bold text-white shadow-lg shadow-[#8B5CF6]/50 transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-[#8B5CF6]/60 disabled:opacity-50"
+                    disabled={isLoading || otp.length !== 6}
+                  >
+                    {isLoading ? (
+                      <div className="flex items-center gap-2">
+                        <Loader2 className="h-5 w-5 animate-spin" />
+                        <span>Verifying...</span>
+                      </div>
+                    ) : (
+                      <div className="flex items-center justify-center gap-2">
+                        <span>Verify & Continue</span>
+                        <Sparkles className="h-5 w-5 transition-transform group-hover:rotate-12" />
+                      </div>
+                    )}
+                  </Button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setStep('email')
+                      setOtp('')
+                      setError('')
+                      setDevCode(null)
+                    }}
+                    className="w-full rounded-xl py-3 text-sm font-semibold text-white/60 transition-all duration-300 hover:bg-white/5 hover:text-white"
+                  >
+                    Use a different email
+                  </button>
+                </form>
+              </>
+            )}
+          </div>
         </div>
 
         {/* Trust Indicators */}
-        <div className="mt-8 flex flex-wrap justify-center items-center gap-6 text-sm text-gray-500">
+        <div className="mt-8 flex flex-wrap justify-center gap-6 text-sm">
           <div className="flex items-center gap-2">
-            <CheckCircle className="h-4 w-4 text-green-500" />
-            <span>Free Access</span>
+            <div className="rounded-lg bg-emerald-500/20 p-1.5 ring-1 ring-emerald-500/30">
+              <CheckCircle className="h-4 w-4 text-emerald-400" />
+            </div>
+            <span className="font-semibold text-white/70">Free Access</span>
           </div>
           <div className="flex items-center gap-2">
-            <CheckCircle className="h-4 w-4 text-green-500" />
-            <span>No Spam</span>
+            <div className="rounded-lg bg-emerald-500/20 p-1.5 ring-1 ring-emerald-500/30">
+              <CheckCircle className="h-4 w-4 text-emerald-400" />
+            </div>
+            <span className="font-semibold text-white/70">No Spam</span>
           </div>
           <div className="flex items-center gap-2">
-            <CheckCircle className="h-4 w-4 text-green-500" />
-            <span>Unsubscribe Anytime</span>
+            <div className="rounded-lg bg-emerald-500/20 p-1.5 ring-1 ring-emerald-500/30">
+              <CheckCircle className="h-4 w-4 text-emerald-400" />
+            </div>
+            <span className="font-semibold text-white/70">Unsubscribe Anytime</span>
           </div>
         </div>
       </div>
+
+      {/* Bottom gradient line */}
+      <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-[#8B5CF6]/50 via-[#00F5FF]/50 to-transparent" />
     </div>
   )
 }

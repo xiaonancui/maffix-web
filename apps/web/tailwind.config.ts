@@ -9,12 +9,28 @@ const config: Config = {
   ],
   theme: {
   	extend: {
+  		fontFamily: {
+  			sans: ['Outfit', 'system-ui', 'sans-serif'],
+  			display: ['Montserrat', 'Outfit', 'system-ui', 'sans-serif'],
+  			mono: ['Space Mono', 'monospace'],
+  		},
   		colors: {
   			border: 'hsl(var(--border))',
   			input: 'hsl(var(--input))',
   			ring: 'hsl(var(--ring))',
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
+  			surface: {
+  				base: '#0A0A0F',
+  				raised: '#1E1E2D',
+  				card: '#16161F'
+  			},
+  			// Maffix Brand Colors
+  			'maffix-hot-pink': '#FF1F7D',
+  			'maffix-purple': '#8B5CF6',
+  			'maffix-gold': '#FFC700',
+  			'maffix-cyan': '#00F5FF',
+  			'maffix-electric-purple': '#B200FF',
   			primary: {
   				DEFAULT: 'hsl(var(--primary))',
   				foreground: 'hsl(var(--primary-foreground))'
@@ -82,6 +98,16 @@ const config: Config = {
   			'text-glow': 'textGlow 0.8s both',
   			'cloud-move': 'cloudMove 28s linear infinite',
   			'bounce-slow': 'bounceSlow 3s infinite ease-in-out'
+  		},
+  		// Animation delays for staggered effects
+  		animationDelay: {
+  			'100': '100ms',
+  			'200': '200ms',
+  			'300': '300ms',
+  			'400': '400ms',
+  			'500': '500ms',
+  			'700': '700ms',
+  			'1000': '1000ms',
   		},
   		keyframes: {
   			fadeIn: {
@@ -235,6 +261,33 @@ const config: Config = {
   					transform: 'translateY(0) scale(1.05)',
   					animationTimingFunction: 'cubic-bezier(0, 0, 0.2, 1)'
   				}
+  			},
+  			// Maffix-specific animations
+  			shine: {
+  				'0%': {
+  					transform: 'translateX(-100%)'
+  				},
+  				'100%': {
+  					transform: 'translateX(100%)'
+  				}
+  			},
+  			'gradient-shift': {
+  				'0%, 100%': {
+  					backgroundPosition: '0% 50%'
+  				},
+  				'50%': {
+  					backgroundPosition: '100% 50%'
+  				}
+  			},
+  			enter: {
+  				'0%': {
+  					opacity: '0',
+  					transform: 'translateY(10px)'
+  				},
+  				'100%': {
+  					opacity: '1',
+  					transform: 'translateY(0)'
+  				}
   			}
   		},
   		backgroundSize: {
@@ -246,4 +299,3 @@ const config: Config = {
 }
 
 export default config
-

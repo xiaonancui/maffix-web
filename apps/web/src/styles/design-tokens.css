@@ -1,0 +1,273 @@
+/**
+ * Maffix Design Tokens
+ * CSS Custom Properties for the Maffix Design System
+ *
+ * Import this file in your global styles to access design tokens
+ * Usage: var(--maffix-hot-pink)
+ */
+
+:root {
+  /* ===================================
+     COLOR PALETTE
+     ================================== */
+
+  /* Primary Brand Colors */
+  --maffix-hot-pink: #FF1F7D;
+  --maffix-purple: #8B5CF6;
+  --maffix-gold: #FFC700;
+  --maffix-cyan: #00F5FF;
+  --maffix-electric-purple: #B200FF;
+
+  /* Surface Colors */
+  --maffix-surface-base: #0A0A0F;
+  --maffix-surface-card: #16161F;
+  --maffix-surface-raised: #1E1E2D;
+
+  /* Text Colors */
+  --maffix-text-primary: #FFFFFF;
+  --maffix-text-secondary: rgba(255, 255, 255, 0.70);
+  --maffix-text-tertiary: rgba(255, 255, 255, 0.50);
+  --maffix-text-muted: rgba(255, 255, 255, 0.40);
+
+  /* Border Colors */
+  --maffix-border-default: rgba(255, 255, 255, 0.10);
+  --maffix-border-hover: rgba(255, 255, 255, 0.20);
+
+  /* ===================================
+     GRADIENTS
+     ================================== */
+
+  /* Background Gradients */
+  --gradient-card-bg: linear-gradient(to bottom right, rgba(22, 22, 31, 0.90), rgba(30, 30, 45, 0.80));
+  --gradient-hot-pink-purple: linear-gradient(to right, #FF1F7D, #B200FF);
+  --gradient-hot-pink-gold: linear-gradient(to right, #FF1F7D, #FFC700);
+  --gradient-purple-cyan: linear-gradient(to right, #8B5CF6, #00F5FF);
+
+  /* Overlay Gradients */
+  --gradient-overlay-hot-pink: linear-gradient(to bottom right, rgba(255, 31, 125, 0.10), transparent, transparent);
+  --gradient-overlay-purple: linear-gradient(to bottom right, rgba(139, 92, 246, 0.10), transparent, transparent);
+  --gradient-overlay-gold: linear-gradient(to bottom right, rgba(255, 199, 0, 0.10), transparent, transparent);
+  --gradient-overlay-cyan: linear-gradient(to bottom right, rgba(0, 245, 255, 0.10), transparent, transparent);
+
+  /* ===================================
+     SHADOWS & GLOWS
+     ================================== */
+
+  /* Base Shadows */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+
+  /* Neon Glows - Hot Pink */
+  --glow-hot-pink-sm: 0 0 20px rgba(255, 31, 125, 0.3);
+  --glow-hot-pink-md: 0 0 40px rgba(255, 31, 125, 0.4);
+  --glow-hot-pink-lg: 0 0 60px rgba(255, 31, 125, 0.5);
+
+  /* Neon Glows - Purple */
+  --glow-purple-sm: 0 0 20px rgba(139, 92, 246, 0.3);
+  --glow-purple-md: 0 0 40px rgba(139, 92, 246, 0.4);
+  --glow-purple-lg: 0 0 60px rgba(139, 92, 246, 0.5);
+
+  /* Neon Glows - Gold */
+  --glow-gold-sm: 0 0 20px rgba(255, 199, 0, 0.3);
+  --glow-gold-md: 0 0 40px rgba(255, 199, 0, 0.4);
+  --glow-gold-lg: 0 0 60px rgba(255, 199, 0, 0.5);
+
+  /* Neon Glows - Cyan */
+  --glow-cyan-sm: 0 0 20px rgba(0, 245, 255, 0.3);
+  --glow-cyan-md: 0 0 40px rgba(0, 245, 255, 0.3);
+  --glow-cyan-lg: 0 0 60px rgba(0, 245, 255, 0.4);
+
+  /* Button Shadows */
+  --shadow-button-hot-pink: 0 10px 15px -3px rgba(255, 31, 125, 0.4);
+  --shadow-button-hot-pink-hover: 0 20px 25px -5px rgba(255, 31, 125, 0.6);
+
+  /* ===================================
+     SPACING
+     (8px scale system)
+     ================================== */
+
+  --space-1: 0.25rem;  /* 4px */
+  --space-2: 0.5rem;   /* 8px */
+  --space-3: 0.75rem;  /* 12px */
+  --space-4: 1rem;     /* 16px */
+  --space-5: 1.25rem;  /* 20px */
+  --space-6: 1.5rem;   /* 24px */
+  --space-8: 2rem;     /* 32px */
+  --space-10: 2.5rem;  /* 40px */
+  --space-12: 3rem;    /* 48px */
+  --space-16: 4rem;    /* 64px */
+  --space-20: 5rem;    /* 80px */
+
+  /* ===================================
+     BORDER RADIUS
+     ================================== */
+
+  --radius-sm: 0.5rem;   /* 8px */
+  --radius-md: 0.75rem;  /* 12px */
+  --radius-lg: 1rem;     /* 16px */
+  --radius-xl: 1.5rem;   /* 24px */
+  --radius-2xl: 1.5rem;  /* 24px - cards */
+  --radius-3xl: 1.5rem;  /* 24px - large cards */
+  --radius-full: 9999px; /* Pills */
+
+  /* ===================================
+     TRANSITIONS
+     ================================== */
+
+  --transition-fast: 150ms ease-in-out;
+  --transition-base: 300ms ease-in-out;
+  --transition-slow: 500ms ease-in-out;
+  --transition-slower: 700ms ease-in-out;
+
+  /* ===================================
+     Z-INDEX SCALE
+     ================================== */
+
+  --z-base: 0;
+  --z-dropdown: 1000;
+  --z-sticky: 1100;
+  --z-fixed: 1200;
+  --z-modal-backdrop: 1300;
+  --z-modal: 1400;
+  --z-popover: 1500;
+  --z-tooltip: 1600;
+}
+
+/* ===================================
+   UTILITY CLASSES
+   ================================== */
+
+/* Glassmorphism effect */
+.glass {
+  background: var(--gradient-card-bg);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+}
+
+/* Neon glow utilities */
+.glow-hot-pink {
+  box-shadow: var(--glow-hot-pink-md);
+}
+
+.glow-hot-pink:hover {
+  box-shadow: var(--glow-hot-pink-lg);
+}
+
+.glow-purple {
+  box-shadow: var(--glow-purple-md);
+}
+
+.glow-purple:hover {
+  box-shadow: var(--glow-purple-lg);
+}
+
+.glow-gold {
+  box-shadow: var(--glow-gold-md);
+}
+
+.glow-gold:hover {
+  box-shadow: var(--glow-gold-lg);
+}
+
+.glow-cyan {
+  box-shadow: var(--glow-cyan-md);
+}
+
+.glow-cyan:hover {
+  box-shadow: var(--glow-cyan-lg);
+}
+
+/* Gradient text */
+.gradient-text-hot-pink {
+  background: var(--gradient-hot-pink-purple);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gradient-text-gold {
+  background: var(--gradient-hot-pink-gold);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Animated gradient background */
+@keyframes gradient-shift {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.animated-gradient {
+  background-size: 200% 200%;
+  animation: gradient-shift 3s ease infinite;
+}
+
+/* Shine effect */
+@keyframes shine {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.shine-effect {
+  position: relative;
+  overflow: hidden;
+}
+
+.shine-effect::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  animation: shine 2s ease-in-out infinite;
+}
+
+/* Fade in up animation */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+/* Animation delays */
+.animation-delay-100 {
+  animation-delay: 100ms;
+}
+
+.animation-delay-200 {
+  animation-delay: 200ms;
+}
+
+.animation-delay-300 {
+  animation-delay: 300ms;
+}
+
+.animation-delay-400 {
+  animation-delay: 400ms;
+}
+
+.animation-delay-500 {
+  animation-delay: 500ms;
+}
