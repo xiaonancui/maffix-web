@@ -6,6 +6,7 @@ import MissionCard from '@/components/dashboard/MissionCard'
 import MissionsHeader from '@/components/dashboard/MissionsHeader'
 import MissionDetailModal from '@/components/dashboard/missions/MissionDetailModal'
 import MissionsClient from './missions-client'
+import { Gem, CheckCircle, Target } from 'lucide-react'
 
 export default async function MissionsPage() {
   const session = await getServerSession(authOptions)
@@ -34,7 +35,8 @@ export default async function MissionsPage() {
       {
         id: 'mission-follow-1',
         title: 'Follow Official Artist Account',
-        description: 'Follow our main account to stay updated with latest releases and exclusive content',
+        description:
+          'Follow our main account to stay updated with latest releases and exclusive content',
         missionType: 'FOLLOW',
         targetTikTokAccount: '@maffix_official',
         diamonds: 50,
@@ -178,64 +180,111 @@ export default async function MissionsPage() {
   const followMissions = missions.filter((m) => m.missionType === 'FOLLOW')
   const mainMissions = missions.filter((m) => m.missionType !== 'FOLLOW')
 
-  return (
-    <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-      {/* Header */}
-      <MissionsHeader streakCount={user?.streakCount || 0} />
+  // Calculate stats
+  const completedCount = Array.from(userMissions.values()).filter((m) => m.verified).length
+  const availableCount = missions.length
 
-      {/* User Stats */}
-      <div className="mb-8 grid gap-4 sm:grid-cols-3">
-        <div className="rounded-lg bg-card border border-border p-4 shadow hover:border-[#FF5656] transition-colors">
-          <div className="flex items-center">
-            <div className="flex-shrink-0">
-              <span className="text-2xl">💎</span>
-            </div>
-            <div className="ml-3">
-              <p className="text-sm font-medium text-muted-foreground">Your Diamonds</p>
-              <p className="text-xl font-semibold text-foreground">
-                {user?.diamonds.toLocaleString() || 0}
-              </p>
-            </div>
-          </div>
-        </div>
-        <div className="rounded-lg bg-card border border-border p-4 shadow hover:border-[#FF5656] transition-colors">
-          <div className="flex items-center">
-            <div className="flex-shrink-0">
-              <span className="text-2xl">✅</span>
-            </div>
-            <div className="ml-3">
-              <p className="text-sm font-medium text-muted-foreground">Completed</p>
-              <p className="text-xl font-semibold text-foreground">
-                {userMissions.size}
-              </p>
-            </div>
-          </div>
-        </div>
-        <div className="rounded-lg bg-card border border-border p-4 shadow hover:border-[#FF5656] transition-colors">
-          <div className="flex items-center">
-            <div className="flex-shrink-0">
-              <span className="text-2xl">🎯</span>
-            </div>
-            <div className="ml-3">
-              <p className="text-sm font-medium text-muted-foreground">Available</p>
-              <p className="text-xl font-semibold text-foreground">
-                {missions.length}
-              </p>
-            </div>
-          </div>
-        </div>
+  return (
+    <div className="relative min-h-screen">
+      {/* Animated background accents */}
+      <div className="pointer-events-none fixed inset-0 overflow-hidden">
+        <div className="absolute -left-1/4 top-0 h-96 w-96 animate-pulse rounded-full bg-[#FF1F7D]/10 blur-3xl" />
+        <div
+          className="absolute -right-1/4 top-1/4 h-96 w-96 animate-pulse rounded-full bg-[#8B5CF6]/10 blur-3xl"
+          style={{ animationDelay: '2s' }}
+        />
+        <div
+          className="absolute bottom-0 left-1/3 h-96 w-96 animate-pulse rounded-full bg-[#00F5FF]/10 blur-3xl"
+          style={{ animationDelay: '4s' }}
+        />
       </div>
 
-      {/* Client Component for Interactive Elements */}
-      <MissionsClient
-        followMissions={followMissions}
-        mainMissions={mainMissions}
-        userMissions={userMissions}
-        hasTikTokLinked={!!user?.tiktokUsername}
-        userId={user.id}
-        streakCount={user?.streakCount || 0}
-      />
+      <div className="relative mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+        {/* Header */}
+        <div className="mb-12 animate-fade-in-up">
+          <MissionsHeader streakCount={user?.streakCount || 0} />
+        </div>
+
+        {/* Enhanced User Stats */}
+        <section className="mb-12 animate-fade-in-up" style={{ animationDelay: '100ms' }}>
+          <div className="grid gap-6 sm:grid-cols-3">
+            {/* Diamonds Stat */}
+            <div className="group relative overflow-hidden rounded-3xl border border-[#FF1F7D]/30 bg-gradient-to-br from-surface-card/90 to-surface-raised/80 p-6 shadow-xl backdrop-blur-xl transition-all duration-500 hover:scale-[1.02] hover:border-[#FF1F7D]/60 hover:shadow-[0_0_40px_rgba(255,31,125,0.4)]">
+              {/* Ambient glow */}
+              <div className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-gradient-to-br from-[#FF1F7D]/20 to-transparent blur-3xl transition-all duration-700 group-hover:scale-150" />
+
+              {/* Hover overlay */}
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-[#FF1F7D]/10 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+
+              <div className="relative flex items-center gap-4">
+                <div className="rounded-xl bg-[#FF1F7D]/20 p-3 ring-1 ring-[#FF1F7D]/30 transition-transform duration-300 group-hover:scale-110">
+                  <Gem className="h-8 w-8 text-[#FF1F7D]" />
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-[#FF1F7D]">Your Diamonds</p>
+                  <p className="font-display text-3xl font-black tabular-nums text-white">
+                    {user?.diamonds.toLocaleString() || 0}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Completed Stat */}
+            <div className="group relative overflow-hidden rounded-3xl border border-emerald-500/30 bg-gradient-to-br from-surface-card/90 to-surface-raised/80 p-6 shadow-xl backdrop-blur-xl transition-all duration-500 hover:scale-[1.02] hover:border-emerald-500/60 hover:shadow-[0_0_40px_rgba(16,185,129,0.4)]">
+              {/* Ambient glow */}
+              <div className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-gradient-to-br from-emerald-500/20 to-transparent blur-3xl transition-all duration-700 group-hover:scale-150" />
+
+              {/* Hover overlay */}
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-emerald-500/10 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+
+              <div className="relative flex items-center gap-4">
+                <div className="rounded-xl bg-emerald-500/20 p-3 ring-1 ring-emerald-500/30 transition-transform duration-300 group-hover:scale-110">
+                  <CheckCircle className="h-8 w-8 text-emerald-400" />
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-emerald-400">Completed</p>
+                  <p className="font-display text-3xl font-black tabular-nums text-white">
+                    {completedCount}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Available Stat */}
+            <div className="group relative overflow-hidden rounded-3xl border border-[#8B5CF6]/30 bg-gradient-to-br from-surface-card/90 to-surface-raised/80 p-6 shadow-xl backdrop-blur-xl transition-all duration-500 hover:scale-[1.02] hover:border-[#8B5CF6]/60 hover:shadow-[0_0_40px_rgba(139,92,246,0.4)]">
+              {/* Ambient glow */}
+              <div className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-gradient-to-br from-[#8B5CF6]/20 to-transparent blur-3xl transition-all duration-700 group-hover:scale-150" />
+
+              {/* Hover overlay */}
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-[#8B5CF6]/10 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+
+              <div className="relative flex items-center gap-4">
+                <div className="rounded-xl bg-[#8B5CF6]/20 p-3 ring-1 ring-[#8B5CF6]/30 transition-transform duration-300 group-hover:scale-110">
+                  <Target className="h-8 w-8 text-[#8B5CF6]" />
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-[#8B5CF6]">Available</p>
+                  <p className="font-display text-3xl font-black tabular-nums text-white">
+                    {availableCount}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Client Component for Interactive Elements */}
+        <div className="animate-fade-in-up" style={{ animationDelay: '200ms' }}>
+          <MissionsClient
+            followMissions={followMissions}
+            mainMissions={mainMissions}
+            userMissions={userMissions}
+            hasTikTokLinked={!!user?.tiktokUsername}
+            userId={user.id}
+            streakCount={user?.streakCount || 0}
+          />
+        </div>
+      </div>
     </div>
   )
 }
-
