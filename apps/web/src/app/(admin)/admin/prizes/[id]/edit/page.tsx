@@ -87,7 +87,7 @@ export default function EditPrizePage({ params }: { params: { id: string } }) {
         >
           ← Back to Prizes
         </button>
-        <h1 className="text-3xl font-bold text-foreground tracking-tight">Edit Prize</h1>
+        <h1 className="font-display text-3xl font-bold text-foreground tracking-tight">Edit Prize</h1>
         <p className="text-muted-foreground mt-1">{prize.name}</p>
       </div>
 

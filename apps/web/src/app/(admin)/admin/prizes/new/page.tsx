@@ -36,7 +36,7 @@ export default function NewPrizePage() {
         >
           ← Back to Prizes
         </button>
-        <h1 className="text-3xl font-bold text-foreground tracking-tight">Create New Prize</h1>
+        <h1 className="font-display text-3xl font-bold text-foreground tracking-tight">Create New Prize</h1>
         <p className="text-muted-foreground mt-1">Add a new prize to the catalog</p>
       </div>
 

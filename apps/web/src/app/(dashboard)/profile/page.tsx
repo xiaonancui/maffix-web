@@ -1,11 +1,8 @@
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { redirect } from 'next/navigation'
-import Link from 'next/link'
 import LogoutButton from '@/components/auth/LogoutButton'
-import { Progress } from '@/components/ui/progress'
-import { getLevelProgress } from '@/lib/level-system'
-import { Gem, Ticket, Star, AlertTriangle } from 'lucide-react'
+import { User } from 'lucide-react'
 
 export default async function ProfilePage() {
   // Dynamic import to avoid build-time database connection
@@ -110,184 +107,110 @@ export default async function ProfilePage() {
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-foreground">Profile</h1>
-        <p className="mt-2 text-sm text-muted-foreground">
+        <h1 className="font-display text-4xl font-black uppercase tracking-wider text-white">Profile</h1>
+        <p className="mt-2 text-sm text-white/60">
           Manage your account and view your statistics
         </p>
       </div>
 
-      {/* TikTok Connection Status */}
-      {!user.tiktokUsername && (
-        <div className="mb-8 rounded-lg border-2 border-yellow-600 bg-transparent p-6 dark:bg-yellow-900/20">
-          <div className="flex items-start gap-3">
-            <AlertTriangle className="h-6 w-6 text-yellow-600 flex-shrink-0" />
-            <div className="flex-1">
-              <h3 className="text-sm font-medium text-yellow-600 dark:text-yellow-300">
-                TikTok Account Not Linked
-              </h3>
-              <div className="mt-2 text-sm text-yellow-700 dark:text-yellow-400">
-                <p>
-                  Link your TikTok account to complete missions and earn rewards.
-                </p>
-              </div>
-              <div className="mt-4">
-                <Link
-                  href="/profile/link-tiktok"
-                  className="inline-flex items-center rounded-md border-2 border-yellow-600 bg-transparent px-3 py-2 text-sm font-semibold text-yellow-600 hover:bg-yellow-600/10 transition-colors dark:bg-yellow-600 dark:text-primary-foreground dark:hover:bg-yellow-700"
-                >
-                  Link TikTok Account
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
       <div className="grid gap-6 lg:grid-cols-3">
         {/* Profile Card */}
         <div className="lg:col-span-1">
-          <div className="rounded-lg bg-card border border-border p-6 shadow">
-            <div className="mb-6 text-center">
-              <div className="mx-auto mb-4 flex h-24 w-24 items-center justify-center rounded-full border-4 border-primary bg-transparent text-4xl text-primary dark:bg-gradient-to-r dark:from-primary dark:to-red-500 dark:text-primary-foreground dark:border-transparent">
-                {user.avatar || '👤'}
-              </div>
-              <h2 className="text-xl font-bold text-foreground">{user.name}</h2>
-              <p className="text-sm text-muted-foreground">{user.email}</p>
-              <div className="mt-2">
-                <span className="rounded-full border-2 border-primary bg-transparent px-3 py-1 text-xs font-medium text-primary dark:bg-primary dark:text-primary-foreground dark:border-transparent">
-                  {user.role}
-                </span>
-              </div>
-            </div>
-
-            {/* Level Progress */}
-            <div className="mb-4 border-b border-border pb-4">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-sm text-muted-foreground">Level</span>
-                <span className="font-semibold text-primary text-lg">
-                  Lv.{user.level || 1}
-                </span>
-              </div>
-              {/* Note: XP-based leveling removed, showing level only */}
-              <div className="text-xs text-muted-foreground text-center">
-                Current Level
+          <div className="space-y-6">
+            <div className="rounded-3xl border-2 border-white/10 bg-gradient-to-br from-surface-card/50 to-surface-raised/50 p-6 backdrop-blur-sm">
+              <div className="text-center">
+                <div className="mx-auto mb-4 flex h-24 w-24 items-center justify-center rounded-full border-4 border-[#FF1F7D] bg-gradient-to-br from-[#FF1F7D]/20 to-[#FF1F7D]/10 shadow-lg shadow-[#FF1F7D]/30">
+                  <User className="h-12 w-12 text-white" />
+                </div>
+                <h2 className="font-display text-2xl font-black text-white">{user.name}</h2>
+                <p className="text-sm text-white/60">{user.email}</p>
+                <div className="mt-3">
+                  <span className="inline-flex rounded-full border-2 border-[#FF1F7D]/40 bg-[#FF1F7D]/20 px-4 py-1.5 font-display text-xs font-black uppercase tracking-wider text-[#FF1F7D] shadow-lg shadow-[#FF1F7D]/20">
+                    {user.role}
+                  </span>
+                </div>
               </div>
             </div>
 
-            {/* Balances */}
-            <div className="space-y-3 border-t border-border pt-4">
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-muted-foreground flex items-center gap-1.5">
-                  <Gem className="h-4 w-4" />
-                  Diamonds
-                </span>
-                <span className="font-semibold text-foreground">
-                  {user.diamonds?.toLocaleString() || 0}
-                </span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-muted-foreground flex items-center gap-1.5">
-                  <Ticket className="h-4 w-4" />
-                  Points
-                </span>
-                <span className="font-semibold text-foreground">
-                  {user.points?.toLocaleString() || 0}
-                </span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-muted-foreground">Member Since</span>
-                <span className="font-semibold text-foreground">
-                  {new Date(user.createdAt).toLocaleDateString()}
-                </span>
-              </div>
-            </div>
-
-            <div className="mt-6">
-              <LogoutButton />
-            </div>
+            <LogoutButton />
           </div>
         </div>
 
         {/* Statistics */}
         <div className="lg:col-span-2">
-          <div className="mb-6 rounded-lg bg-card border border-border p-6 shadow">
-            <h3 className="mb-4 text-lg font-semibold text-foreground">
+          <div className="mb-6 rounded-3xl border-2 border-white/10 bg-gradient-to-br from-surface-card/50 to-surface-raised/50 p-6 backdrop-blur-sm">
+            <h3 className="mb-6 font-display text-xl font-black uppercase tracking-wider text-white">
               Statistics
             </h3>
             <div className="grid gap-4 sm:grid-cols-2">
-              <div className="rounded-lg bg-secondary border border-border p-4">
-                <div className="text-2xl font-bold text-[#FF5656]">
+              <div className="rounded-2xl border-2 border-[#00F5FF]/20 bg-gradient-to-br from-[#00F5FF]/10 to-[#00F5FF]/5 p-4 shadow-lg shadow-[#00F5FF]/10">
+                <div className="font-display text-3xl font-black text-[#00F5FF]">
                   {stats.totalTasks}
                 </div>
-                <div className="text-sm text-muted-foreground">Tasks Completed</div>
+                <div className="text-sm text-white/60">Missions Completed</div>
               </div>
-              <div className="rounded-lg bg-secondary border border-border p-4">
-                <div className="text-2xl font-bold text-[#FF5656]">
-                  {stats.totalPrizes}
+              <div className="rounded-2xl border-2 border-[#FFC700]/20 bg-gradient-to-br from-[#FFC700]/10 to-[#FFC700]/5 p-4 shadow-lg shadow-[#FFC700]/10">
+                <div className="font-display text-3xl font-black text-[#FFC700]">
+                  {user.diamonds?.toLocaleString() || 0}
                 </div>
-                <div className="text-sm text-muted-foreground">Prizes Won</div>
+                <div className="text-sm text-white/60">Diamonds</div>
               </div>
-              <div className="rounded-lg bg-secondary border border-border p-4">
-                <div className="text-2xl font-bold text-[#FF5656]">
-                  {stats.redeemedPrizes}
+              <div className="rounded-2xl border-2 border-[#8B5CF6]/20 bg-gradient-to-br from-[#8B5CF6]/10 to-[#8B5CF6]/5 p-4 shadow-lg shadow-[#8B5CF6]/10">
+                <div className="font-display text-3xl font-black text-[#8B5CF6]">
+                  {user.points?.toLocaleString() || 0}
                 </div>
-                <div className="text-sm text-muted-foreground">Prizes Redeemed</div>
+                <div className="text-sm text-white/60">Points</div>
               </div>
-              <div className="rounded-lg bg-secondary border border-border p-4">
-                <div className="text-2xl font-bold text-[#FF5656]">
-                  💎 {stats.totalEarned.toLocaleString()}
+              <div className="rounded-2xl border-2 border-[#10B981]/20 bg-gradient-to-br from-[#10B981]/10 to-[#10B981]/5 p-4 shadow-lg shadow-[#10B981]/10">
+                <div className="font-display text-3xl font-black text-[#10B981]">
+                  {stats.totalEarned.toLocaleString()}
                 </div>
-                <div className="text-sm text-muted-foreground">Total Earned</div>
+                <div className="text-sm text-white/60">Total Earned</div>
               </div>
             </div>
           </div>
 
           {/* Recent Transactions */}
-          <div className="rounded-lg bg-card border border-border p-6 shadow">
-            <h3 className="mb-4 text-lg font-semibold text-foreground">
+          <div className="rounded-3xl border-2 border-white/10 bg-gradient-to-br from-surface-card/50 to-surface-raised/50 p-6 backdrop-blur-sm">
+            <h3 className="mb-6 font-display text-xl font-black uppercase tracking-wider text-white">
               Recent Transactions
             </h3>
             {user.transactions.length === 0 ? (
-              <p className="text-center text-muted-foreground">No transactions yet</p>
+              <p className="text-center text-white/60">No transactions yet</p>
             ) : (
               <div className="space-y-3">
-                {user.transactions.map((transaction) => (
-                  <div
-                    key={transaction.id}
-                    className="flex items-center justify-between rounded-lg border border-border bg-secondary p-3 hover:border-[#FF5656] transition-colors"
-                  >
-                    <div className="flex-1">
-                      <p className="text-sm font-medium text-foreground">
-                        {transaction.description}
-                      </p>
-                      <p className="text-xs text-muted-foreground">
-                        {new Date(transaction.createdAt).toLocaleString()}
-                      </p>
+                {user.transactions.map((transaction) => {
+                  const isPositive = transaction.type === 'EARN' || transaction.type === 'PURCHASE' || transaction.type === 'GIFT'
+                  const color = isPositive ? '#10B981' : '#FF1F7D'
+                  return (
+                    <div
+                      key={transaction.id}
+                      className={`flex items-center justify-between rounded-xl border-2 border-white/10 bg-white/5 p-3 transition-all duration-300 hover:border-[${color}]/40`}
+                    >
+                      <div className="flex-1">
+                        <p className="text-sm font-medium text-white">
+                          {transaction.description}
+                        </p>
+                        <p className="text-xs text-white/60">
+                          {new Date(transaction.createdAt).toLocaleString()}
+                        </p>
+                      </div>
+                      <div className="text-right">
+                        <p
+                          className="text-sm font-bold"
+                          style={{ color }}
+                        >
+                          {isPositive ? '+' : '-'}
+                          {transaction.amount}{' '}
+                          {transaction.currency === 'DIAMONDS' ? '💎' : '⭐'}
+                        </p>
+                        <p className="text-xs text-white/60">
+                          {transaction.type}
+                        </p>
+                      </div>
                     </div>
-                    <div className="text-right">
-                      <p
-                        className={`text-sm font-semibold ${
-                          transaction.type === 'EARN' ||
-                          transaction.type === 'PURCHASE' ||
-                          transaction.type === 'GIFT'
-                            ? 'text-[#FF5656]'
-                            : 'text-red-400'
-                        }`}
-                      >
-                        {transaction.type === 'EARN' ||
-                        transaction.type === 'PURCHASE' ||
-                        transaction.type === 'GIFT'
-                          ? '+'
-                          : '-'}
-                        {transaction.amount}{' '}
-                        {transaction.currency === 'DIAMONDS' ? '💎' : '⭐'}
-                      </p>
-                      <p className="text-xs text-muted-foreground">
-                        {transaction.type}
-                      </p>
-                    </div>
-                  </div>
-                ))}
+                  )
+                })}
               </div>
             )}
           </div>

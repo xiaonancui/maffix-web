@@ -93,7 +93,7 @@ export default async function LinkTikTokPage() {
       {/* Status Card */}
       <div className="mb-8 rounded-lg bg-white p-8 shadow-lg">
         <div className="mb-6 flex items-center justify-between">
-          <h2 className="text-2xl font-bold text-gray-900">Connection Status</h2>
+          <h2 className="font-display text-2xl font-bold text-gray-900">Connection Status</h2>
           {isLinked ? (
             <span className="rounded-full bg-green-100 px-4 py-2 text-sm font-semibold text-green-800">
               ✓ Connected

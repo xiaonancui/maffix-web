@@ -55,7 +55,7 @@ export default function FilterDropdown({
       </button>
 
       {isOpen && (
-        <div className="absolute z-10 mt-2 w-48 rounded-lg bg-card border border-red-500/20 dark:shadow-xl shadow-red-500/20 overflow-hidden">
+        <div className="absolute z-50 mt-2 w-48 rounded-lg bg-card border border-red-500/20 dark:shadow-xl shadow-red-500/20 overflow-hidden">
           {options.map((option) => (
             <button
               key={option.value}

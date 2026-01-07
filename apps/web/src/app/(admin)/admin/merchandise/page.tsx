@@ -3,8 +3,8 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import AdminPageHeader from '@/components/admin/AdminPageHeader'
 import DataTable from '@/components/admin/DataTable'
-import StatusBadge from '@/components/admin/StatusBadge'
 import FilterDropdown from '@/components/admin/FilterDropdown'
 import SearchBar from '@/components/admin/SearchBar'
 import ConfirmDialog from '@/components/admin/ConfirmDialog'
@@ -167,15 +167,40 @@ export default function MerchandisePage() {
     }
   }
 
-  const getCategoryColor = (category: string) => {
-    const colors: Record<string, string> = {
-      CLOTHING: 'blue',
-      ACCESSORIES: 'purple',
-      MUSIC: 'yellow',
-      COLLECTIBLES: 'green',
-      OTHER: 'gray',
+  const getCategoryBadge = (category: string) => {
+    const badgeStyles: Record<string, { color: string; borderColor: string; bgColor: string; shadowColor: string }> = {
+      CLOTHING: {
+        color: 'text-[#00F5FF]',
+        borderColor: 'border-[#00F5FF]/40',
+        bgColor: 'bg-[#00F5FF]/20',
+        shadowColor: 'shadow-[#00F5FF]/20',
+      },
+      ACCESSORIES: {
+        color: 'text-[#8B5CF6]',
+        borderColor: 'border-[#8B5CF6]/40',
+        bgColor: 'bg-[#8B5CF6]/20',
+        shadowColor: 'shadow-[#8B5CF6]/20',
+      },
+      MUSIC: {
+        color: 'text-[#FFC700]',
+        borderColor: 'border-[#FFC700]/40',
+        bgColor: 'bg-[#FFC700]/20',
+        shadowColor: 'shadow-[#FFC700]/20',
+      },
+      COLLECTIBLES: {
+        color: 'text-[#10B981]',
+        borderColor: 'border-[#10B981]/40',
+        bgColor: 'bg-[#10B981]/20',
+        shadowColor: 'shadow-[#10B981]/20',
+      },
+      OTHER: {
+        color: 'text-white/40',
+        borderColor: 'border-white/20',
+        bgColor: 'bg-white/10',
+        shadowColor: 'shadow-white/10',
+      },
     }
-    return colors[category] || 'gray'
+    return badgeStyles[category] || badgeStyles.OTHER
   }
 
   const getTotalStock = (variants: MerchandiseVariant[]) => {
@@ -191,11 +216,11 @@ export default function MerchandisePage() {
           <img
             src={item.imageUrl}
             alt={item.name}
-            className="w-16 h-16 rounded-lg object-cover border border-border"
+            className="h-16 w-16 rounded-lg border-2 border-white/10 object-cover"
           />
           <div>
-            <div className="font-medium text-foreground">{item.name}</div>
-            <div className="text-sm text-muted-foreground line-clamp-1">{item.description}</div>
+            <div className="font-medium text-white">{item.name}</div>
+            <div className="line-clamp-1 text-sm text-white/60">{item.description}</div>
           </div>
         </div>
       ),
@@ -203,24 +228,27 @@ export default function MerchandisePage() {
     {
       key: 'category',
       label: 'Category',
-      render: (item: Merchandise) => (
-        <StatusBadge variant={getCategoryColor(item.category)}>
-          {item.category}
-        </StatusBadge>
-      ),
+      render: (item: Merchandise) => {
+        const styles = getCategoryBadge(item.category)
+        return (
+          <span className={`inline-flex rounded-full border-2 ${styles.borderColor} ${styles.bgColor} px-3 py-1 font-display text-xs font-black uppercase tracking-wider ${styles.color} shadow-lg ${styles.shadowColor}`}>
+            {item.category}
+          </span>
+        )
+      },
     },
     {
       key: 'price',
       label: 'Price',
       render: (item: Merchandise) => (
-        <span className="text-foreground font-medium">${item.price.toFixed(2)}</span>
+        <span className="font-medium text-white">${item.price.toFixed(2)}</span>
       ),
     },
     {
       key: 'variants',
       label: 'Variants',
       render: (item: Merchandise) => (
-        <span className="text-muted-foreground">{item.variants.length} variant(s)</span>
+        <span className="text-white/60">{item.variants.length} variant(s)</span>
       ),
     },
     {
@@ -229,7 +257,7 @@ export default function MerchandisePage() {
       render: (item: Merchandise) => {
         const totalStock = getTotalStock(item.variants)
         return (
-          <span className={`font-medium ${totalStock > 0 ? 'text-green-400' : 'text-red-400'}`}>
+          <span className={`font-medium ${totalStock > 0 ? 'text-[#10B981]' : 'text-[#FF1F7D]'}`}>
             {totalStock} units
           </span>
         )
@@ -239,32 +267,38 @@ export default function MerchandisePage() {
       key: 'orders',
       label: 'Orders',
       render: (item: Merchandise) => (
-        <span className="text-muted-foreground">{item._count.orderItems}</span>
+        <span className="text-white/60">{item._count.orderItems}</span>
       ),
     },
     {
       key: 'featured',
       label: 'Featured',
       render: (item: Merchandise) => (
-        <StatusBadge variant={item.featured ? 'warning' : 'gray'}>
-          {item.featured ? (
-            <span className="flex items-center gap-1">
-              <Star className="h-3 w-3" />
-              Yes
-            </span>
-          ) : (
-            'No'
-          )}
-        </StatusBadge>
+        item.featured ? (
+          <span className="inline-flex items-center gap-1 rounded-full border-2 border-[#FFC700]/40 bg-[#FFC700]/20 px-3 py-1 font-display text-xs font-black uppercase tracking-wider text-[#FFC700] shadow-lg shadow-[#FFC700]/20">
+            <Star className="h-3 w-3" />
+            Yes
+          </span>
+        ) : (
+          <span className="inline-flex rounded-full border-2 border-white/20 bg-white/10 px-3 py-1 font-display text-xs font-black uppercase tracking-wider text-white/40">
+            No
+          </span>
+        )
       ),
     },
     {
       key: 'inStock',
       label: 'Status',
       render: (item: Merchandise) => (
-        <StatusBadge variant={item.inStock ? 'success' : 'error'}>
-          {item.inStock ? 'In Stock' : 'Out of Stock'}
-        </StatusBadge>
+        item.inStock ? (
+          <span className="inline-flex rounded-full border-2 border-[#10B981]/40 bg-[#10B981]/20 px-3 py-1 font-display text-xs font-black uppercase tracking-wider text-[#10B981] shadow-lg shadow-[#10B981]/20">
+            In Stock
+          </span>
+        ) : (
+          <span className="inline-flex rounded-full border-2 border-[#FF1F7D]/40 bg-[#FF1F7D]/20 px-3 py-1 font-display text-xs font-black uppercase tracking-wider text-[#FF1F7D] shadow-lg shadow-[#FF1F7D]/20">
+            Out of Stock
+          </span>
+        )
       ),
     },
     {
@@ -311,22 +345,23 @@ export default function MerchandisePage() {
     <div className="mx-auto max-w-7xl px-6 py-8">
       <div className="space-y-6">
         {/* Header */}
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold text-foreground tracking-tight">Merchandise</h1>
-            <p className="text-muted-foreground mt-1">Manage store products and inventory</p>
-          </div>
-          <Link
-            href="/admin/merchandise/new"
-            className="px-4 py-2 border-2 border-primary bg-transparent text-primary rounded-lg hover:bg-primary/10 transition-all dark:shadow-lg dark:shadow-red-500/30 font-medium dark:bg-gradient-to-r dark:from-red-600 dark:to-red-500 dark:text-primary-foreground dark:border-transparent dark:hover:from-red-700 dark:hover:to-red-600"
-          >
-            + Add Product
-        </Link>
-      </div>
+        <AdminPageHeader
+          title="Merchandise"
+          description="Manage store products and inventory"
+          actions={
+            <Link
+              href="/admin/merchandise/new"
+              className="group relative flex items-center gap-2 overflow-hidden rounded-2xl border-2 border-[#FF1F7D]/40 bg-gradient-to-r from-[#FF1F7D]/20 to-[#FF1F7D]/10 px-6 py-3 font-display text-sm font-bold uppercase tracking-wider text-white shadow-lg shadow-[#FF1F7D]/20 backdrop-blur-sm transition-all duration-300 hover:scale-105 hover:border-[#FF1F7D]/60 hover:shadow-[#FF1F7D]/40"
+            >
+              <Plus className="h-5 w-5 text-[#FF1F7D]" />
+              <span className="text-[#FF1F7D]">Add Product</span>
+            </Link>
+          }
+        />
 
       {/* Filters */}
-      <div className="bg-card border border-border rounded-lg p-6 dark:shadow-lg dark:shadow-red-500/10">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div className="rounded-3xl border-2 border-white/10 bg-gradient-to-br from-surface-card/90 to-surface-raised/80 p-6 shadow-xl backdrop-blur-xl">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
           <SearchBar
             onSearch={setSearchQuery}
             placeholder="Search products..."
@@ -368,7 +403,7 @@ export default function MerchandisePage() {
       </div>
 
       {/* Table */}
-      <div className="bg-card border border-border rounded-lg dark:shadow-lg dark:shadow-red-500/10">
+      <div className="rounded-3xl border-2 border-white/10 bg-gradient-to-br from-surface-card/90 to-surface-raised/80 shadow-xl backdrop-blur-xl">
         <DataTable
           columns={columns}
           data={merchandise}

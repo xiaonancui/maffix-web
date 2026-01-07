@@ -112,8 +112,8 @@ export function MerchandiseForm({
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       {/* Basic Information */}
-      <div className="bg-card border border-red-500/20 rounded-lg p-6 dark:shadow-lg dark:shadow-red-500/10 space-y-6">
-        <h2 className="text-lg font-bold text-foreground">Basic Information</h2>
+      <div className="rounded-3xl border-2 border-white/10 bg-gradient-to-br from-surface-card/50 to-surface-raised/50 p-6 backdrop-blur-sm space-y-6">
+        <h2 className="font-display text-xl font-black uppercase tracking-wider text-white">Basic Information</h2>
 
         <FormField
           label="Product Name"
@@ -181,8 +181,8 @@ export function MerchandiseForm({
       </div>
 
       {/* Product Details */}
-      <div className="bg-card border border-red-500/20 rounded-lg p-6 dark:shadow-lg dark:shadow-red-500/10 space-y-6">
-        <h2 className="text-lg font-bold text-foreground">Product Details</h2>
+      <div className="rounded-3xl border-2 border-white/10 bg-gradient-to-br from-surface-card/50 to-surface-raised/50 p-6 backdrop-blur-sm space-y-6">
+        <h2 className="font-display text-xl font-black uppercase tracking-wider text-white">Product Details</h2>
 
         <FormField
           label="Material"
@@ -227,13 +227,13 @@ export function MerchandiseForm({
 
         {formData.imageUrl && (
           <div className="mt-4">
-            <label className="block text-sm font-medium text-gray-300 mb-2">
+            <label className="block text-sm font-medium text-white/80 mb-2">
               Image Preview
             </label>
             <img
               src={formData.imageUrl}
               alt="Product preview"
-              className="w-48 h-48 object-cover rounded-lg border border-red-500/20"
+              className="w-48 h-48 object-cover rounded-lg border-2 border-white/10"
               onError={(e) => {
                 e.currentTarget.style.display = 'none'
               }}
@@ -243,8 +243,8 @@ export function MerchandiseForm({
       </div>
 
       {/* Inventory & Display */}
-      <div className="bg-card border border-red-500/20 rounded-lg p-6 dark:shadow-lg dark:shadow-red-500/10 space-y-6">
-        <h2 className="text-lg font-bold text-foreground">Inventory & Display</h2>
+      <div className="rounded-3xl border-2 border-white/10 bg-gradient-to-br from-surface-card/50 to-surface-raised/50 p-6 backdrop-blur-sm space-y-6">
+        <h2 className="font-display text-xl font-black uppercase tracking-wider text-white">Inventory & Display</h2>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <FormField
@@ -301,15 +301,15 @@ export function MerchandiseForm({
         <button
           type="submit"
           disabled={submitting}
-          className="px-6 py-2 border-2 border-primary bg-transparent text-primary rounded-lg hover:bg-primary/10 transition-all dark:shadow-lg dark:shadow-red-500/30 font-medium disabled:opacity-50 disabled:cursor-not-allowed dark:bg-gradient-to-r dark:from-red-600 dark:to-red-500 dark:text-primary-foreground dark:border-transparent dark:hover:from-red-700 dark:hover:to-red-600"
+          className="group relative flex items-center gap-2 overflow-hidden rounded-2xl border-2 border-[#FF1F7D]/40 bg-gradient-to-r from-[#FF1F7D]/20 to-[#FF1F7D]/10 px-6 py-3 font-display text-sm font-bold uppercase tracking-wider text-white shadow-lg shadow-[#FF1F7D]/20 backdrop-blur-sm transition-all duration-300 hover:scale-105 hover:border-[#FF1F7D]/60 hover:shadow-[#FF1F7D]/40 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
         >
-          {submitting ? 'Saving...' : submitLabel}
+          <span className="text-[#FF1F7D]">{submitting ? 'Saving...' : submitLabel}</span>
         </button>
         <button
           type="button"
           onClick={onCancel}
           disabled={submitting}
-          className="px-6 py-2 bg-gray-800 text-foreground rounded-lg hover:bg-gray-700 transition-colors border border-red-500/30 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="rounded-2xl border-2 border-white/10 bg-white/5 px-6 py-3 font-display text-sm font-bold uppercase tracking-wider text-white hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
         >
           Cancel
         </button>

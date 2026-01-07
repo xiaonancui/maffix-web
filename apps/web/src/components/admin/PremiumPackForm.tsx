@@ -124,8 +124,8 @@ export function PremiumPackForm({
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       {/* Basic Information */}
-      <div className="bg-card border border-border rounded-lg p-6 dark:shadow-lg dark:shadow-lg space-y-6">
-        <h2 className="text-lg font-bold text-foreground">Basic Information</h2>
+      <div className="rounded-3xl border-2 border-white/10 bg-gradient-to-br from-surface-card/50 to-surface-raised/50 p-6 backdrop-blur-sm space-y-6">
+        <h2 className="font-display text-xl font-black uppercase tracking-wider text-white">Basic Information</h2>
 
         <FormField
           label="Pack Name"
@@ -156,8 +156,8 @@ export function PremiumPackForm({
       </div>
 
       {/* Pricing */}
-      <div className="bg-card border border-border rounded-lg p-6 dark:shadow-lg dark:shadow-lg space-y-6">
-        <h2 className="text-lg font-bold text-foreground">Pricing</h2>
+      <div className="rounded-3xl border-2 border-white/10 bg-gradient-to-br from-surface-card/50 to-surface-raised/50 p-6 backdrop-blur-sm space-y-6">
+        <h2 className="font-display text-xl font-black uppercase tracking-wider text-white">Pricing</h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <FormField
@@ -191,8 +191,8 @@ export function PremiumPackForm({
       </div>
 
       {/* Pack Contents */}
-      <div className="bg-card border border-border rounded-lg p-6 dark:shadow-lg dark:shadow-lg space-y-6">
-        <h2 className="text-lg font-bold text-foreground">Pack Contents</h2>
+      <div className="rounded-3xl border-2 border-white/10 bg-gradient-to-br from-surface-card/50 to-surface-raised/50 p-6 backdrop-blur-sm space-y-6">
+        <h2 className="font-display text-xl font-black uppercase tracking-wider text-white">Pack Contents</h2>
 
         <FormField
           label="Guaranteed Prize"
@@ -212,7 +212,7 @@ export function PremiumPackForm({
         />
 
         {selectedPrize && (
-          <div className="p-4 bg-purple-500/10 border border-purple-500/30 rounded-lg">
+          <div className="p-4 bg-[#8B5CF6]/10 border-2 border-[#8B5CF6]/30 rounded-lg">
             <div className="flex items-center gap-3">
               {selectedPrize.image && (
                 <img
@@ -222,8 +222,8 @@ export function PremiumPackForm({
                 />
               )}
               <div>
-                <div className="font-medium text-foreground">{selectedPrize.name}</div>
-                <div className="text-sm text-gray-400">
+                <div className="font-medium text-white">{selectedPrize.name}</div>
+                <div className="text-sm text-white/60">
                   {selectedPrize.rarity} • {selectedPrize.type}
                 </div>
               </div>
@@ -263,8 +263,8 @@ export function PremiumPackForm({
       </div>
 
       {/* Display Settings */}
-      <div className="bg-card border border-border rounded-lg p-6 dark:shadow-lg dark:shadow-lg space-y-6">
-        <h2 className="text-lg font-bold text-foreground">Display Settings</h2>
+      <div className="rounded-3xl border-2 border-white/10 bg-gradient-to-br from-surface-card/50 to-surface-raised/50 p-6 backdrop-blur-sm space-y-6">
+        <h2 className="font-display text-xl font-black uppercase tracking-wider text-white">Display Settings</h2>
 
         <FormField
           label="Image URL"
@@ -277,13 +277,13 @@ export function PremiumPackForm({
 
         {formData.imageUrl && (
           <div className="mt-4">
-            <label className="block text-sm font-medium text-gray-300 mb-2">
+            <label className="block text-sm font-medium text-white/80 mb-2">
               Image Preview
             </label>
             <img
               src={formData.imageUrl}
               alt="Pack preview"
-              className="w-48 h-48 object-cover rounded-lg border border-border"
+              className="w-48 h-48 object-cover rounded-lg border-2 border-white/10"
               onError={(e) => {
                 e.currentTarget.style.display = 'none'
               }}
@@ -336,7 +336,7 @@ export function PremiumPackForm({
 
       {/* Error Display */}
       {errors.submit && (
-        <div className="p-4 bg-red-500/10 border border-border rounded-lg text-red-400 text-sm">
+        <div className="p-4 bg-red-500/10 border-2 border-red-500/30 rounded-lg text-red-400 text-sm">
           {errors.submit}
         </div>
       )}
@@ -346,15 +346,15 @@ export function PremiumPackForm({
         <button
           type="submit"
           disabled={submitting || loadingPrizes}
-          className="px-6 py-2 border-2 border-primary bg-transparent text-primary rounded-lg hover:bg-primary/10 transition-all dark:shadow-lg dark:shadow-red-500/30 font-medium disabled:opacity-50 disabled:cursor-not-allowed dark:bg-gradient-to-r dark:from-red-600 dark:to-red-500 dark:text-primary-foreground dark:border-transparent dark:hover:from-red-700 dark:hover:to-red-600"
+          className="group relative flex items-center gap-2 overflow-hidden rounded-2xl border-2 border-[#FF1F7D]/40 bg-gradient-to-r from-[#FF1F7D]/20 to-[#FF1F7D]/10 px-6 py-3 font-display text-sm font-bold uppercase tracking-wider text-white shadow-lg shadow-[#FF1F7D]/20 backdrop-blur-sm transition-all duration-300 hover:scale-105 hover:border-[#FF1F7D]/60 hover:shadow-[#FF1F7D]/40 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
         >
-          {submitting ? 'Saving...' : submitLabel}
+          <span className="text-[#FF1F7D]">{submitting ? 'Saving...' : submitLabel}</span>
         </button>
         <button
           type="button"
           onClick={onCancel}
           disabled={submitting}
-          className="px-6 py-2 bg-gray-800 text-foreground rounded-lg hover:bg-gray-700 transition-colors border border-border disabled:opacity-50 disabled:cursor-not-allowed"
+          className="rounded-2xl border-2 border-white/10 bg-white/5 px-6 py-3 font-display text-sm font-bold uppercase tracking-wider text-white hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
         >
           Cancel
         </button>

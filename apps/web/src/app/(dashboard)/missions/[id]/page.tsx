@@ -195,7 +195,7 @@ export default async function MissionDetailPage({
           <div className="flex items-center gap-4">
             <span className="text-5xl">{getMissionTypeIcon(mission.missionType)}</span>
             <div>
-              <h1 className="text-3xl font-bold text-foreground">{mission.title}</h1>
+              <h1 className="font-display text-3xl font-bold text-foreground">{mission.title}</h1>
               <p className="mt-1 text-sm text-muted-foreground">
                 {getMissionTypeDescription(mission.missionType)}
               </p>
@@ -216,19 +216,19 @@ export default async function MissionDetailPage({
         <div className="grid gap-4 sm:grid-cols-3">
           <div className="rounded-lg bg-blue-900/20 p-4 border border-blue-800/30">
             <div className="text-sm text-muted-foreground">Reward</div>
-            <div className="mt-1 text-2xl font-bold text-[#FF5656]">
+            <div className="mt-1 font-display text-2xl font-bold text-[#FF5656]">
               💎 {mission.diamonds}
             </div>
           </div>
           <div className="rounded-lg bg-purple-900/20 p-4 border border-purple-800/30">
             <div className="text-sm text-muted-foreground">Points</div>
-            <div className="mt-1 text-2xl font-bold text-[#FF5656]">
+            <div className="mt-1 font-display text-2xl font-bold text-[#FF5656]">
               ⭐ {mission.points}
             </div>
           </div>
           <div className="rounded-lg bg-green-900/20 p-4 border border-green-800/30">
             <div className="text-sm text-muted-foreground">Est. Time</div>
-            <div className="mt-1 text-2xl font-bold text-green-400">
+            <div className="mt-1 font-display text-2xl font-bold text-green-400">
               {mission.estimatedTime || '5 min'}
             </div>
           </div>
@@ -353,7 +353,7 @@ export default async function MissionDetailPage({
 
       {/* Mission Instructions */}
       <div className="mb-8 rounded-lg bg-card p-6 shadow border border-border">
-        <h2 className="mb-4 text-xl font-bold text-foreground">How to Complete</h2>
+        <h2 className="mb-4 font-display text-xl font-bold text-foreground">How to Complete</h2>
         <ol className="space-y-3">
           {(mission.instructions || [
             'Open TikTok using the button below',
@@ -373,7 +373,7 @@ export default async function MissionDetailPage({
       {/* Requirements */}
       {mission.requirements && mission.requirements.length > 0 && (
         <div className="mb-8 rounded-lg bg-card p-6 shadow border border-border">
-          <h2 className="mb-4 text-xl font-bold text-foreground">Requirements</h2>
+          <h2 className="mb-4 font-display text-xl font-bold text-foreground">Requirements</h2>
           <ul className="space-y-2">
             {mission.requirements.map((req: string, index: number) => (
               <li key={index} className="flex items-start">

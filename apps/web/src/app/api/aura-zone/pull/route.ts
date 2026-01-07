@@ -106,16 +106,23 @@ export async function POST(request: NextRequest) {
     // Step 4: Save Results to UserItem (wrap in transaction for atomicity)
     const batchId = result.batchId
 
+    // Create a map from prizeId to gachaItemId for efficient lookup
+    const prizeToGachaItemMap = new Map<string, string>()
+    for (const item of gachaItems) {
+      prizeToGachaItemMap.set(item.prizeId, item.id)
+    }
+
     await db.$transaction(async (tx) => {
       for (let i = 0; i < result.pulls.length; i++) {
         const pull = result.pulls[i]
+        const gachaItemId = prizeToGachaItemMap.get(pull.prizeId) || gachaItems[0]?.id
 
         // Create gacha pull record
         await tx.gachaPull.create({
           data: {
             userId: user.id,
             bannerId: banner.id,
-            gachaItemId: auraZoneItems[0].id, // Placeholder - ideally match actual item
+            gachaItemId: gachaItemId, // Now properly mapped from prize
             prizeId: pull.prizeId,
             currencyUsed: currency,
             pulledAt: new Date(),

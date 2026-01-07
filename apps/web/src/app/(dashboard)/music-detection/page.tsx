@@ -263,7 +263,7 @@ export default function MusicDetectionPage() {
         <div className="rounded-lg bg-secondary border-2 border-green-600 p-6">
           <div className="flex items-center mb-4">
             <CheckCircle className="w-6 h-6 text-green-600 mr-2" />
-            <h3 className="text-xl font-bold text-green-600">
+            <h3 className="font-display text-xl font-bold text-green-600">
               Music Identified!
             </h3>
           </div>
@@ -309,14 +309,14 @@ export default function MusicDetectionPage() {
         <div className="bg-card rounded-lg border border-border p-6 mb-6 text-center">
           <div className="flex items-center justify-center mb-3">
             <Music className="w-10 h-10 text-primary mr-3" />
-            <h1 className="text-3xl font-bold text-foreground">Music Detector</h1>
+            <h1 className="font-display text-3xl font-bold text-foreground">Music Detector</h1>
           </div>
           <p className="text-muted-foreground">Identify music from YouTube videos in two simple steps</p>
         </div>
 
         {/* Step 1: Get Audio Link */}
         <div className="bg-card rounded-lg border border-border p-6 mb-6">
-          <h2 className="text-2xl font-bold text-foreground mb-2 flex items-center">
+          <h2 className="font-display text-2xl font-bold text-foreground mb-2 flex items-center">
             <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-primary text-primary-foreground text-sm font-bold mr-3">1</span>
             Get Audio Download Link
           </h2>
@@ -362,7 +362,7 @@ export default function MusicDetectionPage() {
 
         {/* Step 2: Detect Music */}
         <div className="bg-card rounded-lg border border-border p-6">
-          <h2 className="text-2xl font-bold text-foreground mb-2 flex items-center">
+          <h2 className="font-display text-2xl font-bold text-foreground mb-2 flex items-center">
             <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-primary text-primary-foreground text-sm font-bold mr-3">2</span>
             Detect Music
           </h2>

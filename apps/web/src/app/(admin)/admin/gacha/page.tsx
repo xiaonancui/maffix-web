@@ -3,12 +3,12 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import AdminPageHeader from '@/components/admin/AdminPageHeader'
 import DataTable from '@/components/admin/DataTable'
-import StatusBadge from '@/components/admin/StatusBadge'
 import FilterDropdown from '@/components/admin/FilterDropdown'
 import ConfirmDialog from '@/components/admin/ConfirmDialog'
 import ActionMenu from '@/components/admin/ActionMenu'
-import { Plus, Gem, Edit, Play, Pause, Trash2 } from 'lucide-react'
+import { Plus, Gem, Edit, Play, Pause, Trash2, Sparkles, TrendingUp, Star, Users } from 'lucide-react'
 
 interface GachaStats {
   totalPulls: number
@@ -165,15 +165,40 @@ export default function GachaManagementPage() {
     }
   }
 
-  const getRarityColor = (rarity: string) => {
-    const colors: Record<string, string> = {
-      COMMON: 'gray',
-      RARE: 'blue',
-      EPIC: 'purple',
-      SSR: 'yellow',
-      LEGENDARY: 'red',
+  const getRarityBadge = (rarity: string) => {
+    const rarityStyles: Record<string, { color: string; borderColor: string; bgColor: string; shadowColor: string }> = {
+      COMMON: {
+        color: 'text-white/40',
+        borderColor: 'border-white/20',
+        bgColor: 'bg-white/10',
+        shadowColor: 'shadow-white/10',
+      },
+      RARE: {
+        color: 'text-[#00F5FF]',
+        borderColor: 'border-[#00F5FF]/40',
+        bgColor: 'bg-[#00F5FF]/20',
+        shadowColor: 'shadow-[#00F5FF]/20',
+      },
+      EPIC: {
+        color: 'text-[#8B5CF6]',
+        borderColor: 'border-[#8B5CF6]/40',
+        bgColor: 'bg-[#8B5CF6]/20',
+        shadowColor: 'shadow-[#8B5CF6]/20',
+      },
+      SSR: {
+        color: 'text-[#FFC700]',
+        borderColor: 'border-[#FFC700]/40',
+        bgColor: 'bg-[#FFC700]/20',
+        shadowColor: 'shadow-[#FFC700]/20',
+      },
+      LEGENDARY: {
+        color: 'text-[#FF1F7D]',
+        borderColor: 'border-[#FF1F7D]/40',
+        bgColor: 'bg-[#FF1F7D]/20',
+        shadowColor: 'shadow-[#FF1F7D]/20',
+      },
     }
-    return colors[rarity] || 'gray'
+    return rarityStyles[rarity] || rarityStyles.COMMON
   }
 
   const columns = [
@@ -186,12 +211,12 @@ export default function GachaManagementPage() {
             <img
               src={item.prize.image}
               alt={item.prize.name}
-              className="w-12 h-12 rounded-lg object-cover border border-border"
+              className="h-12 w-12 rounded-lg border-2 border-white/10 object-cover"
             />
           )}
           <div>
-            <div className="font-medium text-foreground">{item.prize.name}</div>
-            <div className="text-sm text-muted-foreground">{item.prize.type}</div>
+            <div className="font-medium text-white">{item.prize.name}</div>
+            <div className="text-sm text-white/60">{item.prize.type}</div>
           </div>
         </div>
       ),
@@ -199,31 +224,34 @@ export default function GachaManagementPage() {
     {
       key: 'prize.rarity',
       label: 'Rarity',
-      render: (item: GachaItem) => (
-        <StatusBadge variant={getRarityColor(item.prize.rarity)}>
-          {item.prize.rarity}
-        </StatusBadge>
-      ),
+      render: (item: GachaItem) => {
+        const styles = getRarityBadge(item.prize.rarity)
+        return (
+          <span className={`inline-flex rounded-full border-2 ${styles.borderColor} ${styles.bgColor} px-3 py-1 font-display text-xs font-black uppercase tracking-wider ${styles.color} shadow-lg ${styles.shadowColor}`}>
+            {item.prize.rarity}
+          </span>
+        )
+      },
     },
     {
       key: 'probability',
       label: 'Probability',
       render: (item: GachaItem) => (
-        <span className="text-foreground font-medium">{item.probability.toFixed(2)}%</span>
+        <span className="font-medium text-white">{item.probability.toFixed(2)}%</span>
       ),
     },
     {
       key: '_count.pulls',
       label: 'Total Pulls',
       render: (item: GachaItem) => (
-        <span className="text-muted-foreground">{item._count.pulls.toLocaleString()}</span>
+        <span className="text-white/60">{item._count.pulls.toLocaleString()}</span>
       ),
     },
     {
       key: 'prize.value',
       label: 'Value',
       render: (item: GachaItem) => (
-        <span className="flex items-center gap-1 text-yellow-400">
+        <span className="flex items-center gap-1 text-[#FFC700]">
           <Gem className="h-4 w-4" />
           {item.prize.value.toLocaleString()}
         </span>
@@ -233,9 +261,15 @@ export default function GachaManagementPage() {
       key: 'isActive',
       label: 'Status',
       render: (item: GachaItem) => (
-        <StatusBadge variant={item.isActive ? 'success' : 'error'}>
-          {item.isActive ? 'Active' : 'Inactive'}
-        </StatusBadge>
+        item.isActive ? (
+          <span className="inline-flex rounded-full border-2 border-[#10B981]/40 bg-[#10B981]/20 px-3 py-1 font-display text-xs font-black uppercase tracking-wider text-[#10B981] shadow-lg shadow-[#10B981]/20">
+            Active
+          </span>
+        ) : (
+          <span className="inline-flex rounded-full border-2 border-white/20 bg-white/10 px-3 py-1 font-display text-xs font-black uppercase tracking-wider text-white/40">
+            Inactive
+          </span>
+        )
       ),
     },
     {
@@ -252,7 +286,7 @@ export default function GachaManagementPage() {
             {
               label: 'Edit Probability',
               icon: <Edit className="h-4 w-4" />,
-              onClick: () => router.push(`/admin/gacha/items/${item.id}/edit`),
+              onClick: () => router.push(`/admin/gacha/${item.id}/edit`),
             },
             {
               label: 'Delete',
@@ -273,60 +307,99 @@ export default function GachaManagementPage() {
     <div className="mx-auto max-w-7xl px-6 py-8">
       <div className="space-y-6">
         {/* Header */}
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold text-foreground tracking-tight">Gacha System</h1>
-            <p className="text-muted-foreground mt-1">Manage gacha items and view statistics</p>
-          </div>
-          <Link
-            href="/admin/gacha/items/new"
-            className="flex items-center gap-2 px-4 py-2 border-2 border-primary bg-transparent text-primary rounded-lg hover:bg-primary/10 transition-all dark:shadow-lg dark:shadow-red-500/30 font-medium dark:bg-gradient-to-r dark:from-red-600 dark:to-red-500 dark:text-primary-foreground dark:border-transparent dark:hover:from-red-700 dark:hover:to-red-600"
-          >
-            <Plus className="h-5 w-5" />
-            Add Gacha Item
-          </Link>
-        </div>
+        <AdminPageHeader
+          title="Aura Zone"
+          description="Manage gacha items and view statistics"
+          actions={
+            <Link
+              href="/admin/gacha/new"
+              className="group relative flex items-center gap-2 overflow-hidden rounded-2xl border-2 border-[#FF1F7D]/40 bg-gradient-to-r from-[#FF1F7D]/20 to-[#FF1F7D]/10 px-6 py-3 font-display text-sm font-bold uppercase tracking-wider text-white shadow-lg shadow-[#FF1F7D]/20 backdrop-blur-sm transition-all duration-300 hover:scale-105 hover:border-[#FF1F7D]/60 hover:shadow-[#FF1F7D]/40"
+            >
+              <Plus className="h-5 w-5 text-[#FF1F7D]" />
+              <span className="text-[#FF1F7D]">Add Gacha Item</span>
+            </Link>
+          }
+        />
 
       {/* Statistics Dashboard */}
       {statsLoading ? (
-        <div className="bg-card border border-border rounded-lg p-8 text-center">
-          <div className="text-muted-foreground">Loading statistics...</div>
+        <div className="rounded-3xl border-2 border-white/10 bg-gradient-to-br from-surface-card/90 to-surface-raised/80 p-8 text-center shadow-xl backdrop-blur-xl">
+          <div className="text-white/60">Loading statistics...</div>
         </div>
       ) : stats ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          {/* Total Pulls */}
-          <div className="bg-card border border-border rounded-lg p-6 dark:shadow-lg dark:shadow-red-500/10">
-            <div className="text-muted-foreground text-sm font-medium mb-2">Total Pulls</div>
-            <div className="text-3xl font-bold text-foreground">{stats.totalPulls.toLocaleString()}</div>
-            <div className="text-sm text-muted-foreground mt-1">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+          {/* Total Pulls - Cyan */}
+          <div className="group relative overflow-hidden rounded-3xl border-2 border-[#00F5FF]/30 bg-gradient-to-br from-surface-card/90 to-surface-raised/80 p-6 shadow-xl backdrop-blur-xl transition-all duration-500 hover:scale-[1.02] hover:border-[#00F5FF]/60 hover:shadow-[0_0_40px_rgba(0,245,255,0.3)]">
+            <div className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-gradient-to-br from-[#00F5FF]/20 to-transparent blur-3xl opacity-0 transition-all duration-700 group-hover:scale-150 group-hover:opacity-100" />
+            <div className="relative flex items-center gap-4">
+              <div className="rounded-2xl bg-[#00F5FF]/20 p-3 ring-2 ring-[#00F5FF]/30 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12">
+                <Sparkles className="h-8 w-8 text-[#00F5FF]" />
+              </div>
+              <div>
+                <p className="mb-1 font-display text-xs font-bold uppercase tracking-wider text-white/60">Total Pulls</p>
+                <p className="font-display text-3xl font-black tabular-nums text-white">
+                  {stats.totalPulls.toLocaleString()}
+                </p>
+              </div>
+            </div>
+            <div className="relative mt-3 text-sm font-medium text-white/60">
               {stats.recentPulls24h} in last 24h
             </div>
           </div>
 
-          {/* Total Revenue */}
-          <div className="bg-card border border-border rounded-lg p-6 dark:shadow-lg dark:shadow-red-500/10">
-            <div className="text-muted-foreground text-sm font-medium mb-2">Total Revenue</div>
-            <div className="flex items-center gap-2 text-3xl font-bold text-yellow-400">
-              <Gem className="h-8 w-8" />
-              {stats.totalRevenue.toLocaleString()}
+          {/* Total Revenue - Gold */}
+          <div className="group relative overflow-hidden rounded-3xl border-2 border-[#FFC700]/30 bg-gradient-to-br from-surface-card/90 to-surface-raised/80 p-6 shadow-xl backdrop-blur-xl transition-all duration-500 hover:scale-[1.02] hover:border-[#FFC700]/60 hover:shadow-[0_0_40px_rgba(255,199,0,0.3)]">
+            <div className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-gradient-to-br from-[#FFC700]/20 to-transparent blur-3xl opacity-0 transition-all duration-700 group-hover:scale-150 group-hover:opacity-100" />
+            <div className="relative flex items-center gap-4">
+              <div className="rounded-2xl bg-[#FFC700]/20 p-3 ring-2 ring-[#FFC700]/30 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12">
+                <Gem className="h-8 w-8 text-[#FFC700]" />
+              </div>
+              <div>
+                <p className="mb-1 font-display text-xs font-bold uppercase tracking-wider text-white/60">Total Revenue</p>
+                <p className="font-display text-3xl font-black tabular-nums text-white">
+                  {stats.totalRevenue.toLocaleString()}
+                </p>
+              </div>
             </div>
-            <div className="text-sm text-muted-foreground mt-1">Diamonds spent</div>
+            <div className="relative mt-3 text-sm font-medium text-white/60">
+              Diamonds spent
+            </div>
           </div>
 
-          {/* SSR Rate */}
-          <div className="bg-card border border-border rounded-lg p-6 dark:shadow-lg dark:shadow-red-500/10">
-            <div className="text-muted-foreground text-sm font-medium mb-2">SSR Rate</div>
-            <div className="text-3xl font-bold text-yellow-400">{stats.ssrRate}%</div>
-            <div className="text-sm text-muted-foreground mt-1">
+          {/* SSR Rate - Purple */}
+          <div className="group relative overflow-hidden rounded-3xl border-2 border-[#8B5CF6]/30 bg-gradient-to-br from-surface-card/90 to-surface-raised/80 p-6 shadow-xl backdrop-blur-xl transition-all duration-500 hover:scale-[1.02] hover:border-[#8B5CF6]/60 hover:shadow-[0_0_40px_rgba(139,92,246,0.3)]">
+            <div className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-gradient-to-br from-[#8B5CF6]/20 to-transparent blur-3xl opacity-0 transition-all duration-700 group-hover:scale-150 group-hover:opacity-100" />
+            <div className="relative flex items-center gap-4">
+              <div className="rounded-2xl bg-[#8B5CF6]/20 p-3 ring-2 ring-[#8B5CF6]/30 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12">
+                <Star className="h-8 w-8 text-[#8B5CF6]" />
+              </div>
+              <div>
+                <p className="mb-1 font-display text-xs font-bold uppercase tracking-wider text-white/60">SSR Rate</p>
+                <p className="font-display text-3xl font-black tabular-nums text-white">
+                  {stats.ssrRate}%
+                </p>
+              </div>
+            </div>
+            <div className="relative mt-3 text-sm font-medium text-white/60">
               {stats.guaranteedSSRCount} guaranteed
             </div>
           </div>
 
-          {/* Active Items */}
-          <div className="bg-card border border-border rounded-lg p-6 dark:shadow-lg dark:shadow-red-500/10">
-            <div className="text-muted-foreground text-sm font-medium mb-2">Active Items</div>
-            <div className="text-3xl font-bold text-foreground">{stats.activeItemsCount}</div>
-            <div className="text-sm text-muted-foreground mt-1">
+          {/* Active Items - Emerald */}
+          <div className="group relative overflow-hidden rounded-3xl border-2 border-[#10B981]/30 bg-gradient-to-br from-surface-card/90 to-surface-raised/80 p-6 shadow-xl backdrop-blur-xl transition-all duration-500 hover:scale-[1.02] hover:border-[#10B981]/60 hover:shadow-[0_0_40px_rgba(16,185,129,0.3)]">
+            <div className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-gradient-to-br from-[#10B981]/20 to-transparent blur-3xl opacity-0 transition-all duration-700 group-hover:scale-150 group-hover:opacity-100" />
+            <div className="relative flex items-center gap-4">
+              <div className="rounded-2xl bg-[#10B981]/20 p-3 ring-2 ring-[#10B981]/30 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12">
+                <TrendingUp className="h-8 w-8 text-[#10B981]" />
+              </div>
+              <div>
+                <p className="mb-1 font-display text-xs font-bold uppercase tracking-wider text-white/60">Active Items</p>
+                <p className="font-display text-3xl font-black tabular-nums text-white">
+                  {stats.activeItemsCount}
+                </p>
+              </div>
+            </div>
+            <div className="relative mt-3 text-sm font-medium text-white/60">
               {stats.uniqueUsersCount} unique users
             </div>
           </div>
@@ -335,39 +408,42 @@ export default function GachaManagementPage() {
 
       {/* Prize Distribution */}
       {stats && stats.prizeDistribution.length > 0 && (
-        <div className="bg-card border border-border rounded-lg p-6 dark:shadow-lg dark:shadow-red-500/10">
-          <h2 className="text-xl font-bold text-foreground mb-4">Prize Distribution</h2>
+        <div className="rounded-3xl border-2 border-white/10 bg-gradient-to-br from-surface-card/90 to-surface-raised/80 p-6 shadow-xl backdrop-blur-xl">
+          <h2 className="mb-6 font-display text-xl font-black uppercase tracking-wider text-white">Prize Distribution</h2>
           <div className="space-y-3">
-            {stats.prizeDistribution.map((item) => (
-              <div key={item.rarity} className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <StatusBadge variant={getRarityColor(item.rarity)}>
-                    {item.rarity}
-                  </StatusBadge>
-                  <span className="text-muted-foreground">{item.count.toLocaleString()} pulls</span>
-                </div>
-                <div className="flex items-center gap-4">
-                  <div className="w-48 bg-secondary rounded-full h-2">
-                    <div
-                      className="bg-gradient-to-r from-red-600 to-red-500 h-2 rounded-full"
-                      style={{ width: `${item.percentage}%` }}
-                    />
+            {stats.prizeDistribution.map((item) => {
+              const styles = getRarityBadge(item.rarity)
+              return (
+                <div key={item.rarity} className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <span className={`inline-flex rounded-full border-2 ${styles.borderColor} ${styles.bgColor} px-3 py-1 font-display text-xs font-black uppercase tracking-wider ${styles.color} shadow-lg ${styles.shadowColor}`}>
+                      {item.rarity}
+                    </span>
+                    <span className="text-white/60">{item.count.toLocaleString()} pulls</span>
                   </div>
-                  <span className="text-foreground font-medium w-16 text-right">
-                    {item.percentage.toFixed(1)}%
-                  </span>
+                  <div className="flex items-center gap-4">
+                    <div className="h-2 w-48 overflow-hidden rounded-full bg-white/10">
+                      <div
+                        className="h-2 rounded-full bg-gradient-to-r from-[#8B5CF6]/50 to-[#FF1F7D]/50"
+                        style={{ width: `${item.percentage}%` }}
+                      />
+                    </div>
+                    <span className="w-16 text-right font-bold text-white">
+                      {item.percentage.toFixed(1)}%
+                    </span>
+                  </div>
                 </div>
-              </div>
-            ))}
+              )
+            })}
           </div>
         </div>
       )}
 
       {/* Gacha Items Table */}
-      <div className="bg-card border border-border rounded-lg dark:shadow-lg dark:shadow-red-500/10">
-        <div className="p-6 border-b border-border">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-bold text-foreground">Gacha Items</h2>
+      <div className="rounded-3xl border-2 border-white/10 bg-gradient-to-br from-surface-card/90 to-surface-raised/80 shadow-xl backdrop-blur-xl">
+        <div className="border-b-2 border-white/10 p-6">
+          <div className="mb-4 flex items-center justify-between">
+            <h2 className="font-display text-xl font-black uppercase tracking-wider text-white">Gacha Items</h2>
             <div className="flex items-center gap-3">
               <FilterDropdown
                 label="Rarity"

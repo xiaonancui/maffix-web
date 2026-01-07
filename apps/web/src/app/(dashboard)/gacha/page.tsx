@@ -147,14 +147,14 @@ export default async function GachaPage() {
             <div className="flex items-center gap-2">
               <Ticket className="h-6 w-6 text-primary" />
               <div>
-                <p className="text-2xl font-bold">{tickets.single}</p>
+                <p className="font-display text-2xl font-bold">{tickets.single}</p>
                 <p className="text-xs text-muted-foreground">Single</p>
               </div>
             </div>
             <div className="flex items-center gap-2">
               <Ticket className="h-6 w-6 text-primary" />
               <div>
-                <p className="text-2xl font-bold">{tickets.multi10x}</p>
+                <p className="font-display text-2xl font-bold">{tickets.multi10x}</p>
                 <p className="text-xs text-muted-foreground">10x</p>
               </div>
             </div>
@@ -177,7 +177,7 @@ export default async function GachaPage() {
       {/* Gacha Buttons */}
       <div className="mb-8">
         <div className="mb-4 text-center">
-          <h2 className="text-2xl font-bold text-foreground">Choose Your Draw</h2>
+          <h2 className="font-display text-2xl font-bold text-foreground">Choose Your Draw</h2>
           <p className="mt-1 text-sm text-muted-foreground">
             10x Draw guarantees at least 1 SSR or higher rarity prize!
           </p>
@@ -187,12 +187,12 @@ export default async function GachaPage() {
           {/* Single Draw */}
           <div className="rounded-lg border-2 border-border bg-card p-6 text-center hover:border-primary transition-colors">
             <div className="mb-4">
-              <div className="text-3xl font-bold text-foreground">Single Draw</div>
+              <div className="font-display text-3xl font-bold text-foreground">Single Draw</div>
               <div className="mt-2 text-sm text-muted-foreground">Try your luck once</div>
             </div>
             <div className="mb-4 flex items-center justify-center gap-2">
               <Gem className="h-6 w-6 text-primary" />
-              <div className="text-2xl font-bold text-primary">{GACHA_COST}</div>
+              <div className="font-display text-2xl font-bold text-primary">{GACHA_COST}</div>
             </div>
             <GachaPullButton
               currentBalance={user?.diamonds || 0}
@@ -214,7 +214,7 @@ export default async function GachaPage() {
               </span>
             </div>
             <div className="mb-4">
-              <div className="text-3xl font-bold text-foreground">10x Draw</div>
+              <div className="font-display text-3xl font-bold text-foreground">10x Draw</div>
               <div className="mt-2 text-sm text-muted-foreground">
                 10 draws with guaranteed SSR+
               </div>
@@ -222,7 +222,7 @@ export default async function GachaPage() {
             <div className="mb-4">
               <div className="flex items-center justify-center gap-2">
                 <Gem className="h-6 w-6 text-primary" />
-                <div className="text-2xl font-bold text-primary">{GACHA_COST_10X}</div>
+                <div className="font-display text-2xl font-bold text-primary">{GACHA_COST_10X}</div>
               </div>
               <div className="text-xs text-primary font-semibold">
                 Save {GACHA_COST * 10 - GACHA_COST_10X} diamonds! (10% off)
@@ -244,7 +244,7 @@ export default async function GachaPage() {
 
       {/* Prize Pool */}
       <div>
-        <h2 className="mb-4 text-2xl font-bold text-foreground">Prize Pool</h2>
+        <h2 className="mb-4 font-display text-2xl font-bold text-foreground">Prize Pool</h2>
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {gachaItems.map((item) => (
             <div

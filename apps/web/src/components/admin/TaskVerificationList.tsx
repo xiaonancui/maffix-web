@@ -2,6 +2,19 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import {
+  Users,
+  FileText,
+  Calendar,
+  UserCircle,
+  Link,
+  CreditCard,
+  Sparkles,
+  ClipboardList,
+  Heart,
+  Music,
+  Repeat
+} from 'lucide-react'
 
 type TaskVerification = {
   id: string
@@ -67,53 +80,77 @@ export default function TaskVerificationList({
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
       case 'EASY':
-        return 'bg-background text-green-600 border border-green-600 dark:bg-green-900/20 dark:text-green-400 dark:border-green-700/30 dark:shadow-sm dark:shadow-green-500/20'
+        return 'border-2 border-[#10B981]/40 bg-[#10B981]/20 text-[#10B981] shadow-lg shadow-[#10B981]/20'
       case 'MEDIUM':
-        return 'bg-background text-yellow-600 border border-yellow-600 dark:bg-yellow-900/20 dark:text-yellow-400 dark:border-yellow-700/30 dark:shadow-sm dark:shadow-yellow-500/20'
+        return 'border-2 border-[#FFC700]/40 bg-[#FFC700]/20 text-[#FFC700] shadow-lg shadow-[#FFC700]/20'
       case 'HARD':
-        return 'bg-background text-red-600 border border-red-600 dark:bg-red-900/20 dark:text-red-400 dark:border-red-700/30 dark:shadow-sm dark:shadow-red-500/20'
+        return 'border-2 border-[#FF1F7D]/40 bg-[#FF1F7D]/20 text-[#FF1F7D] shadow-lg shadow-[#FF1F7D]/20'
       default:
-        return 'bg-background text-gray-600 border border-gray-600 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700'
+        return 'border-2 border-white/20 bg-white/10 text-white/60 shadow-lg shadow-white/10'
     }
   }
 
   const getTypeIcon = (type: string) => {
+    const iconProps = { className: "h-5 w-5" }
+
     switch (type) {
       case 'SOCIAL':
-        return '👥'
+      case 'FOLLOW':
+        return <Users {...iconProps} />
       case 'CONTENT':
-        return '✍️'
+        return <FileText {...iconProps} />
       case 'DAILY':
-        return '📅'
+        return <Calendar {...iconProps} />
       case 'PROFILE':
-        return '👤'
+        return <UserCircle {...iconProps} />
       case 'REFERRAL':
-        return '🔗'
+        return <Link {...iconProps} />
       case 'PURCHASE':
-        return '💳'
+        return <CreditCard {...iconProps} />
       case 'EVENT':
-        return '🎉'
+        return <Sparkles {...iconProps} />
+      case 'LIKE':
+        return <Heart {...iconProps} />
+      case 'USE_AUDIO':
+        return <Music {...iconProps} />
+      case 'REPOST':
+        return <Repeat {...iconProps} />
       default:
-        return '📋'
+        return <ClipboardList {...iconProps} />
     }
   }
 
   return (
     <div className="space-y-4">
-      {tasks.map((item) => (
+      {tasks.map((item, index) => (
         <div
           key={item.id}
-          className="rounded-lg bg-card border border-red-500/20 p-6 dark:shadow-lg shadow-red-500/20 transition-all hover:border-red-500/40 hover:shadow-red-500/30 hover:scale-[1.01]"
+          className={`group relative overflow-hidden rounded-3xl border-2 bg-gradient-to-br from-surface-card/90 to-surface-raised/80 p-6 shadow-xl backdrop-blur-xl transition-all duration-500 hover:scale-[1.01] ${
+            isPending
+              ? 'border-[#FF1F7D]/30 hover:border-[#FF1F7D]/60 hover:shadow-[0_0_40px_rgba(255,31,125,0.3)]'
+              : 'border-[#10B981]/30 hover:border-[#10B981]/60 hover:shadow-[0_0_40px_rgba(16,185,129,0.3)]'
+          }`}
+          style={{ animationDelay: `${index * 50}ms` }}
         >
-          <div className="flex items-start justify-between">
+          {/* Ambient glow */}
+          <div
+            className={`pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-gradient-to-br to-transparent blur-3xl opacity-0 transition-all duration-700 group-hover:opacity-100 group-hover:scale-150 ${
+              isPending ? 'from-[#FF1F7D]/20' : 'from-[#10B981]/20'
+            }`}
+          />
+
+          <div className="relative flex items-start justify-between gap-4">
             <div className="flex-1">
-              <div className="mb-2 flex items-center gap-2">
-                <span className="text-2xl">{getTypeIcon(item.task.type)}</span>
-                <h3 className="text-lg font-bold text-foreground">
+              {/* Title row */}
+              <div className="mb-3 flex items-center gap-3">
+                <div className="flex-shrink-0 rounded-2xl bg-white/10 p-3 text-white ring-2 ring-white/20 backdrop-blur-sm transition-transform duration-300 hover:scale-110">
+                  {getTypeIcon(item.task.type)}
+                </div>
+                <h3 className="font-display text-lg font-black text-white">
                   {item.task.title}
                 </h3>
                 <span
-                  className={`rounded-md px-2.5 py-0.5 text-xs font-semibold ${getDifficultyColor(
+                  className={`rounded-full px-3 py-1 font-display text-xs font-black uppercase tracking-wider ${getDifficultyColor(
                     item.task.difficulty
                   )}`}
                 >
@@ -121,35 +158,37 @@ export default function TaskVerificationList({
                 </span>
               </div>
 
-              <p className="mb-3 text-sm text-gray-300">
-                {item.task.description}
-              </p>
-
-              <div className="mb-3 flex items-center gap-4 text-sm">
-                <div className="flex items-center gap-1">
-                  <span className="font-semibold text-gray-300">User:</span>
-                  <span className="text-gray-400">{item.user.name}</span>
-                  <span className="text-gray-500">({item.user.email})</span>
-                </div>
+              {/* Submitted Date Tag - Key Element */}
+              <div className="mb-4 inline-flex items-center gap-2 rounded-2xl border-2 border-[#8B5CF6]/40 bg-gradient-to-r from-[#8B5CF6]/20 to-[#8B5CF6]/10 px-4 py-2 font-display text-xs font-black uppercase tracking-wider text-[#8B5CF6] shadow-lg shadow-[#8B5CF6]/20 backdrop-blur-sm">
+                <Calendar className="h-4 w-4" />
+                <span>{new Date(item.submittedAt).toLocaleDateString()} {new Date(item.submittedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
               </div>
 
-              <div className="flex items-center gap-4 text-sm">
-                <div className="flex items-center gap-1">
-                  <span className="font-semibold text-gray-300">Rewards:</span>
-                  <span className="text-gray-400">
-                    💎 {item.diamondsEarned} | ⭐ {item.pointsEarned}
+              {/* User info */}
+              <div className="mb-3 flex items-center gap-2 text-sm">
+                <span className="font-display font-bold uppercase tracking-wider text-white/70">User:</span>
+                <span className="font-bold text-white">{item.user.name}</span>
+              </div>
+
+              {/* Rewards & Verified timestamp */}
+              <div className="flex flex-wrap items-center gap-3 text-sm">
+                {/* Rewards */}
+                <div className="flex items-center gap-2">
+                  <span className="font-display font-bold uppercase tracking-wider text-white/70">Rewards:</span>
+                  <span className="font-bold tabular-nums text-[#00F5FF]">
+                    💎 {item.diamondsEarned}
+                  </span>
+                  <span className="text-white/30">|</span>
+                  <span className="font-bold tabular-nums text-[#FFC700]">
+                    ⭐ {item.pointsEarned}
                   </span>
                 </div>
-                <div className="flex items-center gap-1">
-                  <span className="font-semibold text-gray-300">Submitted:</span>
-                  <span className="text-gray-400">
-                    {new Date(item.submittedAt).toLocaleString()}
-                  </span>
-                </div>
+
+                {/* Verified timestamp */}
                 {item.verifiedAt && (
-                  <div className="flex items-center gap-1">
-                    <span className="font-semibold text-gray-300">Verified:</span>
-                    <span className="text-gray-400">
+                  <div className="flex items-center gap-2">
+                    <span className="font-display font-bold uppercase tracking-wider text-white/70">Verified:</span>
+                    <span className="font-medium text-white/60">
                       {new Date(item.verifiedAt).toLocaleString()}
                     </span>
                   </div>
@@ -157,46 +196,53 @@ export default function TaskVerificationList({
               </div>
             </div>
 
+            {/* Action buttons */}
             {isPending && (
-              <div className="ml-4 flex gap-2">
+              <div className="flex flex-shrink-0 gap-3">
                 <button
                   onClick={() => handleVerify(item.id, true)}
                   disabled={loading === item.id}
-                  className="rounded-md border-2 border-green-600 bg-background px-4 py-2 text-sm font-bold text-green-600 hover:bg-green-600/10 disabled:opacity-50 transition-all hover:scale-105 dark:bg-green-600 dark:text-primary-foreground dark:border-transparent dark:shadow-lg dark:shadow-green-500/30 dark:hover:bg-green-500 dark:hover:shadow-green-500/50"
+                  className="group/btn relative overflow-hidden rounded-2xl border-2 border-[#10B981]/40 bg-gradient-to-r from-[#10B981]/20 to-[#10B981]/10 px-6 py-3 font-display text-sm font-bold uppercase tracking-wider text-white shadow-lg shadow-[#10B981]/20 backdrop-blur-sm transition-all duration-300 hover:scale-105 hover:border-[#10B981]/60 hover:shadow-[#10B981]/40 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:scale-100"
                 >
                   {loading === item.id ? (
-                    <span className="flex items-center">
-                      <svg className="animate-spin -ml-1 mr-2 h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <span className="flex items-center gap-2">
+                      <svg className="h-4 w-4 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                       </svg>
                       Processing...
                     </span>
-                  ) : '✓ Approve'}
+                  ) : (
+                    <span className="text-[#10B981]">✓ Approve</span>
+                  )}
                 </button>
                 <button
                   onClick={() => handleVerify(item.id, false)}
                   disabled={loading === item.id}
-                  className="rounded-md border-2 border-primary bg-background px-4 py-2 text-sm font-bold text-primary hover:bg-primary/10 disabled:opacity-50 transition-all hover:scale-105 dark:bg-gradient-to-r dark:from-red-600 dark:to-red-500 dark:text-primary-foreground dark:border-transparent dark:shadow-lg dark:shadow-red-500/30 dark:hover:shadow-red-500/50"
+                  className="group/btn relative overflow-hidden rounded-2xl border-2 border-[#FF1F7D]/40 bg-gradient-to-r from-[#FF1F7D]/20 to-[#FF1F7D]/10 px-6 py-3 font-display text-sm font-bold uppercase tracking-wider text-white shadow-lg shadow-[#FF1F7D]/20 backdrop-blur-sm transition-all duration-300 hover:scale-105 hover:border-[#FF1F7D]/60 hover:shadow-[#FF1F7D]/40 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:scale-100"
                 >
                   {loading === item.id ? (
-                    <span className="flex items-center">
-                      <svg className="animate-spin -ml-1 mr-2 h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <span className="flex items-center gap-2">
+                      <svg className="h-4 w-4 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                       </svg>
                       Processing...
                     </span>
-                  ) : '✗ Reject'}
+                  ) : (
+                    <span className="text-[#FF1F7D]">✗ Reject</span>
+                  )}
                 </button>
               </div>
             )}
 
+            {/* Verified badge */}
             {!isPending && (
-              <div className="ml-4">
-                <span className="inline-flex items-center gap-1 rounded-md bg-green-500/20 px-3 py-1 text-sm font-semibold text-green-400 border border-green-500/30 dark:shadow-sm shadow-green-500/20">
-                  ● Verified
-                </span>
+              <div className="flex-shrink-0">
+                <div className="inline-flex items-center gap-2 rounded-2xl border-2 border-[#10B981]/40 bg-[#10B981]/20 px-4 py-2 font-display text-sm font-bold uppercase tracking-wider text-[#10B981] shadow-lg shadow-[#10B981]/20">
+                  <span className="h-2 w-2 animate-pulse rounded-full bg-[#10B981]" />
+                  Verified
+                </div>
               </div>
             )}
           </div>

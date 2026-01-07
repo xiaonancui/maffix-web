@@ -145,12 +145,12 @@ export default function ReleasesPage() {
             <img
               src={release.thumbnailUrl}
               alt={release.title}
-              className="h-12 w-20 rounded object-cover"
+              className="h-12 w-20 rounded-lg border-2 border-white/10 object-cover"
             />
           )}
           <div>
-            <div className="font-semibold text-foreground">{release.title}</div>
-            <div className="text-sm text-muted-foreground">{release.artist}</div>
+            <div className="font-semibold text-white">{release.title}</div>
+            <div className="text-sm text-white/60">{release.artist}</div>
           </div>
         </div>
       ),
@@ -159,21 +159,21 @@ export default function ReleasesPage() {
       key: 'genre',
       label: 'Genre',
       render: (release: Release) => (
-        <span className="text-muted-foreground">{release.genre || '-'}</span>
+        <span className="text-white/60">{release.genre || '-'}</span>
       ),
     },
     {
       key: 'views',
       label: 'Views',
       render: (release: Release) => (
-        <span className="text-muted-foreground">{release.views || '-'}</span>
+        <span className="text-white/60">{release.views || '-'}</span>
       ),
     },
     {
       key: 'releaseDate',
       label: 'Release Date',
       render: (release: Release) => (
-        <span className="text-muted-foreground">
+        <span className="text-white/60">
           {new Date(release.releaseDate).toLocaleDateString()}
         </span>
       ),
@@ -226,15 +226,15 @@ export default function ReleasesPage() {
     <div className="mx-auto max-w-7xl px-6 py-8">
       <div className="space-y-6">
         <AdminPageHeader
-          title="Release Management"
-          description="Manage video releases and music content"
+          title="All Releases"
+          description="Manage music video releases"
           actions={
             <button
               onClick={() => router.push('/admin/releases/new')}
-              className="flex items-center gap-2 rounded-lg border-2 border-primary bg-transparent px-4 py-2 text-sm font-semibold text-primary dark:shadow-lg dark:shadow-red-500/20 transition-all hover:dark:shadow-red-500/40 hover:scale-105 hover:bg-primary/10 dark:bg-gradient-to-r dark:from-red-600 dark:to-red-500 dark:text-primary-foreground dark:border-transparent"
+              className="group relative flex items-center gap-2 overflow-hidden rounded-2xl border-2 border-[#FF1F7D]/40 bg-gradient-to-r from-[#FF1F7D]/20 to-[#FF1F7D]/10 px-6 py-3 font-display text-sm font-bold uppercase tracking-wider text-white shadow-lg shadow-[#FF1F7D]/20 backdrop-blur-sm transition-all duration-300 hover:scale-105 hover:border-[#FF1F7D]/60 hover:shadow-[#FF1F7D]/40"
             >
-              <Plus className="h-5 w-5" />
-              Create Release
+              <Plus className="h-5 w-5 text-[#FF1F7D]" />
+              <span className="text-[#FF1F7D]">Create Release</span>
             </button>
           }
         />

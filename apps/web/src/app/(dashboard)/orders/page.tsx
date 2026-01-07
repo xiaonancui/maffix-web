@@ -174,7 +174,7 @@ export default async function OrdersPage() {
       <div className="container mx-auto px-4">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-foreground">Order History</h1>
+          <h1 className="font-display text-3xl font-bold text-foreground">Order History</h1>
           <p className="mt-2 text-muted-foreground">View and track your orders</p>
         </div>
 

@@ -178,7 +178,7 @@ export default async function TransactionsPage() {
             <Gem className="h-4 w-4" />
             Current Balance
           </div>
-          <div className="text-3xl font-bold text-primary flex items-center gap-2">
+          <div className="font-display text-3xl font-bold text-primary flex items-center gap-2">
             <Gem className="h-8 w-8" />
             {user?.diamonds || 0}
           </div>
@@ -189,7 +189,7 @@ export default async function TransactionsPage() {
             <TrendingUp className="h-4 w-4" />
             Total Earned
           </div>
-          <div className="text-3xl font-bold text-green-600 flex items-center gap-2">
+          <div className="font-display text-3xl font-bold text-green-600 flex items-center gap-2">
             <Gem className="h-8 w-8" />
             {totalEarned}
           </div>
@@ -203,7 +203,7 @@ export default async function TransactionsPage() {
             <TrendingDown className="h-4 w-4" />
             Total Spent
           </div>
-          <div className="text-3xl font-bold text-purple-600 flex items-center gap-2">
+          <div className="font-display text-3xl font-bold text-purple-600 flex items-center gap-2">
             <Gem className="h-8 w-8" />
             {totalSpent}
           </div>
@@ -213,7 +213,7 @@ export default async function TransactionsPage() {
       {/* Transactions List */}
       <div className="rounded-lg bg-card shadow border border-border">
         <div className="border-b border-border px-6 py-4">
-          <h2 className="text-xl font-bold text-foreground">Recent Transactions</h2>
+          <h2 className="font-display text-xl font-bold text-foreground">Recent Transactions</h2>
         </div>
 
         {transactions.length === 0 ? (
@@ -247,7 +247,7 @@ export default async function TransactionsPage() {
 
                 <div className="text-right">
                   <div
-                    className={`text-xl font-bold flex items-center justify-end gap-2 ${getTransactionColor(
+                    className={`font-display text-xl font-bold flex items-center justify-end gap-2 ${getTransactionColor(
                       transaction.amount
                     )}`}
                   >

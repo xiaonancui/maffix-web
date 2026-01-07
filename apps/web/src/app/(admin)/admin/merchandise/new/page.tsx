@@ -1,6 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
+import AdminPageHeader from '@/components/admin/AdminPageHeader'
 import { MerchandiseForm, MerchandiseFormData } from '@/components/admin/MerchandiseForm'
 
 export default function NewMerchandisePage() {
@@ -23,12 +24,12 @@ export default function NewMerchandisePage() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6">
+    <div className="max-w-4xl mx-auto py-8 space-y-6">
       {/* Header */}
-      <div>
-        <h1 className="text-3xl font-bold text-foreground tracking-tight">Add Product</h1>
-        <p className="text-muted-foreground mt-1">Create a new merchandise product</p>
-      </div>
+      <AdminPageHeader
+        title="Add Product"
+        description="Create a new merchandise product"
+      />
 
       {/* Form */}
       <MerchandiseForm

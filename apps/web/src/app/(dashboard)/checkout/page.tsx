@@ -49,7 +49,7 @@ export default function CheckoutPage() {
     <div className="min-h-screen bg-background py-8">
       <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-foreground">Checkout</h1>
+          <h1 className="font-display text-3xl font-bold text-foreground">Checkout</h1>
           <p className="mt-2 text-muted-foreground">Complete your purchase</p>
         </div>
 
@@ -58,7 +58,7 @@ export default function CheckoutPage() {
           <div className="space-y-6">
             {/* Shipping Information */}
             <div className="rounded-lg bg-card border border-border p-6">
-              <h2 className="mb-4 text-xl font-bold text-foreground">Shipping Information</h2>
+              <h2 className="mb-4 font-display text-xl font-bold text-foreground">Shipping Information</h2>
               <div className="grid gap-4 sm:grid-cols-2">
                 <div>
                   <label className="block text-sm font-medium text-muted-foreground mb-2">
@@ -125,7 +125,7 @@ export default function CheckoutPage() {
 
             {/* Payment Method */}
             <div className="rounded-lg bg-card border border-border p-6">
-              <h2 className="mb-4 text-xl font-bold text-foreground">Payment Method</h2>
+              <h2 className="mb-4 font-display text-xl font-bold text-foreground">Payment Method</h2>
               <div className="space-y-4">
                 <div className="flex items-center space-x-3">
                   <input
@@ -210,7 +210,7 @@ export default function CheckoutPage() {
           {/* Order Summary */}
           <div className="lg:col-span-1">
             <div className="sticky top-4 rounded-lg bg-card border border-border p-6 shadow-lg">
-              <h2 className="mb-4 text-xl font-bold text-foreground">Order Summary</h2>
+              <h2 className="mb-4 font-display text-xl font-bold text-foreground">Order Summary</h2>
               
               <div className="space-y-3 border-b border-border pb-4">
                 <div className="flex justify-between text-muted-foreground">

@@ -1,6 +1,7 @@
 'use client'
 
 import { ReactNode } from 'react'
+import { Database } from 'lucide-react'
 import Pagination from './Pagination'
 
 export interface Column<T> {
@@ -103,7 +104,9 @@ export default function DataTable<T>({
   if (data.length === 0) {
     return (
       <div className="rounded-lg bg-card border border-red-500/20 p-12 text-center dark:shadow-lg shadow-red-500/20">
-        <div className="text-6xl mb-4">📋</div>
+        <div className="mb-4 flex justify-center">
+          <Database className="h-16 w-16 text-white/20" />
+        </div>
         <p className="text-gray-400">{emptyMessage}</p>
       </div>
     )

@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
 import AdminPageHeader from '@/components/admin/AdminPageHeader'
 import FormField from '@/components/admin/FormField'
 import { Save } from 'lucide-react'
@@ -54,7 +53,6 @@ interface SiteSettings {
 }
 
 export default function SiteSettingsPage() {
-  const router = useRouter()
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [settings, setSettings] = useState<SiteSettings>({
@@ -135,7 +133,7 @@ export default function SiteSettingsPage() {
     }
   }
 
-  const updateSetting = (key: string, value: any) => {
+  const updateSetting = <K extends keyof SiteSettings>(key: K, value: SiteSettings[K]) => {
     setSettings((prev) => ({ ...prev, [key]: value }))
   }
 
@@ -143,7 +141,7 @@ export default function SiteSettingsPage() {
     return (
       <div className="mx-auto max-w-7xl px-6 py-8">
         <div className="flex items-center justify-center min-h-[400px]">
-          <div className="text-muted-foreground">Loading settings...</div>
+          <div className="text-white/60">Loading settings...</div>
         </div>
       </div>
     )
@@ -163,8 +161,8 @@ export default function SiteSettingsPage() {
         />
 
         {/* Site Information */}
-        <div className="bg-card border border-border rounded-lg p-6 dark:shadow-lg dark:shadow-red-500/10">
-          <h2 className="text-xl font-bold text-foreground mb-4">Site Information</h2>
+        <div className="rounded-3xl border-2 border-white/10 bg-gradient-to-br from-surface-card/50 to-surface-raised/50 p-6 backdrop-blur-sm">
+          <h2 className="font-display text-xl font-black uppercase tracking-wider text-white mb-6">Site Information</h2>
           <div className="space-y-4">
             <FormField
               label="Site Name"
@@ -203,19 +201,20 @@ export default function SiteSettingsPage() {
         </div>
 
         {/* Email Configuration */}
-        <div className="bg-card border border-border rounded-lg p-6 dark:shadow-lg dark:shadow-red-500/10">
-          <h2 className="text-xl font-bold text-foreground mb-4">Email Configuration</h2>
+        <div className="rounded-3xl border-2 border-white/10 bg-gradient-to-br from-surface-card/50 to-surface-raised/50 p-6 backdrop-blur-sm">
+          <h2 className="font-display text-xl font-black uppercase tracking-wider text-white mb-6">Email Configuration</h2>
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <div>
-                <label className="text-foreground font-medium">Email Enabled</label>
-                <p className="text-sm text-muted-foreground">Enable email notifications</p>
+                <label htmlFor="emailEnabled" className="text-white font-medium cursor-pointer">Email Enabled</label>
+                <p className="text-sm text-white/60">Enable email notifications</p>
               </div>
               <input
+                id="emailEnabled"
                 type="checkbox"
                 checked={settings.emailEnabled}
                 onChange={(e) => updateSetting('emailEnabled', e.target.checked)}
-                className="h-5 w-5 rounded border-gray-600 bg-secondary text-red-600 focus:ring-red-500"
+                className="h-4 w-4 rounded border-[#10B981]/30 bg-surface-base text-[#10B981] focus:ring-2 focus:ring-[#10B981]/20 cursor-pointer"
               />
             </div>
             {settings.emailEnabled && (
@@ -268,8 +267,8 @@ export default function SiteSettingsPage() {
         </div>
 
         {/* API Keys */}
-        <div className="bg-card border border-border rounded-lg p-6 dark:shadow-lg dark:shadow-red-500/10">
-          <h2 className="text-xl font-bold text-foreground mb-4">API Keys</h2>
+        <div className="rounded-3xl border-2 border-white/10 bg-gradient-to-br from-surface-card/50 to-surface-raised/50 p-6 backdrop-blur-sm">
+          <h2 className="font-display text-xl font-black uppercase tracking-wider text-white mb-6">API Keys</h2>
           <div className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <FormField
@@ -305,86 +304,92 @@ export default function SiteSettingsPage() {
         </div>
 
         {/* Feature Flags */}
-        <div className="bg-card border border-border rounded-lg p-6 dark:shadow-lg dark:shadow-red-500/10">
-          <h2 className="text-xl font-bold text-foreground mb-4">Feature Flags</h2>
+        <div className="rounded-3xl border-2 border-white/10 bg-gradient-to-br from-surface-card/50 to-surface-raised/50 p-6 backdrop-blur-sm">
+          <h2 className="font-display text-xl font-black uppercase tracking-wider text-white mb-6">Feature Flags</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="flex items-center justify-between">
               <div>
-                <label className="text-foreground font-medium">Enable Gacha</label>
-                <p className="text-sm text-muted-foreground">Enable gacha system</p>
+                <label htmlFor="enableGacha" className="text-white font-medium cursor-pointer">Enable Gacha</label>
+                <p className="text-sm text-white/60">Enable gacha system</p>
               </div>
               <input
+                id="enableGacha"
                 type="checkbox"
                 checked={settings.enableGacha}
                 onChange={(e) => updateSetting('enableGacha', e.target.checked)}
-                className="h-5 w-5 rounded border-gray-600 bg-secondary text-red-600 focus:ring-red-500"
+                className="h-4 w-4 rounded border-[#8B5CF6]/30 bg-surface-base text-[#8B5CF6] focus:ring-2 focus:ring-[#8B5CF6]/20 cursor-pointer"
               />
             </div>
             <div className="flex items-center justify-between">
               <div>
-                <label className="text-foreground font-medium">Enable Store</label>
-                <p className="text-sm text-muted-foreground">Enable merchandise store</p>
+                <label htmlFor="enableStore" className="text-white font-medium cursor-pointer">Enable Store</label>
+                <p className="text-sm text-white/60">Enable merchandise store</p>
               </div>
               <input
+                id="enableStore"
                 type="checkbox"
                 checked={settings.enableStore}
                 onChange={(e) => updateSetting('enableStore', e.target.checked)}
-                className="h-5 w-5 rounded border-gray-600 bg-secondary text-red-600 focus:ring-red-500"
+                className="h-4 w-4 rounded border-[#00F5FF]/30 bg-surface-base text-[#00F5FF] focus:ring-2 focus:ring-[#00F5FF]/20 cursor-pointer"
               />
             </div>
             <div className="flex items-center justify-between">
               <div>
-                <label className="text-foreground font-medium">Enable Missions</label>
-                <p className="text-sm text-muted-foreground">Enable mission system</p>
+                <label htmlFor="enableMissions" className="text-white font-medium cursor-pointer">Enable Missions</label>
+                <p className="text-sm text-white/60">Enable mission system</p>
               </div>
               <input
+                id="enableMissions"
                 type="checkbox"
                 checked={settings.enableMissions}
                 onChange={(e) => updateSetting('enableMissions', e.target.checked)}
-                className="h-5 w-5 rounded border-gray-600 bg-secondary text-red-600 focus:ring-red-500"
+                className="h-4 w-4 rounded border-[#FFC700]/30 bg-surface-base text-[#FFC700] focus:ring-2 focus:ring-[#FFC700]/20 cursor-pointer"
               />
             </div>
             <div className="flex items-center justify-between">
               <div>
-                <label className="text-foreground font-medium">Enable Prizes</label>
-                <p className="text-sm text-muted-foreground">Enable prize system</p>
+                <label htmlFor="enablePrizes" className="text-white font-medium cursor-pointer">Enable Prizes</label>
+                <p className="text-sm text-white/60">Enable prize system</p>
               </div>
               <input
+                id="enablePrizes"
                 type="checkbox"
                 checked={settings.enablePrizes}
                 onChange={(e) => updateSetting('enablePrizes', e.target.checked)}
-                className="h-5 w-5 rounded border-gray-600 bg-secondary text-red-600 focus:ring-red-500"
+                className="h-4 w-4 rounded border-[#FF1F7D]/30 bg-surface-base text-[#FF1F7D] focus:ring-2 focus:ring-[#FF1F7D]/20 cursor-pointer"
               />
             </div>
             <div className="flex items-center justify-between">
               <div>
-                <label className="text-foreground font-medium">Enable Releases</label>
-                <p className="text-sm text-muted-foreground">Enable release system</p>
+                <label htmlFor="enableReleases" className="text-white font-medium cursor-pointer">Enable Releases</label>
+                <p className="text-sm text-white/60">Enable release system</p>
               </div>
               <input
+                id="enableReleases"
                 type="checkbox"
                 checked={settings.enableReleases}
                 onChange={(e) => updateSetting('enableReleases', e.target.checked)}
-                className="h-5 w-5 rounded border-gray-600 bg-secondary text-red-600 focus:ring-red-500"
+                className="h-4 w-4 rounded border-[#10B981]/30 bg-surface-base text-[#10B981] focus:ring-2 focus:ring-[#10B981]/20 cursor-pointer"
               />
             </div>
           </div>
         </div>
 
         {/* Maintenance Mode */}
-        <div className="bg-card border border-border rounded-lg p-6 dark:shadow-lg dark:shadow-red-500/10">
-          <h2 className="text-xl font-bold text-foreground mb-4">Maintenance Mode</h2>
+        <div className="rounded-3xl border-2 border-white/10 bg-gradient-to-br from-surface-card/50 to-surface-raised/50 p-6 backdrop-blur-sm">
+          <h2 className="font-display text-xl font-black uppercase tracking-wider text-white mb-6">Maintenance Mode</h2>
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <div>
-                <label className="text-foreground font-medium">Maintenance Mode</label>
-                <p className="text-sm text-muted-foreground">Put entire site in maintenance mode</p>
+                <label htmlFor="maintenanceMode" className="text-white font-medium cursor-pointer">Maintenance Mode</label>
+                <p className="text-sm text-white/60">Put entire site in maintenance mode</p>
               </div>
               <input
+                id="maintenanceMode"
                 type="checkbox"
                 checked={settings.maintenanceMode}
                 onChange={(e) => updateSetting('maintenanceMode', e.target.checked)}
-                className="h-5 w-5 rounded border-gray-600 bg-secondary text-red-600 focus:ring-red-500"
+                className="h-4 w-4 rounded border-[#FF1F7D]/30 bg-surface-base text-[#FF1F7D] focus:ring-2 focus:ring-[#FF1F7D]/20 cursor-pointer"
               />
             </div>
             {settings.maintenanceMode && (
@@ -400,8 +405,8 @@ export default function SiteSettingsPage() {
         </div>
 
         {/* Social Media */}
-        <div className="bg-card border border-border rounded-lg p-6 dark:shadow-lg dark:shadow-red-500/10">
-          <h2 className="text-xl font-bold text-foreground mb-4">Social Media Links</h2>
+        <div className="rounded-3xl border-2 border-white/10 bg-gradient-to-br from-surface-card/50 to-surface-raised/50 p-6 backdrop-blur-sm">
+          <h2 className="font-display text-xl font-black uppercase tracking-wider text-white mb-6">Social Media Links</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <FormField
               label="TikTok URL"
@@ -431,19 +436,20 @@ export default function SiteSettingsPage() {
         </div>
 
         {/* Advanced Settings */}
-        <div className="bg-card border border-border rounded-lg p-6 dark:shadow-lg dark:shadow-red-500/10">
-          <h2 className="text-xl font-bold text-foreground mb-4">Advanced Settings</h2>
+        <div className="rounded-3xl border-2 border-white/10 bg-gradient-to-br from-surface-card/50 to-surface-raised/50 p-6 backdrop-blur-sm">
+          <h2 className="font-display text-xl font-black uppercase tracking-wider text-white mb-6">Advanced Settings</h2>
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <div>
-                <label className="text-foreground font-medium">Debug Mode</label>
-                <p className="text-sm text-muted-foreground">Enable debug logging</p>
+                <label htmlFor="debugMode" className="text-white font-medium cursor-pointer">Debug Mode</label>
+                <p className="text-sm text-white/60">Enable debug logging</p>
               </div>
               <input
+                id="debugMode"
                 type="checkbox"
                 checked={settings.debugMode}
                 onChange={(e) => updateSetting('debugMode', e.target.checked)}
-                className="h-5 w-5 rounded border-gray-600 bg-secondary text-red-600 focus:ring-red-500"
+                className="h-4 w-4 rounded border-[#8B5CF6]/30 bg-surface-base text-[#8B5CF6] focus:ring-2 focus:ring-[#8B5CF6]/20 cursor-pointer"
               />
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -469,10 +475,10 @@ export default function SiteSettingsPage() {
           <button
             onClick={handleSave}
             disabled={saving}
-            className="flex items-center gap-2 px-6 py-3 border-2 border-primary bg-transparent text-primary rounded-lg hover:bg-primary/10 transition-all dark:shadow-lg dark:shadow-red-500/30 font-medium disabled:opacity-50 disabled:cursor-not-allowed dark:bg-gradient-to-r dark:from-red-600 dark:to-red-500 dark:text-primary-foreground dark:border-transparent dark:hover:from-red-700 dark:hover:to-red-600"
+            className="group relative flex items-center gap-2 overflow-hidden rounded-2xl border-2 border-[#FF1F7D]/40 bg-gradient-to-r from-[#FF1F7D]/20 to-[#FF1F7D]/10 px-6 py-3 font-display text-sm font-bold uppercase tracking-wider text-white shadow-lg shadow-[#FF1F7D]/20 backdrop-blur-sm transition-all duration-300 hover:scale-105 hover:border-[#FF1F7D]/60 hover:shadow-[#FF1F7D]/40 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
           >
-            <Save className="h-5 w-5" />
-            {saving ? 'Saving...' : 'Save All Settings'}
+            <Save className="h-5 w-5 text-[#FF1F7D]" />
+            <span className="text-[#FF1F7D]">{saving ? 'Saving...' : 'Save All Settings'}</span>
           </button>
         </div>
       </div>

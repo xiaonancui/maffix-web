@@ -284,7 +284,7 @@ export default function MerchandiseVariantsPage({ params }: { params: { id: stri
           >
             ← Back to Merchandise
           </button>
-          <h1 className="text-3xl font-bold text-foreground tracking-tight">
+          <h1 className="font-display text-3xl font-bold text-foreground tracking-tight">
             Manage Variants
           </h1>
           {merchandise && (

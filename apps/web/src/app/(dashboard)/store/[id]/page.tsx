@@ -264,7 +264,7 @@ export default async function MerchandiseDetailPage({
         {/* Related Products */}
         {relatedProducts.length > 0 && (
           <div className="mt-16">
-            <h2 className="mb-6 text-2xl font-bold text-gray-900">You May Also Like</h2>
+            <h2 className="mb-6 font-display text-2xl font-bold text-gray-900">You May Also Like</h2>
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
               {relatedProducts.map((product: any) => (
                 <a

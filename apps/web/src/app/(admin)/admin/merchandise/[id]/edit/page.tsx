@@ -80,7 +80,7 @@ export default function EditMerchandisePage({ params }: { params: { id: string }
     <div className="max-w-4xl mx-auto space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold text-foreground tracking-tight">Edit Product</h1>
+        <h1 className="font-display text-3xl font-bold text-foreground tracking-tight">Edit Product</h1>
         <p className="text-muted-foreground mt-1">Update merchandise product details</p>
       </div>
 

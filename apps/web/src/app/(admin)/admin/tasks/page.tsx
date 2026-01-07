@@ -160,36 +160,43 @@ export default async function AdminTasksPage() {
         title="Task Verification"
         description="Review and approve user task completions"
         badge={
-          <span className="rounded-full bg-red-500/20 px-4 py-2 text-xs font-bold text-red-400 backdrop-blur-sm border border-red-500/30 dark:shadow-lg dark:shadow-red-500/20">
-            {pendingTasks.length} Pending
-          </span>
+          <div className="flex items-center gap-2 rounded-2xl border-2 border-[#FF1F7D]/40 bg-gradient-to-r from-[#FF1F7D]/20 to-[#FF1F7D]/10 px-4 py-2 backdrop-blur-sm shadow-lg shadow-[#FF1F7D]/20">
+            <span className="h-2 w-2 animate-pulse rounded-full bg-[#FF1F7D]" />
+            <span className="font-display text-xs font-black uppercase tracking-wider text-[#FF1F7D]">
+              {pendingTasks.length} Pending
+            </span>
+          </div>
         }
       />
 
       {/* Pending Tasks */}
       <div className="mb-8">
-        <h2 className="mb-4 text-xl font-bold tracking-tight text-foreground">
-          Pending Verification ({pendingTasks.length})
+        <h2 className="mb-6 font-display text-2xl font-black uppercase tracking-wider text-white">
+          Pending ({pendingTasks.length})
         </h2>
         {pendingTasks.length === 0 ? (
-          <div className="rounded-lg bg-card border border-border p-12 text-center dark:shadow-lg dark:shadow-red-500/20">
-            <div className="text-6xl mb-4">✓</div>
-            <p className="text-muted-foreground">No pending tasks to verify</p>
+          <div className="rounded-3xl border-2 border-white/10 bg-gradient-to-br from-surface-card/90 to-surface-raised/80 p-12 text-center shadow-xl backdrop-blur-xl">
+            <div className="mb-4 text-6xl">✓</div>
+            <p className="font-display text-lg font-bold uppercase tracking-wider text-white/60">
+              No pending tasks to verify
+            </p>
           </div>
         ) : (
           <TaskVerificationList tasks={pendingTasks} isPending={true} />
         )}
       </div>
 
-      {/* Recently Verified */}
+      {/* Verified Tasks */}
       <div>
-        <h2 className="mb-4 text-xl font-bold tracking-tight text-foreground">
-          Recently Verified
+        <h2 className="mb-6 font-display text-2xl font-black uppercase tracking-wider text-white">
+          Verified
         </h2>
         {verifiedTasks.length === 0 ? (
-          <div className="rounded-lg bg-card border border-border p-12 text-center dark:shadow-lg dark:shadow-red-500/20">
-            <div className="text-6xl mb-4">📋</div>
-            <p className="text-muted-foreground">No verified tasks yet</p>
+          <div className="rounded-3xl border-2 border-white/10 bg-gradient-to-br from-surface-card/90 to-surface-raised/80 p-12 text-center shadow-xl backdrop-blur-xl">
+            <div className="mb-4 text-6xl">📋</div>
+            <p className="font-display text-lg font-bold uppercase tracking-wider text-white/60">
+              No verified tasks yet
+            </p>
           </div>
         ) : (
           <TaskVerificationList tasks={verifiedTasks} isPending={false} />

@@ -1,8 +1,8 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { Plus, Save, Loader2, Music, Music2, Waves, Cloud } from 'lucide-react'
 import FormField from './FormField'
-import StatusBadge from './StatusBadge'
 
 export interface ReleaseFormData {
   title: string
@@ -134,8 +134,8 @@ export default function ReleaseForm({
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       {/* Basic Information */}
-      <div className="rounded-lg border border-red-500/20 bg-card p-6 dark:shadow-lg dark:shadow-red-500/10">
-        <h3 className="mb-4 text-lg font-bold text-foreground">Basic Information</h3>
+      <div className="rounded-3xl border-2 border-white/10 bg-gradient-to-br from-surface-card/50 to-surface-raised/50 p-6 backdrop-blur-sm">
+        <h3 className="mb-6 font-display text-xl font-black uppercase tracking-wider text-white">Basic Information</h3>
         
         <div className="space-y-4">
           <FormField
@@ -210,8 +210,8 @@ export default function ReleaseForm({
       </div>
 
       {/* Video Details */}
-      <div className="rounded-lg border border-red-500/20 bg-card p-6 dark:shadow-lg dark:shadow-red-500/10">
-        <h3 className="mb-4 text-lg font-bold text-foreground">Video Details</h3>
+      <div className="rounded-3xl border-2 border-white/10 bg-gradient-to-br from-surface-card/50 to-surface-raised/50 p-6 backdrop-blur-sm">
+        <h3 className="mb-6 font-display text-xl font-black uppercase tracking-wider text-white">Video Details</h3>
 
         <div className="space-y-4">
           <FormField
@@ -276,59 +276,79 @@ export default function ReleaseForm({
       </div>
 
       {/* Streaming Links */}
-      <div className="rounded-lg border border-red-500/20 bg-card p-6 dark:shadow-lg dark:shadow-red-500/10">
-        <h3 className="mb-4 text-lg font-bold text-foreground">Streaming Links</h3>
+      <div className="rounded-3xl border-2 border-white/10 bg-gradient-to-br from-surface-card/50 to-surface-raised/50 p-6 backdrop-blur-sm">
+        <h3 className="mb-6 font-display text-xl font-black uppercase tracking-wider text-white">Streaming Links</h3>
 
         <div className="space-y-4">
-          <FormField
-            label="Spotify URL"
-            name="spotifyUrl"
-            type="text"
-            value={formData.spotifyUrl || ''}
-            onChange={(value) => handleChange('spotifyUrl', value)}
-            placeholder="https://open.spotify.com/..."
-            disabled={isLoading}
-            icon="🎵"
-          />
+          <div className="space-y-2">
+            <label className="flex items-center gap-2 text-sm font-display font-bold uppercase tracking-wider text-white/70">
+              <Music className="h-4 w-4 text-[#10B981]" />
+              Spotify URL
+            </label>
+            <FormField
+              label=""
+              name="spotifyUrl"
+              type="text"
+              value={formData.spotifyUrl || ''}
+              onChange={(value) => handleChange('spotifyUrl', value)}
+              placeholder="https://open.spotify.com/..."
+              disabled={isLoading}
+            />
+          </div>
 
-          <FormField
-            label="Apple Music URL"
-            name="appleMusicUrl"
-            type="text"
-            value={formData.appleMusicUrl || ''}
-            onChange={(value) => handleChange('appleMusicUrl', value)}
-            placeholder="https://music.apple.com/..."
-            disabled={isLoading}
-            icon="🍎"
-          />
+          <div className="space-y-2">
+            <label className="flex items-center gap-2 text-sm font-display font-bold uppercase tracking-wider text-white/70">
+              <Music2 className="h-4 w-4 text-[#8B5CF6]" />
+              Apple Music URL
+            </label>
+            <FormField
+              label=""
+              name="appleMusicUrl"
+              type="text"
+              value={formData.appleMusicUrl || ''}
+              onChange={(value) => handleChange('appleMusicUrl', value)}
+              placeholder="https://music.apple.com/..."
+              disabled={isLoading}
+            />
+          </div>
 
-          <FormField
-            label="Tidal URL"
-            name="tidalUrl"
-            type="text"
-            value={formData.tidalUrl || ''}
-            onChange={(value) => handleChange('tidalUrl', value)}
-            placeholder="https://tidal.com/..."
-            disabled={isLoading}
-            icon="🌊"
-          />
+          <div className="space-y-2">
+            <label className="flex items-center gap-2 text-sm font-display font-bold uppercase tracking-wider text-white/70">
+              <Waves className="h-4 w-4 text-[#00F5FF]" />
+              Tidal URL
+            </label>
+            <FormField
+              label=""
+              name="tidalUrl"
+              type="text"
+              value={formData.tidalUrl || ''}
+              onChange={(value) => handleChange('tidalUrl', value)}
+              placeholder="https://tidal.com/..."
+              disabled={isLoading}
+            />
+          </div>
 
-          <FormField
-            label="SoundCloud URL"
-            name="soundcloudUrl"
-            type="text"
-            value={formData.soundcloudUrl || ''}
-            onChange={(value) => handleChange('soundcloudUrl', value)}
-            placeholder="https://soundcloud.com/..."
-            disabled={isLoading}
-            icon="☁️"
-          />
+          <div className="space-y-2">
+            <label className="flex items-center gap-2 text-sm font-display font-bold uppercase tracking-wider text-white/70">
+              <Cloud className="h-4 w-4 text-[#FFC700]" />
+              SoundCloud URL
+            </label>
+            <FormField
+              label=""
+              name="soundcloudUrl"
+              type="text"
+              value={formData.soundcloudUrl || ''}
+              onChange={(value) => handleChange('soundcloudUrl', value)}
+              placeholder="https://soundcloud.com/..."
+              disabled={isLoading}
+            />
+          </div>
         </div>
       </div>
 
       {/* Display Settings */}
-      <div className="rounded-lg border border-red-500/20 bg-card p-6 dark:shadow-lg dark:shadow-red-500/10">
-        <h3 className="mb-4 text-lg font-bold text-foreground">Display Settings</h3>
+      <div className="rounded-3xl border-2 border-white/10 bg-gradient-to-br from-surface-card/50 to-surface-raised/50 p-6 backdrop-blur-sm">
+        <h3 className="mb-6 font-display text-xl font-black uppercase tracking-wider text-white">Display Settings</h3>
 
         <div className="space-y-4">
           <div className="flex items-center gap-3">
@@ -338,12 +358,16 @@ export default function ReleaseForm({
               checked={formData.featured}
               onChange={(e) => handleChange('featured', e.target.checked)}
               disabled={isLoading}
-              className="h-4 w-4 rounded border-red-500/30 bg-[#0a0a0a] text-red-500 focus:ring-2 focus:ring-red-500/20"
+              className="h-4 w-4 rounded border-[#FFC700]/30 bg-surface-base text-[#FFC700] focus:ring-2 focus:ring-[#FFC700]/20"
             />
-            <label htmlFor="featured" className="text-sm text-gray-300">
+            <label htmlFor="featured" className="text-sm font-medium text-white/80">
               Featured release (show prominently)
             </label>
-            {formData.featured && <StatusBadge variant="warning">Featured</StatusBadge>}
+            {formData.featured && (
+              <span className="inline-flex rounded-full border-2 border-[#FFC700]/40 bg-[#FFC700]/20 px-3 py-1 font-display text-xs font-black uppercase tracking-wider text-[#FFC700] shadow-lg shadow-[#FFC700]/20">
+                Featured
+              </span>
+            )}
           </div>
 
           <div className="flex items-center gap-3">
@@ -353,15 +377,19 @@ export default function ReleaseForm({
               checked={formData.isActive}
               onChange={(e) => handleChange('isActive', e.target.checked)}
               disabled={isLoading}
-              className="h-4 w-4 rounded border-red-500/30 bg-[#0a0a0a] text-red-500 focus:ring-2 focus:ring-red-500/20"
+              className="h-4 w-4 rounded border-[#10B981]/30 bg-surface-base text-[#10B981] focus:ring-2 focus:ring-[#10B981]/20"
             />
-            <label htmlFor="isActive" className="text-sm text-gray-300">
+            <label htmlFor="isActive" className="text-sm font-medium text-white/80">
               Release is active
             </label>
             {formData.isActive ? (
-              <StatusBadge variant="success">Active</StatusBadge>
+              <span className="inline-flex rounded-full border-2 border-[#10B981]/40 bg-[#10B981]/20 px-3 py-1 font-display text-xs font-black uppercase tracking-wider text-[#10B981] shadow-lg shadow-[#10B981]/20">
+                Active
+              </span>
             ) : (
-              <StatusBadge variant="neutral">Inactive</StatusBadge>
+              <span className="inline-flex rounded-full border-2 border-white/20 bg-white/10 px-3 py-1 font-display text-xs font-black uppercase tracking-wider text-white/40">
+                Inactive
+              </span>
             )}
           </div>
 
@@ -384,24 +412,28 @@ export default function ReleaseForm({
           type="button"
           onClick={onCancel}
           disabled={isLoading}
-          className="rounded-lg border border-red-500/30 bg-gray-800 px-6 py-2 text-sm font-semibold text-foreground hover:bg-gray-700 disabled:opacity-50"
+          className="group rounded-2xl border-2 border-white/10 bg-white/5 px-6 py-3 font-display text-sm font-bold uppercase tracking-wider text-white backdrop-blur-sm transition-all duration-300 hover:scale-105 hover:border-white/20 hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:scale-100"
         >
           Cancel
         </button>
         <button
           type="submit"
           disabled={isLoading}
-          className="flex items-center gap-2 rounded-lg border-2 border-primary bg-transparent px-6 py-2 text-sm font-semibold text-primary dark:shadow-lg dark:shadow-red-500/30 hover:dark:shadow-red-500/50 hover:bg-primary/10 disabled:opacity-50 dark:bg-gradient-to-r dark:from-red-600 dark:to-red-500 dark:text-primary-foreground dark:border-transparent"
+          className="group relative flex items-center gap-2 overflow-hidden rounded-2xl border-2 border-[#FF1F7D]/40 bg-gradient-to-r from-[#FF1F7D]/20 to-[#FF1F7D]/10 px-6 py-3 font-display text-sm font-bold uppercase tracking-wider text-white shadow-lg shadow-[#FF1F7D]/20 backdrop-blur-sm transition-all duration-300 hover:scale-105 hover:border-[#FF1F7D]/60 hover:shadow-[#FF1F7D]/40 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:scale-100"
         >
           {isLoading ? (
             <>
-              <span className="animate-spin">⏳</span>
-              {mode === 'create' ? 'Creating...' : 'Saving...'}
+              <Loader2 className="h-4 w-4 animate-spin text-[#FF1F7D]" />
+              <span className="text-[#FF1F7D]">{mode === 'create' ? 'Creating...' : 'Saving...'}</span>
             </>
           ) : (
             <>
-              <span>{mode === 'create' ? '➕' : '💾'}</span>
-              {mode === 'create' ? 'Create Release' : 'Save Changes'}
+              {mode === 'create' ? (
+                <Plus className="h-4 w-4 text-[#FF1F7D]" />
+              ) : (
+                <Save className="h-4 w-4 text-[#FF1F7D]" />
+              )}
+              <span className="text-[#FF1F7D]">{mode === 'create' ? 'Create Release' : 'Save Changes'}</span>
             </>
           )}
         </button>

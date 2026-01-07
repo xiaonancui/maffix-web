@@ -7,6 +7,7 @@ import StatusBadge from '@/components/admin/StatusBadge'
 import SearchBar from '@/components/admin/SearchBar'
 import FilterDropdown from '@/components/admin/FilterDropdown'
 import ActionMenu from '@/components/admin/ActionMenu'
+import AdminPageHeader from '@/components/admin/AdminPageHeader'
 import { Users, Shield, Music, User, Gem, Star, CheckCircle, Gift, Ticket, CreditCard, Package } from 'lucide-react'
 
 interface User {
@@ -87,13 +88,13 @@ export default function UsersPage() {
     setPagination({ ...pagination, page: newPage })
   }
 
-  const getRoleColor = (role: string) => {
-    const colors: Record<string, string> = {
-      ADMIN: 'error',
-      ARTIST: 'purple',
-      USER: 'blue',
+  const getRoleBadgeStyle = (role: string) => {
+    const styles: Record<string, string> = {
+      ADMIN: 'border-2 border-[#FF1F7D]/40 bg-[#FF1F7D]/20 text-[#FF1F7D] shadow-lg shadow-[#FF1F7D]/20',
+      ARTIST: 'border-2 border-[#8B5CF6]/40 bg-[#8B5CF6]/20 text-[#8B5CF6] shadow-lg shadow-[#8B5CF6]/20',
+      USER: 'border-2 border-[#00F5FF]/40 bg-[#00F5FF]/20 text-[#00F5FF] shadow-lg shadow-[#00F5FF]/20',
     }
-    return colors[role] || 'gray'
+    return styles[role] || 'border-2 border-white/20 bg-white/10 text-white/60'
   }
 
   const formatDate = (dateString: string | null) => {
@@ -126,18 +127,18 @@ export default function UsersPage() {
             <img
               src={user.avatar}
               alt={user.name}
-              className="w-10 h-10 rounded-full border border-border"
+              className="h-10 w-10 rounded-full border-2 border-white/20"
             />
           ) : (
-            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500/20 to-pink-500/20 border border-border flex items-center justify-center text-foreground font-bold">
+            <div className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-white/20 bg-gradient-to-br from-[#FF1F7D]/20 to-[#8B5CF6]/20 font-display font-bold text-white">
               {user.name.charAt(0).toUpperCase()}
             </div>
           )}
           <div>
-            <div className="font-medium text-foreground">{user.name}</div>
-            <div className="text-sm text-muted-foreground">{user.email}</div>
+            <div className="font-medium text-white">{user.name}</div>
+            <div className="text-sm text-white/60">{user.email}</div>
             {user.tiktokUsername && (
-              <div className="text-xs text-purple-400">@{user.tiktokUsername}</div>
+              <div className="text-xs text-[#8B5CF6]">@{user.tiktokUsername}</div>
             )}
           </div>
         </div>
@@ -147,7 +148,9 @@ export default function UsersPage() {
       key: 'role',
       label: 'Role',
       render: (user: User) => (
-        <StatusBadge variant={getRoleColor(user.role)}>{user.role}</StatusBadge>
+        <span className={`inline-flex rounded-full px-3 py-1 font-display text-xs font-black uppercase tracking-wider ${getRoleBadgeStyle(user.role)}`}>
+          {user.role}
+        </span>
       ),
     },
     {
@@ -155,13 +158,13 @@ export default function UsersPage() {
       label: 'Stats',
       render: (user: User) => (
         <div className="space-y-1 text-sm">
-          <div className="flex items-center gap-2 text-muted-foreground">
-            <Gem className="h-4 w-4 text-yellow-400" />
-            {user.diamonds.toLocaleString()}
-            <Star className="h-4 w-4 text-blue-400 ml-2" />
-            {user.points.toLocaleString()}
+          <div className="flex items-center gap-2 text-white/60">
+            <Gem className="h-4 w-4 text-[#00F5FF]" />
+            <span className="font-bold tabular-nums text-[#00F5FF]">{user.diamonds.toLocaleString()}</span>
+            <Star className="ml-2 h-4 w-4 text-[#FFC700]" />
+            <span className="font-bold tabular-nums text-[#FFC700]">{user.points.toLocaleString()}</span>
           </div>
-          <div className="text-muted-foreground">Level {user.level}</div>
+          <div className="font-display text-xs font-bold uppercase tracking-wider text-white/70">Level {user.level}</div>
         </div>
       ),
     },
@@ -169,18 +172,18 @@ export default function UsersPage() {
       key: 'activity',
       label: 'Activity',
       render: (user: User) => (
-        <div className="space-y-1 text-sm text-muted-foreground">
+        <div className="space-y-1 text-sm text-white/60">
           <div className="flex items-center gap-2">
-            <CheckCircle className="h-4 w-4 text-green-400" />
-            {user._count.completedTasks} tasks
+            <CheckCircle className="h-4 w-4 text-[#10B981]" />
+            <span className="font-medium">{user._count.completedTasks} tasks</span>
           </div>
           <div className="flex items-center gap-2">
-            <Gift className="h-4 w-4 text-purple-400" />
-            {user._count.prizes} prizes
+            <Gift className="h-4 w-4 text-[#8B5CF6]" />
+            <span className="font-medium">{user._count.prizes} prizes</span>
           </div>
           <div className="flex items-center gap-2">
-            <Ticket className="h-4 w-4 text-pink-400" />
-            {user._count.gachaPulls} pulls
+            <Ticket className="h-4 w-4 text-[#FF1F7D]" />
+            <span className="font-medium">{user._count.gachaPulls} pulls</span>
           </div>
         </div>
       ),
@@ -189,14 +192,14 @@ export default function UsersPage() {
       key: 'purchases',
       label: 'Purchases',
       render: (user: User) => (
-        <div className="space-y-1 text-sm text-muted-foreground">
+        <div className="space-y-1 text-sm text-white/60">
           <div className="flex items-center gap-2">
-            <CreditCard className="h-4 w-4 text-green-400" />
-            {user._count.purchases} packs
+            <CreditCard className="h-4 w-4 text-[#10B981]" />
+            <span className="font-medium">{user._count.purchases} packs</span>
           </div>
           <div className="flex items-center gap-2">
-            <Package className="h-4 w-4 text-blue-400" />
-            {user._count.orders} orders
+            <Package className="h-4 w-4 text-[#00F5FF]" />
+            <span className="font-medium">{user._count.orders} orders</span>
           </div>
         </div>
       ),
@@ -206,8 +209,8 @@ export default function UsersPage() {
       label: 'Last Login',
       render: (user: User) => (
         <div className="text-sm">
-          <div className="text-muted-foreground">{formatDateTime(user.lastLoginAt)}</div>
-          <div className="text-muted-foreground text-xs">
+          <div className="text-white/60">{formatDateTime(user.lastLoginAt)}</div>
+          <div className="text-xs text-white/40">
             Joined {formatDate(user.createdAt)}
           </div>
         </div>
@@ -234,56 +237,83 @@ export default function UsersPage() {
   ]
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold text-foreground tracking-tight">Users</h1>
-          <p className="text-muted-foreground mt-1">Manage user accounts and permissions</p>
-        </div>
-      </div>
+    <div className="mx-auto max-w-7xl space-y-8 px-6 py-8 sm:px-6 lg:px-8">
+      {/* Page Header */}
+      <AdminPageHeader
+        title="Users"
+        description="Manage user accounts and permissions"
+      />
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <div className="bg-card border border-border rounded-lg p-6 dark:shadow-lg dark:shadow-red-500/10">
-          <div className="flex items-center gap-2 mb-2">
-            <Users className="h-5 w-5 text-primary" />
-            <div className="text-muted-foreground text-sm">Total Users</div>
-          </div>
-          <div className="text-3xl font-bold text-foreground">{pagination.total}</div>
-        </div>
-        <div className="bg-card border border-border rounded-lg p-6 dark:shadow-lg dark:shadow-red-500/10">
-          <div className="flex items-center gap-2 mb-2">
-            <Shield className="h-5 w-5 text-primary" />
-            <div className="text-muted-foreground text-sm">Admins</div>
-          </div>
-          <div className="text-3xl font-bold text-primary">
-            {users.filter((u) => u.role === 'ADMIN').length}
-          </div>
-        </div>
-        <div className="bg-card border border-border rounded-lg p-6 dark:shadow-lg dark:shadow-red-500/10">
-          <div className="flex items-center gap-2 mb-2">
-            <Music className="h-5 w-5 text-purple-400" />
-            <div className="text-muted-foreground text-sm">Artists</div>
-          </div>
-          <div className="text-3xl font-bold text-purple-400">
-            {users.filter((u) => u.role === 'ARTIST').length}
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+        {/* Total Users - Cyan */}
+        <div className="group relative overflow-hidden rounded-3xl border-2 border-[#00F5FF]/30 bg-gradient-to-br from-surface-card/90 to-surface-raised/80 p-6 shadow-xl backdrop-blur-xl transition-all duration-500 hover:scale-[1.02] hover:border-[#00F5FF]/60 hover:shadow-[0_0_40px_rgba(0,245,255,0.3)]">
+          <div className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-gradient-to-br from-[#00F5FF]/20 to-transparent blur-3xl opacity-0 transition-all duration-700 group-hover:scale-150 group-hover:opacity-100" />
+          <div className="relative flex items-center gap-4">
+            <div className="rounded-2xl bg-[#00F5FF]/20 p-3 ring-2 ring-[#00F5FF]/30 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12">
+              <Users className="h-8 w-8 text-[#00F5FF]" />
+            </div>
+            <div>
+              <p className="mb-1 font-display text-xs font-bold uppercase tracking-wider text-white/60">Total Users</p>
+              <p className="font-display text-3xl font-black tabular-nums text-white">
+                {pagination.total.toLocaleString()}
+              </p>
+            </div>
           </div>
         </div>
-        <div className="bg-card border border-border rounded-lg p-6 dark:shadow-lg dark:shadow-red-500/10">
-          <div className="flex items-center gap-2 mb-2">
-            <User className="h-5 w-5 text-blue-400" />
-            <div className="text-muted-foreground text-sm">Regular Users</div>
+
+        {/* Admins - Hot Pink */}
+        <div className="group relative overflow-hidden rounded-3xl border-2 border-[#FF1F7D]/30 bg-gradient-to-br from-surface-card/90 to-surface-raised/80 p-6 shadow-xl backdrop-blur-xl transition-all duration-500 hover:scale-[1.02] hover:border-[#FF1F7D]/60 hover:shadow-[0_0_40px_rgba(255,31,125,0.3)]">
+          <div className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-gradient-to-br from-[#FF1F7D]/20 to-transparent blur-3xl opacity-0 transition-all duration-700 group-hover:scale-150 group-hover:opacity-100" />
+          <div className="relative flex items-center gap-4">
+            <div className="rounded-2xl bg-[#FF1F7D]/20 p-3 ring-2 ring-[#FF1F7D]/30 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12">
+              <Shield className="h-8 w-8 text-[#FF1F7D]" />
+            </div>
+            <div>
+              <p className="mb-1 font-display text-xs font-bold uppercase tracking-wider text-white/60">Admins</p>
+              <p className="font-display text-3xl font-black tabular-nums text-white">
+                {users.filter((u) => u.role === 'ADMIN').length}
+              </p>
+            </div>
           </div>
-          <div className="text-3xl font-bold text-blue-400">
-            {users.filter((u) => u.role === 'USER').length}
+        </div>
+
+        {/* Artists - Purple */}
+        <div className="group relative overflow-hidden rounded-3xl border-2 border-[#8B5CF6]/30 bg-gradient-to-br from-surface-card/90 to-surface-raised/80 p-6 shadow-xl backdrop-blur-xl transition-all duration-500 hover:scale-[1.02] hover:border-[#8B5CF6]/60 hover:shadow-[0_0_40px_rgba(139,92,246,0.3)]">
+          <div className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-gradient-to-br from-[#8B5CF6]/20 to-transparent blur-3xl opacity-0 transition-all duration-700 group-hover:scale-150 group-hover:opacity-100" />
+          <div className="relative flex items-center gap-4">
+            <div className="rounded-2xl bg-[#8B5CF6]/20 p-3 ring-2 ring-[#8B5CF6]/30 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12">
+              <Music className="h-8 w-8 text-[#8B5CF6]" />
+            </div>
+            <div>
+              <p className="mb-1 font-display text-xs font-bold uppercase tracking-wider text-white/60">Artists</p>
+              <p className="font-display text-3xl font-black tabular-nums text-white">
+                {users.filter((u) => u.role === 'ARTIST').length}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Regular Users - Gold */}
+        <div className="group relative overflow-hidden rounded-3xl border-2 border-[#FFC700]/30 bg-gradient-to-br from-surface-card/90 to-surface-raised/80 p-6 shadow-xl backdrop-blur-xl transition-all duration-500 hover:scale-[1.02] hover:border-[#FFC700]/60 hover:shadow-[0_0_40px_rgba(255,199,0,0.3)]">
+          <div className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-gradient-to-br from-[#FFC700]/20 to-transparent blur-3xl opacity-0 transition-all duration-700 group-hover:scale-150 group-hover:opacity-100" />
+          <div className="relative flex items-center gap-4">
+            <div className="rounded-2xl bg-[#FFC700]/20 p-3 ring-2 ring-[#FFC700]/30 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12">
+              <User className="h-8 w-8 text-[#FFC700]" />
+            </div>
+            <div>
+              <p className="mb-1 font-display text-xs font-bold uppercase tracking-wider text-white/60">Regular Users</p>
+              <p className="font-display text-3xl font-black tabular-nums text-white">
+                {users.filter((u) => u.role === 'USER').length}
+              </p>
+            </div>
           </div>
         </div>
       </div>
 
       {/* Filters */}
-      <div className="bg-card border border-border rounded-lg p-6 dark:shadow-lg dark:shadow-red-500/10">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="rounded-3xl border-2 border-white/10 bg-gradient-to-br from-surface-card/90 to-surface-raised/80 p-6 shadow-xl backdrop-blur-xl">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <SearchBar
             onSearch={setSearchQuery}
             placeholder="Search by name, email, or TikTok username..."
@@ -303,7 +333,7 @@ export default function UsersPage() {
       </div>
 
       {/* Table */}
-      <div className="bg-card border border-border rounded-lg dark:shadow-lg dark:shadow-red-500/10">
+      <div className="rounded-3xl border-2 border-white/10 bg-gradient-to-br from-surface-card/90 to-surface-raised/80 shadow-xl backdrop-blur-xl">
         <DataTable
           columns={columns}
           data={users}

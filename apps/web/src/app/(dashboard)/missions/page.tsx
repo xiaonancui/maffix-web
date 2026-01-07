@@ -6,7 +6,7 @@ import MissionCard from '@/components/dashboard/MissionCard'
 import MissionsHeader from '@/components/dashboard/MissionsHeader'
 import MissionDetailModal from '@/components/dashboard/missions/MissionDetailModal'
 import MissionsClient from './missions-client'
-import { Gem, CheckCircle, Target } from 'lucide-react'
+import { Gem, CheckCircle, Target, Flame, Trophy } from 'lucide-react'
 
 export default async function MissionsPage() {
   const session = await getServerSession(authOptions)
@@ -176,13 +176,40 @@ export default async function MissionsPage() {
     })
   }
 
-  // Group missions by category (Follow vs Main)
-  const followMissions = missions.filter((m) => m.missionType === 'FOLLOW')
-  const mainMissions = missions.filter((m) => m.missionType !== 'FOLLOW')
+  // Add TikTok linking mission if not linked
+  if (!user?.tiktokUsername) {
+    missions.unshift({
+      id: 'mission-tiktok-link',
+      title: 'Link Your TikTok Account',
+      description: 'Connect your TikTok account to unlock all missions and start earning diamonds',
+      missionType: 'SETUP',
+      targetUrl: '/profile/link-tiktok',
+      diamonds: 100,
+      points: 50,
+      xpReward: 20,
+      difficulty: 'EASY',
+      isActive: true,
+      estimatedTime: '2 minutes',
+      recurrence: 'ONCE',
+    })
+  }
 
   // Calculate stats
   const completedCount = Array.from(userMissions.values()).filter((m) => m.verified).length
+  const pendingCount = Array.from(userMissions.values()).filter(
+    (m) => !m.verified && m.verificationStatus === 'PENDING'
+  ).length
   const availableCount = missions.length
+  const completionPercentage = Math.round((completedCount / availableCount) * 100)
+
+  // Calculate total potential rewards
+  const totalDiamonds = missions.reduce((sum, m) => sum + m.diamonds, 0)
+  const earnedDiamonds = missions
+    .filter((m) => {
+      const status = userMissions.get(m.id)
+      return status?.verified
+    })
+    .reduce((sum, m) => sum + m.diamonds, 0)
 
   return (
     <div className="relative min-h-screen">
@@ -200,14 +227,57 @@ export default async function MissionsPage() {
       </div>
 
       <div className="relative mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className="mb-12 animate-fade-in-up">
-          <MissionsHeader streakCount={user?.streakCount || 0} />
+        {/* Header with Progress */}
+        <div className="mb-8 animate-fade-in-up">
+          <div className="mb-6">
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <div className="flex items-center gap-3">
+                  <h1 className="font-display text-4xl font-black text-white md:text-5xl">
+                    Missions
+                  </h1>
+                  {user?.streakCount > 0 && (
+                    <div className="flex items-center gap-2 rounded-full border border-[#FF1F7D]/30 bg-[#FF1F7D]/10 px-4 py-2 backdrop-blur-sm">
+                      <Flame className="h-5 w-5 text-[#FF1F7D]" />
+                      <span className="font-display text-lg font-black tabular-nums text-white">
+                        {user.streakCount}
+                      </span>
+                      <span className="text-sm font-bold text-white/70">Day Streak</span>
+                    </div>
+                  )}
+                </div>
+                <p className="mt-2 text-white/60">
+                  Complete missions. Earn diamonds. Unlock legendary rewards.
+                </p>
+              </div>
+
+              {/* Mini Stats */}
+              <div className="hidden items-center gap-4 lg:flex">
+                <div className="text-center">
+                  <div className="font-display text-2xl font-black tabular-nums text-[#FFC700]">
+                    {earnedDiamonds}
+                  </div>
+                  <div className="text-xs text-white/50">Earned</div>
+                </div>
+                <div className="h-8 w-px bg-white/10" />
+                <div className="text-center">
+                  <div className="font-display text-2xl font-black tabular-nums text-[#8B5CF6]">
+                    {totalDiamonds}
+                  </div>
+                  <div className="text-xs text-white/50">Total</div>
+                </div>
+              </div>
+            </div>
+
+          </div>
         </div>
 
-        {/* Enhanced User Stats */}
-        <section className="mb-12 animate-fade-in-up" style={{ animationDelay: '100ms' }}>
-          <div className="grid gap-6 sm:grid-cols-3">
+        {/* Enhanced Stats Cards */}
+        <section
+          className="mb-12 animate-fade-in-up"
+          style={{ animationDelay: '100ms' }}
+        >
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {/* Diamonds Stat */}
             <div className="group relative overflow-hidden rounded-3xl border border-[#FF1F7D]/30 bg-gradient-to-br from-surface-card/90 to-surface-raised/80 p-6 shadow-xl backdrop-blur-xl transition-all duration-500 hover:scale-[1.02] hover:border-[#FF1F7D]/60 hover:shadow-[0_0_40px_rgba(255,31,125,0.4)]">
               {/* Ambient glow */}
@@ -270,14 +340,37 @@ export default async function MissionsPage() {
                 </div>
               </div>
             </div>
+
+            {/* Progress Stat */}
+            <div className="group relative overflow-hidden rounded-3xl border border-[#FFC700]/30 bg-gradient-to-br from-surface-card/90 to-surface-raised/80 p-6 shadow-xl backdrop-blur-xl transition-all duration-500 hover:scale-[1.02] hover:border-[#FFC700]/60 hover:shadow-[0_0_40px_rgba(255,199,0,0.4)]">
+              {/* Ambient glow */}
+              <div className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-gradient-to-br from-[#FFC700]/20 to-transparent blur-3xl transition-all duration-700 group-hover:scale-150" />
+
+              {/* Hover overlay */}
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-[#FFC700]/10 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+
+              <div className="relative flex items-center gap-4">
+                <div className="rounded-xl bg-[#FFC700]/20 p-3 ring-1 ring-[#FFC700]/30 transition-transform duration-300 group-hover:scale-110">
+                  <Trophy className="h-8 w-8 text-[#FFC700]" />
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-[#FFC700]">Progress</p>
+                  <p className="font-display text-3xl font-black tabular-nums text-white">
+                    {completionPercentage}%
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
         </section>
 
-        {/* Client Component for Interactive Elements */}
-        <div className="animate-fade-in-up" style={{ animationDelay: '200ms' }}>
+        {/* Mission Grid - Pass data to Client Component */}
+        <div
+          className="animate-fade-in-up"
+          style={{ animationDelay: '200ms' }}
+        >
           <MissionsClient
-            followMissions={followMissions}
-            mainMissions={mainMissions}
+            missions={missions}
             userMissions={userMissions}
             hasTikTokLinked={!!user?.tiktokUsername}
             userId={user.id}

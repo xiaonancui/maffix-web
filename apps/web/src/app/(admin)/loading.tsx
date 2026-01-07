@@ -10,7 +10,7 @@ export default function AdminLoading() {
 
         {/* Loading Text */}
         <div className="space-y-2">
-          <h2 className="text-xl font-bold text-foreground">Loading Admin Panel</h2>
+          <h2 className="font-display text-xl font-bold text-foreground">Loading Admin Panel</h2>
           <p className="text-sm text-muted-foreground">Please wait...</p>
         </div>
 

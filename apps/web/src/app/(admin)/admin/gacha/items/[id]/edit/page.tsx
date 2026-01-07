@@ -131,7 +131,7 @@ export default function EditGachaItemPage({ params }: { params: { id: string } }
     <div className="max-w-3xl mx-auto space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold text-foreground tracking-tight">Edit Gacha Item</h1>
+        <h1 className="font-display text-3xl font-bold text-foreground tracking-tight">Edit Gacha Item</h1>
         <p className="text-muted-foreground mt-1">Update probability and status for this gacha item</p>
       </div>
 
@@ -148,7 +148,7 @@ export default function EditGachaItemPage({ params }: { params: { id: string } }
           )}
           <div className="flex-1 space-y-2">
             <div className="flex items-center gap-3">
-              <h3 className="text-xl font-bold text-foreground">{gachaItem.prize.name}</h3>
+              <h3 className="font-display text-xl font-bold text-foreground">{gachaItem.prize.name}</h3>
               <StatusBadge variant={getRarityColor(gachaItem.prize.rarity)}>
                 {gachaItem.prize.rarity}
               </StatusBadge>

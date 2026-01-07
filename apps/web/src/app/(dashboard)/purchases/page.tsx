@@ -158,7 +158,7 @@ export default async function PurchasesPage() {
     <div className="container mx-auto px-4 py-8">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-4xl font-bold text-gray-900 mb-2">Purchase History</h1>
+        <h1 className="font-display text-4xl font-bold text-gray-900 mb-2">Purchase History</h1>
         <p className="text-lg text-muted-foreground">
           View your Premium Pack purchases and receipts
         </p>
@@ -168,7 +168,7 @@ export default async function PurchasesPage() {
       {purchases.length === 0 ? (
         <div className="text-center py-16">
           <div className="text-6xl mb-4">🛍️</div>
-          <h3 className="text-2xl font-bold text-gray-900 mb-2">
+          <h3 className="font-display text-2xl font-bold text-gray-900 mb-2">
             No Purchases Yet
           </h3>
           <p className="text-muted-foreground mb-6">
@@ -191,7 +191,7 @@ export default async function PurchasesPage() {
               {/* Purchase Header */}
               <div className="mb-4 flex items-start justify-between">
                 <div>
-                  <h3 className="text-xl font-bold text-gray-900">
+                  <h3 className="font-display text-xl font-bold text-gray-900">
                     {purchase.pack.name}
                   </h3>
                   <p className="text-sm text-muted-foreground">
@@ -203,7 +203,7 @@ export default async function PurchasesPage() {
                   </p>
                 </div>
                 <div className="text-right">
-                  <p className="text-2xl font-bold text-gray-900">
+                  <p className="font-display text-2xl font-bold text-gray-900">
                     ${purchase.amount.toFixed(2)}
                   </p>
                   <p className="text-sm text-muted-foreground">{purchase.currency}</p>
@@ -301,13 +301,13 @@ export default async function PurchasesPage() {
           </h3>
           <div className="grid gap-4 sm:grid-cols-3">
             <div className="text-center">
-              <p className="text-3xl font-bold text-[#FF5656]">
+              <p className="font-display text-3xl font-bold text-[#FF5656]">
                 {purchases.length}
               </p>
               <p className="text-sm text-muted-foreground">Total Purchases</p>
             </div>
             <div className="text-center">
-              <p className="text-3xl font-bold text-green-600">
+              <p className="font-display text-3xl font-bold text-green-600">
                 $
                 {purchases
                   .filter((p) => p.status === 'COMPLETED')
@@ -317,7 +317,7 @@ export default async function PurchasesPage() {
               <p className="text-sm text-muted-foreground">Total Spent</p>
             </div>
             <div className="text-center">
-              <p className="text-3xl font-bold text-[#FF5656]">
+              <p className="font-display text-3xl font-bold text-[#FF5656]">
                 {purchases.filter((p) => p.status === 'COMPLETED').length}
               </p>
               <p className="text-sm text-muted-foreground">Completed</p>

@@ -26,7 +26,7 @@ export default function AdminPageHeader({
         <button
           onClick={action.onClick}
           disabled={action.disabled}
-          className="inline-flex items-center justify-center rounded-md border-2 border-primary bg-transparent px-4 py-2 text-sm font-semibold text-primary dark:shadow-lg dark:shadow-red-500/30 hover:bg-primary/10 disabled:opacity-50 disabled:cursor-not-allowed transition-all dark:bg-gradient-to-r dark:from-red-600 dark:to-red-500 dark:text-primary-foreground dark:border-transparent dark:hover:from-red-700 dark:hover:to-red-600"
+          className="group relative inline-flex items-center justify-center overflow-hidden rounded-2xl border-2 border-[#FF1F7D]/40 bg-gradient-to-r from-[#FF1F7D]/20 to-[#8B5CF6]/10 px-6 py-3 font-display text-sm font-bold uppercase tracking-wider text-white shadow-lg shadow-[#FF1F7D]/20 backdrop-blur-sm transition-all duration-300 hover:scale-105 hover:border-[#FF1F7D]/60 hover:shadow-[#FF1F7D]/40 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:scale-100"
         >
           {action.label}
         </button>
@@ -36,21 +36,25 @@ export default function AdminPageHeader({
   }
 
   return (
-    <div className="border-b-2 border-red-500/30 pb-6 mb-8">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+    <div className="relative mb-8 pb-6">
+      {/* Gradient border divider */}
+      <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-[#FF1F7D] via-[#8B5CF6] to-transparent" />
+      <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-[#FF1F7D]/50 via-[#8B5CF6]/50 to-transparent blur-sm" />
+
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex-1">
           <div className="flex items-center gap-3">
-            <h1 className="text-3xl font-bold tracking-tight text-foreground">
+            <h1 className="font-display text-4xl font-black tracking-tight text-white">
               {title}
             </h1>
             {badge}
           </div>
           {description && (
-            <p className="mt-2 text-sm text-gray-400">{description}</p>
+            <p className="mt-2 text-sm font-medium text-white/60">{description}</p>
           )}
         </div>
         {renderActions() && (
-          <div className="flex items-center gap-3 flex-shrink-0">
+          <div className="flex flex-shrink-0 items-center gap-3">
             {renderActions()}
           </div>
         )}

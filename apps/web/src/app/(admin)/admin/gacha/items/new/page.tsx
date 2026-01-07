@@ -110,7 +110,7 @@ export default function NewGachaItemPage() {
     <div className="max-w-3xl mx-auto space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold text-foreground tracking-tight">Add Gacha Item</h1>
+        <h1 className="font-display text-3xl font-bold text-foreground tracking-tight">Add Gacha Item</h1>
         <p className="text-muted-foreground mt-1">Create a new gacha item from an existing prize</p>
       </div>
 

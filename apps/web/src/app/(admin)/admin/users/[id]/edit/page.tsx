@@ -132,7 +132,7 @@ export default function EditUserPage({ params }: { params: { id: string } }) {
         >
           ← Back to User Details
         </button>
-        <h1 className="text-3xl font-bold text-foreground tracking-tight">Edit User</h1>
+        <h1 className="font-display text-3xl font-bold text-foreground tracking-tight">Edit User</h1>
         <p className="text-muted-foreground mt-1">{user.email}</p>
       </div>
 

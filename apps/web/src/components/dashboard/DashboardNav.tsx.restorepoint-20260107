@@ -1,0 +1,106 @@
+'use client'
+
+import Link from 'next/link'
+import NavLink from '@/components/dashboard/NavLink'
+import AdminNavLink from '@/components/dashboard/AdminNavLink'
+import MobileMenu from '@/components/dashboard/MobileMenu'
+import { ButtonIcon } from '@/components/icons/Icon'
+import { Gem, Ticket, Trophy, Zap } from 'lucide-react'
+
+interface DashboardNavProps {
+  diamonds: number
+  hasCompletedTenDraw: boolean
+  userRole: string
+  points?: number
+  level?: number
+}
+
+export default function DashboardNav({
+  diamonds,
+  hasCompletedTenDraw,
+  userRole,
+  points = 0,
+  level = 1,
+}: DashboardNavProps) {
+  return (
+    <nav className="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur-xl">
+      {/* Subtle accent line at top */}
+      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
+
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="flex h-16 items-center justify-between">
+          {/* Logo and Nav Links */}
+          <div className="flex items-center gap-10">
+            {/* Logo */}
+            <Link
+              href="/dashboard"
+              className="group flex items-center gap-2.5 transition-all duration-300"
+            >
+              <div className="relative flex h-9 w-9 items-center justify-center">
+                <div className="absolute inset-0 rounded-lg bg-primary opacity-80 blur-sm transition-all group-hover:opacity-100 group-hover:blur-md" />
+                <div className="relative flex h-9 w-9 items-center justify-center rounded-lg bg-primary">
+                  <Zap className="h-5 w-5 text-primary-foreground" strokeWidth={2.5} />
+                </div>
+              </div>
+              <span className="text-xl font-bold tracking-tight text-foreground">
+                Maffix
+              </span>
+            </Link>
+
+            {/* Desktop Navigation */}
+            <div className="hidden lg:flex items-center gap-1">
+              <NavLink href="/dashboard">Dashboard</NavLink>
+              <NavLink href="/missions">Missions</NavLink>
+              <NavLink href="/aura-zone">Aura Zone</NavLink>
+              <NavLink href="/store">Store</NavLink>
+            </div>
+          </div>
+
+          {/* Right Side - Stats and Profile */}
+          <div className="flex items-center gap-2">
+            {/* Level Badge */}
+            <div className="hidden md:flex items-center gap-1.5 rounded-md bg-secondary border border-border px-3 py-1.5 transition-all hover:bg-muted">
+              <Trophy className="h-3.5 w-3.5 text-primary" />
+              <span className="text-xs font-semibold text-foreground">Lv.{level}</span>
+            </div>
+
+            {/* Diamond Balance */}
+            <Link
+              href="/transactions"
+              className="hidden sm:flex items-center gap-1.5 rounded-md bg-secondary border border-border px-3 py-1.5 transition-all hover:bg-muted hover:border-primary/30"
+            >
+              <Gem className="h-3.5 w-3.5 text-primary" />
+              <span className="text-xs font-semibold text-foreground font-mono">{diamonds.toLocaleString()}</span>
+            </Link>
+
+            {/* Tickets Balance */}
+            <Link
+              href="/transactions"
+              className="hidden sm:flex items-center gap-1.5 rounded-md bg-secondary border border-border px-3 py-1.5 transition-all hover:bg-muted hover:border-accent/30"
+            >
+              <Ticket className="h-3.5 w-3.5 text-accent" />
+              <span className="text-xs font-semibold text-foreground font-mono">{points.toLocaleString()}</span>
+            </Link>
+
+            {/* Admin Panel Link */}
+            {userRole === 'ADMIN' && <AdminNavLink />}
+
+            {/* Profile Icon */}
+            <Link
+              href="/profile"
+              className="flex items-center justify-center rounded-md bg-secondary border border-border w-9 h-9 text-muted-foreground hover:text-foreground hover:bg-muted transition-all"
+            >
+              <span className="sr-only">View profile</span>
+              <ButtonIcon name="user" label="Profile" />
+            </Link>
+
+            {/* Mobile Menu */}
+            <div className="lg:hidden">
+              <MobileMenu diamonds={diamonds} hasCompletedTenDraw={hasCompletedTenDraw} points={points} />
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+  )
+}

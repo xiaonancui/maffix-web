@@ -269,7 +269,7 @@ export default function PrizesPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-foreground tracking-tight">Prizes</h1>
+          <h1 className="font-display text-3xl font-bold text-foreground tracking-tight">Prizes</h1>
           <p className="text-muted-foreground mt-1">Manage prize catalog and inventory</p>
         </div>
         <Link
@@ -284,23 +284,23 @@ export default function PrizesPage() {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         <div className="bg-card border border-border rounded-lg p-6 dark:shadow-lg dark:shadow-red-500/10">
           <div className="text-muted-foreground text-sm mb-1">Total Prizes</div>
-          <div className="text-3xl font-bold text-foreground">{pagination.total}</div>
+          <div className="font-display text-3xl font-bold text-foreground">{pagination.total}</div>
         </div>
         <div className="bg-card border border-border rounded-lg p-6 dark:shadow-lg dark:shadow-red-500/10">
           <div className="text-muted-foreground text-sm mb-1">Active</div>
-          <div className="text-3xl font-bold text-green-400">
+          <div className="font-display text-3xl font-bold text-green-400">
             {prizes.filter((p) => p.isActive).length}
           </div>
         </div>
         <div className="bg-card border border-border rounded-lg p-6 dark:shadow-lg dark:shadow-red-500/10">
           <div className="text-muted-foreground text-sm mb-1">SSR Prizes</div>
-          <div className="text-3xl font-bold text-red-400">
+          <div className="font-display text-3xl font-bold text-red-400">
             {prizes.filter((p) => p.rarity === 'SSR').length}
           </div>
         </div>
         <div className="bg-card border border-border rounded-lg p-6 dark:shadow-lg dark:shadow-red-500/10">
           <div className="text-muted-foreground text-sm mb-1">Legendary</div>
-          <div className="text-3xl font-bold text-yellow-400">
+          <div className="font-display text-3xl font-bold text-yellow-400">
             {prizes.filter((p) => p.rarity === 'LEGENDARY').length}
           </div>
         </div>

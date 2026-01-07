@@ -288,10 +288,10 @@ export default function MissionsPage() {
         actions={
           <Link
             href="/admin/missions/new"
-            className="flex items-center gap-2 rounded-lg border-2 border-primary bg-transparent px-4 py-2 text-sm font-semibold text-primary dark:shadow-lg dark:shadow-red-500/30 hover:dark:shadow-red-500/50 hover:bg-primary/10 transition-all dark:bg-gradient-to-r dark:from-red-600 dark:to-red-500 dark:text-primary-foreground dark:border-transparent"
+            className="group relative flex items-center gap-2 overflow-hidden rounded-2xl border-2 border-[#FF1F7D]/40 bg-gradient-to-r from-[#FF1F7D]/20 to-[#FF1F7D]/10 px-6 py-3 font-display text-sm font-bold uppercase tracking-wider text-white shadow-lg shadow-[#FF1F7D]/20 backdrop-blur-sm transition-all duration-300 hover:scale-105 hover:border-[#FF1F7D]/60 hover:shadow-[#FF1F7D]/40"
           >
-            <Plus className="h-5 w-5" />
-            Create Mission
+            <Plus className="h-5 w-5 text-[#FF1F7D]" />
+            <span className="text-[#FF1F7D]">Create Mission</span>
           </Link>
         }
       />

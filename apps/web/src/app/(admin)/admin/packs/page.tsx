@@ -3,11 +3,11 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import AdminPageHeader from '@/components/admin/AdminPageHeader'
 import DataTable from '@/components/admin/DataTable'
-import StatusBadge from '@/components/admin/StatusBadge'
 import ActionMenu from '@/components/admin/ActionMenu'
 import ConfirmDialog from '@/components/admin/ConfirmDialog'
-import { Plus, Gem, Ticket, Star, Edit, Play, Pause, Trash2 } from 'lucide-react'
+import { Plus, Gem, Ticket, Star, Edit, Play, Pause, Trash2, Package, TrendingUp, Sparkles, ShoppingBag } from 'lucide-react'
 
 interface Prize {
   id: string
@@ -115,15 +115,40 @@ export default function PremiumPacksPage() {
     }
   }
 
-  const getRarityColor = (rarity: string) => {
-    const colors: Record<string, string> = {
-      COMMON: 'gray',
-      RARE: 'blue',
-      EPIC: 'purple',
-      LEGENDARY: 'yellow',
-      SSR: 'error',
+  const getRarityBadge = (rarity: string) => {
+    const badgeStyles: Record<string, { color: string; borderColor: string; bgColor: string; shadowColor: string }> = {
+      COMMON: {
+        color: 'text-white/40',
+        borderColor: 'border-white/20',
+        bgColor: 'bg-white/10',
+        shadowColor: 'shadow-white/10',
+      },
+      RARE: {
+        color: 'text-[#00F5FF]',
+        borderColor: 'border-[#00F5FF]/40',
+        bgColor: 'bg-[#00F5FF]/20',
+        shadowColor: 'shadow-[#00F5FF]/20',
+      },
+      EPIC: {
+        color: 'text-[#8B5CF6]',
+        borderColor: 'border-[#8B5CF6]/40',
+        bgColor: 'bg-[#8B5CF6]/20',
+        shadowColor: 'shadow-[#8B5CF6]/20',
+      },
+      LEGENDARY: {
+        color: 'text-[#FF1F7D]',
+        borderColor: 'border-[#FF1F7D]/40',
+        bgColor: 'bg-[#FF1F7D]/20',
+        shadowColor: 'shadow-[#FF1F7D]/20',
+      },
+      SSR: {
+        color: 'text-[#FFC700]',
+        borderColor: 'border-[#FFC700]/40',
+        bgColor: 'bg-[#FFC700]/20',
+        shadowColor: 'shadow-[#FFC700]/20',
+      },
     }
-    return colors[rarity] || 'gray'
+    return badgeStyles[rarity] || badgeStyles.COMMON
   }
 
   const getTotalValue = (pack: PremiumPack) => {
@@ -144,16 +169,16 @@ export default function PremiumPacksPage() {
             <img
               src={pack.imageUrl}
               alt={pack.name}
-              className="w-16 h-16 rounded-lg object-cover border border-border"
+              className="w-16 h-16 rounded-lg object-cover border-2 border-white/10"
             />
           ) : (
-            <div className="w-16 h-16 rounded-lg bg-gradient-to-br from-purple-500/20 to-pink-500/20 border border-border flex items-center justify-center text-2xl">
+            <div className="w-16 h-16 rounded-lg bg-gradient-to-br from-purple-500/20 to-pink-500/20 border-2 border-white/10 flex items-center justify-center text-2xl">
               📦
             </div>
           )}
           <div>
-            <div className="font-medium text-foreground">{pack.name}</div>
-            <div className="text-sm text-muted-foreground line-clamp-1">{pack.description}</div>
+            <div className="font-medium text-white">{pack.name}</div>
+            <div className="text-sm text-white/60 line-clamp-1">{pack.description}</div>
           </div>
         </div>
       ),
@@ -163,77 +188,88 @@ export default function PremiumPacksPage() {
       label: 'Price',
       render: (pack: PremiumPack) => (
         <div>
-          <div className="text-foreground font-bold text-lg">${pack.price.toFixed(2)}</div>
-          <div className="text-xs text-muted-foreground">{pack.currency}</div>
+          <div className="text-white font-bold text-lg">${pack.price.toFixed(2)}</div>
+          <div className="text-xs text-white/60">{pack.currency}</div>
         </div>
       ),
     },
     {
       key: 'contents',
       label: 'Contents',
-      render: (pack: PremiumPack) => (
-        <div className="space-y-1 text-sm">
-          {pack.guaranteedPrize && (
-            <div className="flex items-center gap-2">
-              <span className="text-muted-foreground">🎁</span>
-              <span className="text-muted-foreground">{pack.guaranteedPrize.name}</span>
-              <StatusBadge variant={getRarityColor(pack.guaranteedPrize.rarity)}>
-                {pack.guaranteedPrize.rarity}
-              </StatusBadge>
-            </div>
-          )}
-          {pack.bonusTickets > 0 && (
-            <div className="flex items-center gap-1 text-muted-foreground">
-              <Ticket className="h-4 w-4 text-blue-400" />
-              {pack.bonusTickets} Draw Ticket{pack.bonusTickets > 1 ? 's' : ''}
-            </div>
-          )}
-          {pack.bonusDiamonds > 0 && (
-            <div className="flex items-center gap-1 text-muted-foreground">
-              <Gem className="h-4 w-4 text-yellow-400" />
-              {pack.bonusDiamonds.toLocaleString()} Diamonds
-            </div>
-          )}
-        </div>
-      ),
+      render: (pack: PremiumPack) => {
+        const styles = pack.guaranteedPrize ? getRarityBadge(pack.guaranteedPrize.rarity) : null
+        return (
+          <div className="space-y-2 text-sm">
+            {pack.guaranteedPrize && styles && (
+              <div className="space-y-1">
+                <span className={`inline-flex rounded-full border-2 ${styles.borderColor} ${styles.bgColor} px-3 py-1 font-display text-xs font-black uppercase tracking-wider ${styles.color} shadow-lg ${styles.shadowColor}`}>
+                  {pack.guaranteedPrize.rarity}
+                </span>
+                <div className="flex items-center gap-2">
+                  <span className="text-white/60">🎁</span>
+                  <span className="text-white/60">{pack.guaranteedPrize.name}</span>
+                </div>
+              </div>
+            )}
+            {pack.bonusTickets > 0 && (
+              <div className="flex items-center gap-1 text-white/60">
+                <Ticket className="h-4 w-4 text-[#00F5FF]" />
+                {pack.bonusTickets} Draw Ticket{pack.bonusTickets > 1 ? 's' : ''}
+              </div>
+            )}
+            {pack.bonusDiamonds > 0 && (
+              <div className="flex items-center gap-1 text-white/60">
+                <Gem className="h-4 w-4 text-[#FFC700]" />
+                {pack.bonusDiamonds.toLocaleString()} Diamonds
+              </div>
+            )}
+          </div>
+        )
+      },
     },
     {
       key: 'value',
       label: 'Total Value',
       render: (pack: PremiumPack) => (
-        <span className="text-green-400 font-medium">${getTotalValue(pack).toFixed(2)}</span>
+        <span className="text-[#10B981] font-medium">${getTotalValue(pack).toFixed(2)}</span>
       ),
     },
     {
       key: 'purchases',
       label: 'Purchases',
       render: (pack: PremiumPack) => (
-        <span className="text-muted-foreground">{pack._count.purchases}</span>
+        <span className="text-white/60">{pack._count.purchases}</span>
       ),
     },
     {
       key: 'featured',
       label: 'Featured',
       render: (pack: PremiumPack) => (
-        <StatusBadge variant={pack.featured ? 'warning' : 'gray'}>
-          {pack.featured ? (
-            <span className="flex items-center gap-1">
-              <Star className="h-3 w-3" />
-              Yes
-            </span>
-          ) : (
-            'No'
-          )}
-        </StatusBadge>
+        pack.featured ? (
+          <span className="inline-flex items-center gap-1 rounded-full border-2 border-[#FFC700]/40 bg-[#FFC700]/20 px-3 py-1 font-display text-xs font-black uppercase tracking-wider text-[#FFC700] shadow-lg shadow-[#FFC700]/20">
+            <Star className="h-3 w-3" />
+            Yes
+          </span>
+        ) : (
+          <span className="inline-flex rounded-full border-2 border-white/20 bg-white/10 px-3 py-1 font-display text-xs font-black uppercase tracking-wider text-white/40">
+            No
+          </span>
+        )
       ),
     },
     {
       key: 'isActive',
       label: 'Status',
       render: (pack: PremiumPack) => (
-        <StatusBadge variant={pack.isActive ? 'success' : 'error'}>
-          {pack.isActive ? 'Active' : 'Inactive'}
-        </StatusBadge>
+        pack.isActive ? (
+          <span className="inline-flex rounded-full border-2 border-[#10B981]/40 bg-[#10B981]/20 px-3 py-1 font-display text-xs font-black uppercase tracking-wider text-[#10B981] shadow-lg shadow-[#10B981]/20">
+            Active
+          </span>
+        ) : (
+          <span className="inline-flex rounded-full border-2 border-[#FF1F7D]/40 bg-[#FF1F7D]/20 px-3 py-1 font-display text-xs font-black uppercase tracking-wider text-[#FF1F7D] shadow-lg shadow-[#FF1F7D]/20">
+            Inactive
+          </span>
+        )
       ),
     },
     {
@@ -276,47 +312,87 @@ export default function PremiumPacksPage() {
     <div className="mx-auto max-w-7xl px-6 py-8">
       <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold text-foreground tracking-tight">Premium Packs</h1>
-          <p className="text-muted-foreground mt-1">Manage premium pack offerings and bundles</p>
-        </div>
-        <Link
-          href="/admin/packs/new"
-          className="px-4 py-2 border-2 border-primary bg-transparent text-primary rounded-lg hover:bg-primary/10 transition-all dark:shadow-lg dark:shadow-red-500/30 font-medium dark:bg-gradient-to-r dark:from-red-600 dark:to-red-500 dark:text-primary-foreground dark:border-transparent dark:hover:from-red-700 dark:hover:to-red-600"
-        >
-          + Add Pack
-        </Link>
-      </div>
+      <AdminPageHeader
+        title="Premium Packs"
+        description="Manage premium pack offerings and bundles"
+        actions={
+          <Link
+            href="/admin/packs/new"
+            className="group relative flex items-center gap-2 overflow-hidden rounded-2xl border-2 border-[#FF1F7D]/40 bg-gradient-to-r from-[#FF1F7D]/20 to-[#FF1F7D]/10 px-6 py-3 font-display text-sm font-bold uppercase tracking-wider text-white shadow-lg shadow-[#FF1F7D]/20 backdrop-blur-sm transition-all duration-300 hover:scale-105 hover:border-[#FF1F7D]/60 hover:shadow-[#FF1F7D]/40"
+          >
+            <Plus className="h-5 w-5 text-[#FF1F7D]" />
+            <span className="text-[#FF1F7D]">Add Pack</span>
+          </Link>
+        }
+      />
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <div className="bg-card border border-border rounded-lg p-6 dark:shadow-lg dark:shadow-red-500/10">
-          <div className="text-muted-foreground text-sm mb-1">Total Packs</div>
-          <div className="text-3xl font-bold text-foreground">{packs.length}</div>
-        </div>
-        <div className="bg-card border border-border rounded-lg p-6 dark:shadow-lg dark:shadow-red-500/10">
-          <div className="text-muted-foreground text-sm mb-1">Active Packs</div>
-          <div className="text-3xl font-bold text-green-400">
-            {packs.filter((p) => p.isActive).length}
+        {/* Total Packs - Cyan */}
+        <div className="group relative overflow-hidden rounded-3xl border-2 border-[#00F5FF]/30 bg-gradient-to-br from-surface-card/90 to-surface-raised/80 p-6 shadow-xl backdrop-blur-xl transition-all duration-500 hover:scale-[1.02] hover:border-[#00F5FF]/60 hover:shadow-[0_0_40px_rgba(0,245,255,0.3)]">
+          <div className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-gradient-to-br from-[#00F5FF]/20 to-transparent blur-3xl opacity-0 transition-all duration-700 group-hover:scale-150 group-hover:opacity-100" />
+          <div className="relative flex items-center gap-4">
+            <div className="rounded-2xl bg-[#00F5FF]/20 p-3 ring-2 ring-[#00F5FF]/30 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12">
+              <Package className="h-8 w-8 text-[#00F5FF]" />
+            </div>
+            <div>
+              <p className="mb-1 font-display text-xs font-bold uppercase tracking-wider text-white/60">Total Packs</p>
+              <p className="font-display text-3xl font-black tabular-nums text-white">{packs.length}</p>
+            </div>
           </div>
         </div>
-        <div className="bg-card border border-border rounded-lg p-6 dark:shadow-lg dark:shadow-red-500/10">
-          <div className="text-muted-foreground text-sm mb-1">Featured Packs</div>
-          <div className="text-3xl font-bold text-yellow-400">
-            {packs.filter((p) => p.featured).length}
+
+        {/* Active Packs - Emerald */}
+        <div className="group relative overflow-hidden rounded-3xl border-2 border-[#10B981]/30 bg-gradient-to-br from-surface-card/90 to-surface-raised/80 p-6 shadow-xl backdrop-blur-xl transition-all duration-500 hover:scale-[1.02] hover:border-[#10B981]/60 hover:shadow-[0_0_40px_rgba(16,185,129,0.3)]">
+          <div className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-gradient-to-br from-[#10B981]/20 to-transparent blur-3xl opacity-0 transition-all duration-700 group-hover:scale-150 group-hover:opacity-100" />
+          <div className="relative flex items-center gap-4">
+            <div className="rounded-2xl bg-[#10B981]/20 p-3 ring-2 ring-[#10B981]/30 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12">
+              <TrendingUp className="h-8 w-8 text-[#10B981]" />
+            </div>
+            <div>
+              <p className="mb-1 font-display text-xs font-bold uppercase tracking-wider text-white/60">Active Packs</p>
+              <p className="font-display text-3xl font-black tabular-nums text-white">
+                {packs.filter((p) => p.isActive).length}
+              </p>
+            </div>
           </div>
         </div>
-        <div className="bg-card border border-border rounded-lg p-6 dark:shadow-lg dark:shadow-red-500/10">
-          <div className="text-muted-foreground text-sm mb-1">Total Purchases</div>
-          <div className="text-3xl font-bold text-purple-400">
-            {packs.reduce((sum, p) => sum + p._count.purchases, 0)}
+
+        {/* Featured Packs - Gold */}
+        <div className="group relative overflow-hidden rounded-3xl border-2 border-[#FFC700]/30 bg-gradient-to-br from-surface-card/90 to-surface-raised/80 p-6 shadow-xl backdrop-blur-xl transition-all duration-500 hover:scale-[1.02] hover:border-[#FFC700]/60 hover:shadow-[0_0_40px_rgba(255,199,0,0.3)]">
+          <div className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-gradient-to-br from-[#FFC700]/20 to-transparent blur-3xl opacity-0 transition-all duration-700 group-hover:scale-150 group-hover:opacity-100" />
+          <div className="relative flex items-center gap-4">
+            <div className="rounded-2xl bg-[#FFC700]/20 p-3 ring-2 ring-[#FFC700]/30 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12">
+              <Sparkles className="h-8 w-8 text-[#FFC700]" />
+            </div>
+            <div>
+              <p className="mb-1 font-display text-xs font-bold uppercase tracking-wider text-white/60">Featured Packs</p>
+              <p className="font-display text-3xl font-black tabular-nums text-white">
+                {packs.filter((p) => p.featured).length}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Total Purchases - Purple */}
+        <div className="group relative overflow-hidden rounded-3xl border-2 border-[#8B5CF6]/30 bg-gradient-to-br from-surface-card/90 to-surface-raised/80 p-6 shadow-xl backdrop-blur-xl transition-all duration-500 hover:scale-[1.02] hover:border-[#8B5CF6]/60 hover:shadow-[0_0_40px_rgba(139,92,246,0.3)]">
+          <div className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-gradient-to-br from-[#8B5CF6]/20 to-transparent blur-3xl opacity-0 transition-all duration-700 group-hover:scale-150 group-hover:opacity-100" />
+          <div className="relative flex items-center gap-4">
+            <div className="rounded-2xl bg-[#8B5CF6]/20 p-3 ring-2 ring-[#8B5CF6]/30 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12">
+              <ShoppingBag className="h-8 w-8 text-[#8B5CF6]" />
+            </div>
+            <div>
+              <p className="mb-1 font-display text-xs font-bold uppercase tracking-wider text-white/60">Total Purchases</p>
+              <p className="font-display text-3xl font-black tabular-nums text-white">
+                {packs.reduce((sum, p) => sum + p._count.purchases, 0)}
+              </p>
+            </div>
           </div>
         </div>
       </div>
 
       {/* Table */}
-      <div className="bg-card border border-border rounded-lg dark:shadow-lg dark:shadow-red-500/10">
+      <div className="rounded-3xl border-2 border-white/10 bg-gradient-to-br from-surface-card/90 to-surface-raised/80 shadow-xl backdrop-blur-xl">
         <DataTable
           columns={columns}
           data={packs}

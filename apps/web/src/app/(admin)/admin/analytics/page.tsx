@@ -154,7 +154,7 @@ export default function AnalyticsPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-foreground tracking-tight">Analytics Dashboard</h1>
+          <h1 className="font-display text-3xl font-bold text-foreground tracking-tight">Analytics Dashboard</h1>
           <p className="text-muted-foreground mt-1">Platform metrics and insights</p>
         </div>
         <FilterDropdown
@@ -171,18 +171,18 @@ export default function AnalyticsPage() {
 
       {/* User Metrics */}
       <div>
-        <h2 className="text-xl font-bold text-foreground mb-4">User Metrics</h2>
+        <h2 className="font-display text-xl font-bold text-foreground mb-4">User Metrics</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <div className="bg-card border border-border rounded-lg p-6 dark:shadow-lg dark:shadow-red-500/10">
             <div className="text-muted-foreground text-sm mb-1">Total Users</div>
-            <div className="text-3xl font-bold text-foreground">{formatNumber(overview.users.total)}</div>
+            <div className="font-display text-3xl font-bold text-foreground">{formatNumber(overview.users.total)}</div>
             <div className="text-sm text-green-400 mt-2">
               +{formatNumber(overview.users.new)} new
             </div>
           </div>
           <div className="bg-card border border-border rounded-lg p-6 dark:shadow-lg dark:shadow-red-500/10">
             <div className="text-muted-foreground text-sm mb-1">Active Users</div>
-            <div className="text-3xl font-bold text-green-400">
+            <div className="font-display text-3xl font-bold text-green-400">
               {formatNumber(overview.users.active)}
             </div>
             <div className="text-sm text-muted-foreground mt-2">
@@ -191,7 +191,7 @@ export default function AnalyticsPage() {
           </div>
           <div className="bg-card border border-border rounded-lg p-6 dark:shadow-lg dark:shadow-red-500/10">
             <div className="text-muted-foreground text-sm mb-1">TikTok Linked</div>
-            <div className="text-3xl font-bold text-purple-400">
+            <div className="font-display text-3xl font-bold text-purple-400">
               {formatNumber(overview.users.tiktokLinked)}
             </div>
             <div className="text-sm text-muted-foreground mt-2">
@@ -214,11 +214,11 @@ export default function AnalyticsPage() {
 
       {/* Engagement Metrics */}
       <div>
-        <h2 className="text-xl font-bold text-foreground mb-4">Engagement Metrics</h2>
+        <h2 className="font-display text-xl font-bold text-foreground mb-4">Engagement Metrics</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <div className="bg-card border border-border rounded-lg p-6 dark:shadow-lg dark:shadow-red-500/10">
             <div className="text-muted-foreground text-sm mb-1">Total Tasks</div>
-            <div className="text-3xl font-bold text-foreground">
+            <div className="font-display text-3xl font-bold text-foreground">
               {formatNumber(overview.engagement.totalTasks)}
             </div>
             <div className="text-sm text-muted-foreground mt-2">
@@ -227,14 +227,14 @@ export default function AnalyticsPage() {
           </div>
           <div className="bg-card border border-border rounded-lg p-6 dark:shadow-lg dark:shadow-red-500/10">
             <div className="text-muted-foreground text-sm mb-1">Recent Completions</div>
-            <div className="text-3xl font-bold text-blue-400">
+            <div className="font-display text-3xl font-bold text-blue-400">
               {formatNumber(overview.engagement.recentCompletedTasks)}
             </div>
             <div className="text-sm text-muted-foreground mt-2">Last {period} days</div>
           </div>
           <div className="bg-card border border-border rounded-lg p-6 dark:shadow-lg dark:shadow-red-500/10">
             <div className="text-muted-foreground text-sm mb-1">Prizes Awarded</div>
-            <div className="text-3xl font-bold text-yellow-400">
+            <div className="font-display text-3xl font-bold text-yellow-400">
               {formatNumber(overview.engagement.prizesAwarded)}
             </div>
             <div className="text-sm text-muted-foreground mt-2">
@@ -243,7 +243,7 @@ export default function AnalyticsPage() {
           </div>
           <div className="bg-card border border-border rounded-lg p-6 dark:shadow-lg dark:shadow-red-500/10">
             <div className="text-muted-foreground text-sm mb-1">Completion Rate</div>
-            <div className="text-3xl font-bold text-green-400">
+            <div className="font-display text-3xl font-bold text-green-400">
               {formatPercent(overview.engagement.completionRate)}
             </div>
             <div className="text-sm text-muted-foreground mt-2">Overall</div>
@@ -253,11 +253,11 @@ export default function AnalyticsPage() {
 
       {/* Gacha Metrics */}
       <div>
-        <h2 className="text-xl font-bold text-foreground mb-4">Gacha Metrics</h2>
+        <h2 className="font-display text-xl font-bold text-foreground mb-4">Gacha Metrics</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <div className="bg-card border border-border rounded-lg p-6 dark:shadow-lg dark:shadow-red-500/10">
             <div className="text-muted-foreground text-sm mb-1">Total Pulls</div>
-            <div className="text-3xl font-bold text-foreground">
+            <div className="font-display text-3xl font-bold text-foreground">
               {formatNumber(overview.gacha.totalPulls)}
             </div>
             <div className="text-sm text-green-400 mt-2">
@@ -268,7 +268,7 @@ export default function AnalyticsPage() {
             <div className="flex items-center gap-1 text-muted-foreground text-sm mb-1">
               Total Revenue <Gem className="h-4 w-4 text-yellow-400" />
             </div>
-            <div className="text-3xl font-bold text-yellow-400">
+            <div className="font-display text-3xl font-bold text-yellow-400">
               {formatNumber(overview.gacha.totalRevenue)}
             </div>
             <div className="text-sm text-muted-foreground mt-2">Diamonds spent</div>
@@ -277,14 +277,14 @@ export default function AnalyticsPage() {
             <div className="flex items-center gap-1 text-muted-foreground text-sm mb-1">
               Recent Revenue <Gem className="h-4 w-4 text-yellow-400" />
             </div>
-            <div className="text-3xl font-bold text-yellow-400">
+            <div className="font-display text-3xl font-bold text-yellow-400">
               {formatNumber(overview.gacha.recentRevenue)}
             </div>
             <div className="text-sm text-muted-foreground mt-2">Last {period} days</div>
           </div>
           <div className="bg-card border border-border rounded-lg p-6 dark:shadow-lg dark:shadow-red-500/10">
             <div className="text-muted-foreground text-sm mb-1">Avg per Pull</div>
-            <div className="text-3xl font-bold text-purple-400">
+            <div className="font-display text-3xl font-bold text-purple-400">
               {overview.gacha.totalPulls > 0
                 ? formatNumber(Math.round(overview.gacha.totalRevenue / overview.gacha.totalPulls))
                 : '0'}
@@ -296,11 +296,11 @@ export default function AnalyticsPage() {
 
       {/* Revenue Metrics */}
       <div>
-        <h2 className="text-xl font-bold text-foreground mb-4">Revenue Metrics</h2>
+        <h2 className="font-display text-xl font-bold text-foreground mb-4">Revenue Metrics</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <div className="bg-card border border-border rounded-lg p-6 dark:shadow-lg dark:shadow-red-500/10">
             <div className="text-muted-foreground text-sm mb-1">Premium Packs</div>
-            <div className="text-3xl font-bold text-green-400">
+            <div className="font-display text-3xl font-bold text-green-400">
               {formatCurrency(overview.revenue.packs.totalRevenue)}
             </div>
             <div className="text-sm text-muted-foreground mt-2">
@@ -312,7 +312,7 @@ export default function AnalyticsPage() {
           </div>
           <div className="bg-card border border-border rounded-lg p-6 dark:shadow-lg dark:shadow-red-500/10">
             <div className="text-muted-foreground text-sm mb-1">Merchandise</div>
-            <div className="text-3xl font-bold text-blue-400">
+            <div className="font-display text-3xl font-bold text-blue-400">
               {formatCurrency(overview.revenue.merchandise.totalRevenue)}
             </div>
             <div className="text-sm text-muted-foreground mt-2">
@@ -324,7 +324,7 @@ export default function AnalyticsPage() {
           </div>
           <div className="bg-card border border-border rounded-lg p-6 dark:shadow-lg dark:shadow-red-500/10">
             <div className="text-muted-foreground text-sm mb-1">Total Revenue</div>
-            <div className="text-3xl font-bold text-yellow-400">
+            <div className="font-display text-3xl font-bold text-yellow-400">
               {formatCurrency(overview.revenue.combined.totalRevenue)}
             </div>
             <div className="text-sm text-muted-foreground mt-2">All time</div>
@@ -338,7 +338,7 @@ export default function AnalyticsPage() {
       {/* Trends */}
       {trends && (
         <div>
-          <h2 className="text-xl font-bold text-foreground mb-4">Trends (Last 7 Days)</h2>
+          <h2 className="font-display text-xl font-bold text-foreground mb-4">Trends (Last 7 Days)</h2>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* User Registrations Trend */}
             <div className="bg-card border border-border rounded-lg p-6 dark:shadow-lg dark:shadow-red-500/10">

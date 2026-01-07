@@ -99,7 +99,7 @@ export default function CartPage() {
     <div className="min-h-screen bg-background py-8">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-foreground">Shopping Cart</h1>
+          <h1 className="font-display text-3xl font-bold text-foreground">Shopping Cart</h1>
           <p className="mt-2 text-muted-foreground">
             {cartItems.length} {cartItems.length === 1 ? 'item' : 'items'} in your cart
           </p>
@@ -114,7 +114,7 @@ export default function CartPage() {
 
           <div className="lg:col-span-1">
             <div className="sticky top-4 rounded-lg bg-card border border-border p-6 shadow-lg">
-              <h2 className="mb-4 text-xl font-bold text-foreground">Order Summary</h2>
+              <h2 className="mb-4 font-display text-xl font-bold text-foreground">Order Summary</h2>
 
               <div className="space-y-3 border-b border-border pb-4">
                 <div className="flex justify-between text-muted-foreground">

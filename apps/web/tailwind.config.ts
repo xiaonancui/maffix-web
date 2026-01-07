@@ -97,7 +97,8 @@ const config: Config = {
   			ripple: 'ripple 2s infinite',
   			'text-glow': 'textGlow 0.8s both',
   			'cloud-move': 'cloudMove 28s linear infinite',
-  			'bounce-slow': 'bounceSlow 3s infinite ease-in-out'
+  			'bounce-slow': 'bounceSlow 3s infinite ease-in-out',
+  			shimmer: 'shimmer 2s infinite'
   		},
   		// Animation delays for staggered effects
   		animationDelay: {
@@ -287,6 +288,14 @@ const config: Config = {
   				'100%': {
   					opacity: '1',
   					transform: 'translateY(0)'
+  				}
+  			},
+  			shimmer: {
+  				'0%': {
+  					backgroundPosition: '-200% 0'
+  				},
+  				'100%': {
+  					backgroundPosition: '200% 0'
   				}
   			}
   		},

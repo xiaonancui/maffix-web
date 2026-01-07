@@ -136,7 +136,7 @@ export default function StoreSettingsPage() {
     return (
       <div className="mx-auto max-w-7xl px-6 py-8">
         <div className="flex items-center justify-center min-h-[400px]">
-          <div className="text-muted-foreground">Loading settings...</div>
+          <div className="text-white/60">Loading settings...</div>
         </div>
       </div>
     )
@@ -156,31 +156,31 @@ export default function StoreSettingsPage() {
         />
 
         {/* Store Status */}
-        <div className="bg-card border border-border rounded-lg p-6 dark:shadow-lg dark:shadow-red-500/10">
-          <h2 className="text-xl font-bold text-foreground mb-4">Store Status</h2>
+        <div className="rounded-3xl border-2 border-white/10 bg-gradient-to-br from-surface-card/50 to-surface-raised/50 p-6 backdrop-blur-sm">
+          <h2 className="font-display text-xl font-black uppercase tracking-wider text-white mb-6">Store Status</h2>
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <div>
-                <label className="text-foreground font-medium">Store Enabled</label>
-                <p className="text-sm text-muted-foreground">Enable or disable the entire store</p>
+                <label className="text-white font-medium">Store Enabled</label>
+                <p className="text-sm text-white/60">Enable or disable the entire store</p>
               </div>
               <input
                 type="checkbox"
                 checked={settings.storeEnabled}
                 onChange={(e) => updateSetting('storeEnabled', e.target.checked)}
-                className="h-5 w-5 rounded border-gray-600 bg-secondary text-red-600 focus:ring-red-500"
+                className="h-4 w-4 rounded border-[#10B981]/30 bg-surface-base text-[#10B981] focus:ring-2 focus:ring-[#10B981]/20"
               />
             </div>
             <div className="flex items-center justify-between">
               <div>
-                <label className="text-foreground font-medium">Maintenance Mode</label>
-                <p className="text-sm text-muted-foreground">Put store in maintenance mode</p>
+                <label className="text-white font-medium">Maintenance Mode</label>
+                <p className="text-sm text-white/60">Put store in maintenance mode</p>
               </div>
               <input
                 type="checkbox"
                 checked={settings.maintenanceMode}
                 onChange={(e) => updateSetting('maintenanceMode', e.target.checked)}
-                className="h-5 w-5 rounded border-gray-600 bg-secondary text-red-600 focus:ring-red-500"
+                className="h-4 w-4 rounded border-[#FF1F7D]/30 bg-surface-base text-[#FF1F7D] focus:ring-2 focus:ring-[#FF1F7D]/20"
               />
             </div>
             {settings.maintenanceMode && (
@@ -196,19 +196,19 @@ export default function StoreSettingsPage() {
         </div>
 
         {/* Payment Settings */}
-        <div className="bg-card border border-border rounded-lg p-6 dark:shadow-lg dark:shadow-red-500/10">
-          <h2 className="text-xl font-bold text-foreground mb-4">Payment Methods</h2>
+        <div className="rounded-3xl border-2 border-white/10 bg-gradient-to-br from-surface-card/50 to-surface-raised/50 p-6 backdrop-blur-sm">
+          <h2 className="font-display text-xl font-black uppercase tracking-wider text-white mb-6">Payment Methods</h2>
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <div>
-                <label className="text-foreground font-medium">Klarna</label>
-                <p className="text-sm text-muted-foreground">Enable Klarna payments</p>
+                <label className="text-white font-medium">Klarna</label>
+                <p className="text-sm text-white/60">Enable Klarna payments</p>
               </div>
               <input
                 type="checkbox"
                 checked={settings.paymentMethods.klarna}
                 onChange={(e) => updateNestedSetting('paymentMethods', 'klarna', e.target.checked)}
-                className="h-5 w-5 rounded border-gray-600 bg-secondary text-red-600 focus:ring-red-500"
+                className="h-4 w-4 rounded border-[#8B5CF6]/30 bg-surface-base text-[#8B5CF6] focus:ring-2 focus:ring-[#8B5CF6]/20"
               />
             </div>
             {settings.paymentMethods.klarna && (
@@ -221,14 +221,14 @@ export default function StoreSettingsPage() {
             )}
             <div className="flex items-center justify-between">
               <div>
-                <label className="text-foreground font-medium">Stripe</label>
-                <p className="text-sm text-muted-foreground">Enable Stripe payments</p>
+                <label className="text-white font-medium">Stripe</label>
+                <p className="text-sm text-white/60">Enable Stripe payments</p>
               </div>
               <input
                 type="checkbox"
                 checked={settings.paymentMethods.stripe}
                 onChange={(e) => updateNestedSetting('paymentMethods', 'stripe', e.target.checked)}
-                className="h-5 w-5 rounded border-gray-600 bg-secondary text-red-600 focus:ring-red-500"
+                className="h-4 w-4 rounded border-[#00F5FF]/30 bg-surface-base text-[#00F5FF] focus:ring-2 focus:ring-[#00F5FF]/20"
               />
             </div>
             {settings.paymentMethods.stripe && (
@@ -252,19 +252,19 @@ export default function StoreSettingsPage() {
         </div>
 
         {/* Shipping Settings */}
-        <div className="bg-card border border-border rounded-lg p-6 dark:shadow-lg dark:shadow-red-500/10">
-          <h2 className="text-xl font-bold text-foreground mb-4">Shipping Settings</h2>
+        <div className="rounded-3xl border-2 border-white/10 bg-gradient-to-br from-surface-card/50 to-surface-raised/50 p-6 backdrop-blur-sm">
+          <h2 className="font-display text-xl font-black uppercase tracking-wider text-white mb-6">Shipping Settings</h2>
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <div>
-                <label className="text-foreground font-medium">Shipping Enabled</label>
-                <p className="text-sm text-muted-foreground">Enable shipping for physical products</p>
+                <label className="text-white font-medium">Shipping Enabled</label>
+                <p className="text-sm text-white/60">Enable shipping for physical products</p>
               </div>
               <input
                 type="checkbox"
                 checked={settings.shippingEnabled}
                 onChange={(e) => updateSetting('shippingEnabled', e.target.checked)}
-                className="h-5 w-5 rounded border-gray-600 bg-secondary text-red-600 focus:ring-red-500"
+                className="h-4 w-4 rounded border-[#10B981]/30 bg-surface-base text-[#10B981] focus:ring-2 focus:ring-[#10B981]/20"
               />
             </div>
             {settings.shippingEnabled && (
@@ -286,14 +286,14 @@ export default function StoreSettingsPage() {
                 />
                 <div className="flex items-center justify-between">
                   <div>
-                    <label className="text-foreground font-medium">International Shipping</label>
-                    <p className="text-sm text-muted-foreground">Enable international shipping</p>
+                    <label className="text-white font-medium">International Shipping</label>
+                    <p className="text-sm text-white/60">Enable international shipping</p>
                   </div>
                   <input
                     type="checkbox"
                     checked={settings.internationalShipping}
                     onChange={(e) => updateSetting('internationalShipping', e.target.checked)}
-                    className="h-5 w-5 rounded border-gray-600 bg-secondary text-red-600 focus:ring-red-500"
+                    className="h-4 w-4 rounded border-[#FFC700]/30 bg-surface-base text-[#FFC700] focus:ring-2 focus:ring-[#FFC700]/20"
                   />
                 </div>
                 {settings.internationalShipping && (
@@ -313,19 +313,19 @@ export default function StoreSettingsPage() {
         </div>
 
         {/* Tax Settings */}
-        <div className="bg-card border border-border rounded-lg p-6 dark:shadow-lg dark:shadow-red-500/10">
-          <h2 className="text-xl font-bold text-foreground mb-4">Tax Settings</h2>
+        <div className="rounded-3xl border-2 border-white/10 bg-gradient-to-br from-surface-card/50 to-surface-raised/50 p-6 backdrop-blur-sm">
+          <h2 className="font-display text-xl font-black uppercase tracking-wider text-white mb-6">Tax Settings</h2>
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <div>
-                <label className="text-foreground font-medium">Tax Enabled</label>
-                <p className="text-sm text-muted-foreground">Enable tax calculation</p>
+                <label className="text-white font-medium">Tax Enabled</label>
+                <p className="text-sm text-white/60">Enable tax calculation</p>
               </div>
               <input
                 type="checkbox"
                 checked={settings.taxEnabled}
                 onChange={(e) => updateSetting('taxEnabled', e.target.checked)}
-                className="h-5 w-5 rounded border-gray-600 bg-secondary text-red-600 focus:ring-red-500"
+                className="h-4 w-4 rounded border-[#10B981]/30 bg-surface-base text-[#10B981] focus:ring-2 focus:ring-[#10B981]/20"
               />
             </div>
             {settings.taxEnabled && (
@@ -339,14 +339,14 @@ export default function StoreSettingsPage() {
                 />
                 <div className="flex items-center justify-between">
                   <div>
-                    <label className="text-foreground font-medium">Tax Included in Price</label>
-                    <p className="text-sm text-muted-foreground">Tax is already included in product prices</p>
+                    <label className="text-white font-medium">Tax Included in Price</label>
+                    <p className="text-sm text-white/60">Tax is already included in product prices</p>
                   </div>
                   <input
                     type="checkbox"
                     checked={settings.taxIncludedInPrice}
                     onChange={(e) => updateSetting('taxIncludedInPrice', e.target.checked)}
-                    className="h-5 w-5 rounded border-gray-600 bg-secondary text-red-600 focus:ring-red-500"
+                    className="h-4 w-4 rounded border-[#8B5CF6]/30 bg-surface-base text-[#8B5CF6] focus:ring-2 focus:ring-[#8B5CF6]/20"
                   />
                 </div>
               </>
@@ -355,8 +355,8 @@ export default function StoreSettingsPage() {
         </div>
 
         {/* Currency Settings */}
-        <div className="bg-card border border-border rounded-lg p-6 dark:shadow-lg dark:shadow-red-500/10">
-          <h2 className="text-xl font-bold text-foreground mb-4">Currency Settings</h2>
+        <div className="rounded-3xl border-2 border-white/10 bg-gradient-to-br from-surface-card/50 to-surface-raised/50 p-6 backdrop-blur-sm">
+          <h2 className="font-display text-xl font-black uppercase tracking-wider text-white mb-6">Currency Settings</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <FormField
               label="Currency Code"
@@ -374,8 +374,8 @@ export default function StoreSettingsPage() {
         </div>
 
         {/* Order Settings */}
-        <div className="bg-card border border-border rounded-lg p-6 dark:shadow-lg dark:shadow-red-500/10">
-          <h2 className="text-xl font-bold text-foreground mb-4">Order Settings</h2>
+        <div className="rounded-3xl border-2 border-white/10 bg-gradient-to-br from-surface-card/50 to-surface-raised/50 p-6 backdrop-blur-sm">
+          <h2 className="font-display text-xl font-black uppercase tracking-wider text-white mb-6">Order Settings</h2>
           <div className="space-y-4">
             <FormField
               label="Order Number Prefix"
@@ -393,14 +393,14 @@ export default function StoreSettingsPage() {
             />
             <div className="flex items-center justify-between">
               <div>
-                <label className="text-foreground font-medium">Auto-Confirm Orders</label>
-                <p className="text-sm text-muted-foreground">Automatically confirm orders after payment</p>
+                <label className="text-white font-medium">Auto-Confirm Orders</label>
+                <p className="text-sm text-white/60">Automatically confirm orders after payment</p>
               </div>
               <input
                 type="checkbox"
                 checked={settings.autoConfirmOrders}
                 onChange={(e) => updateSetting('autoConfirmOrders', e.target.checked)}
-                className="h-5 w-5 rounded border-gray-600 bg-secondary text-red-600 focus:ring-red-500"
+                className="h-4 w-4 rounded border-[#10B981]/30 bg-surface-base text-[#10B981] focus:ring-2 focus:ring-[#10B981]/20"
               />
             </div>
           </div>
@@ -411,9 +411,9 @@ export default function StoreSettingsPage() {
           <button
             onClick={handleSave}
             disabled={saving}
-            className="px-6 py-3 bg-gradient-to-r from-red-600 to-red-500 text-foreground rounded-lg hover:from-red-700 hover:to-red-600 transition-all dark:shadow-lg dark:shadow-red-500/30 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+            className="group relative flex items-center gap-2 overflow-hidden rounded-2xl border-2 border-[#FF1F7D]/40 bg-gradient-to-r from-[#FF1F7D]/20 to-[#FF1F7D]/10 px-6 py-3 font-display text-sm font-bold uppercase tracking-wider text-white shadow-lg shadow-[#FF1F7D]/20 backdrop-blur-sm transition-all duration-300 hover:scale-105 hover:border-[#FF1F7D]/60 hover:shadow-[#FF1F7D]/40 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
           >
-            {saving ? 'Saving...' : 'Save All Settings'}
+            <span className="text-[#FF1F7D]">{saving ? 'Saving...' : 'Save All Settings'}</span>
           </button>
         </div>
       </div>

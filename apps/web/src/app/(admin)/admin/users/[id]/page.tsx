@@ -124,7 +124,7 @@ export default function UserDetailPage({ params }: { params: { id: string } }) {
           >
             ← Back to Users
           </button>
-          <h1 className="text-3xl font-bold text-foreground tracking-tight">User Details</h1>
+          <h1 className="font-display text-3xl font-bold text-foreground tracking-tight">User Details</h1>
           <p className="text-muted-foreground mt-1">{user.email}</p>
         </div>
         <Link
@@ -151,7 +151,7 @@ export default function UserDetailPage({ params }: { params: { id: string } }) {
           )}
           <div className="flex-1">
             <div className="flex items-center gap-3 mb-2">
-              <h2 className="text-2xl font-bold text-foreground">{user.name}</h2>
+              <h2 className="font-display text-2xl font-bold text-foreground">{user.name}</h2>
               <StatusBadge variant={getRoleColor(user.role)}>{user.role}</StatusBadge>
             </div>
             <div className="space-y-1 text-muted-foreground">
@@ -178,23 +178,23 @@ export default function UserDetailPage({ params }: { params: { id: string } }) {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <div className="bg-card border border-border rounded-lg p-6 dark:shadow-lg dark:shadow-red-500/10">
           <div className="text-muted-foreground text-sm mb-1">Diamond Balance</div>
-          <div className="text-3xl font-bold text-yellow-400">
+          <div className="font-display text-3xl font-bold text-yellow-400">
             💎 {user.diamonds.toLocaleString()}
           </div>
         </div>
         <div className="bg-card border border-border rounded-lg p-6 dark:shadow-lg dark:shadow-red-500/10">
           <div className="text-muted-foreground text-sm mb-1">Points</div>
-          <div className="text-3xl font-bold text-blue-400">
+          <div className="font-display text-3xl font-bold text-blue-400">
             ⭐ {user.points.toLocaleString()}
           </div>
         </div>
         <div className="bg-card border border-border rounded-lg p-6 dark:shadow-lg dark:shadow-red-500/10">
           <div className="text-muted-foreground text-sm mb-1">Level</div>
-          <div className="text-3xl font-bold text-green-400">🎯 {user.level}</div>
+          <div className="font-display text-3xl font-bold text-green-400">🎯 {user.level}</div>
         </div>
         <div className="bg-card border border-border rounded-lg p-6 dark:shadow-lg dark:shadow-red-500/10">
           <div className="text-muted-foreground text-sm mb-1">Gacha Pity</div>
-          <div className="text-3xl font-bold text-purple-400">
+          <div className="font-display text-3xl font-bold text-purple-400">
             {user.gachaPityCounter}/10
           </div>
           <div className="text-xs text-muted-foreground mt-1">

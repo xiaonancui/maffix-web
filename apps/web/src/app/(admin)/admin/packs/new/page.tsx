@@ -1,6 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
+import AdminPageHeader from '@/components/admin/AdminPageHeader'
 import { PremiumPackForm, PremiumPackFormData } from '@/components/admin/PremiumPackForm'
 
 export default function NewPremiumPackPage() {
@@ -23,12 +24,12 @@ export default function NewPremiumPackPage() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6">
+    <div className="max-w-4xl mx-auto py-8 space-y-6">
       {/* Header */}
-      <div>
-        <h1 className="text-3xl font-bold text-foreground tracking-tight">Add Premium Pack</h1>
-        <p className="text-muted-foreground mt-1">Create a new premium pack bundle</p>
-      </div>
+      <AdminPageHeader
+        title="Add Premium Pack"
+        description="Create a new premium pack bundle"
+      />
 
       {/* Form */}
       <PremiumPackForm

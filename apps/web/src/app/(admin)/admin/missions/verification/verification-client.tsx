@@ -166,7 +166,7 @@ export default function VerificationClient({ initialSubmissions }: VerificationC
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-foreground">Mission Verification</h1>
+        <h1 className="font-display text-3xl font-bold text-foreground">Mission Verification</h1>
         <p className="mt-2 text-sm text-muted-foreground">
           Review and verify mission submissions from users
         </p>
@@ -179,7 +179,7 @@ export default function VerificationClient({ initialSubmissions }: VerificationC
             <CardTitle className="text-lg">Pending</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-yellow-500">{submissions.length}</div>
+            <div className="font-display text-3xl font-bold text-yellow-500">{submissions.length}</div>
           </CardContent>
         </Card>
         <Card>
@@ -187,7 +187,7 @@ export default function VerificationClient({ initialSubmissions }: VerificationC
             <CardTitle className="text-lg">Today</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-foreground">
+            <div className="font-display text-3xl font-bold text-foreground">
               {submissions.filter(
                 (s) => new Date(s.submittedAt).toDateString() === new Date().toDateString()
               ).length}

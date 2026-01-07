@@ -1,6 +1,7 @@
 import dynamic from 'next/dynamic'
 import Image from 'next/image'
 import { generateMetadata as generateSEOMetadata } from '@/lib/seo'
+import { Check, Music, Gem, Users, Trophy, Rocket, Star } from 'lucide-react'
 
 const Timeline = dynamic(() => import('@/components/marketing/Timeline'))
 const FeatureCardEnhanced = dynamic(() => import('@/components/marketing/FeatureCardEnhanced'))
@@ -14,30 +15,55 @@ export const metadata = generateSEOMetadata({
   url: '/about',
 })
 
-const values = [
+type Value = {
+  iconName: 'Music' | 'Gem' | 'Users' | 'Rocket'
+  title: string
+  description: string
+  color: 'red' | 'blue' | 'yellow' | 'green' | 'purple'
+}
+
+type Milestone = {
+  year: string
+  title: string
+  description: string
+  icon: string
+}
+
+type TeamMember = {
+  name: string
+  role: string
+  bio: string
+  icon: React.ReactNode
+}
+
+const values: Value[] = [
   {
-    icon: '🎵',
+    iconName: 'Music',
     title: 'Artist First',
-    description: 'We prioritize the success and growth of independent musicians, providing them with tools to engage and monetize their fanbase.',
+    description: 'We prioritize to success and growth of independent musicians, providing them with tools to engage and monetize their fanbase.',
+    color: 'red',
   },
   {
-    icon: '💎',
+    iconName: 'Gem',
     title: 'Fair Rewards',
     description: 'Fans earn real value for their support through our transparent diamond system and guaranteed prize mechanics.',
+    color: 'yellow',
   },
   {
-    icon: '🤝',
+    iconName: 'Users',
     title: 'Community Driven',
     description: 'We build features based on feedback from both artists and fans, creating a platform that serves everyone.',
+    color: 'blue',
   },
   {
-    icon: '🚀',
+    iconName: 'Rocket',
     title: 'Innovation',
     description: 'We combine gamification, social media, and e-commerce to create a unique fan engagement experience.',
+    color: 'purple',
   },
 ]
 
-const milestones = [
+const milestones: Milestone[] = [
   {
     year: '2024 Q1',
     title: 'Platform Launch',
@@ -54,48 +80,48 @@ const milestones = [
     year: '2024 Q3',
     title: 'Gacha System',
     description: 'Launched our innovative gacha prize system with SSR guarantees and exclusive merchandise.',
-    icon: '🎰',
+    icon: '🏆',
   },
   {
     year: '2024 Q4',
     title: 'Community Growth',
-    description: 'Reached 10,000+ active fans and 500+ independent artists on the platform.',
+    description: 'Reached 10,000+ active fans and 500+ independent artists on platform.',
     icon: '🌟',
   },
 ]
 
-const team = [
+const team: TeamMember[] = [
   {
     name: 'Alex Chen',
     role: 'Founder & CEO',
     bio: 'Former music industry executive passionate about empowering independent artists.',
-    emoji: '👨‍💼',
+    icon: <Rocket className="h-8 w-8" />,
   },
   {
     name: 'Sarah Kim',
     role: 'Head of Product',
     bio: 'Product designer with 10+ years experience in gamification and user engagement.',
-    emoji: '👩‍💻',
+    icon: <Music className="h-8 w-8" />,
   },
   {
     name: 'Marcus Johnson',
     role: 'Head of Artist Relations',
     bio: 'Independent musician and advocate for fair compensation in the music industry.',
-    emoji: '🎸',
+    icon: <Trophy className="h-8 w-8" />,
   },
   {
     name: 'Emily Zhang',
     role: 'Head of Engineering',
     bio: 'Full-stack engineer specializing in scalable platforms and real-time systems.',
-    emoji: '👩‍🔬',
+    icon: <Gem className="h-8 w-8" />,
   },
 ]
 
 export default function AboutPage() {
   return (
     <div className="bg-black">
-      {/* Hero Section */}
-      <section className="relative py-24 sm:py-32 overflow-hidden">
+      {/* Hero Section - Improved Padding */}
+      <section className="relative py-32 md:py-40 overflow-hidden bg-black">
         <div className="absolute inset-0 -z-10">
           <Image
             src="/hero-images/austin-neill-hgO1wFPXl3I-unsplash.jpg"
@@ -106,13 +132,13 @@ export default function AboutPage() {
             quality={90}
             sizes="100vw"
           />
-          <div className="absolute inset-0 bg-black/70" />
+          <div className="absolute inset-0 bg-black" />
         </div>
 
         <div className="mx-auto max-w-4xl px-6 lg:px-8 text-center">
-          <span className="inline-block px-4 py-2 bg-[#FF5656]/20 text-[#FF5656] rounded-full text-sm font-bold uppercase tracking-wider mb-6">
-            🌟 About Maffix
-          </span>
+          <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-[#FF2D55] text-white mx-auto mb-6">
+            <Star className="h-6 w-6" />
+          </div>
           <h1 className="text-5xl md:text-7xl font-bold text-white mb-6">
             Revolutionizing Fan Engagement
           </h1>
@@ -130,11 +156,11 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Mission Section */}
-      <section className="py-24 sm:py-32">
+      {/* Mission Section - Improved Padding */}
+      <section className="py-32 md:py-40 bg-black">
         <div className="mx-auto max-w-4xl px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <span className="inline-block px-4 py-2 bg-[#FF5656]/20 text-[#FF5656] rounded-full text-sm font-bold uppercase tracking-wider mb-4">
+          <div className="text-center mb-16">
+            <span className="inline-block px-4 py-2 bg-[#E63946]/20 text-[#E63946] rounded-full text-sm font-bold uppercase tracking-wider mb-4">
               Our Story
             </span>
             <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
@@ -156,29 +182,30 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Values Section */}
-      <section className="py-24 sm:py-32 bg-gray-900/50">
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <span className="inline-block px-4 py-2 bg-[#FF5656]/20 text-[#FF5656] rounded-full text-sm font-bold uppercase tracking-wider mb-4">
-              💡 Our Values
+      {/* Values Section - Improved Padding */}
+      <section className="py-32 md:py-40 bg-black">
+        <div className="mx-auto max-w-6xl px-6 md:px-8">
+          <div className="text-center mb-20">
+            <span className="inline-block px-4 py-2 bg-[#E63946]/20 text-[#E63946] rounded-full text-sm font-bold uppercase tracking-wider mb-4">
+              Our Values
             </span>
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
+            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
               What We Stand For
             </h2>
-            <p className="text-xl text-gray-400 max-w-2xl mx-auto">
+            <p className="text-xl text-[#A0A0A0] max-w-2xl mx-auto leading-relaxed">
               The principles that guide everything we do
             </p>
           </div>
 
-          <div className="mt-16 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-20 grid gap-10 md:gap-12 sm:grid-cols-2 lg:grid-cols-4">
             {values.map((value, index) => (
               <FeatureCardEnhanced
                 key={value.title}
                 variant="default"
-                icon={value.icon}
+                iconName={value.iconName}
                 title={value.title}
                 description={value.description}
+                color={value.color}
                 delay={index * 0.1}
               />
             ))}
@@ -186,17 +213,17 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Timeline Section */}
-      <section className="py-24 sm:py-32">
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
+      {/* Timeline Section - Improved Padding */}
+      <section className="py-32 md:py-40 bg-black">
+        <div className="mx-auto max-w-6xl px-6 md:px-8">
           <div className="text-center mb-20">
-            <span className="inline-block px-4 py-2 bg-[#FF5656]/20 text-[#FF5656] rounded-full text-sm font-bold uppercase tracking-wider mb-4">
-              📅 Our Journey
+            <span className="inline-block px-4 py-2 bg-[#007AFF] text-white rounded-full text-sm font-bold uppercase tracking-wider mb-4">
+              Our Journey
             </span>
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
+            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
               Milestones & Achievements
             </h2>
-            <p className="text-xl text-gray-400 max-w-2xl mx-auto">
+            <p className="text-xl text-[#A0A0A0] max-w-2xl mx-auto leading-relaxed">
               From launch to today, here&apos;s how we&apos;ve grown
             </p>
           </div>
@@ -205,38 +232,40 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Team Section */}
-      <section className="py-24 sm:py-32 bg-gray-900/50">
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <span className="inline-block px-4 py-2 bg-[#FF5656]/20 text-[#FF5656] rounded-full text-sm font-bold uppercase tracking-wider mb-4">
-              👥 Our Team
+      {/* Team Section - Improved Padding & Lucide Icons */}
+      <section className="py-32 md:py-40 bg-black">
+        <div className="mx-auto max-w-6xl px-6 md:px-8">
+          <div className="text-center mb-20">
+            <span className="inline-block px-4 py-2 bg-[#007AFF] text-white rounded-full text-sm font-bold uppercase tracking-wider mb-4">
+              Our Team
             </span>
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
+            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
               Meet the People Behind Maffix
             </h2>
           </div>
 
-          <div className="mt-16 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-20 grid gap-10 md:gap-12 sm:grid-cols-2 lg:grid-cols-4">
             {team.map((member, index) => (
               <div
                 key={member.name}
                 className="text-center group"
               >
-                <div className="mb-4 text-8xl animate-float-up" style={{ animationDelay: `${index * 100}ms` }}>
-                  {member.emoji}
+                <div className="mb-4 inline-flex h-20 w-20 items-center justify-center rounded-xl bg-[#111111] border border-[#333333] group-hover:border-[#FF2D55] transition-colors">
+                  <div className="text-[#FF2D55]">
+                    {member.icon}
+                  </div>
                 </div>
                 <h3 className="text-xl font-bold text-white mb-1">{member.name}</h3>
-                <p className="text-[#FF5656] font-semibold mb-2">{member.role}</p>
-                <p className="text-sm text-gray-400">{member.bio}</p>
+                <p className="text-[#007AFF] font-semibold mb-2 text-sm">{member.role}</p>
+                <p className="text-sm text-[#B3B3B3]">{member.bio}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="relative py-24 sm:py-32 overflow-hidden bg-gray-950">
+      {/* CTA Section - Improved Padding */}
+      <section className="relative py-32 md:py-40 overflow-hidden bg-black">
         <div className="mx-auto max-w-4xl px-6 lg:px-8 text-center">
           <h2 className="text-4xl md:text-6xl font-bold text-white mb-6">
             Ready to Join the Revolution?
@@ -258,4 +287,3 @@ export default function AboutPage() {
     </div>
   )
 }
-

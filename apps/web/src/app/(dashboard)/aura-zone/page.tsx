@@ -53,16 +53,11 @@ export default async function AuraZonePage() {
   }
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-      {/* Header - removed since client component has video background */}
-
-      {/* Client Component for Interactive Elements */}
-      <AuraZoneClient
-        diamonds={diamonds}
-        tickets={tickets} // Changed from points to tickets
-        userId={session.user.id}
-        userRole={session.user.role || 'USER'}
-      />
-    </div>
+    <AuraZoneClient
+      diamonds={diamonds}
+      tickets={tickets} // Changed from points to tickets
+      userId={session.user.id}
+      userRole={session.user.role || 'USER'}
+    />
   )
 }

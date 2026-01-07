@@ -167,7 +167,7 @@ export default async function PremiumPacksPage() {
           </div>
           <div className="text-right">
             <p className="text-sm text-muted-foreground dark:text-primary-foreground dark:opacity-90">Premium Packs Available</p>
-            <p className="text-3xl font-bold text-foreground dark:text-primary-foreground">{packs.length}</p>
+            <p className="font-display text-3xl font-bold text-foreground dark:text-primary-foreground">{packs.length}</p>
           </div>
         </div>
       </div>
@@ -197,7 +197,7 @@ export default async function PremiumPacksPage() {
       {packs.length === 0 ? (
         <div className="text-center py-16">
           <div className="text-6xl mb-4">📦</div>
-          <h3 className="text-2xl font-bold text-gray-900 mb-2">
+          <h3 className="font-display text-2xl font-bold text-gray-900 mb-2">
             No Premium Packs Available
           </h3>
           <p className="text-muted-foreground">
@@ -242,7 +242,7 @@ export default async function PremiumPacksPage() {
 
       {/* FAQ */}
       <div className="mt-12">
-        <h3 className="text-2xl font-bold text-gray-900 mb-6">
+        <h3 className="font-display text-2xl font-bold text-gray-900 mb-6">
           Frequently Asked Questions
         </h3>
         <div className="space-y-4">
