@@ -4,7 +4,7 @@ import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import MerchandiseCard from '@/components/dashboard/MerchandiseCard'
 import MerchandiseFilters from '@/components/dashboard/MerchandiseFilters'
-import { ShieldCheck, Truck, RefreshCw, Star, Sparkles } from 'lucide-react'
+import { ShieldCheck, Truck, RefreshCw } from 'lucide-react'
 
 export default async function StorePage() {
   const session = await getServerSession(authOptions)
@@ -210,131 +210,116 @@ export default async function StorePage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-        {/* Filters */}
-        <MerchandiseFilters categories={categories} />
+      <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8 animate-fade-in-up">
+        {/* Enhanced Store Header */}
+        <div className="mb-12 text-center" style={{ animationDelay: '0ms' }}>
+          <h1 className="font-display text-5xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#FF1F7D] via-[#8B5CF6] to-[#00F5FF] mb-4 drop-shadow-[0_0_30px_rgba(255,31,125,0.5)]" style={{ backgroundSize: '200%', animation: 'gradient-shift 3s ease-in-out infinite' }}>
+            OFFICIAL STORE
+          </h1>
+          <p className="text-xl text-white/70 font-bold uppercase tracking-wider">
+            Premium Merchandise • Exclusive Collectibles
+          </p>
+        </div>
 
-        {/* Featured Banner */}
-        {merchandise.some((item) => item.featured) && (
-          <div className="mb-8 rounded-lg border-2 border-yellow-600 bg-transparent p-6 dark:bg-gradient-to-r dark:from-yellow-900/20 dark:to-orange-900/20">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <Star className="h-8 w-8 text-yellow-600 fill-yellow-600" />
-                <div>
-                  <h3 className="text-lg font-bold text-foreground">Featured Items</h3>
-                  <p className="text-sm text-muted-foreground">
-                    Check out our most popular merchandise
-                  </p>
-                </div>
-              </div>
-              <span className="rounded-full border-2 border-orange-600 bg-transparent px-4 py-2 text-sm font-semibold text-orange-600 dark:bg-orange-600 dark:text-primary-foreground">
-                Limited Stock
-              </span>
-            </div>
-          </div>
-        )}
+        {/* Filters */}
+        <div style={{ animationDelay: '100ms' }}>
+          <MerchandiseFilters categories={categories} />
+        </div>
 
         {/* Merchandise Grid */}
-        {merchandise.length === 0 ? (
-          <div className="rounded-lg bg-card border border-border p-12 text-center shadow">
-            <div className="mb-4 text-6xl">🛍️</div>
-            <p className="text-lg text-muted-foreground">No merchandise available at the moment.</p>
-            <p className="mt-2 text-sm text-muted-foreground">Check back soon for new items!</p>
-          </div>
-        ) : (
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {merchandise.map((item) => (
-              <MerchandiseCard key={item.id} item={item} />
-            ))}
-          </div>
-        )}
-
-        {/* Info Section */}
-        <div className="mt-16 grid gap-8 md:grid-cols-3">
-          <div className="rounded-lg bg-card border border-border p-6 text-center shadow hover:border-[#FF5656] transition-colors">
-            <div className="mb-4 flex justify-center">
-              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-blue-900/20">
-                <svg
-                  className="h-8 w-8 text-[#FF5656]"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth="1.5"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"
-                  />
-                </svg>
-              </div>
+        <div style={{ animationDelay: '200ms' }}>
+          {merchandise.length === 0 ? (
+            <div className="rounded-3xl bg-gradient-to-br from-surface-card/90 to-surface-raised/80 border border-white/10 p-12 text-center shadow-xl backdrop-blur-xl">
+              <div className="mb-4 text-6xl">🛍️</div>
+              <p className="text-lg font-semibold text-white/70">No merchandise available at the moment.</p>
+              <p className="mt-2 text-sm text-white/50">Check back soon for new items!</p>
             </div>
-            <h3 className="mb-2 text-lg font-bold text-foreground">Premium Quality</h3>
-            <p className="text-sm text-muted-foreground">
-              All merchandise is made with high-quality materials and craftsmanship
-            </p>
-          </div>
-
-          <div className="rounded-lg bg-card border border-border p-6 text-center shadow hover:border-[#FF5656] transition-colors">
-            <div className="mb-4 flex justify-center">
-              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-green-900/20">
-                <svg
-                  className="h-8 w-8 text-green-400"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth="1.5"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 00-3.213-9.193 2.056 2.056 0 00-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 00-10.026 0 1.106 1.106 0 00-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12"
-                  />
-                </svg>
-              </div>
+          ) : (
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+              {merchandise.map((item) => (
+                <MerchandiseCard key={item.id} item={item} />
+              ))}
             </div>
-            <h3 className="mb-2 text-lg font-bold text-foreground">Fast Shipping</h3>
-            <p className="text-sm text-muted-foreground">
-              Free worldwide shipping on orders over $50. Delivered within 5-7 business days
-            </p>
+          )}
+        </div>
+
+        {/* Enhanced Info Section */}
+        <div className="mt-20 grid gap-8 md:grid-cols-3" style={{ animationDelay: '300ms' }}>
+          {/* Premium Quality */}
+          <div className="group relative overflow-hidden rounded-3xl border border-[#00F5FF]/30 bg-gradient-to-br from-surface-card/90 to-surface-raised/80 p-8 text-center shadow-xl backdrop-blur-xl transition-all duration-500 hover:scale-[1.02] hover:border-[#00F5FF]/60 hover:shadow-[0_0_40px_rgba(0,245,255,0.4)]">
+            {/* Ambient glow */}
+            <div className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-gradient-to-br from-[#00F5FF]/20 to-transparent blur-3xl transition-all duration-700 group-hover:scale-150" />
+
+            {/* Hover overlay */}
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-[#00F5FF]/10 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+
+            <div className="relative">
+              <div className="mb-6 flex justify-center">
+                <div className="rounded-2xl bg-[#00F5FF]/20 p-4 ring-2 ring-[#00F5FF]/30 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12">
+                  <ShieldCheck className="h-12 w-12 text-[#00F5FF]" />
+                </div>
+              </div>
+              <h3 className="mb-3 font-display text-2xl font-black text-white uppercase tracking-wider">Premium Quality</h3>
+              <p className="text-sm text-white/70 font-medium leading-relaxed">
+                All merchandise is made with high-quality materials and craftsmanship
+              </p>
+            </div>
           </div>
 
-          <div className="rounded-lg bg-card border border-border p-6 text-center shadow hover:border-[#FF5656] transition-colors">
-            <div className="mb-4 flex justify-center">
-              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-purple-900/20">
-                <svg
-                  className="h-8 w-8 text-[#FF5656]"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth="1.5"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99"
-                  />
-                </svg>
+          {/* Fast Shipping */}
+          <div className="group relative overflow-hidden rounded-3xl border border-[#10B981]/30 bg-gradient-to-br from-surface-card/90 to-surface-raised/80 p-8 text-center shadow-xl backdrop-blur-xl transition-all duration-500 hover:scale-[1.02] hover:border-[#10B981]/60 hover:shadow-[0_0_40px_rgba(16,185,129,0.4)]">
+            {/* Ambient glow */}
+            <div className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-gradient-to-br from-[#10B981]/20 to-transparent blur-3xl transition-all duration-700 group-hover:scale-150" />
+
+            {/* Hover overlay */}
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-[#10B981]/10 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+
+            <div className="relative">
+              <div className="mb-6 flex justify-center">
+                <div className="rounded-2xl bg-[#10B981]/20 p-4 ring-2 ring-[#10B981]/30 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12">
+                  <Truck className="h-12 w-12 text-[#10B981]" />
+                </div>
               </div>
+              <h3 className="mb-3 font-display text-2xl font-black text-white uppercase tracking-wider">Fast Shipping</h3>
+              <p className="text-sm text-white/70 font-medium leading-relaxed">
+                Free worldwide shipping on orders over $50. Delivered within 5-7 business days
+              </p>
             </div>
-            <h3 className="mb-2 text-lg font-bold text-foreground">Easy Returns</h3>
-            <p className="text-sm text-muted-foreground">
-              Not satisfied? Return within 30 days for a full refund, no questions asked
-            </p>
+          </div>
+
+          {/* Easy Returns */}
+          <div className="group relative overflow-hidden rounded-3xl border border-[#8B5CF6]/30 bg-gradient-to-br from-surface-card/90 to-surface-raised/80 p-8 text-center shadow-xl backdrop-blur-xl transition-all duration-500 hover:scale-[1.02] hover:border-[#8B5CF6]/60 hover:shadow-[0_0_40px_rgba(139,92,246,0.4)]">
+            {/* Ambient glow */}
+            <div className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-gradient-to-br from-[#8B5CF6]/20 to-transparent blur-3xl transition-all duration-700 group-hover:scale-150" />
+
+            {/* Hover overlay */}
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-[#8B5CF6]/10 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+
+            <div className="relative">
+              <div className="mb-6 flex justify-center">
+                <div className="rounded-2xl bg-[#8B5CF6]/20 p-4 ring-2 ring-[#8B5CF6]/30 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12">
+                  <RefreshCw className="h-12 w-12 text-[#8B5CF6]" />
+                </div>
+              </div>
+              <h3 className="mb-3 font-display text-2xl font-black text-white uppercase tracking-wider">Easy Returns</h3>
+              <p className="text-sm text-white/70 font-medium leading-relaxed">
+                Not satisfied? Return within 30 days for a full refund, no questions asked
+              </p>
+            </div>
           </div>
         </div>
 
         {/* FAQ Section */}
-        <div className="mt-16">
-          <h2 className="mb-8 text-center text-3xl font-bold text-foreground">
+        <div className="mt-20" style={{ animationDelay: '400ms' }}>
+          <h2 className="mb-10 text-center font-display text-4xl font-black text-white uppercase tracking-wider">
             Frequently Asked Questions
           </h2>
           <div className="mx-auto max-w-3xl space-y-4">
-            <details className="group rounded-lg bg-card border border-border p-6 shadow transition-all hover:shadow-md hover:border-[#FF5656]">
-              <summary className="flex cursor-pointer items-center justify-between font-semibold text-foreground">
+            <details className="group rounded-3xl bg-gradient-to-br from-surface-card/90 to-surface-raised/80 border border-white/10 p-6 shadow-xl backdrop-blur-xl transition-all hover:shadow-[0_0_30px_rgba(255,31,125,0.3)] hover:border-[#FF1F7D]/50">
+              <summary className="flex cursor-pointer items-center justify-between font-display font-bold text-white">
                 <span>What sizes are available?</span>
                 <svg
-                  className="h-5 w-5 transition-transform group-open:rotate-180 text-muted-foreground"
+                  className="h-5 w-5 transition-transform group-open:rotate-180 text-[#FF1F7D]"
                   fill="none"
                   viewBox="0 0 24 24"
                   strokeWidth="1.5"
@@ -347,18 +332,18 @@ export default async function StorePage() {
                   />
                 </svg>
               </summary>
-              <p className="mt-4 text-sm text-muted-foreground">
+              <p className="mt-4 text-sm text-white/70 font-medium leading-relaxed">
                 Most apparel items are available in sizes XS to XXL. Hats and accessories are
                 typically one-size-fits-all. Check individual product pages for specific sizing
                 information and size charts.
               </p>
             </details>
 
-            <details className="group rounded-lg bg-card border border-border p-6 shadow transition-all hover:shadow-md hover:border-[#FF5656]">
-              <summary className="flex cursor-pointer items-center justify-between font-semibold text-foreground">
+            <details className="group rounded-3xl bg-gradient-to-br from-surface-card/90 to-surface-raised/80 border border-white/10 p-6 shadow-xl backdrop-blur-xl transition-all hover:shadow-[0_0_30px_rgba(255,31,125,0.3)] hover:border-[#FF1F7D]/50">
+              <summary className="flex cursor-pointer items-center justify-between font-display font-bold text-white">
                 <span>How long does shipping take?</span>
                 <svg
-                  className="h-5 w-5 transition-transform group-open:rotate-180 text-muted-foreground"
+                  className="h-5 w-5 transition-transform group-open:rotate-180 text-[#FF1F7D]"
                   fill="none"
                   viewBox="0 0 24 24"
                   strokeWidth="1.5"
@@ -371,18 +356,18 @@ export default async function StorePage() {
                   />
                 </svg>
               </summary>
-              <p className="mt-4 text-sm text-muted-foreground">
+              <p className="mt-4 text-sm text-white/70 font-medium leading-relaxed">
                 Standard shipping takes 5-7 business days for domestic orders and 10-14 business
                 days for international orders. Express shipping options are available at checkout
                 for faster delivery.
               </p>
             </details>
 
-            <details className="group rounded-lg bg-card border border-border p-6 shadow transition-all hover:shadow-md hover:border-[#FF5656]">
-              <summary className="flex cursor-pointer items-center justify-between font-semibold text-foreground">
+            <details className="group rounded-3xl bg-gradient-to-br from-surface-card/90 to-surface-raised/80 border border-white/10 p-6 shadow-xl backdrop-blur-xl transition-all hover:shadow-[0_0_30px_rgba(255,31,125,0.3)] hover:border-[#FF1F7D]/50">
+              <summary className="flex cursor-pointer items-center justify-between font-display font-bold text-white">
                 <span>What is your return policy?</span>
                 <svg
-                  className="h-5 w-5 transition-transform group-open:rotate-180 text-muted-foreground"
+                  className="h-5 w-5 transition-transform group-open:rotate-180 text-[#FF1F7D]"
                   fill="none"
                   viewBox="0 0 24 24"
                   strokeWidth="1.5"
@@ -395,18 +380,18 @@ export default async function StorePage() {
                   />
                 </svg>
               </summary>
-              <p className="mt-4 text-sm text-muted-foreground">
+              <p className="mt-4 text-sm text-white/70 font-medium leading-relaxed">
                 We offer a 30-day return policy for unworn, unwashed items with original tags
                 attached. Simply contact our support team to initiate a return. Refunds are
                 processed within 5-7 business days after we receive your return.
               </p>
             </details>
 
-            <details className="group rounded-lg bg-card border border-border p-6 shadow transition-all hover:shadow-md hover:border-[#FF5656]">
-              <summary className="flex cursor-pointer items-center justify-between font-semibold text-foreground">
+            <details className="group rounded-3xl bg-gradient-to-br from-surface-card/90 to-surface-raised/80 border border-white/10 p-6 shadow-xl backdrop-blur-xl transition-all hover:shadow-[0_0_30px_rgba(255,31,125,0.3)] hover:border-[#FF1F7D]/50">
+              <summary className="flex cursor-pointer items-center justify-between font-display font-bold text-white">
                 <span>How do I care for my merchandise?</span>
                 <svg
-                  className="h-5 w-5 transition-transform group-open:rotate-180 text-muted-foreground"
+                  className="h-5 w-5 transition-transform group-open:rotate-180 text-[#FF1F7D]"
                   fill="none"
                   viewBox="0 0 24 24"
                   strokeWidth="1.5"
@@ -419,18 +404,18 @@ export default async function StorePage() {
                   />
                 </svg>
               </summary>
-              <p className="mt-4 text-sm text-muted-foreground">
+              <p className="mt-4 text-sm text-white/70 font-medium leading-relaxed">
                 For best results, machine wash cold with like colors and tumble dry on low heat.
                 Avoid bleach and ironing directly on printed designs. Check the care label on each
                 item for specific instructions.
               </p>
             </details>
 
-            <details className="group rounded-lg bg-card border border-border p-6 shadow transition-all hover:shadow-md hover:border-[#FF5656]">
-              <summary className="flex cursor-pointer items-center justify-between font-semibold text-foreground">
+            <details className="group rounded-3xl bg-gradient-to-br from-surface-card/90 to-surface-raised/80 border border-white/10 p-6 shadow-xl backdrop-blur-xl transition-all hover:shadow-[0_0_30px_rgba(255,31,125,0.3)] hover:border-[#FF1F7D]/50">
+              <summary className="flex cursor-pointer items-center justify-between font-display font-bold text-white">
                 <span>Do you offer international shipping?</span>
                 <svg
-                  className="h-5 w-5 transition-transform group-open:rotate-180 text-muted-foreground"
+                  className="h-5 w-5 transition-transform group-open:rotate-180 text-[#FF1F7D]"
                   fill="none"
                   viewBox="0 0 24 24"
                   strokeWidth="1.5"
@@ -443,7 +428,7 @@ export default async function StorePage() {
                   />
                 </svg>
               </summary>
-              <p className="mt-4 text-sm text-muted-foreground">
+              <p className="mt-4 text-sm text-white/70 font-medium leading-relaxed">
                 Yes! We ship worldwide. International orders over $50 qualify for free shipping.
                 Please note that customs fees and import duties may apply depending on your
                 country&apos;s regulations.
