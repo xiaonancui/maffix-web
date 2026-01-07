@@ -9,6 +9,37 @@ function generateOTP(): string {
 }
 
 /**
+ * Rate limiting: max 3 requests per email per 10 minutes
+ */
+const rateLimitMap = new Map<string, { count: number; resetAt: number }>()
+
+function checkRateLimit(email: string): { allowed: boolean; retryAfter?: number } {
+  const now = Date.now()
+  const key = email.toLowerCase()
+  const limit = rateLimitMap.get(key)
+
+  // Clean up expired entries periodically
+  if (rateLimitMap.size > 1000) {
+    for (const [k, v] of rateLimitMap) {
+      if (now > v.resetAt) rateLimitMap.delete(k)
+    }
+  }
+
+  if (!limit || now > limit.resetAt) {
+    rateLimitMap.set(key, { count: 1, resetAt: now + 10 * 60 * 1000 })
+    return { allowed: true }
+  }
+
+  if (limit.count >= 3) {
+    const retryAfter = Math.ceil((limit.resetAt - now) / 1000)
+    return { allowed: false, retryAfter }
+  }
+
+  limit.count++
+  return { allowed: true }
+}
+
+/**
  * POST /api/homepage-otp/send
  * Send OTP verification code to email
  */
@@ -23,6 +54,18 @@ export async function POST(request: NextRequest) {
     }
 
     const normalizedEmail = email.toLowerCase().trim()
+
+    // Check rate limit
+    const rateLimit = checkRateLimit(normalizedEmail)
+    if (!rateLimit.allowed) {
+      return NextResponse.json(
+        {
+          error: 'Too many requests. Please try again later.',
+          retryAfter: rateLimit.retryAfter
+        },
+        { status: 429 }
+      )
+    }
 
     // Generate OTP
     const code = generateOTP()
