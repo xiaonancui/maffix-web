@@ -119,21 +119,21 @@ export default function CartPage() {
               <div className="space-y-3 border-b border-border pb-4">
                 <div className="flex justify-between text-muted-foreground">
                   <span>Subtotal</span>
-                  <span>${subtotal.toFixed(2)}</span>
+                  <span>£{subtotal.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between text-muted-foreground">
                   <span>Shipping</span>
-                  <span>{shipping === 0 ? 'FREE' : `$${shipping.toFixed(2)}`}</span>
+                  <span>{shipping === 0 ? 'FREE' : `£${shipping.toFixed(2)}`}</span>
                 </div>
                 <div className="flex justify-between text-muted-foreground">
                   <span>Tax</span>
-                  <span>${tax.toFixed(2)}</span>
+                  <span>£{tax.toFixed(2)}</span>
                 </div>
               </div>
 
               <div className="mt-4 flex justify-between text-lg font-bold text-foreground">
                 <span>Total</span>
-                <span>${total.toFixed(2)}</span>
+                <span>£{total.toFixed(2)}</span>
               </div>
 
               <div className="mt-6">

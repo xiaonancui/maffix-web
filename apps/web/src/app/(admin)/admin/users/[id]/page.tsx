@@ -353,7 +353,7 @@ export default function UserDetailPage({ params }: { params: { id: string } }) {
                   </div>
                   <div className="text-right">
                     <div className="text-lg font-bold text-green-400">
-                      ${purchase.amount.toFixed(2)}
+                      £{purchase.amount.toFixed(2)}
                     </div>
                     <div className="text-xs text-muted-foreground">
                       {formatDate(purchase.createdAt)}

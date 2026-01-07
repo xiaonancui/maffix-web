@@ -188,7 +188,7 @@ export default function PremiumPacksPage() {
       label: 'Price',
       render: (pack: PremiumPack) => (
         <div>
-          <div className="text-white font-bold text-lg">${pack.price.toFixed(2)}</div>
+          <div className="text-white font-bold text-lg">£{pack.price.toFixed(2)}</div>
           <div className="text-xs text-white/60">{pack.currency}</div>
         </div>
       ),
@@ -231,7 +231,7 @@ export default function PremiumPacksPage() {
       key: 'value',
       label: 'Total Value',
       render: (pack: PremiumPack) => (
-        <span className="text-[#10B981] font-medium">${getTotalValue(pack).toFixed(2)}</span>
+        <span className="text-[#10B981] font-medium">£{getTotalValue(pack).toFixed(2)}</span>
       ),
     },
     {

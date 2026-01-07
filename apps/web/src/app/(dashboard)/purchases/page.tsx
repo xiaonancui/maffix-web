@@ -204,9 +204,9 @@ export default async function PurchasesPage() {
                 </div>
                 <div className="text-right">
                   <p className="font-display text-2xl font-bold text-gray-900">
-                    ${purchase.amount.toFixed(2)}
+                    £{purchase.amount.toFixed(2)}
                   </p>
-                  <p className="text-sm text-muted-foreground">{purchase.currency}</p>
+                  <p className="text-sm text-muted-foreground">GBP</p>
                 </div>
               </div>
 

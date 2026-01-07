@@ -214,7 +214,7 @@ export default async function OrdersPage() {
                       {getStatusIcon(order.status)} {order.status}
                     </span>
                     <span className="text-lg font-bold text-gray-900">
-                      ${order.totalAmount.toFixed(2)}
+                      £{order.totalAmount.toFixed(2)}
                     </span>
                   </div>
                 </div>
@@ -247,7 +247,7 @@ export default async function OrdersPage() {
                       </div>
                       <div className="text-right">
                         <p className="font-semibold text-gray-900">
-                          ${(item.price * item.quantity).toFixed(2)}
+                          £{(item.price * item.quantity).toFixed(2)}
                         </p>
                       </div>
                     </div>

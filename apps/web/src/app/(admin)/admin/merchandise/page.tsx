@@ -241,7 +241,7 @@ export default function MerchandisePage() {
       key: 'price',
       label: 'Price',
       render: (item: Merchandise) => (
-        <span className="font-medium text-white">${item.price.toFixed(2)}</span>
+        <span className="font-medium text-white">£{item.price.toFixed(2)}</span>
       ),
     },
     {

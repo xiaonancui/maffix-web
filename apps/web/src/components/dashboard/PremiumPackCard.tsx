@@ -148,9 +148,9 @@ export default function PremiumPackCard({ pack }: { pack: PremiumPack }) {
         <div className="mb-4 rounded-lg bg-gradient-to-r from-green-50 to-emerald-50 p-4 text-center">
           <p className="text-sm text-muted-foreground">Price</p>
           <p className="text-3xl font-bold text-green-600">
-            ${pack.price.toFixed(2)}
+            £{pack.price.toFixed(2)}
           </p>
-          <p className="text-xs text-muted-foreground">{pack.currency}</p>
+          <p className="text-xs text-muted-foreground">GBP</p>
         </div>
 
         {/* Guaranteed Prize */}

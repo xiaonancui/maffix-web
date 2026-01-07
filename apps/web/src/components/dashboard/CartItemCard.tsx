@@ -100,9 +100,9 @@ export default function CartItemCard({ item }: { item: CartItem }) {
 
             {/* Price */}
             <div className="text-right">
-              <p className="text-lg font-bold text-foreground">${totalPrice.toFixed(2)}</p>
+              <p className="text-lg font-bold text-foreground">£{totalPrice.toFixed(2)}</p>
               {quantity > 1 && (
-                <p className="text-sm text-muted-foreground">${itemPrice.toFixed(2)} each</p>
+                <p className="text-sm text-muted-foreground">£{itemPrice.toFixed(2)} each</p>
               )}
             </div>
           </div>

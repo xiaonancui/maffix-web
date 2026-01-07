@@ -217,10 +217,10 @@ export default function MerchandiseVariantsPage({ params }: { params: { id: stri
         const totalPrice = merchandise ? merchandise.price + modifier : modifier
         return (
           <div>
-            <div className="text-foreground font-medium">${totalPrice.toFixed(2)}</div>
+            <div className="text-foreground font-medium">£{totalPrice.toFixed(2)}</div>
             {modifier !== 0 && (
               <div className={`text-sm ${modifier > 0 ? 'text-green-400' : 'text-red-400'}`}>
-                {modifier > 0 ? '+' : ''}${modifier.toFixed(2)}
+                {modifier > 0 ? '+' : ''}£{modifier.toFixed(2)}
               </div>
             )}
           </div>
@@ -289,7 +289,7 @@ export default function MerchandiseVariantsPage({ params }: { params: { id: stri
           </h1>
           {merchandise && (
             <p className="text-muted-foreground mt-1">
-              {merchandise.name} - Base Price: ${merchandise.price.toFixed(2)}
+              {merchandise.name} - Base Price: £{merchandise.price.toFixed(2)}
             </p>
           )}
         </div>

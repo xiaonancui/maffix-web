@@ -64,8 +64,8 @@ export default function StoreSettingsPage() {
     taxEnabled: true,
     taxRate: 8.5,
     taxIncludedInPrice: false,
-    currency: 'USD',
-    currencySymbol: '$',
+    currency: 'GBP',
+    currencySymbol: '£',
     orderPrefix: 'MFX',
     autoConfirmOrders: false,
     lowStockThreshold: 10,
@@ -362,13 +362,13 @@ export default function StoreSettingsPage() {
               label="Currency Code"
               value={settings.currency}
               onChange={(value) => updateSetting('currency', value)}
-              placeholder="USD"
+              placeholder="GBP"
             />
             <FormField
               label="Currency Symbol"
               value={settings.currencySymbol}
               onChange={(value) => updateSetting('currencySymbol', value)}
-              placeholder="$"
+              placeholder="£"
             />
           </div>
         </div>

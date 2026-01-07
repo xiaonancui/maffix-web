@@ -99,9 +99,9 @@ export default function MerchandiseCard({ item }: { item: MerchandiseItem }) {
           {/* Price */}
           <div className="mb-5">
             <span className="font-display text-3xl font-black tabular-nums text-white">
-              ${item.price.toFixed(2)}
+              £{item.price.toFixed(2)}
             </span>
-            <span className="ml-2 text-sm font-semibold uppercase tracking-wider text-white/50">{item.currency}</span>
+            <span className="ml-2 text-sm font-semibold uppercase tracking-wider text-white/50">GBP</span>
           </div>
 
           {/* Color Selection */}
