@@ -370,6 +370,9 @@ model Merchandise {
   description String
   price       Float
   category    MerchandiseCategory
+  type        ProductType          @default(MAIN) // MAIN, ACCESSORY, or BUNDLE
+  sizes       String[]             // Available size options (e.g., ["S", "M", "L"] or ["1", "2", "3"])
+  label       String?              // Branding code (e.g., "TS-01")
   material    String?
   features    String[]
   tags        String[]
@@ -385,6 +388,7 @@ model Merchandise {
   orderItems  OrderItem[]
 
   @@index([category])
+  @@index([type])
   @@index([featured])
   @@index([inStock])
   @@map("merchandise")
@@ -691,4 +695,10 @@ enum OrderStatus {
   DELIVERED
   CANCELLED
   REFUNDED
+}
+
+enum ProductType {
+  MAIN       // Standard merchandise - sold individually in store
+  ACCESSORY  // Not sold individually - hidden from store, used in bundles
+  BUNDLE     // Packaged sets of accessory items
 }
