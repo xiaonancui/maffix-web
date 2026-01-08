@@ -126,14 +126,18 @@ export async function POST(request: Request) {
       })
     }
 
-    // Check if item already exists in cart
+    // Normalize size and color (null if not provided)
+    const normalizedSize = size ?? null
+    const normalizedColor = color ?? null
+
+    // Check if item already exists in cart (matching variant, size, and color)
     const existingItem = await db.cartItem.findFirst({
       where: {
         cartId: cart.id,
         merchandiseId,
-        ...(normalizedVariantId === null
-          ? { variantId: null }
-          : { variantId: normalizedVariantId }),
+        variantId: normalizedVariantId,
+        size: normalizedSize,
+        color: normalizedColor,
       },
     })
 
@@ -151,12 +155,14 @@ export async function POST(request: Request) {
         },
       })
     } else {
-      // Create new cart item
+      // Create new cart item with size and color
       cartItem = await db.cartItem.create({
         data: {
           cartId: cart.id,
           merchandiseId,
           quantity,
+          size: normalizedSize,
+          color: normalizedColor,
           ...(normalizedVariantId ? { variantId: normalizedVariantId } : {}),
         },
         include: {
