@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { ShoppingCart, Check, AlertCircle } from 'lucide-react'
 
 type Merchandise = {
   id: string
@@ -15,6 +16,7 @@ type Merchandise = {
   tags?: string[]
   inStock: boolean
   variants?: any[]
+  label?: string
 }
 
 export default function ProductDetails({
@@ -27,8 +29,9 @@ export default function ProductDetails({
   colors: string[]
 }) {
   const router = useRouter()
-  const [selectedSize, setSelectedSize] = useState<string | null>(sizes[0] || null)
-  const [selectedColor, setSelectedColor] = useState<string | null>(colors[0] || null)
+  // No default selection - user must choose
+  const [selectedSize, setSelectedSize] = useState<string | null>(null)
+  const [selectedColor, setSelectedColor] = useState<string | null>(colors.length === 1 ? colors[0] : null)
   const [quantity, setQuantity] = useState(1)
   const [isAdding, setIsAdding] = useState(false)
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
@@ -41,18 +44,25 @@ export default function ProductDetails({
   const isInStock = selectedVariant ? selectedVariant.inStock && selectedVariant.stockQuantity > 0 : merchandise.inStock
   const maxQuantity = selectedVariant ? Math.min(selectedVariant.stockQuantity, 99) : 99
 
+  // Determine if size selection is required
+  const sizeRequired = sizes.length > 0
+  const colorRequired = colors.length > 0
+  const sizeSelected = !sizeRequired || selectedSize !== null
+  const colorSelected = !colorRequired || selectedColor !== null
+  const canAddToCart = isInStock && sizeSelected && colorSelected
+
   const handleAddToCart = async () => {
     if (!isInStock) {
       setMessage({ type: 'error', text: 'This item is out of stock' })
       return
     }
 
-    if (sizes.length > 0 && !selectedSize) {
+    if (sizeRequired && !selectedSize) {
       setMessage({ type: 'error', text: 'Please select a size' })
       return
     }
 
-    if (colors.length > 0 && !selectedColor) {
+    if (colorRequired && !selectedColor) {
       setMessage({ type: 'error', text: 'Please select a color' })
       return
     }
@@ -80,8 +90,8 @@ export default function ProductDetails({
       }
 
       setMessage({ type: 'success', text: 'Added to cart!' })
-      
-      // Refresh cart count (you might want to use a global state management solution)
+
+      // Refresh cart count
       setTimeout(() => {
         router.refresh()
       }, 500)
@@ -94,57 +104,80 @@ export default function ProductDetails({
   }
 
   return (
-    <div className="rounded-lg bg-white p-6 shadow-lg">
-      {/* Product Name and Price */}
-      <div className="mb-6">
-        <h1 className="mb-2 text-3xl font-bold text-gray-900">{merchandise.name}</h1>
-        <div className="flex items-baseline gap-2">
-          <span className="text-3xl font-bold text-[#FF5656]">
-            £{merchandise.price.toFixed(2)}
+    <div className="space-y-6">
+      {/* Product Label & Name */}
+      <div>
+        {merchandise.label && (
+          <span className="mb-2 inline-block font-mono text-sm font-medium tracking-wider text-white/50">
+            {merchandise.label}
           </span>
-          <span className="text-sm text-muted-foreground">GBP</span>
-        </div>
+        )}
+        <h1 className="font-display text-3xl font-black text-white md:text-4xl">
+          {merchandise.name}
+        </h1>
+      </div>
+
+      {/* Price */}
+      <div className="flex items-baseline gap-3">
+        <span className="font-display text-4xl font-black tabular-nums text-white">
+          £{merchandise.price.toFixed(2)}
+        </span>
+        <span className="font-display text-sm font-bold uppercase tracking-wider text-white/50">
+          GBP
+        </span>
       </div>
 
       {/* Stock Status */}
-      <div className="mb-6">
+      <div>
         {isInStock ? (
-          <span className="inline-flex items-center gap-2 rounded-full bg-green-100 px-3 py-1 text-sm font-semibold text-green-800">
-            ✓ In Stock
-            {selectedVariant && ` (${selectedVariant.stockQuantity} available)`}
+          <span className="inline-flex items-center gap-2 rounded-full border border-[#10B981]/50 bg-[#10B981]/20 px-4 py-2 font-display text-sm font-bold text-[#10B981]">
+            <Check className="h-4 w-4" />
+            In Stock
+            {selectedVariant && ` · ${selectedVariant.stockQuantity} available`}
           </span>
         ) : (
-          <span className="inline-flex items-center gap-2 rounded-full bg-red-100 px-3 py-1 text-sm font-semibold text-red-800">
-            ✗ Out of Stock
+          <span className="inline-flex items-center gap-2 rounded-full border border-[#FF1F7D]/50 bg-[#FF1F7D]/20 px-4 py-2 font-display text-sm font-bold text-[#FF1F7D]">
+            <AlertCircle className="h-4 w-4" />
+            Out of Stock
           </span>
         )}
       </div>
 
       {/* Description */}
-      <div className="mb-6">
-        <p className="text-gray-700">{merchandise.description}</p>
-      </div>
+      <p className="text-base leading-relaxed text-white/70">
+        {merchandise.description}
+      </p>
 
       {/* Size Selector */}
       {sizes.length > 0 && (
-        <div className="mb-6">
-          <label className="mb-2 block text-sm font-semibold text-gray-900">Size</label>
-          <div className="flex flex-wrap gap-2">
+        <div className="space-y-3">
+          <div className="flex items-center justify-between">
+            <label className="font-display text-sm font-bold uppercase tracking-wider text-white">
+              Size {!selectedSize && <span className="text-[#FF1F7D]">*</span>}
+            </label>
+            {selectedSize && (
+              <span className="text-sm font-medium text-white/50">
+                Selected: {selectedSize}
+              </span>
+            )}
+          </div>
+          <div className="flex flex-wrap gap-3">
             {sizes.map((size) => {
               const sizeVariants = merchandise.variants?.filter((v) => v.size === size)
-              const sizeInStock = sizeVariants?.some((v) => v.inStock && v.stockQuantity > 0)
-              
+              const sizeInStock = sizeVariants?.some((v) => v.inStock && v.stockQuantity > 0) ?? true
+              const isSelected = selectedSize === size
+
               return (
                 <button
                   key={size}
                   onClick={() => setSelectedSize(size)}
                   disabled={!sizeInStock}
-                  className={`rounded-lg border-2 px-4 py-2 font-semibold transition-all ${
-                    selectedSize === size
-                      ? 'border-blue-500 bg-blue-50 text-blue-700'
+                  className={`min-w-[60px] rounded-xl border-2 px-5 py-3 font-display text-sm font-bold uppercase tracking-wider transition-all duration-300 ${
+                    isSelected
+                      ? 'border-[#FF1F7D] bg-[#FF1F7D]/20 text-white shadow-lg shadow-[#FF1F7D]/30 scale-105'
                       : sizeInStock
-                      ? 'border-border bg-white text-gray-700 hover:border-gray-400'
-                      : 'border-border bg-gray-100 text-muted-foreground cursor-not-allowed line-through'
+                        ? 'border-white/20 bg-surface-card/50 text-white/70 hover:border-white/40 hover:bg-surface-card/80 hover:text-white hover:scale-105'
+                        : 'border-white/10 bg-surface-card/30 text-white/30 cursor-not-allowed line-through'
                   }`}
                 >
                   {size}
@@ -152,29 +185,44 @@ export default function ProductDetails({
               )
             })}
           </div>
+          {!selectedSize && (
+            <p className="text-sm font-medium text-[#FFC700]">
+              Please select a size to continue
+            </p>
+          )}
         </div>
       )}
 
       {/* Color Selector */}
       {colors.length > 0 && (
-        <div className="mb-6">
-          <label className="mb-2 block text-sm font-semibold text-gray-900">Color</label>
-          <div className="flex flex-wrap gap-2">
+        <div className="space-y-3">
+          <div className="flex items-center justify-between">
+            <label className="font-display text-sm font-bold uppercase tracking-wider text-white">
+              Color {!selectedColor && <span className="text-[#FF1F7D]">*</span>}
+            </label>
+            {selectedColor && (
+              <span className="text-sm font-medium text-white/50">
+                Selected: {selectedColor}
+              </span>
+            )}
+          </div>
+          <div className="flex flex-wrap gap-3">
             {colors.map((color) => {
               const colorVariants = merchandise.variants?.filter((v) => v.color === color)
-              const colorInStock = colorVariants?.some((v) => v.inStock && v.stockQuantity > 0)
-              
+              const colorInStock = colorVariants?.some((v) => v.inStock && v.stockQuantity > 0) ?? true
+              const isSelected = selectedColor === color
+
               return (
                 <button
                   key={color}
                   onClick={() => setSelectedColor(color)}
                   disabled={!colorInStock}
-                  className={`rounded-lg border-2 px-4 py-2 font-semibold transition-all ${
-                    selectedColor === color
-                      ? 'border-blue-500 bg-blue-50 text-blue-700'
+                  className={`rounded-xl border-2 px-5 py-3 font-display text-sm font-bold transition-all duration-300 ${
+                    isSelected
+                      ? 'border-[#FF1F7D] bg-[#FF1F7D]/20 text-white shadow-lg shadow-[#FF1F7D]/30 scale-105'
                       : colorInStock
-                      ? 'border-border bg-white text-gray-700 hover:border-gray-400'
-                      : 'border-border bg-gray-100 text-muted-foreground cursor-not-allowed line-through'
+                        ? 'border-white/20 bg-surface-card/50 text-white/70 hover:border-white/40 hover:bg-surface-card/80 hover:text-white hover:scale-105'
+                        : 'border-white/10 bg-surface-card/30 text-white/30 cursor-not-allowed line-through'
                   }`}
                 >
                   {color}
@@ -186,21 +234,25 @@ export default function ProductDetails({
       )}
 
       {/* Quantity Selector */}
-      <div className="mb-6">
-        <label className="mb-2 block text-sm font-semibold text-gray-900">Quantity</label>
-        <div className="flex items-center gap-3">
+      <div className="space-y-3">
+        <label className="font-display text-sm font-bold uppercase tracking-wider text-white">
+          Quantity
+        </label>
+        <div className="flex items-center gap-4">
           <button
             onClick={() => setQuantity(Math.max(1, quantity - 1))}
             disabled={quantity <= 1}
-            className="rounded-lg border-2 border-border bg-white px-4 py-2 font-bold text-gray-700 transition-all hover:border-gray-400 disabled:opacity-50"
+            className="flex h-12 w-12 items-center justify-center rounded-xl border-2 border-white/20 bg-surface-card/50 font-display text-xl font-bold text-white transition-all duration-300 hover:border-white/40 hover:bg-surface-card/80 disabled:opacity-30 disabled:cursor-not-allowed"
           >
             −
           </button>
-          <span className="w-12 text-center text-lg font-semibold">{quantity}</span>
+          <span className="w-12 text-center font-display text-2xl font-black tabular-nums text-white">
+            {quantity}
+          </span>
           <button
             onClick={() => setQuantity(Math.min(maxQuantity, quantity + 1))}
             disabled={quantity >= maxQuantity}
-            className="rounded-lg border-2 border-border bg-white px-4 py-2 font-bold text-gray-700 transition-all hover:border-gray-400 disabled:opacity-50"
+            className="flex h-12 w-12 items-center justify-center rounded-xl border-2 border-white/20 bg-surface-card/50 font-display text-xl font-bold text-white transition-all duration-300 hover:border-white/40 hover:bg-surface-card/80 disabled:opacity-30 disabled:cursor-not-allowed"
           >
             +
           </button>
@@ -210,41 +262,79 @@ export default function ProductDetails({
       {/* Message */}
       {message && (
         <div
-          className={`mb-4 rounded-lg p-3 ${
+          className={`rounded-2xl border-2 p-4 ${
             message.type === 'success'
-              ? 'bg-green-100 text-green-800'
-              : 'bg-red-100 text-red-800'
+              ? 'border-[#10B981]/50 bg-[#10B981]/20 text-[#10B981]'
+              : 'border-[#FF1F7D]/50 bg-[#FF1F7D]/20 text-[#FF1F7D]'
           }`}
         >
-          {message.text}
+          <p className="font-display font-bold">{message.text}</p>
         </div>
       )}
 
       {/* Add to Cart Button */}
       <button
         onClick={handleAddToCart}
-        disabled={!isInStock || isAdding}
-        className="w-full rounded-lg border-2 border-blue-600 bg-transparent px-6 py-3 font-bold text-blue-600 transition-all hover:scale-105 hover:bg-blue-600/10 disabled:opacity-50 disabled:cursor-not-allowed dark:bg-gradient-to-r dark:from-blue-500 dark:to-purple-500 dark:text-primary-foreground dark:border-transparent"
+        disabled={!canAddToCart || isAdding}
+        className={`group relative w-full overflow-hidden rounded-2xl border-2 px-8 py-4 font-display text-base font-black uppercase tracking-wider transition-all duration-300 ${
+          canAddToCart && !isAdding
+            ? 'border-[#FF1F7D] bg-gradient-to-r from-[#FF1F7D] to-[#8B5CF6] text-white shadow-lg shadow-[#FF1F7D]/40 hover:scale-[1.02] hover:shadow-xl hover:shadow-[#FF1F7D]/60'
+            : 'border-white/20 bg-surface-card/50 text-white/40 cursor-not-allowed'
+        }`}
       >
-        {isAdding ? '⏳ Adding...' : isInStock ? '🛒 Add to Cart' : '✗ Out of Stock'}
+        <span className="relative z-10 flex items-center justify-center gap-3">
+          {isAdding ? (
+            <>
+              <span className="animate-spin">⏳</span>
+              Adding to Cart...
+            </>
+          ) : !isInStock ? (
+            <>
+              <AlertCircle className="h-5 w-5" />
+              Out of Stock
+            </>
+          ) : !sizeSelected ? (
+            <>
+              <AlertCircle className="h-5 w-5" />
+              Select a Size
+            </>
+          ) : !colorSelected ? (
+            <>
+              <AlertCircle className="h-5 w-5" />
+              Select a Color
+            </>
+          ) : (
+            <>
+              <ShoppingCart className="h-5 w-5 transition-transform group-hover:scale-110" />
+              Add to Cart
+            </>
+          )}
+        </span>
       </button>
 
       {/* Product Details */}
       {(merchandise.material || merchandise.features) && (
-        <div className="mt-8 space-y-4 border-t pt-6">
+        <div className="space-y-6 border-t border-white/10 pt-6">
           {merchandise.material && (
             <div>
-              <h3 className="mb-2 font-semibold text-gray-900">Material</h3>
-              <p className="text-gray-700">{merchandise.material}</p>
+              <h3 className="mb-2 font-display text-sm font-bold uppercase tracking-wider text-white">
+                Material
+              </h3>
+              <p className="text-white/70">{merchandise.material}</p>
             </div>
           )}
 
           {merchandise.features && merchandise.features.length > 0 && (
             <div>
-              <h3 className="mb-2 font-semibold text-gray-900">Features</h3>
-              <ul className="list-inside list-disc space-y-1 text-gray-700">
+              <h3 className="mb-3 font-display text-sm font-bold uppercase tracking-wider text-white">
+                Features
+              </h3>
+              <ul className="space-y-2">
                 {merchandise.features.map((feature, index) => (
-                  <li key={index}>{feature}</li>
+                  <li key={index} className="flex items-start gap-2 text-white/70">
+                    <Check className="mt-0.5 h-4 w-4 flex-shrink-0 text-[#10B981]" />
+                    {feature}
+                  </li>
                 ))}
               </ul>
             </div>
@@ -254,4 +344,3 @@ export default function ProductDetails({
     </div>
   )
 }
-
