@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Link from 'next/link'
 import {
   Dialog,
   DialogContent,
@@ -12,7 +13,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Badge } from '@/components/ui/badge'
-import { Upload, X, Clock, ExternalLink, CheckCircle } from 'lucide-react'
+import { Upload, X, Clock, ExternalLink, CheckCircle, Music, Headphones, Sparkles } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 
 interface MissionDetailModalProps {
@@ -49,6 +50,9 @@ export default function MissionDetailModal({
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle')
   const router = useRouter()
+
+  // Check if this is an audio detection mission
+  const isAudioMission = mission.missionType === 'USE_AUDIO'
 
   const getMissionIcon = (type?: string) => {
     switch (type) {
@@ -254,62 +258,105 @@ export default function MissionDetailModal({
           {/* Action Steps */}
           <div className="rounded-lg bg-secondary p-4">
             <Label className="text-sm text-muted-foreground mb-2 block">How to Complete</Label>
-            <ol className="list-decimal list-inside space-y-2 text-sm text-foreground">
-              <li>Navigate to the target account/video on TikTok</li>
-              <li>Complete the required action (follow, like, repost, or use audio)</li>
-              <li>Take a screenshot of your completed action</li>
-              <li>Upload the screenshot below for verification</li>
-            </ol>
-          </div>
-
-          {/* Screenshot Upload */}
-          <div className="rounded-lg bg-secondary p-4">
-            <Label className="text-sm text-muted-foreground mb-2 block">
-              Proof Screenshot
-            </Label>
-            <p className="text-xs text-muted-foreground mb-3">
-              Upload a screenshot showing you completed the task (Max 5MB)
-            </p>
-
-            {preview ? (
-              <div className="relative">
-                <img
-                  src={preview}
-                  alt="Screenshot preview"
-                  className="w-full rounded-lg border border-border"
-                />
-                <button
-                  onClick={clearScreenshot}
-                  className="absolute top-2 right-2 rounded-full bg-background p-1 shadow-md hover:bg-secondary"
-                  type="button"
-                >
-                  <X className="h-4 w-4" />
-                </button>
-              </div>
+            {isAudioMission ? (
+              <ol className="list-decimal list-inside space-y-2 text-sm text-foreground">
+                <li>Click "Start Listening" to open the Music Detection page</li>
+                <li>Play the required audio track on your device or surroundings</li>
+                <li>Use the audio detector to identify the track</li>
+                <li>The mission will be verified automatically when detected</li>
+              </ol>
             ) : (
-              <div className="relative">
-                <Input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleScreenshotChange}
-                  className="sr-only"
-                  id="screenshot-upload"
-                />
-                <Label
-                  htmlFor="screenshot-upload"
-                  className="flex flex-col items-center justify-center w-full h-32 rounded-lg border-2 border-dashed border-border hover:border-primary cursor-pointer transition-colors"
-                >
-                  <Upload className="h-8 w-8 text-muted-foreground mb-2" />
-                  <span className="text-sm text-muted-foreground">
-                    Click to upload screenshot
-                  </span>
-                  <span className="text-xs text-muted-foreground mt-1">
-                    PNG, JPG up to 5MB
-                  </span>
-                </Label>
-              </div>
+              <ol className="list-decimal list-inside space-y-2 text-sm text-foreground">
+                <li>Navigate to the target account/video on TikTok</li>
+                <li>Complete the required action (follow, like, repost, or use audio)</li>
+                <li>Take a screenshot of your completed action</li>
+                <li>Upload the screenshot below for verification</li>
+              </ol>
             )}
           </div>
+
+          {/* Audio Mission - Start Listening CTA */}
+          {isAudioMission && (
+            <div className="rounded-2xl border-2 border-[#FFC700]/30 bg-gradient-to-br from-[#FFC700]/10 to-[#FFC700]/5 p-6">
+              <div className="flex items-center gap-4 mb-4">
+                <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-[#FFC700]/20 ring-2 ring-[#FFC700]/40">
+                  <Headphones className="h-8 w-8 text-[#FFC700]" />
+                </div>
+                <div>
+                  <h3 className="font-display text-lg font-bold text-foreground">Music Detection</h3>
+                  <p className="text-sm text-muted-foreground">
+                    Use our audio detection to verify this mission
+                  </p>
+                </div>
+              </div>
+
+              <div className="rounded-xl bg-background/50 p-4 mb-4">
+                <div className="flex items-center gap-2 mb-2">
+                  <Music className="h-4 w-4 text-[#FFC700]" />
+                  <span className="text-sm font-medium text-foreground">Required Track</span>
+                </div>
+                <p className="text-sm text-muted-foreground font-mono">
+                  {mission.targetAudioId || 'Official audio track'}
+                </p>
+              </div>
+
+              <div className="flex items-center gap-2 text-sm text-muted-foreground mb-4">
+                <Sparkles className="h-4 w-4 text-[#FFC700]" />
+                <span>Automatic verification when audio is detected</span>
+              </div>
+            </div>
+          )}
+
+          {/* Screenshot Upload - Only for non-audio missions */}
+          {!isAudioMission && (
+            <div className="rounded-lg bg-secondary p-4">
+              <Label className="text-sm text-muted-foreground mb-2 block">
+                Proof Screenshot
+              </Label>
+              <p className="text-xs text-muted-foreground mb-3">
+                Upload a screenshot showing you completed the task (Max 5MB)
+              </p>
+
+              {preview ? (
+                <div className="relative">
+                  <img
+                    src={preview}
+                    alt="Screenshot preview"
+                    className="w-full rounded-lg border border-border"
+                  />
+                  <button
+                    onClick={clearScreenshot}
+                    className="absolute top-2 right-2 rounded-full bg-background p-1 shadow-md hover:bg-secondary"
+                    type="button"
+                  >
+                    <X className="h-4 w-4" />
+                  </button>
+                </div>
+              ) : (
+                <div className="relative">
+                  <Input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleScreenshotChange}
+                    className="sr-only"
+                    id="screenshot-upload"
+                  />
+                  <Label
+                    htmlFor="screenshot-upload"
+                    className="flex flex-col items-center justify-center w-full h-32 rounded-lg border-2 border-dashed border-border hover:border-primary cursor-pointer transition-colors"
+                  >
+                    <Upload className="h-8 w-8 text-muted-foreground mb-2" />
+                    <span className="text-sm text-muted-foreground">
+                      Click to upload screenshot
+                    </span>
+                    <span className="text-xs text-muted-foreground mt-1">
+                      PNG, JPG up to 5MB
+                    </span>
+                  </Label>
+                </div>
+              )}
+            </div>
+          )}
 
           {/* Warning for unlinked TikTok */}
           {!hasTikTokLinked && (
@@ -331,22 +378,35 @@ export default function MissionDetailModal({
           >
             Cancel
           </Button>
-          <Button
-            onClick={handleSubmitTask}
-            disabled={!screenshot || isSubmitting}
-            className="flex-1"
-          >
-            {isSubmitting ? (
-              'Submitting...'
-            ) : submitStatus === 'success' ? (
-              <span className="flex items-center gap-2">
-                <CheckCircle className="h-4 w-4" />
-                Submitted!
-              </span>
-            ) : (
-              'Submit Task'
-            )}
-          </Button>
+          {isAudioMission ? (
+            <Link
+              href={`/music-detection?missionId=${mission.id}`}
+              className="flex-1"
+              onClick={() => onOpenChange(false)}
+            >
+              <Button className="w-full bg-gradient-to-r from-[#FFC700] to-[#FF8C00] hover:from-[#FFD700] hover:to-[#FFA500] text-black font-bold">
+                <Headphones className="h-4 w-4 mr-2" />
+                Start Listening
+              </Button>
+            </Link>
+          ) : (
+            <Button
+              onClick={handleSubmitTask}
+              disabled={!screenshot || isSubmitting}
+              className="flex-1"
+            >
+              {isSubmitting ? (
+                'Submitting...'
+              ) : submitStatus === 'success' ? (
+                <span className="flex items-center gap-2">
+                  <CheckCircle className="h-4 w-4" />
+                  Submitted!
+                </span>
+              ) : (
+                'Submit Task'
+              )}
+            </Button>
+          )}
         </div>
       </DialogContent>
     </Dialog>
