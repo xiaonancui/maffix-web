@@ -92,29 +92,30 @@ model VerificationToken {
 }
 
 model Task {
-  id                  String                   @id @default(uuid())
-  title               String
-  description         String
-  type                TaskType
-  difficulty          Difficulty               @default(EASY)
-  missionType         MissionType?
-  recurrence          String?              @default("ONCE") // "DAILY", "WEEKLY", "ONCE"
-  targetTikTokAccount String?
-  targetVideoUrl      String?
-  targetAudioId       String?
-  autoVerify          Boolean                  @default(false)
-  verificationStatus  String?
-  points              Int                      @default(0)
-  diamonds            Int                      @default(0)
-  isActive            Boolean                  @default(true)
-  startDate           DateTime?
-  endDate             DateTime?
-  maxCompletions      Int?
-  completionCount     Int                      @default(0)
-  createdAt           DateTime                 @default(now())
-  updatedAt           DateTime                 @updatedAt
-  verificationJobs    MissionVerificationJob[]
-  completions         UserTask[]
+  id                    String                   @id @default(uuid())
+  title                 String
+  description           String
+  type                  TaskType
+  difficulty            Difficulty               @default(EASY)
+  missionType           MissionType?
+  recurrence            String?              @default("ONCE") // "DAILY", "WEEKLY", "ONCE"
+  targetTikTokAccount   String?
+  targetVideoUrl        String?
+  targetAudioId         String?
+  targetSpotifyArtistId String?              // Spotify artist ID for SPOTIFY_FOLLOW missions
+  autoVerify            Boolean                  @default(false)
+  verificationStatus    String?
+  points                Int                      @default(0)
+  diamonds              Int                      @default(0)
+  isActive              Boolean                  @default(true)
+  startDate             DateTime?
+  endDate               DateTime?
+  maxCompletions        Int?
+  completionCount       Int                      @default(0)
+  createdAt             DateTime                 @default(now())
+  updatedAt             DateTime                 @updatedAt
+  verificationJobs      MissionVerificationJob[]
+  completions           UserTask[]
 
   @@index([type])
   @@index([isActive])
@@ -585,6 +586,7 @@ enum MissionType {
   LIKE
   REPOST
   USE_AUDIO
+  SPOTIFY_FOLLOW
 }
 
 enum Difficulty {

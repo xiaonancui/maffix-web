@@ -1,19 +1,19 @@
 import { NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
-import { z } from 'zod'
+import { checkUserFollowsArtist, getUserSpotifyToken, SpotifyApiError } from '@/lib/spotify'
 
 /**
  * POST /api/missions/[missionId]/submit
- * 
+ *
  * Submit a mission for verification
- * 
+ *
  * This endpoint:
- * 1. Validates user has TikTok account linked
+ * 1. Validates user has required account linked (TikTok/Spotify)
  * 2. Validates mission exists and is active
  * 3. Checks if user already completed this mission
- * 4. Creates a pending UserTask record
- * 5. Creates a MissionVerificationJob for async processing
+ * 4. For SPOTIFY_FOLLOW: Instant verification via Spotify API
+ * 5. For TikTok missions: Creates pending UserTask + MissionVerificationJob
  * 6. Returns submission confirmation
  */
 export async function POST(
@@ -98,6 +98,7 @@ export async function POST(
         targetTikTokAccount: true,
         targetVideoUrl: true,
         targetAudioId: true,
+        targetSpotifyArtistId: true,
         autoVerify: true,
         diamonds: true,
         points: true,
@@ -178,10 +179,136 @@ export async function POST(
             )
           }
           break
+        case 'SPOTIFY_FOLLOW':
+          if (!task.targetSpotifyArtistId) {
+            return NextResponse.json(
+              { error: 'Mission configuration error: missing target Spotify artist' },
+              { status: 500 }
+            )
+          }
+          break
       }
     }
 
-    // Create UserTask and MissionVerificationJob in a transaction
+    // ========================================
+    // SPOTIFY_FOLLOW: Instant Verification
+    // ========================================
+    if (task.missionType === 'SPOTIFY_FOLLOW') {
+      // Get user's Spotify access token
+      const spotifyToken = await getUserSpotifyToken(user.id)
+
+      if (!spotifyToken) {
+        return NextResponse.json(
+          {
+            error: 'Spotify account not linked',
+            message: 'Please link your Spotify account to complete this mission',
+            requiresLink: true,
+            linkType: 'spotify',
+          },
+          { status: 400 }
+        )
+      }
+
+      // Verify user follows the artist
+      try {
+        const followsArtist = await checkUserFollowsArtist(
+          spotifyToken,
+          task.targetSpotifyArtistId!
+        )
+
+        if (!followsArtist) {
+          return NextResponse.json(
+            {
+              error: 'Verification failed',
+              message: 'You are not following the artist. Please follow them on Spotify and try again.',
+              verified: false,
+            },
+            { status: 400 }
+          )
+        }
+
+        // User follows the artist - award immediately
+        const { addCurrency } = await import('@/lib/transaction')
+
+        const result = await db.$transaction(async (tx) => {
+          // Create completed UserTask record
+          const userTask = await tx.userTask.create({
+            data: {
+              userId: user.id,
+              taskId: task.id,
+              pointsEarned: task.points,
+              diamondsEarned: task.diamonds,
+              verificationStatus: 'APPROVED',
+              verified: true,
+              verifiedAt: new Date(),
+              completedAt: new Date(),
+            },
+          })
+
+          // Increment task completion count
+          await tx.task.update({
+            where: { id: task.id },
+            data: { completionCount: { increment: 1 } },
+          })
+
+          // Award diamonds
+          if (task.diamonds > 0) {
+            await addCurrency(
+              user.id,
+              task.diamonds,
+              'DIAMONDS',
+              'MISSION_REWARD',
+              `mission_${task.id}`
+            )
+          }
+
+          // Award XP (points)
+          if (task.points > 0) {
+            await tx.user.update({
+              where: { id: user.id },
+              data: { xp: { increment: task.points } },
+            })
+          }
+
+          return { userTask }
+        })
+
+        return NextResponse.json({
+          success: true,
+          message: 'Mission completed successfully!',
+          verified: true,
+          submission: {
+            id: result.userTask.id,
+            taskId: task.id,
+            taskTitle: task.title,
+            status: 'APPROVED',
+            submittedAt: result.userTask.submittedAt,
+            completedAt: result.userTask.completedAt,
+            diamondsEarned: task.diamonds,
+            pointsEarned: task.points,
+          },
+        })
+      } catch (error) {
+        if (error instanceof SpotifyApiError) {
+          if (error.statusCode === 401) {
+            return NextResponse.json(
+              {
+                error: 'Spotify token expired',
+                message: 'Your Spotify access has expired. Please re-link your account.',
+                requiresLink: true,
+                linkType: 'spotify',
+              },
+              { status: 400 }
+            )
+          }
+        }
+        throw error
+      }
+    }
+
+    // ========================================
+    // TikTok Missions: Async Verification
+    // ========================================
     const result = await db.$transaction(async (tx) => {
       // Create UserTask record
       const userTask = await tx.userTask.create({
