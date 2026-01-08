@@ -51,6 +51,7 @@ const navigationItems: NavItem[] = [
     children: [
       { name: 'Merchandise', href: '/admin/merchandise', icon: 'tshirt' },
       { name: 'Premium Packs', href: '/admin/packs', icon: 'box' },
+      { name: 'Featured Product', href: '/admin/store/featured-product', icon: 'star' },
       { name: 'Store Settings', href: '/admin/store/settings', icon: 'cog' },
     ],
   },
