@@ -21,21 +21,32 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { Badge } from '@/components/ui/badge'
-import { Gem, Ticket, Sparkles, Info, AlertCircle, X } from 'lucide-react'
-import { BANNER_TYPES, getRarityDistribution, AURA_ZONE_COSTS, type BannerType } from '@/lib/aura-zone'
+import { Gem, Ticket, Sparkles, Info, AlertCircle, X, Music } from 'lucide-react'
+import { getRarityDistribution, AURA_ZONE_COSTS } from '@/lib/aura-zone'
+import type { BannerData } from './page'
+
+// Accent colors for banner tabs (cycles through)
+const BANNER_ACCENT_COLORS = [
+  { primary: '#FF1F7D', secondary: '#8B5CF6' },
+  { primary: '#00F5FF', secondary: '#8B5CF6' },
+  { primary: '#FFC700', secondary: '#FF1F7D' },
+  { primary: '#10B981', secondary: '#00F5FF' },
+]
 
 interface AuraZoneClientProps {
   diamonds: number
   tickets: number
   userId: string
   userRole: string
+  banners: BannerData[]
 }
 
 export default function AuraZoneClient({
   diamonds: initialDiamonds,
   tickets: initialTickets,
+  banners,
 }: AuraZoneClientProps) {
-  const [selectedBanner, setSelectedBanner] = useState<BannerType>('beat-like-dat')
+  const [selectedBannerIndex, setSelectedBannerIndex] = useState(0)
   const [showConfirm, setShowConfirm] = useState(false)
   const [paymentMethod, setPaymentMethod] = useState<'diamonds' | 'tickets'>('diamonds')
   const [isPulling, setIsPulling] = useState(false)
@@ -48,7 +59,8 @@ export default function AuraZoneClient({
   const [diamonds, setDiamonds] = useState(initialDiamonds)
   const [tickets, setTickets] = useState(initialTickets)
 
-  const currentBanner = BANNER_TYPES[selectedBanner]
+  const currentBanner = banners[selectedBannerIndex] || banners[0]
+  const currentAccent = BANNER_ACCENT_COLORS[selectedBannerIndex % BANNER_ACCENT_COLORS.length]
   const canAffordWithDiamonds = diamonds >= AURA_ZONE_COSTS.TENX_DIAMONDS
   const canAffordWithTickets = tickets >= AURA_ZONE_COSTS.TENX_TICKETS
   const canAffordEither = canAffordWithDiamonds || canAffordWithTickets
@@ -58,7 +70,7 @@ export default function AuraZoneClient({
   // Reset video error when banner changes
   useEffect(() => {
     setVideoError(false)
-  }, [selectedBanner])
+  }, [selectedBannerIndex])
 
   const handlePull = async () => {
     if (!canAffordEither) return
@@ -73,7 +85,7 @@ export default function AuraZoneClient({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           paymentMethod,
-          bannerId: selectedBanner,
+          bannerId: currentBanner.id,
         }),
       })
 
@@ -108,7 +120,7 @@ export default function AuraZoneClient({
         {!videoError ? (
           <>
             <video
-              key={selectedBanner}
+              key={currentBanner.id}
               autoPlay
               loop
               muted
@@ -116,7 +128,7 @@ export default function AuraZoneClient({
               onError={() => setVideoError(true)}
               className="h-full w-full object-cover scale-105 animate-[zoom_20s_ease-in-out_infinite]"
             >
-              <source src={currentBanner.backgroundVideo} type="video/mp4" />
+              <source src={currentBanner.backgroundVideoUrl} type="video/mp4" />
             </video>
             <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/60 to-black/80" />
           </>
@@ -183,73 +195,105 @@ export default function AuraZoneClient({
           </div>
         </div>
 
-        {/* Enhanced Banner Selection */}
-        <div className="mb-20 max-w-5xl mx-auto" style={{ animationDelay: '200ms' }}>
-          <div className="flex items-center justify-center gap-3 mb-8">
-            <div className="h-px w-20 bg-gradient-to-r from-transparent via-[#FF1F7D] to-transparent" />
-            <h2 className="font-display text-3xl md:text-4xl font-black text-white uppercase tracking-wider">Select Song</h2>
-            <div className="h-px w-20 bg-gradient-to-l from-transparent via-[#FF1F7D] to-transparent" />
+        {/* Banner Tabs Navigation */}
+        <div className="mb-12 max-w-5xl mx-auto" style={{ animationDelay: '200ms' }}>
+          {/* Tab Headers */}
+          <div className="flex items-center justify-center gap-2 mb-8 overflow-x-auto pb-2">
+            {banners.map((banner, index) => {
+              const accent = BANNER_ACCENT_COLORS[index % BANNER_ACCENT_COLORS.length]
+              const isActive = selectedBannerIndex === index
+
+              return (
+                <button
+                  key={banner.id}
+                  onClick={() => setSelectedBannerIndex(index)}
+                  className={`group relative flex items-center gap-3 rounded-2xl px-6 py-4 font-display font-bold uppercase tracking-wider transition-all duration-500 whitespace-nowrap ${
+                    isActive
+                      ? 'text-white scale-105'
+                      : 'bg-surface-card/50 border border-white/10 text-white/70 hover:text-white hover:border-white/30 hover:scale-[1.02]'
+                  }`}
+                  style={isActive ? {
+                    background: `linear-gradient(135deg, ${accent.primary}40, ${accent.secondary}30)`,
+                    borderColor: accent.primary,
+                    boxShadow: `0 0 30px ${accent.primary}50`,
+                    border: `2px solid ${accent.primary}`,
+                  } : undefined}
+                >
+                  {/* Active indicator glow */}
+                  {isActive && (
+                    <div
+                      className="pointer-events-none absolute inset-0 rounded-2xl blur-xl opacity-50"
+                      style={{ background: `linear-gradient(135deg, ${accent.primary}, ${accent.secondary})` }}
+                    />
+                  )}
+
+                  <Music className={`relative h-5 w-5 transition-transform duration-300 ${isActive ? 'scale-110' : 'group-hover:scale-110'}`}
+                    style={isActive ? { color: accent.primary } : undefined}
+                  />
+                  <span className="relative">{banner.name}</span>
+
+                  {isActive && (
+                    <Badge
+                      className="relative ml-2 border-0 font-display text-xs font-bold uppercase tracking-wider"
+                      style={{
+                        backgroundColor: accent.primary,
+                        boxShadow: `0 0 10px ${accent.primary}80`
+                      }}
+                    >
+                      Active
+                    </Badge>
+                  )}
+                </button>
+              )
+            })}
           </div>
-          <div className="grid gap-6 sm:grid-cols-2">
-            {/* Beat Like Dat Banner */}
-            <button
-              onClick={() => setSelectedBanner('beat-like-dat')}
-              className={`group relative overflow-hidden rounded-3xl border-2 p-8 transition-all duration-500 backdrop-blur-xl ${
-                selectedBanner === 'beat-like-dat'
-                  ? 'border-[#FF1F7D] bg-gradient-to-br from-[#FF1F7D]/30 to-[#8B5CF6]/20 shadow-[0_0_50px_rgba(255,31,125,0.5)] scale-[1.03]'
-                  : 'border-white/10 bg-surface-card/50 hover:border-[#FF1F7D]/50 hover:bg-[#FF1F7D]/10 hover:scale-[1.02]'
-              }`}
-            >
-              {/* Ambient glow */}
-              <div className={`pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-gradient-to-br from-[#FF1F7D]/30 to-transparent blur-3xl transition-all duration-700 ${selectedBanner === 'beat-like-dat' ? 'opacity-100' : 'opacity-0 group-hover:opacity-50'}`} />
 
-              {/* Hover overlay */}
-              <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-[#FF1F7D]/10 via-transparent to-[#8B5CF6]/10 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+          {/* Selected Banner Info Card */}
+          <div
+            className="group relative overflow-hidden rounded-3xl border-2 p-8 transition-all duration-500 backdrop-blur-xl"
+            style={{
+              borderColor: `${currentAccent.primary}60`,
+              background: `linear-gradient(135deg, ${currentAccent.primary}20, ${currentAccent.secondary}15)`,
+              boxShadow: `0 0 40px ${currentAccent.primary}30`,
+            }}
+          >
+            {/* Ambient glow */}
+            <div
+              className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full blur-3xl opacity-60"
+              style={{ background: `linear-gradient(135deg, ${currentAccent.primary}40, transparent)` }}
+            />
 
-              <div className="relative">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="font-display text-2xl md:text-3xl font-black text-white">Beat Like Dat</h3>
-                  {selectedBanner === 'beat-like-dat' && (
-                    <Badge className="bg-[#FF1F7D] text-white border-0 font-display font-bold uppercase tracking-wider shadow-lg shadow-[#FF1F7D]/50">
-                      Active
+            <div className="relative">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="font-display text-2xl md:text-3xl font-black text-white">
+                  {currentBanner.name}
+                </h3>
+                <div className="flex items-center gap-3">
+                  {currentBanner.currencyType === 'TICKETS' && (
+                    <Badge className="bg-[#8B5CF6] text-white border-0 font-display font-bold uppercase tracking-wider">
+                      <Ticket className="h-3 w-3 mr-1" />
+                      Ticket Banner
                     </Badge>
                   )}
                 </div>
-                <p className="text-sm text-white/70 leading-relaxed font-medium">
-                  {BANNER_TYPES['beat-like-dat'].description}
-                </p>
               </div>
-            </button>
-
-            {/* SYBAU Banner */}
-            <button
-              onClick={() => setSelectedBanner('sybau')}
-              className={`group relative overflow-hidden rounded-3xl border-2 p-8 transition-all duration-500 backdrop-blur-xl ${
-                selectedBanner === 'sybau'
-                  ? 'border-[#00F5FF] bg-gradient-to-br from-[#00F5FF]/30 to-[#8B5CF6]/20 shadow-[0_0_50px_rgba(0,245,255,0.5)] scale-[1.03]'
-                  : 'border-white/10 bg-surface-card/50 hover:border-[#00F5FF]/50 hover:bg-[#00F5FF]/10 hover:scale-[1.02]'
-              }`}
-            >
-              {/* Ambient glow */}
-              <div className={`pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-gradient-to-br from-[#00F5FF]/30 to-transparent blur-3xl transition-all duration-700 ${selectedBanner === 'sybau' ? 'opacity-100' : 'opacity-0 group-hover:opacity-50'}`} />
-
-              {/* Hover overlay */}
-              <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-[#00F5FF]/10 via-transparent to-[#8B5CF6]/10 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
-
-              <div className="relative">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="font-display text-2xl md:text-3xl font-black text-white">SYBAU</h3>
-                  {selectedBanner === 'sybau' && (
-                    <Badge className="bg-[#00F5FF] text-white border-0 font-display font-bold uppercase tracking-wider shadow-lg shadow-[#00F5FF]/50">
-                      Active
-                    </Badge>
+              <p className="text-sm text-white/70 leading-relaxed font-medium mb-4">
+                {currentBanner.description || 'Draw exclusive prizes from this collection'}
+              </p>
+              <div className="flex items-center gap-4 text-sm">
+                <span className="flex items-center gap-2 text-white/60">
+                  {currentBanner.currencyType === 'DIAMONDS' ? (
+                    <Gem className="h-4 w-4 text-[#00F5FF]" />
+                  ) : (
+                    <Ticket className="h-4 w-4 text-[#8B5CF6]" />
                   )}
-                </div>
-                <p className="text-sm text-white/70 leading-relaxed font-medium">
-                  {BANNER_TYPES.sybau.description}
-                </p>
+                  <span className="font-display font-bold text-white">
+                    {currentBanner.costPerPull * 10} {currentBanner.currencyType.toLowerCase()}
+                  </span>
+                  <span>per 10x draw</span>
+                </span>
               </div>
-            </button>
+            </div>
           </div>
         </div>
 
