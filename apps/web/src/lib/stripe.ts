@@ -29,6 +29,16 @@ export function centsToDollars(cents: number): number {
   return cents / 100
 }
 
+// Helper function to format amount for Stripe (convert pounds to pence)
+export function poundsToPence(pounds: number): number {
+  return Math.round(pounds * 100)
+}
+
+// Helper function to format amount from Stripe (convert pence to pounds)
+export function penceToPounds(pence: number): number {
+  return pence / 100
+}
+
 // Stripe webhook signature verification
 export function constructWebhookEvent(
   payload: string | Buffer,

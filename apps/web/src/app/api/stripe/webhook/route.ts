@@ -116,16 +116,15 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) 
       },
     })
 
-    console.log(`[Webhook] Order ${orderId} marked as PAID - Total: $${order.totalAmount.toFixed(2)} USD`)
+    console.log(`[Webhook] Order ${orderId} marked as PAID - Total: £${order.totalAmount.toFixed(2)} GBP`)
 
-    // Calculate tickets from purchase
+    // Calculate tickets from purchase (£10 GBP = 1 ticket)
     const ticketsEarned = calculateTicketsFromPurchase(order.totalAmount)
     const breakdown = getTicketCalculationBreakdown(order.totalAmount)
 
     console.log('[Webhook] Ticket calculation:', {
-      orderTotal: `$${breakdown.totalUSD} USD`,
-      convertedAmount: `£${breakdown.totalGBP} GBP`,
-      exchangeRate: breakdown.exchangeRate,
+      orderTotal: `£${breakdown.totalGBP} GBP`,
+      ticketThreshold: `£${breakdown.ticketThreshold} per ticket`,
       ticketsEarned: breakdown.tickets,
     })
 
@@ -163,7 +162,7 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) 
         type: 'SPEND',
         amount: 0, // Not a diamond transaction
         currency: 'DIAMONDS',
-        description: `Merchandise purchase - Order #${order.id.slice(0, 8)} ($${order.totalAmount.toFixed(2)} USD)`,
+        description: `Merchandise purchase - Order #${order.id.slice(0, 8)} (£${order.totalAmount.toFixed(2)} GBP)`,
         reference: order.id,
         status: 'COMPLETED',
       },

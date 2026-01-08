@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
-import { stripe, dollarsToCents } from '@/lib/stripe'
+import { stripe, poundsToPence } from '@/lib/stripe'
 import { z } from 'zod'
 
 // Validation schema
@@ -93,7 +93,7 @@ export async function POST(request: Request) {
       const price = item.merchandise.price + (item.variant?.priceModifier || 0)
       return {
         price_data: {
-          currency: 'usd',
+          currency: 'gbp',
           product_data: {
             name: item.merchandise.name,
             description: item.variant
@@ -101,7 +101,7 @@ export async function POST(request: Request) {
               : undefined,
             images: item.merchandise.imageUrl ? [item.merchandise.imageUrl] : [],
           },
-          unit_amount: dollarsToCents(price),
+          unit_amount: poundsToPence(price),
         },
         quantity: item.quantity,
       }
