@@ -8,6 +8,9 @@ export interface MerchandiseFormData {
   description: string
   price: number
   category: 'CLOTHING' | 'ACCESSORIES' | 'MUSIC' | 'COLLECTIBLES' | 'OTHER'
+  type: 'MAIN' | 'ACCESSORY' | 'BUNDLE'
+  label: string
+  sizes: string[]
   material: string
   features: string[]
   tags: string[]
@@ -35,6 +38,9 @@ export function MerchandiseForm({
     description: initialData?.description || '',
     price: initialData?.price || 0,
     category: initialData?.category || 'CLOTHING',
+    type: initialData?.type || 'MAIN',
+    label: initialData?.label || '',
+    sizes: initialData?.sizes || [],
     material: initialData?.material || '',
     features: initialData?.features || [],
     tags: initialData?.tags || [],
@@ -53,6 +59,9 @@ export function MerchandiseForm({
   )
   const [tagsInput, setTagsInput] = useState(
     initialData?.tags?.join(', ') || ''
+  )
+  const [sizesInput, setSizesInput] = useState(
+    initialData?.sizes?.join(', ') || ''
   )
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -86,7 +95,7 @@ export function MerchandiseForm({
     try {
       setSubmitting(true)
 
-      // Parse features and tags from comma-separated strings
+      // Parse features, tags, and sizes from comma-separated strings
       const features = featuresInput
         .split(',')
         .map((f) => f.trim())
@@ -97,10 +106,16 @@ export function MerchandiseForm({
         .map((t) => t.trim())
         .filter((t) => t.length > 0)
 
+      const sizes = sizesInput
+        .split(',')
+        .map((s) => s.trim().toUpperCase())
+        .filter((s) => s.length > 0)
+
       await onSubmit({
         ...formData,
         features,
         tags,
+        sizes,
       })
     } catch (error: any) {
       setErrors({ submit: error.message || 'An unexpected error occurred' })
@@ -144,7 +159,7 @@ export function MerchandiseForm({
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <FormField
-            label="Price (USD)"
+            label="Price (GBP)"
             type="number"
             value={formData.price}
             onChange={(value) => {
@@ -176,6 +191,45 @@ export function MerchandiseForm({
               { label: 'Collectibles', value: 'COLLECTIBLES' },
               { label: 'Other', value: 'OTHER' },
             ]}
+          />
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <FormField
+            label="Product Type"
+            type="select"
+            value={formData.type}
+            onChange={(value) =>
+              setFormData({
+                ...formData,
+                type: value as MerchandiseFormData['type'],
+              })
+            }
+            required
+            options={[
+              { label: 'Main Product', value: 'MAIN' },
+              { label: 'Accessory', value: 'ACCESSORY' },
+              { label: 'Bundle', value: 'BUNDLE' },
+            ]}
+            helpText="Main: sold individually. Accessory: hidden, used in bundles. Bundle: packaged sets."
+          />
+
+          <FormField
+            label="Product Label"
+            type="text"
+            value={formData.label}
+            onChange={(value) => setFormData({ ...formData, label: value })}
+            placeholder="e.g., TS-01, HAT-02"
+            helpText="Optional: Branding code for the product"
+          />
+
+          <FormField
+            label="Sizes"
+            type="text"
+            value={sizesInput}
+            onChange={setSizesInput}
+            placeholder="e.g., S, M, L, XL or ONE SIZE"
+            helpText="Comma-separated list of available sizes"
           />
         </div>
       </div>
