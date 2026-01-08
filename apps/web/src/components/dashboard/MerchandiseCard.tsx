@@ -21,9 +21,16 @@ interface MerchandiseItem {
   tags: string[]
   material?: string
   features?: string[]
+  label?: string
+  type?: string
 }
 
-export default function MerchandiseCard({ item }: { item: MerchandiseItem }) {
+interface MerchandiseCardProps {
+  item: MerchandiseItem
+  variant?: 'default' | 'minimal'
+}
+
+export default function MerchandiseCard({ item, variant = 'default' }: MerchandiseCardProps) {
   const [selectedSize, setSelectedSize] = useState(item.sizes[0])
   const [selectedColor, setSelectedColor] = useState(item.colors[0])
   const [showToast, setShowToast] = useState(false)
@@ -42,6 +49,49 @@ export default function MerchandiseCard({ item }: { item: MerchandiseItem }) {
       setIsAdding(false)
       router.push('/cart')
     }, 1000)
+  }
+
+  // Minimal variant - Yeezy-style clean product card
+  if (variant === 'minimal') {
+    return (
+      <Link
+        href={`/store/${item.id}`}
+        className="group relative block overflow-hidden bg-surface-card transition-all duration-300 hover:bg-surface-raised"
+      >
+        {/* Image */}
+        <div className="relative aspect-square overflow-hidden">
+          <Image
+            src={item.imageUrl}
+            alt={item.name}
+            fill
+            sizes="(min-width: 768px) 33vw, 50vw"
+            className="object-cover transition-transform duration-700 group-hover:scale-105"
+          />
+          {!item.inStock && (
+            <div className="absolute inset-0 flex items-center justify-center bg-black/50">
+              <span className="font-display text-xs font-bold uppercase tracking-wider text-white/80">
+                Sold Out
+              </span>
+            </div>
+          )}
+          {item.label && (
+            <span className="absolute left-3 top-3 font-mono text-[10px] font-medium tracking-wider text-white/60">
+              {item.label}
+            </span>
+          )}
+        </div>
+
+        {/* Content - Minimal */}
+        <div className="p-4">
+          <h3 className="font-display text-sm font-bold uppercase tracking-wide text-white truncate">
+            {item.name}
+          </h3>
+          <p className="mt-1 font-display text-sm font-medium tabular-nums text-white/70">
+            £{item.price.toFixed(2)}
+          </p>
+        </div>
+      </Link>
+    )
   }
 
   return (
