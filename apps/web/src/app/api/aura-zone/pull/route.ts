@@ -1,9 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
-import { performTenPull, getRarityConfig } from '@/lib/aura-zone'
+import { performTenPull, getRarityConfig, AURA_ZONE_COSTS } from '@/lib/aura-zone'
 import { deductCurrency, InsufficientFundsError } from '@/lib/transaction'
 import { Currency, TransactionType } from '@prisma/client'
+
+// Fixed costs for 10x pulls
+const TENX_DIAMOND_COST = AURA_ZONE_COSTS.TENX_DIAMONDS // 3000
+const TENX_TICKET_COST = AURA_ZONE_COSTS.TENX_TICKETS // 10
 
 export async function POST(request: NextRequest) {
   try {
@@ -14,14 +18,33 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json()
-    const { paymentMethod = 'diamonds', bannerId = 'beat-like-dat' } = body
+    const { paymentMethod = 'diamonds', bannerId } = body
+
+    // Validate payment method
+    if (paymentMethod !== 'diamonds' && paymentMethod !== 'tickets') {
+      return NextResponse.json(
+        { error: 'Invalid payment method. Must be "diamonds" or "tickets"' },
+        { status: 400 }
+      )
+    }
+
+    if (!bannerId) {
+      return NextResponse.json({ error: 'Banner ID is required' }, { status: 400 })
+    }
 
     const { db } = await import('@/lib/db')
 
-    // Step 1: Validate Banner is Active
-    const banner = await db.gachaBanner.findUnique({
-      where: { slug: bannerId },
+    // Step 1: Validate Banner is Active (search by id first, then slug for backwards compatibility)
+    let banner = await db.gachaBanner.findUnique({
+      where: { id: bannerId },
     })
+
+    // Fallback to slug search for backwards compatibility
+    if (!banner) {
+      banner = await db.gachaBanner.findUnique({
+        where: { slug: bannerId },
+      })
+    }
 
     if (!banner) {
       return NextResponse.json({ error: 'Banner not found' }, { status: 404 })
@@ -41,7 +64,7 @@ export async function POST(request: NextRequest) {
       select: {
         id: true,
         diamonds: true,
-        tickets: true, // Changed from points to tickets
+        tickets: true,
       },
     })
 
@@ -49,21 +72,51 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 })
     }
 
-    const TENX_DIAMOND_COST = 3000
-    const TENX_TICKET_COST = 10 // Changed from POINTS to TICKETS
+    // Step 2: Determine cost based on payment method (strict 10x pull only)
+    let costAmount: number
+    let currency: Currency
 
-    // Step 2: Validate Balance & Deduct Cost (Atomic Transaction)
-    const costAmount = paymentMethod === 'diamonds' ? TENX_DIAMOND_COST : TENX_TICKET_COST
-    const currency = paymentMethod === 'diamonds' ? Currency.DIAMONDS : Currency.TICKETS
+    if (paymentMethod === 'diamonds') {
+      costAmount = TENX_DIAMOND_COST
+      currency = Currency.DIAMONDS
 
-    // Deduct currency using Phase 2 transaction system
+      // Validate user has enough diamonds
+      if (user.diamonds < costAmount) {
+        return NextResponse.json(
+          {
+            error: `Insufficient diamonds. Need ${costAmount}, have ${user.diamonds}`,
+            required: costAmount,
+            available: user.diamonds,
+          },
+          { status: 400 }
+        )
+      }
+    } else {
+      // tickets
+      costAmount = TENX_TICKET_COST
+      currency = Currency.TICKETS
+
+      // Validate user has enough tickets
+      if (user.tickets < costAmount) {
+        return NextResponse.json(
+          {
+            error: `Insufficient tickets. Need ${costAmount}, have ${user.tickets}`,
+            required: costAmount,
+            available: user.tickets,
+          },
+          { status: 400 }
+        )
+      }
+    }
+
+    // Step 3: Deduct currency atomically
     try {
       await deductCurrency(
         user.id,
         costAmount,
         currency,
         TransactionType.GACHA_SPEND,
-        bannerId
+        `banner_${banner.id}`
       )
     } catch (error) {
       if (error instanceof InsufficientFundsError) {
