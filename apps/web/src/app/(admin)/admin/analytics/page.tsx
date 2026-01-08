@@ -87,36 +87,36 @@ export default function AnalyticsPage() {
   const [period, setPeriod] = useState('30')
 
   useEffect(() => {
+    const fetchAnalytics = async () => {
+      try {
+        setLoading(true)
+
+        const [overviewRes, trendsRes] = await Promise.all([
+          fetch(`/api/admin/analytics/overview?days=${period}`),
+          fetch(`/api/admin/analytics/trends?days=${period}`),
+        ])
+
+        const [overviewData, trendsData] = await Promise.all([
+          overviewRes.json(),
+          trendsRes.json(),
+        ])
+
+        if (overviewData.success) {
+          setOverview(overviewData)
+        }
+
+        if (trendsData.success) {
+          setTrends(trendsData)
+        }
+      } catch (error) {
+        console.error('Failed to fetch analytics:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
     fetchAnalytics()
   }, [period])
-
-  const fetchAnalytics = async () => {
-    try {
-      setLoading(true)
-
-      const [overviewRes, trendsRes] = await Promise.all([
-        fetch(`/api/admin/analytics/overview?days=${period}`),
-        fetch(`/api/admin/analytics/trends?days=${period}`),
-      ])
-
-      const [overviewData, trendsData] = await Promise.all([
-        overviewRes.json(),
-        trendsRes.json(),
-      ])
-
-      if (overviewData.success) {
-        setOverview(overviewData)
-      }
-
-      if (trendsData.success) {
-        setTrends(trendsData)
-      }
-    } catch (error) {
-      console.error('Failed to fetch analytics:', error)
-    } finally {
-      setLoading(false)
-    }
-  }
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-US', {

@@ -150,6 +150,7 @@ export function PrizeForm({
         {formData.image && isValidUrl(formData.image) && (
           <div className="mt-2">
             <div className="text-sm text-gray-400 mb-2">Image Preview:</div>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={formData.image}
               alt="Prize preview"

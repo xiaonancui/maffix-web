@@ -166,6 +166,7 @@ export default function PremiumPacksPage() {
       render: (pack: PremiumPack) => (
         <div className="flex items-center gap-3">
           {pack.imageUrl ? (
+            // eslint-disable-next-line @next/next/no-img-element
             <img
               src={pack.imageUrl}
               alt={pack.name}

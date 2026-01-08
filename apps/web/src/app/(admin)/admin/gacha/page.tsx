@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import AdminPageHeader from '@/components/admin/AdminPageHeader'
@@ -69,7 +69,7 @@ export default function GachaManagementPage() {
   const [itemToDelete, setItemToDelete] = useState<string | null>(null)
 
   // Fetch gacha statistics
-  const fetchStats = async () => {
+  const fetchStats = useCallback(async () => {
     try {
       setStatsLoading(true)
       const response = await fetch('/api/admin/gacha/stats')
@@ -85,10 +85,10 @@ export default function GachaManagementPage() {
     } finally {
       setStatsLoading(false)
     }
-  }
+  }, [])
 
   // Fetch gacha items
-  const fetchGachaItems = async () => {
+  const fetchGachaItems = useCallback(async () => {
     try {
       setLoading(true)
       const params = new URLSearchParams({
@@ -115,15 +115,15 @@ export default function GachaManagementPage() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [pagination.page, pagination.limit, rarityFilter, statusFilter])
 
   useEffect(() => {
     fetchStats()
-  }, [])
+  }, [fetchStats])
 
   useEffect(() => {
     fetchGachaItems()
-  }, [pagination.page, rarityFilter, statusFilter])
+  }, [fetchGachaItems])
 
   const handlePageChange = (newPage: number) => {
     setPagination((prev) => ({ ...prev, page: newPage }))
@@ -208,6 +208,7 @@ export default function GachaManagementPage() {
       render: (item: GachaItem) => (
         <div className="flex items-center gap-3">
           {item.prize.image && (
+            // eslint-disable-next-line @next/next/no-img-element
             <img
               src={item.prize.image}
               alt={item.prize.name}

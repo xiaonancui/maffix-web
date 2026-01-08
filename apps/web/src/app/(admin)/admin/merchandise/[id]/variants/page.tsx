@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import DataTable from '@/components/admin/DataTable'
 import StatusBadge from '@/components/admin/StatusBadge'
@@ -47,12 +47,7 @@ export default function MerchandiseVariantsPage({ params }: { params: { id: stri
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [submitting, setSubmitting] = useState(false)
 
-  useEffect(() => {
-    fetchMerchandise()
-    fetchVariants()
-  }, [params.id])
-
-  const fetchMerchandise = async () => {
+  const fetchMerchandise = useCallback(async () => {
     try {
       const response = await fetch(`/api/admin/merchandise/${params.id}`)
       const data = await response.json()
@@ -63,9 +58,9 @@ export default function MerchandiseVariantsPage({ params }: { params: { id: stri
     } catch (error) {
       console.error('Failed to fetch merchandise:', error)
     }
-  }
+  }, [params.id])
 
-  const fetchVariants = async () => {
+  const fetchVariants = useCallback(async () => {
     try {
       setLoading(true)
       const response = await fetch(`/api/admin/merchandise/${params.id}/variants`)
@@ -79,7 +74,12 @@ export default function MerchandiseVariantsPage({ params }: { params: { id: stri
     } finally {
       setLoading(false)
     }
-  }
+  }, [params.id])
+
+  useEffect(() => {
+    fetchMerchandise()
+    fetchVariants()
+  }, [fetchMerchandise, fetchVariants])
 
   const handleAddVariant = () => {
     setShowAddForm(true)

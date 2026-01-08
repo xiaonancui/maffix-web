@@ -143,6 +143,7 @@ export default function NewGachaItemPage() {
             <div className="p-4 bg-secondary/50 border border-border rounded-lg">
               <div className="flex items-start gap-4">
                 {selectedPrize.image && (
+                  // eslint-disable-next-line @next/next/no-img-element
                   <img
                     src={selectedPrize.image}
                     alt={selectedPrize.name}

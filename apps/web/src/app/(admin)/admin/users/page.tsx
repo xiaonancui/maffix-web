@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import DataTable from '@/components/admin/DataTable'
 import StatusBadge from '@/components/admin/StatusBadge'
@@ -56,11 +56,7 @@ export default function UsersPage() {
   const [searchQuery, setSearchQuery] = useState('')
   const [roleFilter, setRoleFilter] = useState<string>('')
 
-  useEffect(() => {
-    fetchUsers()
-  }, [pagination.page, searchQuery, roleFilter])
-
-  const fetchUsers = async () => {
+  const fetchUsers = useCallback(async () => {
     try {
       setLoading(true)
       const params = new URLSearchParams({
@@ -82,7 +78,11 @@ export default function UsersPage() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [pagination.page, pagination.limit, searchQuery, roleFilter])
+
+  useEffect(() => {
+    fetchUsers()
+  }, [fetchUsers])
 
   const handlePageChange = (newPage: number) => {
     setPagination({ ...pagination, page: newPage })
@@ -124,6 +124,7 @@ export default function UsersPage() {
       render: (user: User) => (
         <div className="flex items-center gap-3">
           {user.avatar ? (
+            // eslint-disable-next-line @next/next/no-img-element
             <img
               src={user.avatar}
               alt={user.name}

@@ -29,35 +29,35 @@ export default function EditUserPage({ params }: { params: { id: string } }) {
   const [errors, setErrors] = useState<Record<string, string>>({})
 
   useEffect(() => {
-    fetchUser()
-  }, [params.id])
+    const fetchUser = async () => {
+      try {
+        setLoading(true)
+        const response = await fetch(`/api/admin/users/${params.id}`)
+        const data = await response.json()
 
-  const fetchUser = async () => {
-    try {
-      setLoading(true)
-      const response = await fetch(`/api/admin/users/${params.id}`)
-      const data = await response.json()
-
-      if (data.success && data.user) {
-        setUser(data.user)
-        setFormData({
-          name: data.user.name,
-          role: data.user.role,
-          diamonds: data.user.diamonds,
-          points: data.user.points,
-          level: data.user.level,
-        })
-      } else {
-        console.error('Failed to fetch user:', data.error)
+        if (data.success && data.user) {
+          setUser(data.user)
+          setFormData({
+            name: data.user.name,
+            role: data.user.role,
+            diamonds: data.user.diamonds,
+            points: data.user.points,
+            level: data.user.level,
+          })
+        } else {
+          console.error('Failed to fetch user:', data.error)
+          router.push('/admin/users')
+        }
+      } catch (error) {
+        console.error('Failed to fetch user:', error)
         router.push('/admin/users')
+      } finally {
+        setLoading(false)
       }
-    } catch (error) {
-      console.error('Failed to fetch user:', error)
-      router.push('/admin/users')
-    } finally {
-      setLoading(false)
     }
-  }
+
+    fetchUser()
+  }, [params.id, router])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()

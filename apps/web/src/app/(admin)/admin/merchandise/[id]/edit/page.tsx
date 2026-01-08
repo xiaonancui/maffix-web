@@ -25,28 +25,28 @@ export default function EditMerchandisePage({ params }: { params: { id: string }
   const [merchandise, setMerchandise] = useState<Merchandise | null>(null)
 
   useEffect(() => {
-    fetchMerchandise()
-  }, [params.id])
+    const fetchMerchandise = async () => {
+      try {
+        setLoading(true)
+        const response = await fetch(`/api/admin/merchandise/${params.id}`)
+        const data = await response.json()
 
-  const fetchMerchandise = async () => {
-    try {
-      setLoading(true)
-      const response = await fetch(`/api/admin/merchandise/${params.id}`)
-      const data = await response.json()
-
-      if (data.success && data.merchandise) {
-        setMerchandise(data.merchandise)
-      } else {
-        console.error('Failed to fetch merchandise:', data.error)
+        if (data.success && data.merchandise) {
+          setMerchandise(data.merchandise)
+        } else {
+          console.error('Failed to fetch merchandise:', data.error)
+          router.push('/admin/merchandise')
+        }
+      } catch (error) {
+        console.error('Failed to fetch merchandise:', error)
         router.push('/admin/merchandise')
+      } finally {
+        setLoading(false)
       }
-    } catch (error) {
-      console.error('Failed to fetch merchandise:', error)
-      router.push('/admin/merchandise')
-    } finally {
-      setLoading(false)
     }
-  }
+
+    fetchMerchandise()
+  }, [params.id, router])
 
   const handleSubmit = async (data: MerchandiseFormData) => {
     const response = await fetch(`/api/admin/merchandise/${params.id}`, {

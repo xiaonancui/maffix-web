@@ -11,11 +11,9 @@ import { ENABLE_PREMIUM_PACKS } from '@/lib/constants'
 
 export default function MobileMenu({
   diamonds,
-  hasCompletedTenDraw,
   points = 0
 }: {
   diamonds: number
-  hasCompletedTenDraw: boolean
   points?: number
 }) {
   const [isOpen, setIsOpen] = useState(false)

@@ -538,6 +538,7 @@ export default function AuraZoneClient({
                         </Badge>
                         <p className="font-display font-bold text-white text-sm leading-tight">{pull.prizeName}</p>
                         {pull.imageUrl && (
+                          // eslint-disable-next-line @next/next/no-img-element
                           <img
                             src={pull.imageUrl}
                             alt={pull.prizeName}

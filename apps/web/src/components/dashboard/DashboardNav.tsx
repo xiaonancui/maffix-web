@@ -10,7 +10,6 @@ import { ENABLE_PREMIUM_PACKS } from '@/lib/constants'
 
 interface DashboardNavProps {
   diamonds: number
-  hasCompletedTenDraw: boolean
   userRole: string
   points?: number
   level?: number
@@ -18,7 +17,6 @@ interface DashboardNavProps {
 
 export default function DashboardNav({
   diamonds,
-  hasCompletedTenDraw,
   userRole,
   points = 0,
   level = 1,
@@ -115,7 +113,7 @@ export default function DashboardNav({
 
             {/* Mobile Menu */}
             <div className="lg:hidden">
-              <MobileMenu diamonds={diamonds} hasCompletedTenDraw={hasCompletedTenDraw} points={points} />
+              <MobileMenu diamonds={diamonds} points={points} />
             </div>
           </div>
         </div>

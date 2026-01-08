@@ -4,7 +4,7 @@ import Link from 'next/link'
 import MissionSubmitButton from '@/components/dashboard/MissionSubmitButton'
 import { Gem, Trophy, Clock, Sparkles } from 'lucide-react'
 
-type MissionCompletionStatus = 'NOT_STARTED' | 'PENDING' | 'FAILED' | 'APPROVED' | string
+type MissionCompletionStatus = 'NOT_STARTED' | 'PENDING' | 'FAILED' | 'APPROVED'
 
 export interface MissionCardData {
   id: string
@@ -45,10 +45,10 @@ const missionTypeColors: Record<string, string> = {
   SETUP: '#00F5FF',
 }
 
-const difficultyColors: Record<string, { text: string; bg: string; border: string }> = {
-  EASY: { text: '#10B981', bg: '#10B981/20', border: '#10B981/40' },
-  MEDIUM: { text: '#FFC700', bg: '#FFC700/20', border: '#FFC700/40' },
-  HARD: { text: '#FF1F7D', bg: '#FF1F7D/20', border: '#FF1F7D/40' },
+const difficultyColors: Record<string, string> = {
+  EASY: '#10B981',
+  MEDIUM: '#FFC700',
+  HARD: '#FF1F7D',
 }
 
 const statusStyles: Record<string, { label: string; color: string; bgColor: string; borderColor: string }> = {
@@ -151,9 +151,9 @@ export default function MissionCard({ mission, hasTikTokLinked, onViewDetail }: 
               <span
                 className="rounded-full border px-3 py-1 font-display text-xs font-bold uppercase tracking-wider"
                 style={{
-                  color: difficultyColors[mission.difficulty]?.text || '#8B5CF6',
-                  backgroundColor: `${difficultyColors[mission.difficulty]?.text || '#8B5CF6'}15`,
-                  borderColor: `${difficultyColors[mission.difficulty]?.text || '#8B5CF6'}40`,
+                  color: difficultyColors[mission.difficulty] || '#8B5CF6',
+                  backgroundColor: `${difficultyColors[mission.difficulty] || '#8B5CF6'}15`,
+                  borderColor: `${difficultyColors[mission.difficulty] || '#8B5CF6'}40`,
                 }}
               >
                 {mission.difficulty}

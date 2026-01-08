@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import DataTable from '@/components/admin/DataTable'
@@ -55,11 +55,7 @@ export default function PrizesPage() {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [prizeToDelete, setPrizeToDelete] = useState<Prize | null>(null)
 
-  useEffect(() => {
-    fetchPrizes()
-  }, [pagination.page, searchQuery, rarityFilter, typeFilter, activeFilter])
-
-  const fetchPrizes = async () => {
+  const fetchPrizes = useCallback(async () => {
     try {
       setLoading(true)
       const params = new URLSearchParams({
@@ -83,7 +79,11 @@ export default function PrizesPage() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [pagination.page, pagination.limit, searchQuery, rarityFilter, typeFilter, activeFilter])
+
+  useEffect(() => {
+    fetchPrizes()
+  }, [fetchPrizes])
 
   const handlePageChange = (newPage: number) => {
     setPagination({ ...pagination, page: newPage })
@@ -162,6 +162,7 @@ export default function PrizesPage() {
       render: (prize: Prize) => (
         <div className="flex items-center gap-3">
           {prize.image ? (
+            // eslint-disable-next-line @next/next/no-img-element
             <img
               src={prize.image}
               alt={prize.name}

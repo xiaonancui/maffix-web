@@ -44,28 +44,28 @@ export default function UserDetailPage({ params }: { params: { id: string } }) {
   const [user, setUser] = useState<User | null>(null)
 
   useEffect(() => {
-    fetchUser()
-  }, [params.id])
+    const fetchUser = async () => {
+      try {
+        setLoading(true)
+        const response = await fetch(`/api/admin/users/${params.id}`)
+        const data = await response.json()
 
-  const fetchUser = async () => {
-    try {
-      setLoading(true)
-      const response = await fetch(`/api/admin/users/${params.id}`)
-      const data = await response.json()
-
-      if (data.success && data.user) {
-        setUser(data.user)
-      } else {
-        console.error('Failed to fetch user:', data.error)
+        if (data.success && data.user) {
+          setUser(data.user)
+        } else {
+          console.error('Failed to fetch user:', data.error)
+          router.push('/admin/users')
+        }
+      } catch (error) {
+        console.error('Failed to fetch user:', error)
         router.push('/admin/users')
+      } finally {
+        setLoading(false)
       }
-    } catch (error) {
-      console.error('Failed to fetch user:', error)
-      router.push('/admin/users')
-    } finally {
-      setLoading(false)
     }
-  }
+
+    fetchUser()
+  }, [params.id, router])
 
   const getRoleColor = (role: string) => {
     const colors: Record<string, string> = {
@@ -139,6 +139,7 @@ export default function UserDetailPage({ params }: { params: { id: string } }) {
       <div className="bg-card border border-border rounded-lg p-6 dark:shadow-lg dark:shadow-red-500/10">
         <div className="flex items-start gap-6">
           {user.avatar ? (
+            // eslint-disable-next-line @next/next/no-img-element
             <img
               src={user.avatar}
               alt={user.name}
@@ -312,6 +313,7 @@ export default function UserDetailPage({ params }: { params: { id: string } }) {
                   className="flex items-center gap-3 p-3 bg-[#0a0a0a] rounded-lg"
                 >
                   {userPrize.prize.image && (
+                    // eslint-disable-next-line @next/next/no-img-element
                     <img
                       src={userPrize.prize.image}
                       alt={userPrize.prize.name}

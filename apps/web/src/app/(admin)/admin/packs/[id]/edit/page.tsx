@@ -25,28 +25,28 @@ export default function EditPremiumPackPage({ params }: { params: { id: string }
   const [pack, setPack] = useState<PremiumPack | null>(null)
 
   useEffect(() => {
-    fetchPack()
-  }, [params.id])
+    const fetchPack = async () => {
+      try {
+        setLoading(true)
+        const response = await fetch(`/api/admin/packs/${params.id}`)
+        const data = await response.json()
 
-  const fetchPack = async () => {
-    try {
-      setLoading(true)
-      const response = await fetch(`/api/admin/packs/${params.id}`)
-      const data = await response.json()
-
-      if (data.success && data.pack) {
-        setPack(data.pack)
-      } else {
-        console.error('Failed to fetch pack:', data.error)
+        if (data.success && data.pack) {
+          setPack(data.pack)
+        } else {
+          console.error('Failed to fetch pack:', data.error)
+          router.push('/admin/packs')
+        }
+      } catch (error) {
+        console.error('Failed to fetch pack:', error)
         router.push('/admin/packs')
+      } finally {
+        setLoading(false)
       }
-    } catch (error) {
-      console.error('Failed to fetch pack:', error)
-      router.push('/admin/packs')
-    } finally {
-      setLoading(false)
     }
-  }
+
+    fetchPack()
+  }, [params.id, router])
 
   const handleSubmit = async (data: PremiumPackFormData) => {
     const response = await fetch(`/api/admin/packs/${params.id}`, {

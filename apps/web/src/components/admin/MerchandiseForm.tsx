@@ -284,6 +284,7 @@ export function MerchandiseForm({
             <label className="block text-sm font-medium text-white/80 mb-2">
               Image Preview
             </label>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={formData.imageUrl}
               alt="Product preview"

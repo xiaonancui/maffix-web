@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import AdminPageHeader from '@/components/admin/AdminPageHeader'
 import DataTable from '@/components/admin/DataTable'
@@ -53,7 +53,7 @@ export default function ReleasesPage() {
   })
 
   // Fetch releases from API
-  const fetchReleases = async () => {
+  const fetchReleases = useCallback(async () => {
     setLoading(true)
     try {
       const params = new URLSearchParams({
@@ -85,11 +85,11 @@ export default function ReleasesPage() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [pagination.page, pagination.limit, artistFilter, statusFilter])
 
   useEffect(() => {
     fetchReleases()
-  }, [pagination.page, artistFilter, statusFilter])
+  }, [fetchReleases])
 
   // Filter releases by search query (client-side)
   const filteredReleases = (releases || []).filter((release) =>
@@ -142,6 +142,7 @@ export default function ReleasesPage() {
       render: (release: Release) => (
         <div className="flex items-center gap-3">
           {release.thumbnailUrl && (
+            // eslint-disable-next-line @next/next/no-img-element
             <img
               src={release.thumbnailUrl}
               alt={release.title}

@@ -171,8 +171,9 @@ export function getLevelProgress(currentXp: number, currentLevel: number): Level
   }
 
   const xpInCurrentLevel = currentXp - currentLevelInfo.xpThreshold
-  const xpToNextLevel = nextLevelInfo.xpThreshold - currentLevelInfo.xpThreshold
-  const progressPercent = Math.min((xpInCurrentLevel / xpToNextLevel) * 100, 100)
+  const xpRangeForLevel = nextLevelInfo.xpThreshold - currentLevelInfo.xpThreshold
+  const xpToNextLevel = nextLevelInfo.xpThreshold - currentXp
+  const progressPercent = Math.min((xpInCurrentLevel / xpRangeForLevel) * 100, 100)
 
   return {
     currentLevel,

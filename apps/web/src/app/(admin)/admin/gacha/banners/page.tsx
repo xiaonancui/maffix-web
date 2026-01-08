@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import AdminPageHeader from '@/components/admin/AdminPageHeader'
@@ -61,7 +61,7 @@ export default function GachaBannersPage() {
   const [bannerToDelete, setBannerToDelete] = useState<string | null>(null)
 
   // Fetch banners
-  const fetchBanners = async () => {
+  const fetchBanners = useCallback(async () => {
     try {
       setLoading(true)
       const params = new URLSearchParams({
@@ -76,7 +76,7 @@ export default function GachaBannersPage() {
 
       if (data.success) {
         setBanners(data.banners || [])
-        setPagination(data.pagination || pagination)
+        setPagination(prev => data.pagination || prev)
       } else {
         console.error('Failed to fetch banners:', data.error)
         setBanners([])
@@ -87,11 +87,11 @@ export default function GachaBannersPage() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [pagination.page, pagination.limit, statusFilter])
 
   useEffect(() => {
     fetchBanners()
-  }, [pagination.page, statusFilter])
+  }, [fetchBanners])
 
   const handlePageChange = (newPage: number) => {
     setPagination((prev) => ({ ...prev, page: newPage }))

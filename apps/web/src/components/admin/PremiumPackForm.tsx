@@ -215,6 +215,7 @@ export function PremiumPackForm({
           <div className="p-4 bg-[#8B5CF6]/10 border-2 border-[#8B5CF6]/30 rounded-lg">
             <div className="flex items-center gap-3">
               {selectedPrize.image && (
+                // eslint-disable-next-line @next/next/no-img-element
                 <img
                   src={selectedPrize.image}
                   alt={selectedPrize.name}
@@ -280,6 +281,7 @@ export function PremiumPackForm({
             <label className="block text-sm font-medium text-white/80 mb-2">
               Image Preview
             </label>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={formData.imageUrl}
               alt="Pack preview"

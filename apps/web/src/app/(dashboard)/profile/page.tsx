@@ -256,11 +256,12 @@ export default async function ProfilePage() {
               <div className="space-y-3">
                 {user.transactions.map((transaction) => {
                   const isPositive = transaction.type === 'EARN' || transaction.type === 'PURCHASE' || transaction.type === 'GIFT'
-                  const color = isPositive ? '#10B981' : '#FF1F7D'
                   return (
                     <div
                       key={transaction.id}
-                      className={`flex items-center justify-between rounded-xl border-2 border-white/10 bg-white/5 p-3 transition-all duration-300 hover:border-[${color}]/40`}
+                      className={`flex items-center justify-between rounded-xl border-2 border-white/10 bg-white/5 p-3 transition-all duration-300 ${
+                        isPositive ? 'hover:border-[#10B981]/40' : 'hover:border-[#FF1F7D]/40'
+                      }`}
                     >
                       <div className="flex-1">
                         <p className="text-sm font-medium text-white">
@@ -272,8 +273,7 @@ export default async function ProfilePage() {
                       </div>
                       <div className="text-right">
                         <p
-                          className="text-sm font-bold"
-                          style={{ color }}
+                          className={`text-sm font-bold ${isPositive ? 'text-[#10B981]' : 'text-[#FF1F7D]'}`}
                         >
                           {isPositive ? '+' : '-'}
                           {transaction.amount}{' '}

@@ -260,7 +260,7 @@ export default function MissionDetailModal({
             <Label className="text-sm text-muted-foreground mb-2 block">How to Complete</Label>
             {isAudioMission ? (
               <ol className="list-decimal list-inside space-y-2 text-sm text-foreground">
-                <li>Click "Start Listening" to open the Music Detection page</li>
+                <li>Click &quot;Start Listening&quot; to open the Music Detection page</li>
                 <li>Play the required audio track on your device or surroundings</li>
                 <li>Use the audio detector to identify the track</li>
                 <li>The mission will be verified automatically when detected</li>
@@ -319,6 +319,7 @@ export default function MissionDetailModal({
 
               {preview ? (
                 <div className="relative">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={preview}
                     alt="Screenshot preview"

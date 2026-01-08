@@ -22,28 +22,28 @@ export default function EditPrizePage({ params }: { params: { id: string } }) {
   const [prize, setPrize] = useState<Prize | null>(null)
 
   useEffect(() => {
-    fetchPrize()
-  }, [params.id])
+    const fetchPrize = async () => {
+      try {
+        setLoading(true)
+        const response = await fetch(`/api/admin/prizes/${params.id}`)
+        const data = await response.json()
 
-  const fetchPrize = async () => {
-    try {
-      setLoading(true)
-      const response = await fetch(`/api/admin/prizes/${params.id}`)
-      const data = await response.json()
-
-      if (data.success && data.prize) {
-        setPrize(data.prize)
-      } else {
-        console.error('Failed to fetch prize:', data.error)
+        if (data.success && data.prize) {
+          setPrize(data.prize)
+        } else {
+          console.error('Failed to fetch prize:', data.error)
+          router.push('/admin/prizes')
+        }
+      } catch (error) {
+        console.error('Failed to fetch prize:', error)
         router.push('/admin/prizes')
+      } finally {
+        setLoading(false)
       }
-    } catch (error) {
-      console.error('Failed to fetch prize:', error)
-      router.push('/admin/prizes')
-    } finally {
-      setLoading(false)
     }
-  }
+
+    fetchPrize()
+  }, [params.id, router])
 
   const handleSubmit = async (data: any) => {
     const response = await fetch(`/api/admin/prizes/${params.id}`, {

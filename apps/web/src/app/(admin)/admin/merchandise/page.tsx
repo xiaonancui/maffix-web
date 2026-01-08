@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import AdminPageHeader from '@/components/admin/AdminPageHeader'
@@ -67,7 +67,7 @@ export default function MerchandisePage() {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [itemToDelete, setItemToDelete] = useState<string | null>(null)
 
-  const fetchMerchandise = async () => {
+  const fetchMerchandise = useCallback(async () => {
     try {
       setLoading(true)
       const params = new URLSearchParams({
@@ -84,7 +84,7 @@ export default function MerchandisePage() {
 
       if (data.success) {
         let items = data.merchandise || []
-        
+
         // Client-side search filtering
         if (searchQuery) {
           const query = searchQuery.toLowerCase()
@@ -107,11 +107,11 @@ export default function MerchandisePage() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [pagination.page, pagination.limit, categoryFilter, statusFilter, featuredFilter, searchQuery])
 
   useEffect(() => {
     fetchMerchandise()
-  }, [pagination.page, categoryFilter, statusFilter, featuredFilter, searchQuery])
+  }, [fetchMerchandise])
 
   const handlePageChange = (newPage: number) => {
     setPagination((prev) => ({ ...prev, page: newPage }))
@@ -213,6 +213,7 @@ export default function MerchandisePage() {
       label: 'Product',
       render: (item: Merchandise) => (
         <div className="flex items-center gap-3">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={item.imageUrl}
             alt={item.name}

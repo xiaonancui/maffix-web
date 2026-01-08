@@ -36,33 +36,33 @@ export default function EditGachaItemPage({ params }: { params: { id: string } }
   const [errors, setErrors] = useState<Record<string, string>>({})
 
   useEffect(() => {
-    fetchGachaItem()
-  }, [params.id])
+    const fetchGachaItem = async () => {
+      try {
+        setLoading(true)
+        const response = await fetch(`/api/admin/gacha/items/${params.id}`)
+        const data = await response.json()
 
-  const fetchGachaItem = async () => {
-    try {
-      setLoading(true)
-      const response = await fetch(`/api/admin/gacha/items/${params.id}`)
-      const data = await response.json()
-
-      if (data.success && data.data.gachaItem) {
-        const item = data.data.gachaItem
-        setGachaItem(item)
-        setFormData({
-          probability: item.probability,
-          isActive: item.isActive,
-        })
-      } else {
-        console.error('Failed to fetch gacha item:', data.error)
+        if (data.success && data.data.gachaItem) {
+          const item = data.data.gachaItem
+          setGachaItem(item)
+          setFormData({
+            probability: item.probability,
+            isActive: item.isActive,
+          })
+        } else {
+          console.error('Failed to fetch gacha item:', data.error)
+          router.push('/admin/gacha')
+        }
+      } catch (error) {
+        console.error('Failed to fetch gacha item:', error)
         router.push('/admin/gacha')
+      } finally {
+        setLoading(false)
       }
-    } catch (error) {
-      console.error('Failed to fetch gacha item:', error)
-      router.push('/admin/gacha')
-    } finally {
-      setLoading(false)
     }
-  }
+
+    fetchGachaItem()
+  }, [params.id, router])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -140,6 +140,7 @@ export default function EditGachaItemPage({ params }: { params: { id: string } }
         <h2 className="text-lg font-bold text-foreground mb-4">Prize Information</h2>
         <div className="flex items-start gap-4">
           {gachaItem.prize.image && (
+            // eslint-disable-next-line @next/next/no-img-element
             <img
               src={gachaItem.prize.image}
               alt={gachaItem.prize.name}

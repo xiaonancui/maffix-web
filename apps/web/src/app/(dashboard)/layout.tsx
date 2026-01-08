@@ -28,13 +28,11 @@ export default async function DashboardLayout({
   let diamonds = 0
   let points = 0
   let level = 1
-  let hasCompletedTenDraw = false
 
   if (isTestAccount) {
     diamonds = session.user.role === 'ADMIN' ? 10000 : 500
     points = session.user.role === 'ADMIN' ? 50 : 5
     level = session.user.role === 'ADMIN' ? 10 : 1
-    hasCompletedTenDraw = true // Test accounts have access to Store by default
   } else {
     try {
       const { db } = await import('@/lib/db')
@@ -45,13 +43,11 @@ export default async function DashboardLayout({
           diamonds: true,
           points: true,
           level: true,
-          hasCompletedTenDraw: true,
         },
       })
       diamonds = user?.diamonds || 0
       points = user?.points || 0
       level = user?.level || 1
-      hasCompletedTenDraw = user?.hasCompletedTenDraw || false
     } catch (error) {
       console.error('Failed to fetch user data:', error)
     }
@@ -72,7 +68,6 @@ export default async function DashboardLayout({
           diamonds={diamonds}
           points={points}
           level={level}
-          hasCompletedTenDraw={hasCompletedTenDraw}
           userRole={session.user.role || 'USER'}
         />
       </div>
