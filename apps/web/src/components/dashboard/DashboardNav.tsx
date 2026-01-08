@@ -6,6 +6,7 @@ import AdminNavLink from '@/components/dashboard/AdminNavLink'
 import MobileMenu from '@/components/dashboard/MobileMenu'
 import { ButtonIcon } from '@/components/icons/Icon'
 import { Gem, Ticket, Trophy, Zap } from 'lucide-react'
+import { ENABLE_PREMIUM_PACKS } from '@/lib/constants'
 
 interface DashboardNavProps {
   diamonds: number
@@ -51,6 +52,7 @@ export default function DashboardNav({
               <NavLink href="/missions">Missions</NavLink>
               <NavLink href="/aura-zone">Aura Zone</NavLink>
               <NavLink href="/store">Store</NavLink>
+              {ENABLE_PREMIUM_PACKS && <NavLink href="/store/packs">Packs</NavLink>}
             </div>
           </div>
 

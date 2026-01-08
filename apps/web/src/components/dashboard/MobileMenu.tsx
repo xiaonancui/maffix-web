@@ -7,6 +7,7 @@ import { useUserRole } from '@/lib/rbac'
 import { signOut } from 'next-auth/react'
 import { NavIcon } from '@/components/icons/Icon'
 import { Gem, Ticket } from 'lucide-react'
+import { ENABLE_PREMIUM_PACKS } from '@/lib/constants'
 
 export default function MobileMenu({
   diamonds,
@@ -110,6 +111,19 @@ export default function MobileMenu({
             >
               Store
             </Link>
+            {ENABLE_PREMIUM_PACKS && (
+              <Link
+                href="/store/packs"
+                className={`block rounded-md px-3 py-2 text-base font-medium transition-colors ${
+                  isActive('/store/packs')
+                    ? 'bg-[#FF5656]/20 text-[#FF5656] font-semibold'
+                    : 'text-muted-foreground hover:bg-secondary hover:text-foreground'
+                }`}
+                onClick={() => setIsOpen(false)}
+              >
+                Packs
+              </Link>
+            )}
             <Link
               href="/profile"
               className="block rounded-md px-3 py-2 text-base font-medium text-muted-foreground hover:bg-secondary hover:text-foreground transition-colors"
