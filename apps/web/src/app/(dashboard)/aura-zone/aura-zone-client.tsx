@@ -21,7 +21,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { Badge } from '@/components/ui/badge'
-import { Gem, Ticket, Sparkles, Info, AlertCircle, X, Music } from 'lucide-react'
+import { Gem, Ticket, Sparkles, Info, AlertCircle, X, Music, Crown, Star, Award, Circle } from 'lucide-react'
 import { getRarityDistribution, AURA_ZONE_COSTS } from '@/lib/aura-zone'
 import type { BannerData } from './page'
 
@@ -32,6 +32,24 @@ const BANNER_ACCENT_COLORS = [
   { primary: '#FFC700', secondary: '#FF1F7D' },
   { primary: '#10B981', secondary: '#00F5FF' },
 ]
+
+// Helper function to get icon for each rarity tier
+const getRarityIcon = (rarity: string, className: string = 'h-6 w-6') => {
+  switch (rarity) {
+    case 'LEGENDARY':
+      return <Crown className={className} aria-hidden="true" />
+    case 'SSR':
+      return <Star className={className} aria-hidden="true" />
+    case 'EPIC':
+      return <Sparkles className={className} aria-hidden="true" />
+    case 'RARE':
+      return <Award className={className} aria-hidden="true" />
+    case 'COMMON':
+      return <Circle className={className} aria-hidden="true" />
+    default:
+      return <Circle className={className} aria-hidden="true" />
+  }
+}
 
 interface AuraZoneClientProps {
   diamonds: number
@@ -139,55 +157,37 @@ export default function AuraZoneClient({
         )}
       </div>
 
-      <div className="relative z-10 px-4 pt-28 pb-16 md:px-8 md:pt-32 animate-fade-in-up">
-        {/* Enhanced Header with Glow Effect */}
-        <div className="mb-12 text-center" style={{ animationDelay: '0ms' }}>
-          <h1 className="font-display text-5xl md:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#FF1F7D] via-[#8B5CF6] to-[#00F5FF] mb-4 drop-shadow-[0_0_30px_rgba(255,31,125,0.5)]" style={{ backgroundSize: '200%', animation: 'gradient-shift 3s ease-in-out infinite' }}>
-            AURA ZONE
-          </h1>
-          <p className="text-white/70 text-lg md:text-xl font-semibold uppercase tracking-wider">
-            Draw exclusive prizes • Unlock legendary rewards
-          </p>
-        </div>
-
-        {/* Enhanced Balance Display - Missions Style */}
-        <div className="mb-12 flex justify-center gap-6 flex-wrap" style={{ animationDelay: '100ms' }}>
-          {/* Diamonds Balance */}
-          <div className="group relative overflow-hidden rounded-3xl border border-[#00F5FF]/30 bg-gradient-to-br from-surface-card/90 to-surface-raised/80 p-6 shadow-xl backdrop-blur-xl transition-all duration-500 hover:scale-[1.02] hover:border-[#00F5FF]/60 hover:shadow-[0_0_40px_rgba(0,245,255,0.4)]">
-            {/* Ambient glow */}
-            <div className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-gradient-to-br from-[#00F5FF]/20 to-transparent blur-3xl transition-all duration-700 group-hover:scale-150" />
-
-            {/* Hover overlay */}
-            <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-[#00F5FF]/10 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
-
-            <div className="relative flex items-center gap-4">
-              <div className="rounded-xl bg-[#00F5FF]/20 p-3 ring-1 ring-[#00F5FF]/30 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12">
-                <Gem className="h-8 w-8 text-[#00F5FF]" />
-              </div>
+      <div className="relative z-10 px-4 pt-24 pb-16 md:px-8 md:pt-28 animate-fade-in-up">
+        {/* Compact Balance Display - Top Right Corner */}
+        <div className="fixed top-20 right-4 md:right-8 z-30 flex gap-3" style={{ animationDelay: '0ms' }}>
+          {/* Diamonds Balance - Compact */}
+          <div
+            className="group relative rounded-2xl border border-[#00F5FF]/40 bg-surface-card/80 backdrop-blur-xl px-4 py-2.5 shadow-lg transition-all duration-300 hover:border-[#00F5FF] hover:shadow-[0_0_20px_rgba(0,245,255,0.3)] focus-within:ring-2 focus-within:ring-[#00F5FF]/50 focus-within:ring-offset-2 focus-within:ring-offset-black"
+            role="status"
+            aria-label={`${diamonds.toLocaleString()} diamonds available`}
+          >
+            <div className="flex items-center gap-2.5">
+              <Gem className="h-5 w-5 text-[#00F5FF] transition-transform duration-300 group-hover:scale-110" aria-hidden="true" />
               <div>
-                <p className="text-sm font-semibold uppercase tracking-wider text-[#00F5FF]">Diamonds</p>
-                <p className="font-display text-3xl font-black tabular-nums text-white">
+                <p className="text-[10px] font-bold uppercase tracking-wider text-[#00F5FF]/70 leading-none">Diamonds</p>
+                <p className="font-display text-lg font-black tabular-nums text-white leading-none mt-1">
                   {diamonds.toLocaleString()}
                 </p>
               </div>
             </div>
           </div>
 
-          {/* Tickets Balance */}
-          <div className="group relative overflow-hidden rounded-3xl border border-[#8B5CF6]/30 bg-gradient-to-br from-surface-card/90 to-surface-raised/80 p-6 shadow-xl backdrop-blur-xl transition-all duration-500 hover:scale-[1.02] hover:border-[#8B5CF6]/60 hover:shadow-[0_0_40px_rgba(139,92,246,0.4)]">
-            {/* Ambient glow */}
-            <div className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-gradient-to-br from-[#8B5CF6]/20 to-transparent blur-3xl transition-all duration-700 group-hover:scale-150" />
-
-            {/* Hover overlay */}
-            <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-[#8B5CF6]/10 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
-
-            <div className="relative flex items-center gap-4">
-              <div className="rounded-xl bg-[#8B5CF6]/20 p-3 ring-1 ring-[#8B5CF6]/30 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12">
-                <Ticket className="h-8 w-8 text-[#8B5CF6]" />
-              </div>
+          {/* Tickets Balance - Compact */}
+          <div
+            className="group relative rounded-2xl border border-[#8B5CF6]/40 bg-surface-card/80 backdrop-blur-xl px-4 py-2.5 shadow-lg transition-all duration-300 hover:border-[#8B5CF6] hover:shadow-[0_0_20px_rgba(139,92,246,0.3)] focus-within:ring-2 focus-within:ring-[#8B5CF6]/50 focus-within:ring-offset-2 focus-within:ring-offset-black"
+            role="status"
+            aria-label={`${tickets.toLocaleString()} tickets available`}
+          >
+            <div className="flex items-center gap-2.5">
+              <Ticket className="h-5 w-5 text-[#8B5CF6] transition-transform duration-300 group-hover:scale-110" aria-hidden="true" />
               <div>
-                <p className="text-sm font-semibold uppercase tracking-wider text-[#8B5CF6]">Tickets</p>
-                <p className="font-display text-3xl font-black tabular-nums text-white">
+                <p className="text-[10px] font-bold uppercase tracking-wider text-[#8B5CF6]/70 leading-none">Tickets</p>
+                <p className="font-display text-lg font-black tabular-nums text-white leading-none mt-1">
                   {tickets.toLocaleString()}
                 </p>
               </div>
@@ -195,10 +195,25 @@ export default function AuraZoneClient({
           </div>
         </div>
 
-        {/* Banner Tabs Navigation */}
-        <div className="mb-12 max-w-5xl mx-auto" style={{ animationDelay: '200ms' }}>
-          {/* Tab Headers */}
-          <div className="flex items-center justify-center gap-2 mb-8 overflow-x-auto pb-2">
+        {/* Enhanced Header with Glow Effect */}
+        <div className="mb-16 text-center" style={{ animationDelay: '100ms' }}>
+          <h1 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#FF1F7D] via-[#8B5CF6] to-[#00F5FF] mb-4 drop-shadow-[0_0_30px_rgba(255,31,125,0.5)]" style={{ backgroundSize: '200%', animation: 'gradient-shift 3s ease-in-out infinite' }}>
+            AURA ZONE
+          </h1>
+          <p className="text-white/80 text-base md:text-lg font-semibold uppercase tracking-wider">
+            Try Your Luck • Win Rare Collectibles & Exclusive Merch
+          </p>
+        </div>
+
+        {/* Banner Selection - Consolidated Design */}
+        <div className="mb-24 max-w-6xl mx-auto px-4" style={{ animationDelay: '200ms' }}>
+          <div className="text-center mb-8">
+            <h2 className="font-display text-2xl md:text-3xl font-black text-white mb-2">Choose Your Banner</h2>
+            <p className="text-white/60 text-sm">Each banner features different prize pools and rarities</p>
+          </div>
+
+          {/* Banner Cards - Integrated Info */}
+          <div className="grid gap-6 sm:grid-cols-2">
             {banners.map((banner, index) => {
               const accent = BANNER_ACCENT_COLORS[index % BANNER_ACCENT_COLORS.length]
               const isActive = selectedBannerIndex === index
@@ -207,116 +222,106 @@ export default function AuraZoneClient({
                 <button
                   key={banner.id}
                   onClick={() => setSelectedBannerIndex(index)}
-                  className={`group relative flex items-center gap-3 rounded-2xl px-6 py-4 font-display font-bold uppercase tracking-wider transition-all duration-500 whitespace-nowrap ${
+                  className={`group relative overflow-hidden rounded-3xl border-2 p-6 text-left transition-all duration-300 backdrop-blur-xl ${
                     isActive
-                      ? 'text-white scale-105'
-                      : 'bg-surface-card/50 border border-white/10 text-white/70 hover:text-white hover:border-white/30 hover:scale-[1.02]'
+                      ? 'scale-[1.02]'
+                      : 'hover:scale-[1.01] border-white/10 bg-surface-card/40'
                   }`}
                   style={isActive ? {
-                    background: `linear-gradient(135deg, ${accent.primary}40, ${accent.secondary}30)`,
                     borderColor: accent.primary,
-                    boxShadow: `0 0 30px ${accent.primary}50`,
-                    border: `2px solid ${accent.primary}`,
+                    background: `linear-gradient(135deg, ${accent.primary}20, ${accent.secondary}15)`,
+                    boxShadow: `0 0 40px -5px ${accent.primary}50, 0 0 20px -3px ${accent.primary}40`,
                   } : undefined}
+                  aria-pressed={isActive}
+                  aria-label={`${banner.name} banner ${isActive ? 'selected' : ''}`}
                 >
-                  {/* Active indicator glow */}
+                  {/* Selection Indicator */}
                   {isActive && (
+                    <div className="absolute top-4 right-4">
+                      <div
+                        className="rounded-full px-3 py-1 font-display text-xs font-bold uppercase tracking-wider"
+                        style={{
+                          background: accent.primary,
+                          boxShadow: `0 0 15px ${accent.primary}60`
+                        }}
+                      >
+                        Selected
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Banner Header */}
+                  <div className="flex items-start gap-3 mb-4">
                     <div
-                      className="pointer-events-none absolute inset-0 rounded-2xl blur-xl opacity-50"
-                      style={{ background: `linear-gradient(135deg, ${accent.primary}, ${accent.secondary})` }}
-                    />
-                  )}
-
-                  <Music className={`relative h-5 w-5 transition-transform duration-300 ${isActive ? 'scale-110' : 'group-hover:scale-110'}`}
-                    style={isActive ? { color: accent.primary } : undefined}
-                  />
-                  <span className="relative">{banner.name}</span>
-
-                  {isActive && (
-                    <Badge
-                      className="relative ml-2 border-0 font-display text-xs font-bold uppercase tracking-wider"
-                      style={{
-                        backgroundColor: accent.primary,
-                        boxShadow: `0 0 10px ${accent.primary}80`
-                      }}
+                      className="rounded-xl p-2.5 transition-transform duration-300 group-hover:scale-110"
+                      style={isActive ? {
+                        background: `${accent.primary}30`,
+                        boxShadow: `0 0 15px ${accent.primary}40`
+                      } : { background: 'rgba(255,255,255,0.1)' }}
                     >
-                      Active
-                    </Badge>
-                  )}
+                      <Music
+                        className="h-5 w-5"
+                        style={{ color: isActive ? accent.primary : 'rgba(255,255,255,0.6)' }}
+                        aria-hidden="true"
+                      />
+                    </div>
+                    <div className="flex-1">
+                      <h3 className={`font-display text-xl font-black leading-tight ${isActive ? 'text-white' : 'text-white/80'}`}>
+                        {banner.name}
+                      </h3>
+                      <p className={`text-sm mt-1 leading-relaxed ${isActive ? 'text-white/70' : 'text-white/50'}`}>
+                        {banner.description || 'Exclusive prize collection'}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Banner Info */}
+                  <div className="flex items-center justify-between pt-4 border-t border-white/10">
+                    <div className="flex items-center gap-2">
+                      {banner.currencyType === 'DIAMONDS' ? (
+                        <Gem className="h-4 w-4 text-[#00F5FF]" aria-hidden="true" />
+                      ) : (
+                        <Ticket className="h-4 w-4 text-[#8B5CF6]" aria-hidden="true" />
+                      )}
+                      <span className={`font-display text-sm font-bold ${isActive ? 'text-white' : 'text-white/70'}`}>
+                        {banner.costPerPull * 10} {banner.currencyType.toLowerCase()}
+                      </span>
+                    </div>
+                    {banner.currencyType === 'TICKETS' && (
+                      <span className="text-xs font-bold uppercase tracking-wider text-[#8B5CF6]">
+                        Ticket Only
+                      </span>
+                    )}
+                  </div>
                 </button>
               )
             })}
           </div>
-
-          {/* Selected Banner Info Card */}
-          <div
-            className="group relative overflow-hidden rounded-3xl border-2 p-8 transition-all duration-500 backdrop-blur-xl"
-            style={{
-              borderColor: `${currentAccent.primary}60`,
-              background: `linear-gradient(135deg, ${currentAccent.primary}20, ${currentAccent.secondary}15)`,
-              boxShadow: `0 0 40px ${currentAccent.primary}30`,
-            }}
-          >
-            {/* Ambient glow */}
-            <div
-              className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full blur-3xl opacity-60"
-              style={{ background: `linear-gradient(135deg, ${currentAccent.primary}40, transparent)` }}
-            />
-
-            <div className="relative">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="font-display text-2xl md:text-3xl font-black text-white">
-                  {currentBanner.name}
-                </h3>
-                <div className="flex items-center gap-3">
-                  {currentBanner.currencyType === 'TICKETS' && (
-                    <Badge className="bg-[#8B5CF6] text-white border-0 font-display font-bold uppercase tracking-wider">
-                      <Ticket className="h-3 w-3 mr-1" />
-                      Ticket Banner
-                    </Badge>
-                  )}
-                </div>
-              </div>
-              <p className="text-sm text-white/70 leading-relaxed font-medium mb-4">
-                {currentBanner.description || 'Draw exclusive prizes from this collection'}
-              </p>
-              <div className="flex items-center gap-4 text-sm">
-                <span className="flex items-center gap-2 text-white/60">
-                  {currentBanner.currencyType === 'DIAMONDS' ? (
-                    <Gem className="h-4 w-4 text-[#00F5FF]" />
-                  ) : (
-                    <Ticket className="h-4 w-4 text-[#8B5CF6]" />
-                  )}
-                  <span className="font-display font-bold text-white">
-                    {currentBanner.costPerPull * 10} {currentBanner.currencyType.toLowerCase()}
-                  </span>
-                  <span>per 10x draw</span>
-                </span>
-              </div>
-            </div>
-          </div>
         </div>
 
-        {/* Enhanced Draw Options */}
-        <div className="mb-20 max-w-5xl mx-auto" style={{ animationDelay: '300ms' }}>
-          <div className="flex items-center justify-center gap-3 mb-8">
-            <div className="h-px w-20 bg-gradient-to-r from-transparent via-[#FFC700] to-transparent" />
-            <h2 className="font-display text-3xl md:text-4xl font-black text-white uppercase tracking-wider">Select Draw</h2>
-            <div className="h-px w-20 bg-gradient-to-l from-transparent via-[#FFC700] to-transparent" />
-          </div>
-          <div className="text-center mb-8">
-            <p className="text-white/70 text-base md:text-lg mb-4 font-bold uppercase tracking-wider">
-              10x Draw Only • No SSR Guarantee • Pure Luck!
+        {/* Draw Section - Hero Element */}
+        <div className="mb-20 max-w-6xl mx-auto" style={{ animationDelay: '300ms' }}>
+          <div className="text-center mb-10">
+            <div className="flex items-center justify-center gap-4 mb-4">
+              <div className="h-px w-16 bg-gradient-to-r from-transparent via-[#FFC700] to-transparent" />
+              <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-black text-white uppercase tracking-wider">
+                Ready To Draw?
+              </h2>
+              <div className="h-px w-16 bg-gradient-to-l from-transparent via-[#FFC700] to-transparent" />
+            </div>
+            <p className="text-white/70 text-sm md:text-base mb-3">
+              10x Pull • All Rarities Available
             </p>
             <Dialog open={showProbability} onOpenChange={setShowProbability}>
               <DialogTrigger asChild>
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="rounded-xl backdrop-blur-md border border-white/10 bg-white/5 hover:bg-white/10 hover:border-white/20 transition-all duration-300 hover:scale-105 text-white font-semibold"
+                  className="rounded-xl backdrop-blur-md border border-white/20 bg-white/5 hover:bg-white/10 hover:border-white/30 transition-all duration-300 hover:scale-105 text-white/80 hover:text-white font-semibold focus:ring-2 focus:ring-[#FFC700]/50 focus:ring-offset-2 focus:ring-offset-black"
+                  aria-label="View probability rates for all rarities"
                 >
-                  <Info className="mr-2 h-4 w-4" />
-                  View Probability
+                  <Info className="mr-2 h-4 w-4" aria-hidden="true" />
+                  View Drop Rates
                 </Button>
               </DialogTrigger>
               <DialogContent className="max-w-2xl backdrop-blur-xl bg-gradient-to-b from-surface-card to-surface-raised border-white/20">
@@ -333,10 +338,16 @@ export default function AuraZoneClient({
                       className="flex items-center justify-between rounded-2xl border border-white/10 bg-white/5 p-5 hover:bg-white/10 hover:border-white/20 transition-all duration-300 hover:scale-[1.02]"
                     >
                       <div className="flex items-center gap-4">
-                        <span className="text-4xl">{config.emoji}</span>
+                        <div className={`rounded-xl p-2.5 ${config.color}`}>
+                          {getRarityIcon(rarity, 'h-6 w-6 text-white')}
+                        </div>
                         <div>
-                          <div className="font-display font-bold text-white text-lg">{config.name}</div>
-                          <div className="text-sm text-white/60 font-medium">{config.shortName}</div>
+                          <div className="flex items-center gap-3">
+                            <div className="font-display font-bold text-white text-lg">{config.name}</div>
+                            <div className={`rounded-full border px-3 py-1 font-display text-xs font-bold uppercase tracking-wider ${config.borderColor} ${config.textColor} bg-black/40 backdrop-blur-sm`}>
+                              {config.shortName}
+                            </div>
+                          </div>
                         </div>
                       </div>
                       <div className="text-right">
@@ -349,84 +360,118 @@ export default function AuraZoneClient({
             </Dialog>
           </div>
 
-          <div className="grid gap-8 sm:grid-cols-2">
-            {/* Enhanced Diamond Draw */}
+          <div className="grid gap-6 sm:grid-cols-2">
+            {/* Diamond Draw - Enhanced Hero CTA */}
             <button
               onClick={() => {
                 setPaymentMethod('diamonds')
                 setShowConfirm(true)
               }}
               disabled={!canAffordWithDiamonds || isPulling}
-              className={`group relative overflow-hidden rounded-3xl border-2 p-12 text-center transition-all duration-500 backdrop-blur-xl ${
+              className={`group relative overflow-hidden rounded-3xl border-2 p-8 md:p-10 text-center transition-all duration-300 backdrop-blur-xl ${
                 !canAffordWithDiamonds
-                  ? 'border-white/10 bg-surface-card/30 opacity-50 cursor-not-allowed'
-                  : 'border-[#00F5FF]/50 bg-gradient-to-br from-[#00F5FF]/20 to-[#8B5CF6]/10 hover:from-[#00F5FF]/30 hover:to-[#8B5CF6]/20 hover:border-[#00F5FF] hover:shadow-[0_0_50px_rgba(0,245,255,0.5)] hover:scale-[1.05] cursor-pointer'
+                  ? 'border-white/20 bg-surface-card/40 cursor-not-allowed'
+                  : 'border-[#00F5FF]/60 bg-gradient-to-br from-[#00F5FF]/20 to-[#8B5CF6]/10 hover:from-[#00F5FF]/30 hover:to-[#8B5CF6]/20 hover:border-[#00F5FF] hover:shadow-[0_0_60px_rgba(0,245,255,0.6)] hover:scale-[1.03] cursor-pointer focus:ring-4 focus:ring-[#00F5FF]/50 focus:ring-offset-4 focus:ring-offset-black'
               }`}
+              aria-label={`Draw 10 times using ${AURA_ZONE_COSTS.TENX_DIAMONDS} diamonds${!canAffordWithDiamonds ? ' - insufficient balance' : ''}`}
+              aria-disabled={!canAffordWithDiamonds || isPulling}
             >
+              {/* Disabled state overlay */}
+              {!canAffordWithDiamonds && (
+                <div className="absolute inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-10 rounded-3xl">
+                  <div className="text-center">
+                    <AlertCircle className="h-12 w-12 text-white/50 mx-auto mb-3" aria-hidden="true" />
+                    <p className="font-display text-lg font-bold text-white/70">Need More Diamonds</p>
+                    <p className="text-sm text-white/50 mt-1">Complete missions to earn more</p>
+                  </div>
+                </div>
+              )}
+
               {/* Ambient glow */}
-              <div className={`pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-gradient-to-br from-[#00F5FF]/30 to-transparent blur-3xl transition-all duration-700 ${!canAffordWithDiamonds ? 'opacity-0' : 'group-hover:scale-150'}`} />
+              {canAffordWithDiamonds && (
+                <div className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-gradient-to-br from-[#00F5FF]/30 to-transparent blur-3xl transition-all duration-700 group-hover:scale-150" />
+              )}
 
               {/* Hover overlay */}
-              <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-[#00F5FF]/10 via-transparent to-[#8B5CF6]/10 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-[#00F5FF]/10 via-transparent to-[#8B5CF6]/10 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
 
               <div className="relative">
-                <div className="mb-6 flex items-center justify-center gap-4">
-                  <div className="rounded-2xl bg-[#00F5FF]/20 p-4 ring-2 ring-[#00F5FF]/30 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12">
-                    <Gem className="h-12 w-12 text-[#00F5FF]" />
+                <div className="mb-5 flex items-center justify-center gap-3">
+                  <div className={`rounded-2xl p-3 ring-2 transition-all duration-300 ${canAffordWithDiamonds ? 'bg-[#00F5FF]/20 ring-[#00F5FF]/40 group-hover:scale-110 group-hover:rotate-12' : 'bg-white/5 ring-white/10'}`}>
+                    <Gem className={`h-10 w-10 md:h-12 md:w-12 ${canAffordWithDiamonds ? 'text-[#00F5FF]' : 'text-white/30'}`} aria-hidden="true" />
                   </div>
-                  <span className="font-display text-5xl md:text-6xl font-black text-white tabular-nums">
+                  <span className={`font-display text-4xl md:text-5xl lg:text-6xl font-black tabular-nums ${canAffordWithDiamonds ? 'text-white' : 'text-white/40'}`}>
                     {AURA_ZONE_COSTS.TENX_DIAMONDS.toLocaleString()}
                   </span>
                 </div>
-                <div className="mb-6 flex items-center justify-center gap-3">
-                  <Sparkles className="h-7 w-7 text-[#00F5FF] transition-transform duration-300 group-hover:rotate-180" />
-                  <p className="font-display text-3xl font-black text-white uppercase tracking-wider">10x Diamond Draw</p>
+                <div className="mb-4 flex items-center justify-center gap-2">
+                  <Sparkles className={`h-6 w-6 transition-transform duration-300 ${canAffordWithDiamonds ? 'text-[#00F5FF] group-hover:rotate-180' : 'text-white/30'}`} aria-hidden="true" />
+                  <p className={`font-display text-2xl md:text-3xl font-black uppercase tracking-wider ${canAffordWithDiamonds ? 'text-white' : 'text-white/40'}`}>
+                    10x Draw
+                  </p>
                 </div>
-                <p className="text-base text-white/70 font-bold uppercase tracking-wider">
-                  {canAffordWithDiamonds
-                    ? `${Math.floor(diamonds / AURA_ZONE_COSTS.TENX_DIAMONDS)} Draws Available`
-                    : 'Insufficient Diamonds'}
-                </p>
+                {canAffordWithDiamonds && (
+                  <p className="text-sm text-white/70 font-semibold">
+                    {Math.floor(diamonds / AURA_ZONE_COSTS.TENX_DIAMONDS)} pull{Math.floor(diamonds / AURA_ZONE_COSTS.TENX_DIAMONDS) !== 1 ? 's' : ''} available
+                  </p>
+                )}
               </div>
             </button>
 
-            {/* Enhanced Ticket Draw */}
+            {/* Ticket Draw - Enhanced Hero CTA */}
             <button
               onClick={() => {
                 setPaymentMethod('tickets')
                 setShowConfirm(true)
               }}
               disabled={!canAffordWithTickets || isPulling}
-              className={`group relative overflow-hidden rounded-3xl border-2 p-12 text-center transition-all duration-500 backdrop-blur-xl ${
+              className={`group relative overflow-hidden rounded-3xl border-2 p-8 md:p-10 text-center transition-all duration-300 backdrop-blur-xl ${
                 !canAffordWithTickets
-                  ? 'border-white/10 bg-surface-card/30 opacity-50 cursor-not-allowed'
-                  : 'border-[#8B5CF6]/50 bg-gradient-to-br from-[#8B5CF6]/20 to-[#FF1F7D]/10 hover:from-[#8B5CF6]/30 hover:to-[#FF1F7D]/20 hover:border-[#8B5CF6] hover:shadow-[0_0_50px_rgba(139,92,246,0.5)] hover:scale-[1.05] cursor-pointer'
+                  ? 'border-white/20 bg-surface-card/40 cursor-not-allowed'
+                  : 'border-[#8B5CF6]/60 bg-gradient-to-br from-[#8B5CF6]/20 to-[#FF1F7D]/10 hover:from-[#8B5CF6]/30 hover:to-[#FF1F7D]/20 hover:border-[#8B5CF6] hover:shadow-[0_0_60px_rgba(139,92,246,0.6)] hover:scale-[1.03] cursor-pointer focus:ring-4 focus:ring-[#8B5CF6]/50 focus:ring-offset-4 focus:ring-offset-black'
               }`}
+              aria-label={`Draw 10 times using ${AURA_ZONE_COSTS.TENX_TICKETS} tickets${!canAffordWithTickets ? ' - insufficient balance' : ''}`}
+              aria-disabled={!canAffordWithTickets || isPulling}
             >
+              {/* Disabled state overlay */}
+              {!canAffordWithTickets && (
+                <div className="absolute inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-10 rounded-3xl">
+                  <div className="text-center">
+                    <AlertCircle className="h-12 w-12 text-white/50 mx-auto mb-3" aria-hidden="true" />
+                    <p className="font-display text-lg font-bold text-white/70">Need More Tickets</p>
+                    <p className="text-sm text-white/50 mt-1">Earn tickets from missions & events</p>
+                  </div>
+                </div>
+              )}
+
               {/* Ambient glow */}
-              <div className={`pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-gradient-to-br from-[#8B5CF6]/30 to-transparent blur-3xl transition-all duration-700 ${!canAffordWithTickets ? 'opacity-0' : 'group-hover:scale-150'}`} />
+              {canAffordWithTickets && (
+                <div className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-gradient-to-br from-[#8B5CF6]/30 to-transparent blur-3xl transition-all duration-700 group-hover:scale-150" />
+              )}
 
               {/* Hover overlay */}
-              <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-[#8B5CF6]/10 via-transparent to-[#FF1F7D]/10 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-[#8B5CF6]/10 via-transparent to-[#FF1F7D]/10 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
 
               <div className="relative">
-                <div className="mb-6 flex items-center justify-center gap-4">
-                  <div className="rounded-2xl bg-[#8B5CF6]/20 p-4 ring-2 ring-[#8B5CF6]/30 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12">
-                    <Ticket className="h-12 w-12 text-[#8B5CF6]" />
+                <div className="mb-5 flex items-center justify-center gap-3">
+                  <div className={`rounded-2xl p-3 ring-2 transition-all duration-300 ${canAffordWithTickets ? 'bg-[#8B5CF6]/20 ring-[#8B5CF6]/40 group-hover:scale-110 group-hover:rotate-12' : 'bg-white/5 ring-white/10'}`}>
+                    <Ticket className={`h-10 w-10 md:h-12 md:w-12 ${canAffordWithTickets ? 'text-[#8B5CF6]' : 'text-white/30'}`} aria-hidden="true" />
                   </div>
-                  <span className="font-display text-5xl md:text-6xl font-black text-white tabular-nums">
+                  <span className={`font-display text-4xl md:text-5xl lg:text-6xl font-black tabular-nums ${canAffordWithTickets ? 'text-white' : 'text-white/40'}`}>
                     {AURA_ZONE_COSTS.TENX_TICKETS.toLocaleString()}
                   </span>
                 </div>
-                <div className="mb-6 flex items-center justify-center gap-3">
-                  <Sparkles className="h-7 w-7 text-[#8B5CF6] transition-transform duration-300 group-hover:rotate-180" />
-                  <p className="font-display text-3xl font-black text-white uppercase tracking-wider">10x Ticket Draw</p>
+                <div className="mb-4 flex items-center justify-center gap-2">
+                  <Sparkles className={`h-6 w-6 transition-transform duration-300 ${canAffordWithTickets ? 'text-[#8B5CF6] group-hover:rotate-180' : 'text-white/30'}`} aria-hidden="true" />
+                  <p className={`font-display text-2xl md:text-3xl font-black uppercase tracking-wider ${canAffordWithTickets ? 'text-white' : 'text-white/40'}`}>
+                    10x Draw
+                  </p>
                 </div>
-                <p className="text-base text-white/70 font-bold uppercase tracking-wider">
-                  {canAffordWithTickets
-                    ? `${Math.floor(tickets / AURA_ZONE_COSTS.TENX_TICKETS)} Draws Available`
-                    : 'Insufficient Tickets'}
-                </p>
+                {canAffordWithTickets && (
+                  <p className="text-sm text-white/70 font-semibold">
+                    {Math.floor(tickets / AURA_ZONE_COSTS.TENX_TICKETS)} pull{Math.floor(tickets / AURA_ZONE_COSTS.TENX_TICKETS) !== 1 ? 's' : ''} available
+                  </p>
+                )}
               </div>
             </button>
           </div>
